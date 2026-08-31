@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" fill="none" role="img" aria-label="mark"><defs><clipPath id="clip-oxagen-spd"><path d="M233.82 64.98 227.46 60.54 229.32 57.84Q230.34 56.4 231.84 55.02Q233.34 53.64 234.87 52.47Q236.4 51.3 237.48 50.58L237.36 50.34Q236.04 50.34 234.12 50.25Q232.2 50.16 230.22 49.86Q228.24 49.56 226.68 49.02L223.62 47.88L226.26 40.56L229.38 41.7Q230.94 42.24 232.62 43.32Q234.3 44.4 235.83 45.57Q237.36 46.74 238.38 47.64L238.68 47.4Q238.26 46.14 237.63 44.28Q237 42.42 236.55 40.38Q236.1 38.34 236.1 36.6V33.3H243.9V36.6Q243.9 38.34 243.45 40.38Q243 42.42 242.4 44.28Q241.8 46.14 241.32 47.4L241.56 47.58Q242.58 46.68 244.11 45.54Q245.64 44.4 247.32 43.32Q249 42.24 250.56 41.7L253.68 40.56L256.38 47.88L253.26 49.02Q251.7 49.56 249.75 49.86Q247.8 50.16 245.91 50.25Q244.02 50.34 242.64 50.34L242.52 50.58Q243.6 51.3 245.13 52.47Q246.66 53.64 248.19 55.02Q249.72 56.4 250.68 57.78L252.54 60.54L246.18 64.98L244.26 62.28Q243.3 60.84 242.49 58.92Q241.68 57 241.11 55.11Q240.54 53.22 240.18 51.96H239.82Q239.52 53.22 238.92 55.11Q238.32 57 237.54 58.92Q236.76 60.84 235.74 62.28Z"/></clipPath></defs><rect width="96" height="96" fill="#0A0A0C"/><g transform="translate(-458.374,-55.680) scale(2.10989)"><g class="star" clip-path="url(#clip-oxagen-spd)"><path class="ray ray0" d="M240.00 49.14 L211.12 9.38 L268.88 9.38 Z" fill="#EFC53F"/><path class="ray ray1" d="M240.00 49.14 L268.88 9.38 L286.73 64.33 Z" fill="#FD5C0E"/><path class="ray ray2" d="M240.00 49.14 L286.73 64.33 L240.00 98.28 Z" fill="#FD3BAD"/><path class="ray ray3" d="M240.00 49.14 L240.00 98.28 L193.27 64.33 Z" fill="#AC75FD"/><path class="ray ray4" d="M240.00 49.14 L193.27 64.33 L211.12 9.38 Z" fill="#11A9CC"/></g></g><style>
+.star{transform-origin:240.00px 49.14px;animation:step 1.250s steps(1,end) infinite}
+.ray{animation:lift 1.250s linear infinite}
+.ray0{animation-delay:0.000s}
+.ray1{animation-delay:-0.250s}
+.ray2{animation-delay:-0.500s}
+.ray3{animation-delay:-0.750s}
+.ray4{animation-delay:-1.000s}
+@keyframes step{from{transform:rotate(0deg)}to{transform:rotate(72deg)}}
+@keyframes lift{0%{opacity:1}18%{opacity:1}36%{opacity:.24}100%{opacity:.24}}
+@media (prefers-reduced-motion:reduce){
+.star{animation:none}.ray{animation:none;opacity:1}}
+</style></svg>
