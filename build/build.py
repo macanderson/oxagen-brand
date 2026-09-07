@@ -39,9 +39,12 @@ BRAND_WORDS = ("oxagen", "stella")
 #: cannot leave its old name behind.
 GENERATED = ("logo", "icons", "spinners", "wallpapers", "social", "ads", "content", "tokens")
 
+#: Straight from the September 2026 positioning deck, so the art cannot say
+#: something the company has stopped saying. Oxagen's is the deck's own
+#: subtitle; Stella's is the deck's one-line description of the agent.
 TAGLINES = {
-    "stella": "verified done, not claimed done",
-    "oxagen": "verified work becomes owned capability",
+    "oxagen": "Agents that prove their work. A model you own.",
+    "stella": "It does the work and proves it finished.",
 }
 DOMAINS = {"stella": "stella.oxagen.sh", "oxagen": "oxagen.sh"}
 
@@ -255,18 +258,23 @@ def build_social(raster: bool) -> None:
                     png(p, width=w)
 
 
+#: The ad line is the positioning line. Oxagen leads with the four jobs and the
+#: promise the deck leads with; Stella leads with the proof rule that decides
+#: when a run counts as done. No benchmark numbers and no competitor is named
+#: in public art: the deck's comparison is an investor slide, and a number in
+#: an ad is a claim the ad has to keep being true.
 AD_COPY = {
+    "oxagen": {
+        "kicker": "Teach. Govern. Explain. Learn.",
+        "headline": ["Agents that", "prove their work.", "A model you own."],
+        "short": ["A model", "you own."],
+        "cta": "oxagen.sh",
+    },
     "stella": {
-        "kicker": "The terminal agent",
+        "kicker": "The open-source agent",
         "headline": ["It does not", "say done.", "It proves it."],
         "short": ["It proves", "it."],
         "cta": "brew install stella",
-    },
-    "oxagen": {
-        "kicker": "Deterministic AI engineering",
-        "headline": ["Ship code", "that passes", "its own test."],
-        "short": ["Code that", "proves itself."],
-        "cta": "oxagen.sh",
     },
 }
 AD_SIZES = [(1080, 1080, "square"), (1080, 1350, "portrait"), (1200, 628, "landscape"), (300, 250, "mpu")]
@@ -294,19 +302,20 @@ def build_ads(raster: bool) -> None:
 
 
 CONTENT = {
+    "oxagen": [
+        ("Field note", ["The meter runs.", "The knowledge", "leaves."], "The field manual", None),
+        ("Essay", ["Own the model that", "learns your business"], "Engineering notes", None),
+        ("Release", ["Oxagen platform"], "oxagen.sh/changelog",
+         ["+ agent identity, roles, and budgets on every call",
+          "+ every run saved as a trace beside its data"]),
+    ],
     "stella": [
         ("Changelog", ["Parallel tool calls,", "now measured"], "30 Aug 2026 · Engineering",
          ["$ stella run --pipeline vera", "  witness authored    fail -> pass",
           "  verdict CONFIRMED   12.4s"]),
         ("Essay", ["A green check is not", "an answer"], "Engineering notes", None),
-        ("Release", ["stella 0.9.266"], "brew upgrade stella",
-         ["+ hold the spacebar to speak a prompt", "+ promotion ledger survives a trimmed newline"]),
-    ],
-    "oxagen": [
-        ("Field note", ["Measure honestly,", "especially when", "it costs you"], "The field manual", None),
-        ("Changelog", ["One house system,", "two wordmarks"], "6 Sep 2026 · Brand", None),
-        ("Release", ["Oxagen platform"], "oxagen.sh/changelog",
-         ["+ house colour system published", "+ both kits ship one gold"]),
+        ("Release", ["stella 0.9.305"], "brew upgrade stella",
+         ["+ skills mined from proven runs", "+ settings picked by measured A/B"]),
     ],
 }
 
