@@ -1,11 +1,13 @@
-"""OKLCH <-> sRGB, WCAG contrast, and the house spectrum.
+"""The house colours: one metal, two grounds, and the warm greys between.
 
-The spectrum is the one colour decision this kit adds to stella's black-and-gold
-system, so it is derived here rather than picked by eye. Five rays, one per arm
-of the JetBrains Mono asterisk, at a single OKLCH lightness: equal perceived
-lightness is what makes five hues read as one object instead of five stickers.
-Stella's gold is one of the five, unchanged, which is what makes the two
-wordmarks provably the same system rather than merely adjacent.
+The grounds and the greys are the Oxagen brand kit's Ink and Paper as shipped.
+The metal is that kit's Bronze Gold lifted a step in OKLCH: a little lighter, a
+little more saturated, and a few degrees toward yellow, so it reads as gold
+rather than bronze. The lift is derived here, not typed, and `verify()` fails
+if the pinned hex ever stops matching its derivation.
+
+Gold is identity and at most one action per screen. It is never a surface and
+it never encodes a state. Both wordmarks paint exactly one glyph in it.
 """
 
 from __future__ import annotations
@@ -13,7 +15,7 @@ from __future__ import annotations
 import math
 
 # --------------------------------------------------------------------------
-# sRGB <-> linear <-> OKLab <-> OKLCH
+# sRGB <-> OKLCH, and WCAG contrast
 # --------------------------------------------------------------------------
 
 
@@ -63,30 +65,13 @@ def oklch(L: float, C: float, H: float) -> tuple[float, float, float]:
     return oklab_to_rgb(L, C * math.cos(rad), C * math.sin(rad))
 
 
+def oklch_hex(L: float, C: float, H: float) -> str:
+    return rgb_to_hex(*oklch(L, C, H))
+
+
 def hex_to_oklch(h: str) -> tuple[float, float, float]:
     L, a, b = rgb_to_oklab(*hex_to_rgb(h))
     return L, math.hypot(a, b), math.degrees(math.atan2(b, a)) % 360
-
-
-def in_gamut(rgb: tuple[float, float, float], eps: float = 1e-4) -> bool:
-    return all(-eps <= v <= 1 + eps for v in rgb)
-
-
-def max_chroma(L: float, H: float, ceiling: float = 0.40) -> float:
-    """Largest in-gamut chroma at this lightness and hue, to 1e-4."""
-    lo, hi = 0.0, ceiling
-    for _ in range(40):
-        mid = (lo + hi) / 2
-        if in_gamut(oklch(L, mid, H)):
-            lo = mid
-        else:
-            hi = mid
-    return lo
-
-
-# --------------------------------------------------------------------------
-# WCAG relative luminance and contrast
-# --------------------------------------------------------------------------
 
 
 def luminance(h: str) -> float:
@@ -101,73 +86,134 @@ def contrast(a: str, b: str) -> float:
 
 
 # --------------------------------------------------------------------------
-# the house spectrum
+# the metal
 # --------------------------------------------------------------------------
 
-GOLD = "#EFC53F"  # stella's brand metal, unchanged; ray 1 of 5
-INK = "#0A0A0C"  # the canvas
-PAPER = "#FFFCF5"  # the warm light canvas
+#: Bronze Gold as shipped in the Oxagen brand kit (`wordmark-color-light.svg`,
+#: the fill of the `x`). Kept only as the anchor the house gold is derived from.
+REFERENCE_GOLD = "#C58A32"
 
-#: Ray hues in OKLCH degrees, clockwise from twelve o'clock. Gold is measured
-#: from the shipped token rather than typed, so recolouring gold moves the star.
-GOLD_L, GOLD_C, GOLD_H = hex_to_oklch(GOLD)
+#: The lift, in OKLCH: lightness, chroma, hue degrees. "A tad brighter and more
+#: shimmery" -- lighter so it lifts off ink, more chroma so it does not go
+#: sandy when lighter, and a nudge toward yellow so it reads gold, not copper.
+GOLD_LIFT = (0.043, 0.014, 1.8)
 
-#: The other four are a warm-to-cool sweep away from gold. Every adjacent gap
-#: clears the 30-degree OKLCH separation floor stella's `hue-separation` gate
-#: holds its web tokens to, so no two rays can be confused at avatar size.
-RAY_NAMES = ("gold", "ember", "rose", "orchid", "azure")
-RAY_HUES = (GOLD_H, 40.0, 350.0, 300.0, 220.0)
+GOLD = "#D6962C"  # the metal: identity, one action per screen
+GOLD_BRIGHT = "#F1C364"  # the highlight the shimmer passes through
+GOLD_DEEP = "#8B5E1A"  # gold as text on paper, and small details there
 
-#: Chroma is capped just below the gamut edge so no ray clips to a flat primary
-#: on a cheap panel, and every ray is capped at the same fraction of its own
-#: maximum so none of them shouts over the others.
-CHROMA_FRACTION = 0.98
+#: What the two gold neighbours are: the same hue, moved in lightness only.
+#: (L, C, H) for the highlight; the deep value is the reference kit's Bronze
+#: Deep, unchanged, because it already clears AA on paper.
+GOLD_BRIGHT_LCH = (0.840, 0.125, 84.0)
 
-#: The four non-gold rays share one lightness, chosen by rendering the mark at
-#: 0.68, 0.72 and 0.76 against both grounds and looking at it. Above 0.72 the
-#: rays go pastel and the star reads as confectionery; 0.68 keeps them jewelled
-#: and still clears 6:1 on the ink canvas at every hue. Gold is left at its
-#: shipped lightness (0.838) rather than dragged down to join them, because gold
-#: is the house metal and is supposed to lead.
-RAY_L = 0.68
+# --------------------------------------------------------------------------
+# the grounds and the greys
+# --------------------------------------------------------------------------
+
+INK = "#10100F"  # the dark canvas
+VOID = "#0A0A09"  # below the canvas: full-bleed backdrops
+PANEL = "#181715"  # panels, cards, code blocks
+HL = "#201F1C"  # a row or line lifted off a panel
+BORDER = "#292722"  # hairlines on ink (the kit's Hairline Dark)
+RULE = "#34322D"  # a heavier rule on ink
+
+PAPER = "#F2EEE5"  # the warm light canvas
+PAPER_PANEL = "#F8F5EE"  # light panel
+PAPER_BORDER = "#D8CDBD"  # hairlines on paper (the kit's Hairline Light)
+PAPER_RULE = "#C9BFAE"  # a heavier rule on paper
+
+PAPER_TEXT = PAPER  # primary text on ink: the kit sets type in Paper
+TEXT = "#DDD8CD"  # body text on ink
+MUTED = "#9B958A"  # secondary text on ink
+DIM = "#6E6A62"  # the quietest text on ink
+
+INK_TEXT = INK  # primary text on paper
+TEXT_INK = "#2A2823"  # body text on paper
+MUTED_INK = "#6B665C"  # secondary text on paper
+DIM_INK = "#8C877C"  # the quietest text on paper
+
+#: (token, value, use). This list is the palette. Nothing else is.
+TOKENS: list[tuple[str, str, str]] = [
+    ("gold", GOLD, "the metal: identity, one action per screen"),
+    ("gold-bright", GOLD_BRIGHT, "the shimmer highlight; hover on ink"),
+    ("gold-deep", GOLD_DEEP, "gold as text on paper; small gold details there"),
+    ("ink", INK, "the dark canvas"),
+    ("void", VOID, "below the canvas"),
+    ("panel", PANEL, "panels, cards, code blocks"),
+    ("hl", HL, "a lifted row or line"),
+    ("border", BORDER, "hairlines on ink"),
+    ("rule", RULE, "a heavier rule on ink"),
+    ("paper", PAPER, "the warm light canvas"),
+    ("paper-panel", PAPER_PANEL, "light panel"),
+    ("paper-border", PAPER_BORDER, "hairlines on paper"),
+    ("paper-rule", PAPER_RULE, "a heavier rule on paper"),
+    ("text", PAPER_TEXT, "primary text on ink"),
+    ("text-body", TEXT, "body text on ink"),
+    ("muted", MUTED, "secondary text on ink"),
+    ("dim", DIM, "the quietest text on ink"),
+    ("text-ink", INK_TEXT, "primary text on paper"),
+    ("text-ink-body", TEXT_INK, "body text on paper"),
+    ("muted-ink", MUTED_INK, "secondary text on paper"),
+    ("dim-ink", DIM_INK, "the quietest text on paper"),
+]
+
+GROUNDS = {"dark": INK, "light": PAPER}
+TEXT_ON = {"dark": PAPER_TEXT, "light": INK_TEXT}
+MUTED_ON = {"dark": MUTED, "light": MUTED_INK}
+GOLD_TEXT_ON = {"dark": GOLD, "light": GOLD_DEEP}
+BORDER_ON = {"dark": BORDER, "light": PAPER_BORDER}
 
 
-def spectrum(L: float, *, anchor_gold: str | None = None) -> dict[str, str]:
-    """Five rays at one perceived lightness, gold optionally pinned to a token."""
-    out: dict[str, str] = {}
-    for name, H in zip(RAY_NAMES, RAY_HUES):
-        if name == "gold" and anchor_gold is not None:
-            out[name] = anchor_gold
-            continue
-        out[name] = rgb_to_hex(*oklch(L, max_chroma(L, H) * CHROMA_FRACTION, H))
-    return out
+# --------------------------------------------------------------------------
+# checks
+# --------------------------------------------------------------------------
 
 
-#: The star as it is drawn on every surface, light or dark. The gold ray is the
-#: shipped stella token byte-for-byte, not a re-derivation of it, so recolouring
-#: stella's metal recolours oxagen's star and the two cannot drift apart.
-RESTING = spectrum(RAY_L, anchor_gold=GOLD)
+def derive_gold() -> str:
+    L, C, H = hex_to_oklch(REFERENCE_GOLD)
+    dL, dC, dH = GOLD_LIFT
+    return oklch_hex(L + dL, C + dC, H + dH)
 
-#: The same five hues as *text* on warm paper, where a resting ray cannot clear
-#: AA -- the reason stella ships `--st-gold-ink` beside its metal. Never used for
-#: the mark itself, which keeps its resting colour on both grounds.
-INK_L = 0.52
-INKED = spectrum(INK_L)
+
+def verify() -> list[str]:
+    """Every fact the palette claims, checked. Returns the problems found."""
+    problems = []
+    if derive_gold() != GOLD:
+        problems.append(f"gold {GOLD} is not the reference gold lifted by {GOLD_LIFT}: {derive_gold()}")
+    if oklch_hex(*GOLD_BRIGHT_LCH) != GOLD_BRIGHT:
+        problems.append(f"gold-bright {GOLD_BRIGHT} != {oklch_hex(*GOLD_BRIGHT_LCH)}")
+    gL, gC, gH = hex_to_oklch(GOLD)
+    rL, rC, rH = hex_to_oklch(REFERENCE_GOLD)
+    if not (gL > rL and gC > rC):
+        problems.append("gold is not brighter and richer than the reference")
+    if contrast(GOLD, INK) < 4.5:
+        problems.append(f"gold on ink is {contrast(GOLD, INK):.2f}:1, below AA")
+    if contrast(GOLD_DEEP, PAPER) < 4.5:
+        problems.append(f"gold-deep on paper is {contrast(GOLD_DEEP, PAPER):.2f}:1, below AA")
+    for name, value, ground in (
+        ("text", PAPER_TEXT, INK),
+        ("text-body", TEXT, INK),
+        ("muted", MUTED, INK),
+        ("text-ink", INK_TEXT, PAPER),
+        ("text-ink-body", TEXT_INK, PAPER),
+        ("muted-ink", MUTED_INK, PAPER),
+    ):
+        if contrast(value, ground) < 4.5:
+            problems.append(f"{name} on its ground is {contrast(value, ground):.2f}:1, below AA")
+    return problems
 
 
 if __name__ == "__main__":
-    print(f"gold measured: L={GOLD_L:.4f} C={GOLD_C:.4f} H={GOLD_H:.2f}")
+    L, C, H = hex_to_oklch(REFERENCE_GOLD)
+    print(f"reference gold {REFERENCE_GOLD}  L={L:.3f} C={C:.3f} H={H:.1f}")
+    L, C, H = hex_to_oklch(GOLD)
+    print(f"house gold     {GOLD}  L={L:.3f} C={C:.3f} H={H:.1f}")
     print()
-    hdr = f"{'ray':8} {'resting':9} {'on ink':>7} {'on paper':>9}   {'inked':9} {'on paper':>9}"
+    hdr = f"{'token':14} {'value':8} {'on ink':>7} {'on paper':>9}"
     print(hdr)
     print("-" * len(hdr))
-    for name in RAY_NAMES:
-        r, i = RESTING[name], INKED[name]
-        print(
-            f"{name:8} {r:9} {contrast(r, INK):7.2f} {contrast(r, PAPER):9.2f}   "
-            f"{i:9} {contrast(i, PAPER):9.2f}"
-        )
+    for name, value, _ in TOKENS:
+        print(f"{name:14} {value:8} {contrast(value, INK):7.2f} {contrast(value, PAPER):9.2f}")
     print()
-    hs = sorted(RAY_HUES)
-    gaps = [min((b - a) % 360, (a - b) % 360) for a, b in zip(hs, hs[1:] + hs[:1])]
-    print("adjacent OKLCH hue gaps:", ", ".join(f"{g:.0f}" for g in sorted(gaps)))
+    print("problems:", verify() or "none")

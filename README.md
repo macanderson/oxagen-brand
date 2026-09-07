@@ -1,70 +1,88 @@
-# oxagen house system
+# Oxagen house system
 
-One design system for everything a customer sees from **Oxagen** and **Stella** —
-the palette, the type, the two logos, the spinner, the wallpapers, the social
-art, the ads, and the templates we publish content in.
+One design system for everything a customer sees from **Oxagen** and **Stella**:
+the colours, the type, the two logos, the icons, the spinner, the wallpapers,
+the social art, the ads, and the content cards.
 
-**Start with [`playbook.html`](playbook.html).** It explains everything below,
-adapts to light and dark, and works offline.
+**Start with [`playbook.html`](playbook.html).** It shows every asset, adapts
+to light and dark, and works offline.
 
 ## The decision
 
-Stella's **black and gold on warm paper** is the house system. Oxagen moves onto
-it and drops the `›oxagen.sh▮` prompt-and-cursor mark.
+The Oxagen brand kit is the house kit. It already had the right bones: Space
+Grotesk, a warm near-black and a warm off-white, and a wordmark whose only
+colour is one gold letter. This system takes that kit as the base and brings
+Stella onto it.
 
-Both logos are now the same thing: a lowercase name set in **JetBrains Mono
-ExtraBold**, outlined, with **one asterisk at the end and nothing to the left**.
-The asterisk is where the two brands separate:
+- **oxagen** is the kit's wordmark, reproduced from the font: the word in
+  Space Grotesk 600, lowercase, its **x** in gold.
+- **stella\*** is the same word treatment followed by the font's own asterisk,
+  in the same gold. The asterisk is a character, not a drawing. It is never
+  redrawn.
 
-- **stella\*** — all five arms in the house metal, gold `#EFC53F`.
-- **oxagen\*** — five arms, five hues, and one of those five *is* Stella's gold
-  at the exact shipped value.
+Both are set at one em (the size the kit froze `oxagen` at), so they are the
+same letter size exactly and the same height to within a pixel.
 
-Oxagen is the company and Stella is one of the things it makes, so the parent
-holds the whole spectrum and the product holds one ray of it. Both names are six
-letters and the face is monospaced, so the two wordmarks occupy the **identical
-264×96 box** and swap in a layout with nothing else moving.
+The gold is the kit's Bronze Gold `#C58A32` lifted one step in OKLCH: a little
+lighter, a little richer, a few degrees toward yellow, so it reads as gold
+rather than copper. That is `#D6962C`. `#F1C364` is the highlight the shimmer
+passes through; `#8B5E1A` is gold as text on paper. Both names carry the one
+value, so the two marks cannot drift apart.
+
+Where a square is required, Stella uses its asterisk and Oxagen uses the kit's
+continuous **ox** monogram, gold only where the loop and the x share an edge.
+Oxagen alone has a lockup (monogram, gap, word). Stella has none; its asterisk
+is already in the word.
 
 ## Layout
 
 ```
-playbook.html      the document — read this first
+playbook.html      the document. Read this first.
 build/             color.py · glyphs.py · marks.py · surfaces.py · build.py · playbook.py
+build/reference/   the kit wordmark and logomark this system is checked against
+fonts/             Space Grotesk, variable and static, with its licence
 tokens/            house-tokens.css · house-tokens.json
-logo/svg,png/      wordmarks and marks — dark, light, adaptive, mono, mono-white, mono-black
-icons/             favicons and app icons, 16 → 512
+logo/svg,png/      wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles
+icons/             favicons and app icons, 16 to 512
 spinners/          the house motion, animated SVG, no script
-wallpapers/        desktop 4K/5K/6K · iphone ×3 · aurora | quiet · dark | light
+wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet · dark | light
 social/            avatar · x · linkedin · youtube · open graph · dark | light
 ads/               1080×1080 · 1080×1350 · 1200×628 · 300×250
-content/           changelog / essay / release / field-note cards, 1200×675
+content/           changelog · essay · release · field note cards, 1200×675
 ```
 
 ## Every pixel here is generated
 
 No file in this kit is drawn by hand. Every PNG is a render of the SVG beside
-it, every SVG is emitted from `build/`, and the gold is **read out of Stella's
-own token file** rather than retyped — so recolouring the metal recolours
-Oxagen's star, and the two marks cannot drift apart.
+it. Every SVG is emitted from `build/`. The colours live in one file,
+`build/color.py`, so a change there moves every asset on the next run.
 
 ```sh
-python3 build/build.py          # every asset
-python3 build/build.py --svg    # skip the raster pass
-python3 build/playbook.py       # rebuild the document
+python3 -m venv .venv && .venv/bin/pip install fonttools brotli
+brew install harfbuzz librsvg          # hb-shape and rsvg-convert
+.venv/bin/python build/build.py --check   # verify the face and the palette, write nothing
+.venv/bin/python build/build.py           # every asset
+.venv/bin/python build/build.py --svg     # skip the raster pass
+.venv/bin/python build/playbook.py        # rebuild the document
 ```
 
-Needs `fonttools`, `brotli` and `rsvg-convert` (`brew install librsvg`).
-`build/glyphs.py` has a `verify()` that reproduces Stella's shipped wordmark
-geometry from the font; if that fails, the transform has moved and every logo
-in the kit is wrong.
+`--check` reproduces the kit's shipped `oxagen` wordmark from the font (same
+weight, same em, HarfBuzz spacing including kerning) and fails if the geometry
+has moved. It also fails if the pinned gold stops matching its derivation from
+the kit's Bronze Gold, or if any text token drops below AA on its ground.
 
 ## Rules worth knowing before you use it
 
-- **Nothing sits to the left of the word.** The star is the only mark.
-- **Gold never encodes a state.** It is identity and at most one primary action
-  per screen. A gold "active" sits 1.3:1 from a warning amber.
-- **Gold as *text* on warm paper becomes `#806607`.** The mark keeps its metal;
+- **One glyph is gold.** The x in oxagen, the asterisk in stella. Never a
+  second one, never the whole word.
+- **Gold is identity and at most one action per screen.** It is never a
+  surface and it never encodes a state.
+- **Gold as text on warm paper becomes `#8B5E1A`.** The mark keeps its metal;
   words do not.
-- **Minimum 96 px** for the wordmark, **24 px** for the star alone.
-- **The star is the only picture we own.** No stock illustration, no gradient
-  mesh, no 3D render.
+- **Nothing sits to the left of stella.** The asterisk is the only mark.
+- **Minimum 88 px** for a wordmark, **24 px** for an icon, **120 px** for the
+  lockup. Below that, use the favicon.
+- **The icon is the only picture we own.** No stock illustration, no gradient
+  mesh, no 3D render. A surface that needs an image uses a bigger icon.
+- **Space Grotesk is not a code face.** Terminal output and code stay in the
+  system monospace.
