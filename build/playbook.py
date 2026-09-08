@@ -17,15 +17,15 @@ import surfaces as SF
 from build import AD_COPY, CONTENT, TAGLINES, ad_svg
 from marks import (
     BRANDS,
-    OXG,
-    OXG_BOX,
+    OX_TEXT,
+    OX_TRACKING,
+    OX_WEIGHT,
     SHIMMER_PERIOD,
     asterisk,
     favicon_svg,
     icon_svg,
     lockup_svg,
-    oxg_mark,
-    oxg_parts,
+    ox_lettermark,
     sheen_defs,
     spinner_svg,
     spinner_wordmark_svg,
@@ -153,28 +153,46 @@ def misuse_panel(kind: str, brand: str) -> str:
 
 
 def icon_construction() -> str:
-    """The ox graph in its box with its radii and the diagonals drawn over it."""
-    p = oxg_parts()
-    cx, cy, rr, rw = p["ring"]  # type: ignore[misc]
-    box = OXG_BOX
-    x0, y0, x1, y1 = p["ink"]  # type: ignore[misc]
+    """The lettermark on its type lines: baseline, x-height, cap-height, ink box.
+
+    The mark is letters, so what there is to show is where the font puts
+    them, not a set of radii. The only number here that is a decision rather
+    than a measurement is the tracking.
+    """
+    m = ox_lettermark()
+    x0, y0, x1, y1 = m["bounds"]  # type: ignore[misc]
+    w, h = float(x1) - float(x0), float(y1) - float(y0)
+    base, xh, cap = 0.0, float(m["x_height"]), float(m["cap_height"])  # type: ignore[arg-type]
+    pad = w * 0.08
+
+    def hline(y: float, colour: str, dash: str, op: float) -> str:
+        return (
+            f'<line x1="{float(x0) - pad:.2f}" y1="{y:.2f}" x2="{float(x1) + pad:.2f}" y2="{y:.2f}" '
+            f'stroke="{colour}" stroke-width="0.7" stroke-dasharray="{dash}" opacity="{op:g}"/>'
+        )
+
     guides = [
-        f'<rect x="0.5" y="0.5" width="{box - 1:g}" height="{box - 1:g}" fill="none" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.35"/>',
-        f'<rect x="{x0:.2f}" y="{y0:.2f}" width="{x1 - x0:.2f}" height="{y1 - y0:.2f}" fill="none" stroke="{C.GOLD}" stroke-width="0.6" stroke-dasharray="3 3" opacity="0.7"/>',
-        f'<path d="M0 0L{box:g} {box:g}M{box:g} 0L0 {box:g}" stroke="currentColor" stroke-width="0.4" opacity="0.3"/>',
-        f'<circle cx="{cx:g}" cy="{cy:g}" r="{OXG["leaf_d"]:g}" fill="none" stroke="currentColor" stroke-width="0.4" stroke-dasharray="2 2" opacity="0.35"/>',
-        f'<circle cx="{cx:g}" cy="{cy:g}" r="{rr:g}" fill="none" stroke="{C.GOLD}" stroke-width="0.5" opacity="0.8"/>',
+        f'<rect x="{float(x0):.2f}" y="{float(y0):.2f}" width="{w:.2f}" height="{h:.2f}" fill="none" '
+        f'stroke="{C.GOLD}" stroke-width="0.8" stroke-dasharray="4 4" opacity="0.7"/>',
+        hline(base, "currentColor", "0", 0.55),
+        hline(base - xh, "currentColor", "3 3", 0.35),
+        hline(base - cap, "currentColor", "3 3", 0.35),
     ]
     labels = [
-        (0, -3, f"box {box:g} · ink {x1 - x0:.0f} · blocks {OXG['leaf']:g} at r {OXG['leaf_d']:g}"),
-        (0, box + 7, f"node r {rr:g} · stroke {rw:g} · wire {OXG['edge_w']:g} · gap {OXG['gap']:g}"),
+        (float(x0), float(y0) - 8, f"{OX_TEXT} · Space Grotesk {OX_WEIGHT} · tracking {OX_TRACKING:+.2f} em"),
+        (float(x0), float(y1) + 16, f"ink {w:.0f} x {h:.0f} · cap {cap:.0f} · x-height {xh:.0f}"),
     ]
     text = "".join(
-        f'<text x="{x:.1f}" y="{y:.1f}" font-size="3.4" fill="currentColor" opacity="0.7">{esc(t)}</text>' for x, y, t in labels
+        f'<text x="{x:.1f}" y="{y:.1f}" font-size="7" fill="currentColor" opacity="0.7">{esc(t)}</text>'
+        for x, y, t in labels
     )
+    vx, vy = float(x0) - pad, float(y0) - 20
+    vw, vh = w + pad * 2, h + 44
     return (
-        f'<svg viewBox="-4 -8 {box + 8:g} {box + 18:g}" role="img" aria-label="ox graph construction" class="diagram">'
-        f'<g opacity="0.9">{oxg_mark("currentColor", C.GOLD, opacity=0.55)}</g>{"".join(guides)}{text}</svg>'
+        f'<svg viewBox="{vx:.2f} {vy:.2f} {vw:.2f} {vh:.2f}" role="img" '
+        f'aria-label="Ox lettermark construction" class="diagram">'
+        f'<path d="{m["path"]}" fill="currentColor" opacity="0.55"/>'
+        f'{"".join(guides)}{text}</svg>'
     )
 
 
@@ -460,7 +478,8 @@ def build_html() -> str:
 <li><b>Gold is identity, and one action per screen.</b> It is never a surface, and it never means a state.</li>
 <li><b>Gold as text on paper becomes gold-deep.</b> The mark keeps its metal; words do not.</li>
 <li><b>Nothing sits to the left of stella.</b> The asterisk is the only mark. Oxagen's lockup is the one exception, and only for Oxagen.</li>
-<li><b>The icon and its parts are the only pictures we own.</b> A node, an edge, a context block. No stock illustration, no gradient mesh, no 3D render. A surface that needs a picture builds one from those parts, or uses a bigger icon.</li>
+<li><b>The Ox mark is one colour.</b> It takes the colour of whatever it sits on -- paper on ink, ink on paper, <code>currentColor</code> in the adaptive files -- and it never carries the metal. The gold stays where the kit put it: on the <code>x</code> of the word.</li>
+<li><b>The icon is the only picture we own.</b> No stock illustration, no gradient mesh, no 3D render. A surface that needs a picture builds one out of the icon -- its outline, its mosaic, a field around it -- or simply uses a bigger one.</li>
 </ul>
 </section>
 
@@ -485,7 +504,7 @@ def build_html() -> str:
 {plate(inline(wordmark_svg("stella", sheen=True, uid=uid("v"))), "sheen: the metallic gradient, for hero sizes", cls="ink wm")}
 </div>
 <h3>The oxagen lockup</h3>
-<p>Oxagen alone has a lockup: the ox graph, then the word. The graph is centred on the x-height band, the band the letters <code>o x a e n</code> live in, and stands a third taller than it, so its blocks reach a little above the x-height and a little below the baseline. The gap is four tenths of the x-height. Every number is measured from the font. Use the lockup where a square mark and a name are needed together. Stella has no lockup; its asterisk is already in the word.</p>
+<p>Oxagen alone has a lockup: the mark in a plate, a gap, then the word. The plate stands a third taller than the wordmark's box and the mark is reversed out of it. That plate is doing real work. Set plainly, <code>Ox oxagen</code> stutters -- the mark is the word's own first two letters at the word's own size, so the eye reads one misspelt word instead of a mark and a name. Reversing the mark out of a plate separates them at the root: the plate is an object, the word is text, and no letterform had to be compromised to tell them apart. It costs nothing in colour either, because a plate with letters punched through it is still one path and one fill. Every number is measured from the font. Stella has no lockup; its asterisk is already in the word.</p>
 <div class="grid g2">
 {plate(inline(lockup_svg(uid=uid("lk"))), "oxagen lockup · on ink", cls="ink big")}
 {plate(inline(lockup_svg(letters=C.INK_TEXT, uid=uid("lk"))), "oxagen lockup · on paper", cls="paper big")}
@@ -507,11 +526,12 @@ def build_html() -> str:
 
 <section id="icons">
 <p class="eyebrow">Icons</p>
-<h2>The asterisk and the ox graph</h2>
-<p>Where a square is required, Stella uses its asterisk and Oxagen uses the ox graph: a hollow node at the centre, the <code>o</code>, wired to four context blocks on the diagonals, the <code>x</code>. One node connected to many, and every edge runs both ways. The blocks and their edges are gold; the node takes the letter colour, exactly as the wordmark paints <code>ox</code>. It is drawn from nine primitives (a ring, four lines, four rounded squares) and nothing else, so it survives a 16 px favicon and a 6K wallpaper alike. Do not add nodes, do not fill the ring, do not rotate it off the diagonals.</p>
+<h2>The asterisk and the Ox</h2>
+<p>Where a square is required, Stella uses its asterisk and Oxagen uses <code>Ox</code>: the word's own first two letters, capitalised the way a name is. It is not drawn. Like the wordmark and like the asterisk, it is outlines straight out of Space Grotesk, so the mark and the word can never drift apart -- set at the display weight, because an icon needs more mass than a word, and fitted {OX_TRACKING:+.2f} em tighter than the font would set them, because two letters standing alone are a drawing and not a word. That is the only number here that was decided rather than measured.</p>
+<p>The mark carries no metal. It is one colour, and that colour is whatever the surface gives it. A mark that is two colours has to be redrawn for every ground it lands on; a mark that is one colour is placed and forgotten, and it can be handed to an operating system that will tint it however it likes. Do not add a second colour, do not outline it, do not set it in another face or weight.</p>
 <div class="grid g2">
-{plate(icon_construction(), "construction: the 96 box, the ring, the wires, the blocks")}
-{plate(icon_family(), "the family: asterisk and ox graph, side by side")}
+{plate(icon_construction(), "construction: the type lines the mark is set on")}
+{plate(icon_family(), "the family: asterisk and Ox, side by side")}
 </div>
 <div class="grid g4">
 {plate(inline(icon_svg("stella", uid=uid("i"))), "stella icon · on ink", cls="ink icon")}
@@ -523,7 +543,7 @@ def build_html() -> str:
 {plate(inline(icon_svg("stella", background=C.PAPER, letters=C.INK_TEXT, radius=20, sheen=True, uid=uid("i"))), "stella tile · paper", cls="icon")}
 {plate(inline(icon_svg("oxagen", background=C.PAPER, letters=C.INK_TEXT, radius=20, sheen=True, uid=uid("i"))), "oxagen tile · paper", cls="icon")}
 </div>
-<p style="margin-top:18px">At 16 to 48 px both icons survive as themselves. The ox graph's strokes are set a third heavier for the favicon, so the wires do not fall between pixels.</p>
+<p style="margin-top:18px">At 16 to 48 px both icons survive as themselves, and neither is redrawn to get there. <code>Ox</code> was fitted at 16 px in the first place: the display weight keeps the stems on the pixel grid and the tight fit keeps the <code>O</code>'s counter open. Only the fill fraction changes -- at 16 px the mark takes almost the whole square, because the padding a 256 px tile wants is four pixels a favicon cannot spare.</p>
 <div class="favs">{favicon_row("oxagen")}{favicon_row("stella")}</div>
 </section>
 
@@ -554,7 +574,7 @@ def build_html() -> str:
 <section id="motion">
 <p class="eyebrow">Motion</p>
 <h2>Light passes over the metal</h2>
-<p>The house motion is the shimmer: a band of light crosses the gold glyph every {SHIMMER_PERIOD:g} seconds. Stella's asterisk turns a sixth of a turn, its own symmetry, as the light passes. Oxagen's graph assembles: the node draws on, the four wires run out from it, and the blocks land at their ends. All of it is CSS inside the SVG; it runs in an <code>&lt;img&gt;</code> with no script, and <code>prefers-reduced-motion</code> lands it on a still mark.</p>
+<p>The house motion is the shimmer: a band of light crosses the mark every {SHIMMER_PERIOD:g} seconds. Stella's asterisk turns a sixth of a turn, its own symmetry, as the light passes over its gold. Oxagen's <code>Ox</code> has no metal for light to catch, so it takes the same band in value instead: the mark is held at a third strength and the band brings it up to full. Same band, same tilt, same easing -- one gesture, made in hue on the one mark and in brightness on the other. All of it is CSS inside the SVG; it runs in an <code>&lt;img&gt;</code> with no script, and <code>prefers-reduced-motion</code> lands it on a still mark at full strength.</p>
 <div class="grid g4">
 {plate(inline(spinner_svg("stella", uid=uid("sp"))), "stella spinner", cls="ink sp")}
 {plate(inline(spinner_svg("oxagen", uid=uid("sp"))), "oxagen spinner", cls="ink sp")}
@@ -570,16 +590,16 @@ def build_html() -> str:
 <section id="surfaces">
 <p class="eyebrow">Surfaces</p>
 <h2>One composition rule</h2>
-<p>A surface is a ground, one warm bloom of the metal, the brand's own icon placed off-centre, and at most a few lines of type. When a surface needs more than a mark, it builds the picture from the icon's own parts. Every surface below is the vector the kit ships, not a screenshot.</p>
+<p>A surface is a ground, one warm bloom of the metal, the brand's own icon placed off-centre, and at most a few lines of type. When a surface needs more than a mark, it builds the picture out of the mark. Every surface below is the vector the kit ships, not a screenshot.</p>
 <h3>Wallpapers, five ways</h3>
-<p><b>graph</b> scatters nodes across the ground, wires each to its two nearest neighbours, and runs gold edges from the icon's blocks to the nodes nearest them: the one-to-many, drawn. <b>blocks</b> rebuilds the icon from context blocks on a grid, each tile a shade brighter or deeper than the next, with a bloom of fainter blocks around it. <b>orbit</b> hangs five rings of nodes off the mark, each node wired inward to the ring inside it. <b>glow</b> and <b>quiet</b> are the mark alone, as a bloom and as a hairline. Every node is placed by a seeded random, so the same file comes out of every build.</p>
+<p><b>graph</b> scatters nodes across the ground, wires each to its two nearest neighbours, and runs gold edges from the mark out to the nodes nearest it: the one-to-many, drawn. <b>blocks</b> rebuilds the mark from blocks on a grid, each tile a shade brighter or deeper than the next, with a bloom of fainter blocks around it. <b>orbit</b> hangs five rings of nodes off the mark, each node wired inward to the ring inside it. <b>glow</b> and <b>quiet</b> are the mark alone, as a bloom and as a hairline -- and both are pulled back inside the canvas rather than cropped, because a mark clipped by a few per cent of its width reads as a mistake and not as a crop. Every node is placed by a seeded random, so the same file comes out of every build.</p>
 <div class="grid g2">{walls}</div>
 <div class="grid g4" style="margin-top:18px">{phones}</div>
 <h3>Social</h3>
 <div class="grid g4">{social}</div>
 <div class="grid g2" style="margin-top:18px">{banners}</div>
 <h3>Ads</h3>
-<p>Every ad opens on the reader's pain, then the mark answers it. Oxagen runs four lines: the bill, the re-explaining, the waste, and the September positioning. Stella runs two: the proof rule, and the green check. Each line ships in the four sizes, on ink and on paper.</p>
+<p>Every ad opens on the reader's pain and then answers it in one line. The headline is the problem -- the bill, re-explaining yourself, wasted spend -- and under it sits a single sentence saying what Oxagen does about it. Those four answer lines are the four things the product does, one to an ad: it <b>teaches</b> your agents your business, <b>governs</b> what they may do, <b>explains</b> every run, and <b>learns</b> from each one. No ad carries more than one of them, and between them the four carry all of it, so the promise is made whole by the campaign rather than crammed onto a single poster. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form: that line is the reason the ad exists. Stella runs two lines: the proof rule, and the green check. Each ships in the four sizes, on ink and on paper.</p>
 <div class="grid g2">{"".join(ads)}</div>
 <h3>Content cards</h3>
 <div class="grid g2">{"".join(cards)}</div>

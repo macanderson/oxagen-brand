@@ -2,12 +2,12 @@
 
 One composition rule holds all of them. A surface is a ground, one warm bloom
 of the metal, the brand's own icon placed off-centre, and at most a few lines
-of type. The icon and the vocabulary it is built from (a node, an edge, a
-context block) are the only pictures either brand owns, so a surface that
-needs more than a mark builds it from those parts: a constellation of nodes
-wired to the icon, a mosaic of blocks in the icon's shape, or rings of nodes in
-orbit around it. Every one of them is placed by a seeded random, so the same
-file comes out of the build every time.
+of type. The icon is the only picture either brand owns, so a surface that
+needs more than a mark builds one out of the icon itself: a constellation of
+nodes wired to it, a mosaic of blocks in its shape, or rings of nodes in orbit
+around it. Nothing here draws a shape the marks do not already contain. Every
+one of them is placed by a seeded random, so the same file comes out of the
+build every time.
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ from color import (
 )
 from geom import Point, dist, nearest, rng, scatter
 from glyphs import glyph_paths, text_path, text_width, wordmark
-from marks import BRANDS, icon_body, icon_geometry, icon_hit, oxg_outline, oxg_parts, sheen_defs
+from marks import BRANDS, icon_body, icon_geometry, icon_hit, sheen_defs
 
 #: Process-global, not per-surface. Several of these compositions are inlined
 #: into one HTML document by the playbook, and `id` is document-scoped: a
@@ -45,12 +45,19 @@ def _mark(brand: str) -> dict[str, object]:
 
 
 def icon_ports(brand: str) -> list[Point]:
-    """Where an edge may leave the icon, in its own units: the blocks, or the arm tips."""
-    if brand == "oxagen":
-        return list(oxg_parts()["leaves"])  # type: ignore[arg-type]
+    """Where an edge may leave the icon, in its own units.
+
+    Six points on the ellipse the mark's ink box inscribes, so a constellation
+    hangs off the shape rather than off its corners. Both marks are outlines
+    now, so neither needs a special case.
+    """
     g = icon_geometry(brand)
-    cx, cy, r = float(g["cx"]), float(g["cy"]), float(g["h"]) / 2 * 0.9  # type: ignore[arg-type]
-    return [(cx + r * math.cos(math.radians(a)), cy + r * math.sin(math.radians(a))) for a in range(30, 360, 60)]
+    cx, cy = float(g["cx"]), float(g["cy"])  # type: ignore[arg-type]
+    rx, ry = float(g["w"]) / 2 * 0.9, float(g["h"]) / 2 * 0.9  # type: ignore[arg-type]
+    return [
+        (cx + rx * math.cos(math.radians(a)), cy + ry * math.sin(math.radians(a)))
+        for a in range(30, 360, 60)
+    ]
 
 
 class Surface:
@@ -115,6 +122,23 @@ class Surface:
         a = math.radians(rot)
         return (cx + x * math.cos(a) - y * math.sin(a), cy + x * math.sin(a) + y * math.cos(a))
 
+    def inside(self, brand: str, cx: float, cy: float, span: float, *, margin: float = 0.05) -> tuple[float, float]:
+        """`cx, cy` pulled back until a mark of `span` fits the canvas whole.
+
+        A surface that wants the mark bleeding off an edge (the ads, the open
+        graph card) places it directly and does not call this. A wallpaper
+        does call it, because a mark clipped by a few per cent of its width
+        reads as a mistake rather than as a crop -- and because the two marks
+        are different shapes, the placement that fits one does not fit the
+        other. `span` is the mark's long edge, so it bounds both directions.
+        """
+        half, m = span / 2, min(self.w, self.h) * margin
+        if half * 2 + m * 2 <= self.w:
+            cx = min(max(cx, half + m), self.w - half - m)
+        if half * 2 + m * 2 <= self.h:
+            cy = min(max(cy, half + m), self.h - half - m)
+        return cx, cy
+
     def ghost(
         self, brand: str, cx: float, cy: float, span: float, *, rot: float = 0.0, alpha: float | None = None
     ) -> "Surface":
@@ -131,10 +155,10 @@ class Surface:
         t, s = self._placed(brand, cx, cy, span, rot)
         g = icon_geometry(brand)
         hair = max(1.6, self.short * 0.0012)  # a hairline, but one that survives a thumbnail
-        if g["kind"] == "asterisk":
-            inner = f'<path d="{g["path"]}" fill="none" stroke="{GOLD}" stroke-width="{hair / s:.4f}"/>'
-        else:
-            inner = oxg_outline(GOLD, hair / s)
+        inner = (
+            f'<path d="{g["path"]}" fill="none" stroke="{GOLD}" '
+            f'stroke-width="{hair / s:.4f}" stroke-linejoin="round"/>'
+        )
         self.body.append(f'<g opacity="0.85" {t}>{inner}</g>')
         return self
 
@@ -220,8 +244,8 @@ class Surface:
         Nodes scatter over the canvas but keep clear of the icon and thin out
         toward the quiet edges (`quiet` is how much of each of left, top, right,
         bottom to leave calm). Each node joins its two nearest neighbours in a
-        hairline. The icon's ports reach out in gold to the nodes nearest them,
-        and those nodes become context blocks: the one-to-many, drawn.
+        hairline. The icon reaches out in gold to the nodes nearest it, and
+        those nodes are lit as blocks: the one-to-many, drawn.
         """
         w, h, short = self.w, self.h, self.short
         r = rng("constellation", brand, w, h, seed)
@@ -295,7 +319,7 @@ class Surface:
         return self
 
     def mosaic(self, brand: str, cx: float, cy: float, span: float, *, cell: float, seed: str = "") -> "Surface":
-        """The icon rebuilt from context blocks on a grid, with a bloom of blocks around it.
+        """The icon rebuilt from blocks on a grid, with a bloom of blocks around it.
 
         A faint grid of blocks covers the whole ground. Every cell whose centre
         lands on the icon's ink is painted in the metal, each a shade brighter
@@ -432,10 +456,12 @@ WALLPAPER_STYLES = ("glow", "quiet", "graph", "blocks", "orbit")
 def wallpaper_desktop(w: int, h: int, brand: str, scheme: str, style: str = "glow") -> str:
     """The picture sits right of centre, leaving the icon corner and the dock clear."""
     s = Surface(w, h, scheme)
+    span = h * 0.82
+    cx, cy = s.inside(brand, w * 0.78, h * 0.46, span)
     if style == "glow":
-        s.ghost(brand, w * 0.78, h * 0.46, h * 0.82, rot=GHOST_ROT[brand])
+        s.ghost(brand, cx, cy, span, rot=GHOST_ROT[brand])
     elif style == "quiet":
-        s.outline(brand, w * 0.78, h * 0.46, h * 0.82, rot=GHOST_ROT[brand])
+        s.outline(brand, cx, cy, span, rot=GHOST_ROT[brand])
     elif style == "graph":
         s.constellation(brand, w * 0.66, h * 0.5, h * 0.30, quiet=(0.30, 0.06, 0.0, 0.08))
     elif style == "blocks":
@@ -451,10 +477,11 @@ def wallpaper_phone(w: int, h: int, brand: str, scheme: str, style: str = "glow"
     """Portrait: the picture sits below the clock and above the dock."""
     s = Surface(w, h, scheme)
     cx, cy = w * 0.5, h * 0.47
+    gx, gy = s.inside(brand, cx, h * 0.5, w * 0.92)
     if style == "glow":
-        s.ghost(brand, cx, h * 0.5, w * 0.92, rot=GHOST_ROT[brand])
+        s.ghost(brand, gx, gy, w * 0.92, rot=GHOST_ROT[brand])
     elif style == "quiet":
-        s.outline(brand, cx, h * 0.5, w * 0.92, rot=GHOST_ROT[brand])
+        s.outline(brand, gx, gy, w * 0.92, rot=GHOST_ROT[brand])
     elif style == "graph":
         s.constellation(brand, cx, cy, w * 0.40, quiet=(0.0, 0.16, 0.0, 0.14))
     elif style == "blocks":
@@ -499,13 +526,26 @@ def og_card(w: int, h: int, brand: str, scheme: str, *, tagline: str) -> str:
 
 
 def ad(
-    w: int, h: int, brand: str, scheme: str, *, headline: list[str], kicker: str = "", cta: str = ""
+    w: int,
+    h: int,
+    brand: str,
+    scheme: str,
+    *,
+    headline: list[str],
+    kicker: str = "",
+    subline: str = "",
+    cta: str = "",
 ) -> str:
-    """Kicker, a short headline set tight, a rule in the metal, then the mark.
+    """Kicker, a short headline set tight, the answer line, a rule, then the mark.
 
     Laid out from the bottom edge upward so the call to action can never land
     on the wordmark, and the type is shrunk until the block fits under the
     kicker -- the square is where the headline is tallest against the canvas.
+
+    The headline names the reader's problem; `subline` is the one line that
+    says what Oxagen does about it. It is set at a little under half the
+    headline and in the full text colour rather than the muted one, because
+    it is the substance of the ad and not a caption to it.
     """
     s = Surface(w, h, scheme)
     short = min(w, h)
@@ -519,7 +559,12 @@ def ad(
     size = min(w * 0.075, h * 0.105)
     ceiling = pad + (size * 0.035 / 0.075 * 2.2 if kicker else 0)
     for _ in range(24):
-        block = (len(headline) - 1) * size * 1.22 + size * 1.9 + (size * 0.85 if cta else 0)
+        block = (
+            (len(headline) - 1) * size * 1.22
+            + size * 1.9
+            + (size * 0.85 if cta else 0)
+            + (size * 1.05 if subline else 0)
+        )
         wide = max(text_width(ln, size, 700) for ln in headline)
         if mark_cy - mark_h / 2 - size * 0.9 - block >= ceiling and wide <= w - pad * 2:
             break
@@ -534,6 +579,14 @@ def ad(
     rule_h = max(3.0, short * 0.011)
     s.rule(pad, y - rule_h, short * 0.13, rule_h)
     y -= rule_h + size * 0.95
+    if subline:
+        # The answer line never wraps and never runs into the margin: it is
+        # one sentence, so if it will not fit the measure it is set smaller.
+        sub = size * 0.44
+        while sub > size * 0.22 and text_width(subline, sub, 500) > w - pad * 2:
+            sub *= 0.96
+        s.line(subline, pad, y, sub, weight=500)
+        y -= size * 1.05
 
     for i, ln in enumerate(reversed(headline)):
         s.line(ln, pad, y - i * lead, size, weight=700)

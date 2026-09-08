@@ -29,18 +29,33 @@ rather than copper. That is `#D6962C`. `#F1C364` is the highlight the shimmer
 passes through; `#8B5E1A` is gold as text on paper. Both names carry the one
 value, so the two marks cannot drift apart.
 
-Where a square is required, Stella uses its asterisk and Oxagen uses the **ox
-graph**: a hollow node (the o) wired to four context blocks on the diagonals
-(the x). One node connected to many, every edge running both ways. The blocks
-and their edges are gold; the node takes the letter colour, exactly as the
-wordmark paints `ox`. It is nine primitives, a ring, four lines and four
-rounded squares, so it survives a 16 px favicon and a 6K wallpaper alike.
-The kit's continuous-loop monogram is retired (September 2026); its file
-stays in `build/reference/` as history.
+Where a square is required, Stella uses its asterisk and Oxagen uses **Ox**:
+the word's own first two letters, capitalised the way a name is. It is not
+drawn. Like the wordmark and like the asterisk, it is outlines straight out of
+Space Grotesk, so the mark and the word can never drift apart -- set at the
+display weight, because an icon needs more mass than a word, and fitted 0.06 em
+tighter than the font would set them, because two letters standing alone are a
+drawing and not a word. That is the only number in the mark that was decided
+rather than measured.
 
-Oxagen alone has a lockup: the graph centred on the x-height band, a third
-taller than it, a gap of four tenths of the x-height, then the word. Stella
-has none; its asterisk is already in the word.
+**The mark is one colour.** It takes the colour of whatever it sits on --
+paper on ink, ink on paper, `currentColor` in the adaptive files -- and it
+never carries the metal. A mark that is two colours has to be redrawn for
+every ground it lands on; a mark that is one colour is placed and forgotten,
+and it can be handed to an operating system that will tint it however it
+likes. The gold stays where the kit put it: on the `x` of the word.
+
+The kit's continuous-loop monogram and the ox graph that briefly replaced it
+are both retired (September 2026); the kit's own file stays in
+`build/reference/` as history.
+
+Oxagen alone has a lockup: the mark in a plate, a gap, then the word. The
+plate is doing real work. Set plainly, `Ox oxagen` stutters -- the mark is the
+word's own first two letters at the word's own size, so the eye reads one
+misspelt word instead of a mark and a name. Reversing the mark out of a plate
+separates them at the root, and costs nothing in colour: a plate with letters
+punched through it is still one path and one fill. Stella has no lockup; its
+asterisk is already in the word.
 
 ## Layout
 
@@ -90,11 +105,16 @@ the kit's Bronze Gold, or if any text token drops below AA on its ground.
 - **Nothing sits to the left of stella.** The asterisk is the only mark.
 - **Minimum 88 px** for a wordmark, **24 px** for an icon, **120 px** for the
   lockup. Below that, use the favicon.
-- **The icon and its parts are the only pictures we own.** A node, an edge, a
-  context block. No stock illustration, no gradient mesh, no 3D render. A
-  surface that needs a picture builds one from those parts (the `graph`,
-  `blocks` and `orbit` wallpapers) or uses a bigger icon.
-- **Every ad opens on the reader's pain.** The bill, the re-explaining, the
-  waste. The mark answers; it never leads.
+- **The Ox mark is one colour.** Never two, never outlined, never in another
+  face or weight. The gold belongs to the `x` of the word.
+- **The icon is the only picture we own.** No stock illustration, no gradient
+  mesh, no 3D render. A surface that needs a picture builds one out of the
+  icon -- its outline, its mosaic, a field around it (the `quiet`, `blocks`,
+  `graph` and `orbit` wallpapers) -- or simply uses a bigger one.
+- **Every ad opens on the reader's pain, and answers it in one line.** The
+  bill, the re-explaining, the waste. Under the headline sits one sentence
+  saying what Oxagen does about it: it teaches your agents your business,
+  governs what they may do, explains every run, or learns from each one. One
+  of the four to an ad, all four across the campaign.
 - **Space Grotesk is not a code face.** Terminal output and code stay in the
   system monospace.

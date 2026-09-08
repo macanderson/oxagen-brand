@@ -112,13 +112,23 @@ def _draw(f: TTFont, name: str, x: float, y: float, size: float) -> tuple[str, t
 
 
 def set_line(
-    text: str, x: float = 0.0, y: float = 0.0, size: float = EM, weight: int = LOGO_WEIGHT
+    text: str,
+    x: float = 0.0,
+    y: float = 0.0,
+    size: float = EM,
+    weight: int = LOGO_WEIGHT,
+    tracking: float = 0.0,
 ) -> list[dict[str, object]]:
     """Every glyph of `text` on one baseline at (`x`, `y`), left to right, kerned.
 
     One record per glyph: the character(s) it came from, its glyph name, path,
     origin, advance and ink bounds (None for anything with no contour, such as
     a space). A ligature is one record whose `char` is both letters.
+
+    `tracking` adds a fixed amount to every advance, in the same units as
+    `size`. Wordmarks never use it -- their spacing is the font's, and the
+    reference check would fail if it moved -- but a two-letter monogram is a
+    drawing, not a word, and is fitted by eye.
     """
     f = font(weight)
     s = size / _upm(f)
@@ -131,7 +141,7 @@ def set_line(
         out.append(
             {"char": text[cl:end], "glyph": name, "x": cx, "advance": ax * s, "path": path, "bounds": bounds}
         )
-        cx += ax * s
+        cx += ax * s + tracking
     return out
 
 

@@ -21,6 +21,7 @@ from pathlib import Path
 
 import color as C
 import glyphs as G
+import marks as MK
 import surfaces as SF
 from marks import (
     BRANDS,
@@ -128,7 +129,19 @@ def build_tokens() -> None:
         "version": "2.1.0",
         "name": "oxagen house system",
         "built_on": "oxagen brand kit (Space Grotesk, Ink and Paper, Bronze Gold)",
-        "icons": {"oxagen": "ox graph", "stella": "asterisk"},
+        "icons": {
+            "oxagen": {
+                "kind": "lettermark",
+                "text": MK.OX_TEXT,
+                "family": "Space Grotesk",
+                "weight": MK.OX_WEIGHT,
+                "tracking_em": MK.OX_TRACKING,
+                "colours": 1,
+                "note": "one colour, taken from the surface; never the metal",
+            },
+            "stella": {"kind": "glyph", "text": "*", "family": "Space Grotesk",
+                       "weight": G.LOGO_WEIGHT, "colours": 1, "note": "the metal"},
+        },
         "gold": {
             "hex": C.GOLD,
             "oklch": {"L": round(gL, 4), "C": round(gC, 4), "H": round(gH, 2)},
@@ -272,7 +285,18 @@ def build_social(raster: bool) -> None:
 #: square and the portrait; `wide` is the same words in two long lines for the
 #: landscape, where a four-line stack would shrink to fit; `short` is the line
 #: the 300x250 carries, because a banner is not a poster with the middle line
-#: deleted.
+#: The ad line is the positioning line. Every Oxagen ad opens on the reader's
+#: own problem -- the bill, re-explaining yourself, wasted spend -- and then
+#: answers it in one line. Those four answer lines are the four things the
+#: product does, one per ad: it teaches your agents your business, governs
+#: what they may do, explains every run, and learns from each one. No ad
+#: carries more than one of them, and between them the four ads carry all of
+#: it, so the promise is made whole by the campaign rather than crammed into
+#: a single poster.
+#:
+#: No benchmark numbers and no competitor is named in public art: the deck's
+#: comparison is an investor slide, and a number in an ad is a claim the ad
+#: has to keep being true.
 AD_COPY: dict[str, list[dict[str, object]]] = {
     "oxagen": [
         {
@@ -281,6 +305,9 @@ AD_COPY: dict[str, list[dict[str, object]]] = {
             "headline": ["Can you explain", "your AI bill?", "Neither can", "your provider."],
             "wide": ["Can you explain your AI bill?", "Neither can your provider."],
             "short": ["Can you explain", "your AI bill?"],
+            # explains every run
+            "subline": "Oxagen explains every run: what it did, and what it cost.",
+            "subshort": "Every run explains itself.",
             "cta": "oxagen.sh",
         },
         {
@@ -289,13 +316,20 @@ AD_COPY: dict[str, list[dict[str, object]]] = {
             "headline": ["Never re-explain", "yourself to AI", "ever again."],
             "wide": ["Never re-explain yourself", "to AI ever again."],
             "short": ["Never re-explain", "yourself."],
+            # teaches your agents your business
+            "subline": "Teach Oxagen your business once. Every agent you run has it.",
+            "subshort": "Taught once. Known by all.",
             "cta": "oxagen.sh",
         },
         {
             "slug": "waste",
             "kicker": "Fewer tokens. Same answers.",
             "headline": ["Stop wasting", "money on AI."],
+            "wide": ["Stop wasting money on AI."],
             "short": ["Stop wasting", "money on AI."],
+            # learns from each one
+            "subline": "Oxagen learns from every run, and the next one costs less.",
+            "subshort": "Each run costs less.",
             "cta": "oxagen.sh",
         },
         {
@@ -304,6 +338,9 @@ AD_COPY: dict[str, list[dict[str, object]]] = {
             "headline": ["Agents that", "prove their work.", "A model you own."],
             "wide": ["Agents that prove their work.", "A model you own."],
             "short": ["A model", "you own."],
+            # governs what they may do
+            "subline": "Oxagen governs what your agents may do: a role, a budget, a boundary.",
+            "subshort": "A role. A budget. A boundary.",
             "cta": "oxagen.sh",
         },
     ],
@@ -330,12 +367,21 @@ AD_SIZES = [(1080, 1080, "square"), (1080, 1350, "portrait"), (1200, 628, "lands
 
 
 def ad_svg(brand: str, campaign: dict[str, object], w: int, h: int, tag: str, scheme: str) -> str:
+    """One campaign at one size. The small formats carry their own, shorter copy.
+
+    A banner is not a poster with the middle line deleted. The 300x250 drops
+    the kicker and the call to action -- there is no room for either at a
+    legible size -- but it keeps the answer line, in its short form, because
+    that line is the reason the ad exists.
+    """
     small = tag == "mpu"
     key = "short" if small else ("wide" if tag == "landscape" and "wide" in campaign else "headline")
+    sub = campaign.get("subshort" if small else "subline", "")
     return SF.ad(
         w, h, brand, scheme,
         kicker="" if small else str(campaign["kicker"]),
         headline=list(campaign[key]),  # type: ignore[call-overload]
+        subline=str(sub),
         cta="" if small else str(campaign["cta"]),
     )
 
@@ -386,14 +432,27 @@ def build_content(raster: bool) -> None:
 
 
 def build_favicons(raster: bool) -> None:
-    """16 to 48 from the favicon mark on nothing; 180 and up from the dark tile."""
+    """The SVG favicon, and the PNG fallbacks a browser or a home screen asks for.
+
+    The SVG is adaptive: a browser that takes an SVG favicon gets a mark that
+    follows the tab's own colour scheme, which is the whole point of a
+    one-colour mark.
+
+    A PNG cannot adapt, and that is what decides where each brand's small
+    sizes come from. Stella's asterisk is gold, and gold is legible on a light
+    tab and a dark one alike, so it rasterises on nothing. Oxagen's `Ox` is
+    one colour: on nothing it would be paper on a paper-coloured tab, which is
+    no favicon at all. So Oxagen's PNGs come from its tile at every size --
+    opaque, and legible wherever the tab is painted. Both brands take 180 and
+    up from the tile regardless, because a home-screen icon is a tile.
+    """
     for b in BRAND_WORDS:
-        fav = write(f"logo/svg/{b}-favicon.svg", favicon_svg(b))
+        fav = write(f"logo/svg/{b}-favicon.svg", favicon_svg(b, adaptive=True))
         if not raster:
             continue
         tile = ROOT / f"logo/svg/{b}-icon-tile-dark.svg"
         for size in (16, 32, 48, 180, 192, 512):
-            src = fav if size <= 48 else tile
+            src = tile if (size > 48 or b == "oxagen") else fav
             png(src, width=size, height=size, out=ROOT / "icons" / f"{b}-icon-{size}.png")
 
 
