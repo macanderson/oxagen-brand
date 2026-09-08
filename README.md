@@ -29,25 +29,33 @@ rather than copper. That is `#D6962C`. `#F1C364` is the highlight the shimmer
 passes through; `#8B5E1A` is gold as text on paper. Both names carry the one
 value, so the two marks cannot drift apart.
 
-Where a square is required, Stella uses its asterisk and Oxagen uses the kit's
-continuous **ox** monogram, gold only where the loop and the x share an edge.
-Oxagen alone has a lockup (monogram, gap, word). Stella has none; its asterisk
-is already in the word.
+Where a square is required, Stella uses its asterisk and Oxagen uses the **ox
+graph**: a hollow node (the o) wired to four context blocks on the diagonals
+(the x). One node connected to many, every edge running both ways. The blocks
+and their edges are gold; the node takes the letter colour, exactly as the
+wordmark paints `ox`. It is nine primitives, a ring, four lines and four
+rounded squares, so it survives a 16 px favicon and a 6K wallpaper alike.
+The kit's continuous-loop monogram is retired (September 2026); its file
+stays in `build/reference/` as history.
+
+Oxagen alone has a lockup: the graph centred on the x-height band, a third
+taller than it, a gap of four tenths of the x-height, then the word. Stella
+has none; its asterisk is already in the word.
 
 ## Layout
 
 ```
 playbook.html      the document. Read this first.
-build/             color.py · glyphs.py · marks.py · surfaces.py · build.py · playbook.py
+build/             color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against
 fonts/             Space Grotesk, variable and static, with its licence
 tokens/            house-tokens.css · house-tokens.json
 logo/svg,png/      wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles
 icons/             favicons and app icons, 16 to 512
 spinners/          the house motion, animated SVG, no script
-wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet · dark | light
+wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit · dark | light
 social/            avatar · x · linkedin · youtube · open graph · dark | light
-ads/               1080×1080 · 1080×1350 · 1200×628 · 300×250
+ads/               bill · memory · waste · proof · 1080×1080 · 1080×1350 · 1200×628 · 300×250
 content/           changelog · essay · release · field note cards, 1200×675
 ```
 
@@ -82,7 +90,11 @@ the kit's Bronze Gold, or if any text token drops below AA on its ground.
 - **Nothing sits to the left of stella.** The asterisk is the only mark.
 - **Minimum 88 px** for a wordmark, **24 px** for an icon, **120 px** for the
   lockup. Below that, use the favicon.
-- **The icon is the only picture we own.** No stock illustration, no gradient
-  mesh, no 3D render. A surface that needs an image uses a bigger icon.
+- **The icon and its parts are the only pictures we own.** A node, an edge, a
+  context block. No stock illustration, no gradient mesh, no 3D render. A
+  surface that needs a picture builds one from those parts (the `graph`,
+  `blocks` and `orbit` wallpapers) or uses a bigger icon.
+- **Every ad opens on the reader's pain.** The bill, the re-explaining, the
+  waste. The mark answers; it never leads.
 - **Space Grotesk is not a code face.** Terminal output and code stay in the
   system monospace.

@@ -8,9 +8,11 @@ Two wordmarks, one face, one metal.
              asterisk, in the same gold. The asterisk is a character, not a
              drawing, and it is never redrawn.
 
-Each brand has one icon for squares: Stella's is the asterisk; Oxagen's is the
-kit's continuous `ox` monogram, an open loop whose right edge becomes an `x`,
-gold only where the two shapes share an edge.
+Each brand has one icon for squares. Stella's is the asterisk. Oxagen's is
+the ox graph: a hollow node (the `o`) wired to four context blocks (the `x`),
+one node connected to many and every edge running both ways. The blocks and
+their edges are gold; the node takes the letter colour, exactly as the
+wordmark paints `ox`.
 
 The house motion is the shimmer: a band of light passes over the metal. It is
 declarative CSS inside the SVG, so it runs in an `<img>` with no script, and
@@ -19,8 +21,11 @@ declarative CSS inside the SVG, so it runs in an `<img>` with no script, and
 
 from __future__ import annotations
 
+import math
+
 from color import GOLD, GOLD_BRIGHT, GOLD_DEEP, INK, INK_TEXT, PAPER, PAPER_TEXT
-from glyphs import LOGO_WEIGHT, EM, glyph_paths, set_line, union_bounds, wordmark
+from geom import path_hit
+from glyphs import LOGO_WEIGHT, EM, font, glyph_paths, set_line, union_bounds, wordmark
 
 #: What each brand is made of. `accent` is the one glyph painted in the metal.
 BRANDS: dict[str, dict[str, object]] = {
@@ -162,63 +167,139 @@ def wordmark_svg(
 
 
 # --------------------------------------------------------------------------
-# the continuous ox
+# the ox graph
 # --------------------------------------------------------------------------
 
-#: The monogram's own drawing box, from the kit. Stroke geometry in these
-#: units; the ink extends past the paths by half the stroke.
-OX_BOX = (128.0, 96.0)
-OX_STROKE = 12.0
-OX_PATHS = {
-    "o": "M66.213 26.787 A30 30 0 1 0 66.213 69.213",
-    "xa": "M66.213 26.787 L108 72",
-    "xb": "M108 24 L66.213 69.213",
-    "ga": "M66.213 26.787 L78.2 39.760",
-    "gb": "M66.213 69.213 L78.2 56.240",
+#: The graph's drawing box and its parts, in its own units. The `o` is a
+#: hollow node at the centre; the `x` is four context blocks, one on each
+#: diagonal, each wired to the node by a short edge. One node, many blocks,
+#: and every edge runs both ways.
+OXG_BOX = 96.0
+OXG = {
+    "cx": 48.0,
+    "cy": 48.0,
+    "ring_r": 15.0,  # the node's centreline radius
+    "ring_w": 6.5,  # and its stroke
+    "leaf_d": 41.0,  # centre to each block's centre, along the diagonal
+    "leaf": 14.0,  # block side
+    "leaf_rx": 3.8,  # block corner
+    "edge_w": 5.0,  # the wire
+    "gap": 2.2,  # daylight between the wire and what it joins
 }
-#: The ink the strokes actually cover, measured with their caps.
-OX_INK = (9.0, 15.51, 116.49, 80.49)
+OXG_ANGLES = (45.0, 135.0, 225.0, 315.0)
+_SQ2 = 2**0.5
 
 
-def ox_mark(
+def oxg_parts(weight: float = 1.0) -> dict[str, object]:
+    """The graph's primitives as numbers: the ring, the four edges, the four blocks.
+
+    `weight` thickens strokes and blocks without moving their centres, which
+    is what the favicon needs at 16 px.
+    """
+    g = OXG
+    cx, cy = g["cx"], g["cy"]
+    rr, rw = g["ring_r"], g["ring_w"] * weight
+    leaf, lrx = g["leaf"] * (0.5 + weight / 2), g["leaf_rx"] * (0.5 + weight / 2)
+    ew, gap = g["edge_w"] * weight, g["gap"]
+    edges, leaves = [], []
+    for a in OXG_ANGLES:
+        ux, uy = math.cos(math.radians(a)), math.sin(math.radians(a))
+        r0 = rr + rw / 2 + gap
+        r1 = g["leaf_d"] - leaf / 2 * _SQ2 * 0.72 - gap * 0.4
+        edges.append((cx + ux * r0, cy + uy * r0, cx + ux * r1, cy + uy * r1))
+        leaves.append((cx + ux * g["leaf_d"], cy + uy * g["leaf_d"]))
+    half = g["leaf_d"] / _SQ2 + leaf / 2
+    return {
+        "ring": (cx, cy, rr, rw),
+        "edges": edges,
+        "edge_w": ew,
+        "leaves": leaves,
+        "leaf": leaf,
+        "leaf_rx": lrx,
+        "ink": (cx - half, cy - half, cx + half, cy + half),
+    }
+
+
+def oxg_mark(
     ink: str = PAPER_TEXT,
     gold: str = GOLD,
     *,
     cls: bool = False,
     opacity: float = 1.0,
-    stroke: float = OX_STROKE,
+    weight: float = 1.0,
 ) -> str:
-    """The monogram in its 128x96 box. `cls` adds classes the spinner animates.
-
-    The `o` is an open loop; its right edge is absorbed into an asymmetric `x`.
-    Gold appears only on the two short segments the loop and the `x` share, so
-    the symbol stays one gesture and not a circle with a cross on it.
-    """
+    """The graph in its 96 box. `cls` adds the classes the spinner animates."""
+    p = oxg_parts(weight)
     op = f' opacity="{opacity:g}"' if opacity < 1 else ""
     c = (lambda k: f' class="{k}"') if cls else (lambda k: "")
-
-    def seg(key: str, colour: str, cap: str) -> str:
-        return (
-            f'<path data-part="{key}"{c(key)} pathLength="1" d="{OX_PATHS[key]}" fill="none" '
-            f'stroke="{colour}" stroke-width="{stroke:g}" stroke-linecap="{cap}"{op}/>'
+    cx, cy, rr, rw = p["ring"]  # type: ignore[misc]
+    out = [
+        '<g data-mark="ox-graph">',
+        f'<circle data-part="o"{c("o")} pathLength="1" cx="{cx:g}" cy="{cy:g}" r="{rr:g}" fill="none" '
+        f'stroke="{ink}" stroke-width="{rw:g}"{op}/>',
+    ]
+    for i, (x0, y0, x1, y1) in enumerate(p["edges"]):  # type: ignore[arg-type]
+        out.append(
+            f'<line data-part="e{i}"{c("e")} pathLength="1" x1="{x0:.3f}" y1="{y0:.3f}" x2="{x1:.3f}" y2="{y1:.3f}" '
+            f'stroke="{gold}" stroke-width="{p["edge_w"]:g}" stroke-linecap="round"{op}/>'
         )
-
-    return (
-        '<g data-mark="continuous-ox">'
-        + seg("o", ink, "round")
-        + seg("xa", ink, "square")
-        + seg("xb", ink, "square")
-        + seg("ga", gold, "butt")
-        + seg("gb", gold, "butt")
-        + "</g>"
-    )
+    s, rx = float(p["leaf"]), float(p["leaf_rx"])  # type: ignore[arg-type]
+    for i, (lx, ly) in enumerate(p["leaves"]):  # type: ignore[misc]
+        out.append(
+            f'<rect data-part="b{i}"{c("b")} x="{lx - s / 2:.3f}" y="{ly - s / 2:.3f}" width="{s:g}" height="{s:g}" '
+            f'rx="{rx:g}" fill="{gold}"{op}/>'
+        )
+    out.append("</g>")
+    return "".join(out)
 
 
-def ox_outline(ink: str, width: float, opacity: float = 1.0) -> str:
-    """The monogram as a hairline: one colour, thin stroke, the gold segments left out."""
-    return ox_mark(ink, ink, opacity=opacity, stroke=width).replace(
-        'stroke-linecap="butt"', 'stroke-linecap="butt" visibility="hidden"'
-    )
+def oxg_outline(ink: str, width: float, opacity: float = 1.0) -> str:
+    """The graph as a hairline: one colour, thin stroke, nothing filled."""
+    p = oxg_parts()
+    cx, cy, rr, rw = p["ring"]  # type: ignore[misc]
+    op = f' opacity="{opacity:g}"' if opacity < 1 else ""
+    st = f'fill="none" stroke="{ink}" stroke-width="{width:.4f}"{op}'
+    out = [f'<g data-mark="ox-graph-outline" {st}>']
+    out.append(f'<circle cx="{cx:g}" cy="{cy:g}" r="{rr + rw / 2:g}"/>')
+    out.append(f'<circle cx="{cx:g}" cy="{cy:g}" r="{rr - rw / 2:g}"/>')
+    ew = float(p["edge_w"])  # type: ignore[arg-type]
+    for x0, y0, x1, y1 in p["edges"]:  # type: ignore[misc]
+        ux, uy = x1 - x0, y1 - y0
+        n = math.hypot(ux, uy)
+        vx, vy = -uy / n * ew / 2, ux / n * ew / 2
+        out.append(
+            f'<path d="M{x0 + vx:.3f} {y0 + vy:.3f} L{x1 + vx:.3f} {y1 + vy:.3f} '
+            f'M{x0 - vx:.3f} {y0 - vy:.3f} L{x1 - vx:.3f} {y1 - vy:.3f}"/>'
+        )
+    s, rx = float(p["leaf"]), float(p["leaf_rx"])  # type: ignore[arg-type]
+    for lx, ly in p["leaves"]:  # type: ignore[misc]
+        out.append(f'<rect x="{lx - s / 2:.3f}" y="{ly - s / 2:.3f}" width="{s:g}" height="{s:g}" rx="{rx:g}"/>')
+    out.append("</g>")
+    return "".join(out)
+
+
+def oxg_hit(px: float, py: float) -> bool:
+    """Whether (px, py), in the graph's own units, lands on its ink."""
+    p = oxg_parts()
+    cx, cy, rr, rw = p["ring"]  # type: ignore[misc]
+    d = math.hypot(px - cx, py - cy)
+    if abs(d - rr) <= rw / 2:
+        return True
+    hw = float(p["edge_w"]) / 2  # type: ignore[arg-type]
+    for x0, y0, x1, y1 in p["edges"]:  # type: ignore[misc]
+        dx, dy = x1 - x0, y1 - y0
+        t = max(0.0, min(1.0, ((px - x0) * dx + (py - y0) * dy) / (dx * dx + dy * dy)))
+        if math.hypot(px - (x0 + t * dx), py - (y0 + t * dy)) <= hw:
+            return True
+    half = float(p["leaf"]) / 2  # type: ignore[arg-type]
+    rx = float(p["leaf_rx"])  # type: ignore[arg-type]
+    for lx, ly in p["leaves"]:  # type: ignore[misc]
+        ax, ay = abs(px - lx), abs(py - ly)
+        if ax <= half and ay <= half:
+            qx, qy = max(ax - (half - rx), 0.0), max(ay - (half - rx), 0.0)
+            if qx * qx + qy * qy <= rx * rx:
+                return True
+    return False
 
 
 # --------------------------------------------------------------------------
@@ -245,7 +326,7 @@ def asterisk() -> dict[str, object]:
 # --------------------------------------------------------------------------
 
 ICON_BOX = 96.0
-ICON_FILL = {"stella": 0.60, "oxagen": 0.74}  # the icon's long edge over the box
+ICON_FILL = {"stella": 0.60, "oxagen": 0.76}  # the icon's long edge over the box
 
 
 def icon_geometry(brand: str) -> dict[str, object]:
@@ -254,9 +335,16 @@ def icon_geometry(brand: str) -> dict[str, object]:
         a = asterisk()
         return {"kind": "asterisk", "bounds": a["bounds"], "cx": a["cx"], "cy": a["cy"],
                 "w": a["w"], "h": a["h"], "path": a["path"]}
-    x0, y0, x1, y1 = OX_INK
-    return {"kind": "ox", "bounds": OX_INK, "cx": (x0 + x1) / 2, "cy": (y0 + y1) / 2,
+    x0, y0, x1, y1 = oxg_parts()["ink"]  # type: ignore[misc]
+    return {"kind": "graph", "bounds": (x0, y0, x1, y1), "cx": (x0 + x1) / 2, "cy": (y0 + y1) / 2,
             "w": x1 - x0, "h": y1 - y0, "path": ""}
+
+
+def icon_hit(brand: str):
+    """A point test in the icon's own units, for mosaics and fields."""
+    if brand == "stella":
+        return path_hit(str(asterisk()["path"]))
+    return oxg_hit
 
 
 def icon_body(
@@ -266,13 +354,14 @@ def icon_body(
     accent: str = GOLD,
     mono: str | None = None,
     cls: bool = False,
+    weight: float = 1.0,
 ) -> str:
-    """The icon's drawing in its own units (asterisk: the em; ox: the 128x96 box)."""
+    """The icon's drawing in its own units (asterisk: the em; graph: the 96 box)."""
     g = icon_geometry(brand)
     if g["kind"] == "asterisk":
         fill = mono or accent
         return f'<path class="accent" d="{g["path"]}" fill="{fill}"/>'
-    return ox_mark(mono or letters, mono or accent, cls=cls)
+    return oxg_mark(mono or letters, mono or accent, cls=cls, weight=weight)
 
 
 def icon_transform(brand: str, box: float, fill: float | None = None) -> tuple[str, float]:
@@ -297,6 +386,7 @@ def icon_svg(
     mono: str | None = None,
     adaptive: bool = False,
     sheen: bool = False,
+    weight: float = 1.0,
     uid: str | None = None,
 ) -> str:
     """The brand's icon centred in a square."""
@@ -315,33 +405,51 @@ def icon_svg(
     t, _ = icon_transform(brand, box, fill)
     return (
         f"{_head(box, box, BRANDS[brand]['label'] + ' mark')}{defs}{bg}"
-        f'<g transform="{t}">{icon_body(brand, letters=letters, accent=accent, mono=mono)}</g>'
+        f'<g transform="{t}">{icon_body(brand, letters=letters, accent=accent, mono=mono, weight=weight)}</g>'
         f"{style}</svg>"
     )
 
 
 def favicon_svg(brand: str, *, box: float = 96.0, background: str | None = None) -> str:
-    """The 16 to 48 px mark: what survives at that size.
+    """The 16 to 48 px mark: the icon, set heavier and filling the square.
 
-    Stella's asterisk survives as itself. The `ox` monogram does not, so
-    Oxagen's favicon is the kit's simplified gold `x` alone.
+    Stella's asterisk survives as itself. The ox graph survives because it is
+    four blocks and a ring, which is what a 16 px grid can hold; its strokes
+    are thickened by a third so the wire does not fall between pixels.
     """
     if brand == "stella":
         return icon_svg(brand, box=box, background=background, fill=0.78, uid="fav")
-    bg = f'<rect width="{box:g}" height="{box:g}" fill="{background}"/>' if background else ""
-    cx = cy = box / 2
-    half, stroke = box * 0.28, box * 0.19
-    return (
-        f"{_head(box, box, 'oxagen mark')}{bg}"
-        f'<path d="M{cx - half:.3f} {cy - half:.3f} L{cx + half:.3f} {cy + half:.3f} '
-        f'M{cx + half:.3f} {cy - half:.3f} L{cx - half:.3f} {cy + half:.3f}" fill="none" '
-        f'stroke="{GOLD}" stroke-width="{stroke:.3f}" stroke-linecap="square"/></svg>'
-    )
+    return icon_svg(brand, box=box, background=background, fill=0.92, weight=1.35, uid="fav")
 
 
 # --------------------------------------------------------------------------
-# the oxagen lockup: monogram, gap, wordmark
+# the oxagen lockup: graph, gap, wordmark
 # --------------------------------------------------------------------------
+
+
+def lockup_metrics() -> dict[str, float]:
+    """Where the graph sits beside the word.
+
+    The graph is centred on the x-height band, the band the letters `o x a e n`
+    live in, and stands a third taller than it, so the blocks reach a little
+    above the x-height and a little below the baseline. The gap is four tenths
+    of the x-height. Everything here is measured from the font, not typed.
+    """
+    m = wordmark("oxagen")
+    f = font()
+    upm = f["head"].unitsPerEm
+    xh = f["OS/2"].sxHeight * EM / upm
+    base = float(m["baseline"])  # type: ignore[arg-type]
+    mark_h = xh * 1.34
+    return {
+        "w": float(m["width"]),  # type: ignore[arg-type]
+        "h": float(m["height"]),  # type: ignore[arg-type]
+        "xh": xh,
+        "baseline": base,
+        "mark_h": mark_h,
+        "mark_cy": base - xh / 2,
+        "gap": xh * 0.42,
+    }
 
 
 def lockup_svg(
@@ -351,25 +459,35 @@ def lockup_svg(
     background: str | None = None,
     adaptive: bool = False,
     mono: str | None = None,
+    sheen: bool = False,
     uid: str | None = None,
 ) -> str:
-    """The kit's primary lockup: the monogram at 4:3 of the height, then the word."""
+    """The primary lockup: the graph on the x-height band, a gap, then the word."""
+    lm = lockup_metrics()
     m = wordmark("oxagen")
-    h = float(m["height"])  # type: ignore[arg-type]
-    mark_w, gap = h * 1.333333, h * 0.22
-    w = mark_w + gap + float(m["width"])  # type: ignore[arg-type]
     plain, gold = glyph_paths(m, {"x"})
-    s = mark_w / OX_BOX[0]
-    ty = (h - OX_BOX[1] * s) / 2
-    bg = f'<rect width="{w:g}" height="{h:g}" fill="{background}"/>' if background else ""
-    style = ""
+    g = icon_geometry("oxagen")
+    s = lm["mark_h"] / float(g["h"])  # type: ignore[arg-type]
+    mark_w = float(g["w"]) * s  # type: ignore[arg-type]
+    top = lm["mark_cy"] - lm["mark_h"] / 2
+    y_off = min(0.0, top)  # the blocks may rise above the word's box
+    h = max(lm["h"], top + lm["mark_h"]) - y_off
+    w = mark_w + lm["gap"] + lm["w"]
+    tx = -float(g["bounds"][0]) * s  # type: ignore[index]
+    ty = top - y_off - float(g["bounds"][1]) * s  # type: ignore[index]
+    uid = uid or "lk"
+    bg = f'<rect width="{w:.3f}" height="{h:.3f}" fill="{background}"/>' if background else ""
+    style, defs = "", ""
     if adaptive:
         letters, style = "currentColor", ADAPTIVE_STYLE
     ink, gold_c = (mono, mono) if mono else (letters, accent)
+    if sheen and not mono:
+        defs = f"<defs>{sheen_defs(uid)}</defs>"
+        gold_c = f"url(#sheen-{uid})"
     return (
-        f"{_head(w, h, 'oxagen')}{bg}"
-        f'<g transform="translate(0,{ty:.3f}) scale({s:.6f})">{ox_mark(ink, gold_c)}</g>'
-        f'<g transform="translate({mark_w + gap:.3f},0)">'
+        f"{_head(w, h, 'oxagen')}{defs}{bg}"
+        f'<g transform="translate({tx:.3f},{ty:.3f}) scale({s:.6f})">{icon_body("oxagen", letters=ink, accent=gold_c, mono=mono)}</g>'
+        f'<g transform="translate({mark_w + lm["gap"]:.3f},{-y_off:.3f})">'
         f'<path class="letters" d="{plain}" fill="{ink}"/>'
         f'<path class="accent" d="{gold}" fill="{gold_c}"/></g>{style}</svg>'
     )
@@ -379,19 +497,18 @@ def lockup_svg(
 # the house motion
 # --------------------------------------------------------------------------
 
-#: Oxagen's monogram draws itself on, the way the kit animates it, and the gold
-#: segments arrive last. Then the shimmer crosses the gold. One cycle.
-_OX_DRAW_CSS = """
-.o,.xa,.xb,.ga,.gb{stroke-dasharray:1;stroke-dashoffset:1}
-.o{animation:ox-o {p}s cubic-bezier(.65,0,.35,1) infinite}
-.xa{animation:ox-xa {p}s cubic-bezier(.65,0,.35,1) infinite}
-.xb{animation:ox-xb {p}s cubic-bezier(.65,0,.35,1) infinite}
-.ga,.gb{animation:ox-g {p}s cubic-bezier(.65,0,.35,1) infinite}
-@keyframes ox-o{0%,4%{stroke-dashoffset:1}30%,86%{stroke-dashoffset:0}100%{stroke-dashoffset:1}}
-@keyframes ox-xa{0%,22%{stroke-dashoffset:1}48%,86%{stroke-dashoffset:0}100%{stroke-dashoffset:1}}
-@keyframes ox-xb{0%,32%{stroke-dashoffset:1}58%,86%{stroke-dashoffset:0}100%{stroke-dashoffset:1}}
-@keyframes ox-g{0%,40%{stroke-dashoffset:1}62%,86%{stroke-dashoffset:0}100%{stroke-dashoffset:1}}
-@media(prefers-reduced-motion:reduce){.o,.xa,.xb,.ga,.gb{animation:none;stroke-dashoffset:0}}
+#: Oxagen's graph assembles: the node draws on, the four edges run out from it,
+#: and the blocks land at their ends. Then it holds, and starts again.
+_OXG_DRAW_CSS = """
+.o,.e{stroke-dasharray:1;stroke-dashoffset:1}
+.b{transform-box:fill-box;transform-origin:center;transform:scale(0)}
+.o{animation:oxg-o {p}s cubic-bezier(.65,0,.35,1) infinite}
+.e{animation:oxg-e {p}s cubic-bezier(.65,0,.35,1) infinite}
+.b{animation:oxg-b {p}s cubic-bezier(.2,1.4,.4,1) infinite}
+@keyframes oxg-o{0%,4%{stroke-dashoffset:1}30%,86%{stroke-dashoffset:0}100%{stroke-dashoffset:1}}
+@keyframes oxg-e{0%,26%{stroke-dashoffset:1}48%,86%{stroke-dashoffset:0}100%{stroke-dashoffset:1}}
+@keyframes oxg-b{0%,44%{transform:scale(0)}62%,86%{transform:scale(1)}100%{transform:scale(0)}}
+@media(prefers-reduced-motion:reduce){.o,.e{animation:none;stroke-dashoffset:0}.b{animation:none;transform:none}}
 """
 
 #: Stella's asterisk turns a sixth of a turn, its own symmetry, while the light
@@ -429,8 +546,8 @@ def spinner_svg(
         )
     return (
         f"{_head(box, box, 'oxagen loading')}{bg}"
-        f'<g transform="{t}">{ox_mark(PAPER_TEXT, GOLD, cls=True)}</g>'
-        f"<style>{_OX_DRAW_CSS.replace('{p}', f'{SPIN_PERIOD:g}')}</style></svg>"
+        f'<g transform="{t}">{oxg_mark(PAPER_TEXT, GOLD, cls=True)}</g>'
+        f"<style>{_OXG_DRAW_CSS.replace('{p}', f'{SPIN_PERIOD:g}')}</style></svg>"
     )
 
 
@@ -445,3 +562,5 @@ if __name__ == "__main__":
         print(f"{b:7} wordmark {m['width']:g} x {m['height']:g}")
         g = icon_geometry(b)
         print(f"{b:7} icon {g['kind']} ink {g['w']:.1f} x {g['h']:.1f}")
+    lm = lockup_metrics()
+    print("lockup", {k: round(v, 2) for k, v in lm.items()})

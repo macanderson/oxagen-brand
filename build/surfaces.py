@@ -1,14 +1,18 @@
 """Every finished surface: wallpapers, social art, ads, and content cards.
 
 One composition rule holds all of them. A surface is a ground, one warm bloom
-of the metal, one oversized ghost of the brand's own icon placed off-centre,
-and at most a few lines of type. The icon is the only picture either brand
-owns, so a surface that needs an image uses a bigger icon rather than a new
-drawing -- and because the ghost is the same geometry the logo uses, a poster
-and a favicon are provably the same shape.
+of the metal, the brand's own icon placed off-centre, and at most a few lines
+of type. The icon and the vocabulary it is built from (a node, an edge, a
+context block) are the only pictures either brand owns, so a surface that
+needs more than a mark builds it from those parts: a constellation of nodes
+wired to the icon, a mosaic of blocks in the icon's shape, or rings of nodes in
+orbit around it. Every one of them is placed by a seeded random, so the same
+file comes out of the build every time.
 """
 
 from __future__ import annotations
+
+import math
 
 from color import (
     BORDER_ON,
@@ -20,8 +24,9 @@ from color import (
     MUTED_ON,
     TEXT_ON,
 )
+from geom import Point, dist, nearest, rng, scatter
 from glyphs import glyph_paths, text_path, text_width, wordmark
-from marks import BRANDS, icon_body, icon_geometry, ox_outline, sheen_defs
+from marks import BRANDS, icon_body, icon_geometry, icon_hit, oxg_outline, oxg_parts, sheen_defs
 
 #: Process-global, not per-surface. Several of these compositions are inlined
 #: into one HTML document by the playbook, and `id` is document-scoped: a
@@ -39,11 +44,21 @@ def _mark(brand: str) -> dict[str, object]:
     return wordmark(str(BRANDS[brand]["text"]))
 
 
+def icon_ports(brand: str) -> list[Point]:
+    """Where an edge may leave the icon, in its own units: the blocks, or the arm tips."""
+    if brand == "oxagen":
+        return list(oxg_parts()["leaves"])  # type: ignore[arg-type]
+    g = icon_geometry(brand)
+    cx, cy, r = float(g["cx"]), float(g["cy"]), float(g["h"]) / 2 * 0.9  # type: ignore[arg-type]
+    return [(cx + r * math.cos(math.radians(a)), cy + r * math.sin(math.radians(a))) for a in range(30, 360, 60)]
+
+
 class Surface:
     """A fixed-size canvas that stacks SVG fragments in order."""
 
     def __init__(self, w: int, h: int, scheme: str = "dark", ground: str | None = None):
         self.w, self.h, self.scheme = w, h, scheme
+        self.dark = scheme == "dark"
         self.ground = ground or GROUNDS[scheme]
         self.text = TEXT_ON[scheme]
         self.muted = MUTED_ON[scheme]
@@ -51,6 +66,19 @@ class Surface:
         self.border = BORDER_ON[scheme]
         self.body: list[str] = []
         self.defs: list[str] = []
+        self._sheen: str | None = None
+
+    @property
+    def short(self) -> float:
+        return min(self.w, self.h)
+
+    def sheen(self) -> str:
+        """One metallic gradient per surface, shared by every block that wants it."""
+        if not self._sheen:
+            uid = _sid()
+            self.defs.append(sheen_defs(uid))
+            self._sheen = f"url(#sheen-{uid})"
+        return self._sheen
 
     # -- pieces ---------------------------------------------------------
 
@@ -66,50 +94,54 @@ class Surface:
         self.body.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="url(#g-{uid})"/>')
         return self
 
-    def _placed(self, brand: str, cx: float, cy: float, span: float, rot: float) -> tuple[str, float]:
+    def _placement(self, brand: str, cx: float, cy: float, span: float, rot: float) -> tuple[float, float, float]:
+        """(scale, icon cx, icon cy): the icon's own centre maps to (cx, cy) at `span`."""
         g = icon_geometry(brand)
         s = span / max(float(g["w"]), float(g["h"]))  # type: ignore[arg-type]
+        return s, float(g["cx"]), float(g["cy"])  # type: ignore[arg-type]
+
+    def _placed(self, brand: str, cx: float, cy: float, span: float, rot: float) -> tuple[str, float]:
+        s, gcx, gcy = self._placement(brand, cx, cy, span, rot)
         return (
             f'transform="translate({cx:.2f},{cy:.2f}) rotate({rot:g}) scale({s:.5f}) '
-            f'translate({-float(g["cx"]):.3f},{-float(g["cy"]):.3f})"',  # type: ignore[arg-type]
+            f'translate({-gcx:.3f},{-gcy:.3f})"',
             s,
         )
+
+    def _to_canvas(self, brand: str, cx: float, cy: float, span: float, rot: float, p: Point) -> Point:
+        """A point in icon units, on the canvas, under the same placement."""
+        s, gcx, gcy = self._placement(brand, cx, cy, span, rot)
+        x, y = (p[0] - gcx) * s, (p[1] - gcy) * s
+        a = math.radians(rot)
+        return (cx + x * math.cos(a) - y * math.sin(a), cy + x * math.sin(a) + y * math.cos(a))
 
     def ghost(
         self, brand: str, cx: float, cy: float, span: float, *, rot: float = 0.0, alpha: float | None = None
     ) -> "Surface":
         """The icon, oversized, in the metal, at a fifth strength over its own bloom."""
-        a = (0.16 if self.scheme == "dark" else 0.20) if alpha is None else alpha
-        self.glow(cx, cy, span * 0.95, 0.42 if self.scheme == "dark" else 0.34)
+        a = (0.16 if self.dark else 0.20) if alpha is None else alpha
+        self.glow(cx, cy, span * 0.95, 0.42 if self.dark else 0.34)
         t, _ = self._placed(brand, cx, cy, span, rot)
-        uid = _sid()
-        self.defs.append(sheen_defs(uid))
-        fill = f"url(#sheen-{uid})"
-        self.body.append(
-            f'<g opacity="{a:g}" {t}>{icon_body(brand, letters=fill, accent=fill)}</g>'
-        )
+        fill = self.sheen()
+        self.body.append(f'<g opacity="{a:g}" {t}>{icon_body(brand, letters=fill, accent=fill)}</g>')
         return self
 
     def outline(self, brand: str, cx: float, cy: float, span: float, *, rot: float = 0.0) -> "Surface":
         """The icon as a hairline in the metal: the quiet wallpaper."""
         t, s = self._placed(brand, cx, cy, span, rot)
         g = icon_geometry(brand)
-        hair = max(1.6, min(self.w, self.h) * 0.0012)  # a hairline, but one that survives a thumbnail
+        hair = max(1.6, self.short * 0.0012)  # a hairline, but one that survives a thumbnail
         if g["kind"] == "asterisk":
             inner = f'<path d="{g["path"]}" fill="none" stroke="{GOLD}" stroke-width="{hair / s:.4f}"/>'
         else:
-            inner = ox_outline(GOLD, hair / s)
+            inner = oxg_outline(GOLD, hair / s)
         self.body.append(f'<g opacity="0.85" {t}>{inner}</g>')
         return self
 
     def icon(self, brand: str, cx: float, cy: float, span: float, *, sheen: bool = True) -> "Surface":
         """The icon at full strength."""
         t, _ = self._placed(brand, cx, cy, span, 0.0)
-        accent = GOLD
-        if sheen:
-            uid = _sid()
-            self.defs.append(sheen_defs(uid))
-            accent = f"url(#sheen-{uid})"
+        accent = self.sheen() if sheen else GOLD
         self.body.append(f"<g {t}>{icon_body(brand, letters=self.text, accent=accent)}</g>")
         return self
 
@@ -163,9 +195,211 @@ class Surface:
 
     def rule(self, x: float, y: float, w: float, h: float) -> "Surface":
         """A short bar of the metal: the one accent a surface gets besides the mark."""
+        return self.rect(x, y, w, h, self.sheen(), rx=h / 2)
+
+    # -- the icon's vocabulary, at scale ----------------------------------
+
+    def _block(self, x: float, y: float, side: float, fill: str, alpha: float) -> str:
+        return (
+            f'<rect x="{x - side / 2:.1f}" y="{y - side / 2:.1f}" width="{side:.1f}" height="{side:.1f}" '
+            f'rx="{side * 0.24:.1f}" fill="{fill}" opacity="{alpha:.2f}"/>'
+        )
+
+    def constellation(
+        self,
+        brand: str,
+        hx: float,
+        hy: float,
+        span: float,
+        *,
+        seed: str = "",
+        quiet: tuple[float, float, float, float] = (0.0, 0.0, 0.0, 0.0),
+    ) -> "Surface":
+        """A field of nodes, each wired to its neighbours, with the icon as the hub.
+
+        Nodes scatter over the canvas but keep clear of the icon and thin out
+        toward the quiet edges (`quiet` is how much of each of left, top, right,
+        bottom to leave calm). Each node joins its two nearest neighbours in a
+        hairline. The icon's ports reach out in gold to the nodes nearest them,
+        and those nodes become context blocks: the one-to-many, drawn.
+        """
+        w, h, short = self.w, self.h, self.short
+        r = rng("constellation", brand, w, h, seed)
+        n = int(w * h / (short * short) * 150)
+        min_d = short * 0.052
+        clear = span * 0.66
+        ql, qt, qr, qb = quiet
+
+        def accept(x: float, y: float) -> float:
+            if dist((x, y), (hx, hy)) < clear:
+                return 0.0
+            a = 1.0
+            if ql and x < w * ql:
+                a *= 0.25 + 0.75 * x / (w * ql)
+            if qr and x > w * (1 - qr):
+                a *= 0.25 + 0.75 * (w - x) / (w * qr)
+            if qt and y < h * qt:
+                a *= 0.25 + 0.75 * y / (h * qt)
+            if qb and y > h * (1 - qb):
+                a *= 0.25 + 0.75 * (h - y) / (h * qb)
+            return a
+
+        pts = scatter(r, w, h, n, min_d, accept=accept)
+        if not pts:
+            return self
+        line_a = 0.13 if self.dark else 0.15
+        edges: set[tuple[int, int]] = set()
+        for i in range(len(pts)):
+            for j in nearest(pts, i, 2):
+                if dist(pts[i], pts[j]) < min_d * 2.8:
+                    edges.add((min(i, j), max(i, j)))
+        hair = max(1.2, short * 0.0009)
+        seg = "".join(
+            f'<path d="M{pts[i][0]:.1f} {pts[i][1]:.1f}L{pts[j][0]:.1f} {pts[j][1]:.1f}"/>' for i, j in sorted(edges)
+        )
+        self.body.append(f'<g fill="none" stroke="{self.text}" stroke-width="{hair:.2f}" opacity="{line_a}">{seg}</g>')
+
+        # the hub reaches out: each port to the three nodes nearest it
+        ports = [self._to_canvas(brand, hx, hy, span, 0.0, p) for p in icon_ports(brand)]
+        gold_nodes: set[int] = set()
+        gold_seg = []
+        for px, py in ports:
+            order = sorted(range(len(pts)), key=lambda k: dist(pts[k], (px, py)))
+            for k in order[:3]:
+                if dist(pts[k], (px, py)) < span * 1.15:
+                    gold_nodes.add(k)
+                    gold_seg.append(f'<path d="M{px:.1f} {py:.1f}L{pts[k][0]:.1f} {pts[k][1]:.1f}"/>')
+        self.body.append(
+            f'<g fill="none" stroke="{GOLD}" stroke-width="{hair * 1.6:.2f}" stroke-linecap="round" '
+            f'opacity="{0.55 if self.dark else 0.6}">{"".join(gold_seg)}</g>'
+        )
+
+        # the nodes: dots that brighten toward the hub, and a few blocks
+        dots, blocks = [], []
+        reach = max(w, h) * 0.75
+        for i, (x, y) in enumerate(pts):
+            near = max(0.0, 1 - dist((x, y), (hx, hy)) / reach)
+            if i in gold_nodes:
+                blocks.append(self._block(x, y, short * 0.014, self.sheen(), 0.95))
+            elif r.random() < 0.09:
+                blocks.append(self._block(x, y, short * 0.010, GOLD, 0.35 + 0.45 * near))
+            else:
+                rad = short * (0.0022 + 0.0032 * r.random())
+                a = 0.22 + 0.5 * near
+                dots.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{rad:.1f}" opacity="{a:.2f}"/>')
+        self.body.append(f'<g fill="{self.text}">{"".join(dots)}</g>')
+        self.body.append("".join(blocks))
+
+        self.glow(hx, hy, span * 1.4, 0.34 if self.dark else 0.26)
+        self.icon(brand, hx, hy, span)
+        return self
+
+    def mosaic(self, brand: str, cx: float, cy: float, span: float, *, cell: float, seed: str = "") -> "Surface":
+        """The icon rebuilt from context blocks on a grid, with a bloom of blocks around it.
+
+        A faint grid of blocks covers the whole ground. Every cell whose centre
+        lands on the icon's ink is painted in the metal, each a shade brighter
+        or deeper than its neighbour so the surface reads as tiles, not a
+        stencil. Cells just outside the ink catch a little gold that fades with
+        distance, the bloom drawn in the same blocks.
+        """
+        r = rng("mosaic", brand, self.w, self.h, seed)
+        gap = cell * 0.26
+        side = cell - gap
+        rx = side * 0.24
+        ox, oy = (cx % cell) - cell / 2, (cy % cell) - cell / 2  # the icon's centre on a cell centre
         uid = _sid()
-        self.defs.append(sheen_defs(uid))
-        return self.rect(x, y, w, h, f"url(#sheen-{uid})", rx=h / 2)
+        base_a = 0.055 if self.dark else 0.07
+        self.defs.append(
+            f'<pattern id="p-{uid}" x="{ox:.2f}" y="{oy:.2f}" width="{cell:.3f}" height="{cell:.3f}" patternUnits="userSpaceOnUse">'
+            f'<rect x="{gap / 2:.2f}" y="{gap / 2:.2f}" width="{side:.2f}" height="{side:.2f}" rx="{rx:.2f}" '
+            f'fill="{self.text}" opacity="{base_a}"/></pattern>'
+        )
+        self.body.append(f'<rect width="{self.w}" height="{self.h}" fill="url(#p-{uid})"/>')
+        self.glow(cx, cy, span * 0.9, 0.30 if self.dark else 0.22)
+
+        hit = icon_hit(brand)
+        s, gcx, gcy = self._placement(brand, cx, cy, span, 0.0)
+        halo = span * 0.8
+        lit, warm = [], []
+        nx, ny = int(self.w / cell) + 2, int(self.h / cell) + 2
+        for j in range(ny):
+            y = oy + j * cell + cell / 2
+            for i in range(nx):
+                x = ox + i * cell + cell / 2
+                d = dist((x, y), (cx, cy))
+                if d > halo:
+                    continue
+                if hit((x - cx) / s + gcx, (y - cy) / s + gcy):
+                    lit.append(self._block(x, y, side, self.sheen(), 0.74 + 0.26 * r.random()))
+                else:
+                    a = (1 - d / halo) ** 2 * (0.20 if self.dark else 0.16) * (0.7 + 0.3 * r.random())
+                    if a > 0.015:
+                        warm.append(self._block(x, y, side, GOLD, a))
+        self.body.append("".join(warm))
+        self.body.append("".join(lit))
+        return self
+
+    def orbit(self, brand: str, cx: float, cy: float, span: float, *, seed: str = "") -> "Surface":
+        """Rings of nodes around the icon, each wired inward: the graph, radially.
+
+        Five hairline rings, more nodes on each ring out. Every node joins the
+        nearest node on the ring inside it, and the innermost ring joins the
+        icon's own ports in gold, so the whole field hangs off the mark.
+        """
+        r = rng("orbit", brand, self.w, self.h, seed)
+        short = self.short
+        radii = [span * k for k in (0.78, 1.16, 1.6, 2.1, 2.7)]
+        counts = (6, 9, 13, 18, 24)
+        hair = max(1.2, short * 0.0009)
+        ring_a = 0.11 if self.dark else 0.13
+        self.body.append(
+            f'<g fill="none" stroke="{self.text}" stroke-width="{hair:.2f}" opacity="{ring_a}">'
+            + "".join(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{rad:.1f}"/>' for rad in radii)
+            + "</g>"
+        )
+        rings: list[list[Point]] = []
+        for rad, n in zip(radii, counts):
+            phase = r.random() * 360
+            pts = []
+            for k in range(n):
+                a = math.radians(phase + k * 360 / n + (r.random() - 0.5) * 360 / n * 0.5)
+                pts.append((cx + rad * math.cos(a), cy + rad * math.sin(a)))
+            rings.append(pts)
+
+        ports = [self._to_canvas(brand, cx, cy, span, 0.0, p) for p in icon_ports(brand)]
+        gold_seg, seg = [], []
+        for p in rings[0]:
+            q = min(ports, key=lambda t: dist(t, p))
+            gold_seg.append(f'<path d="M{q[0]:.1f} {q[1]:.1f}L{p[0]:.1f} {p[1]:.1f}"/>')
+        for inner, outer in zip(rings, rings[1:]):
+            for p in outer:
+                q = min(inner, key=lambda t: dist(t, p))
+                seg.append(f'<path d="M{q[0]:.1f} {q[1]:.1f}L{p[0]:.1f} {p[1]:.1f}"/>')
+        self.body.append(
+            f'<g fill="none" stroke="{self.text}" stroke-width="{hair:.2f}" opacity="{0.16 if self.dark else 0.18}">{"".join(seg)}</g>'
+        )
+        self.body.append(
+            f'<g fill="none" stroke="{GOLD}" stroke-width="{hair * 1.6:.2f}" stroke-linecap="round" '
+            f'opacity="{0.6 if self.dark else 0.65}">{"".join(gold_seg)}</g>'
+        )
+        nodes = []
+        for depth, pts in enumerate(rings):
+            fade = 1 - depth * 0.16
+            for x, y in pts:
+                if depth == 0:
+                    nodes.append(self._block(x, y, short * 0.016, self.sheen(), 0.95))
+                elif r.random() < 0.22:
+                    nodes.append(self._block(x, y, short * 0.011, GOLD, 0.5 * fade))
+                else:
+                    nodes.append(
+                        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{short * (0.0028 + 0.0025 * r.random()):.1f}" '
+                        f'fill="{self.text}" opacity="{0.55 * fade:.2f}"/>'
+                    )
+        self.body.append("".join(nodes))
+        self.glow(cx, cy, span * 1.3, 0.36 if self.dark else 0.28)
+        self.icon(brand, cx, cy, span)
+        return self
 
     # -- output ---------------------------------------------------------
 
@@ -190,33 +424,52 @@ def mark_aspect(brand: str) -> float:
 
 GHOST_ROT = {"stella": -15.0, "oxagen": 0.0}
 
+#: The wallpaper styles. `glow` and `quiet` are the mark alone; the other
+#: three build a picture from the mark's own parts.
+WALLPAPER_STYLES = ("glow", "quiet", "graph", "blocks", "orbit")
+
 
 def wallpaper_desktop(w: int, h: int, brand: str, scheme: str, style: str = "glow") -> str:
-    """The bloom sits right of centre, leaving the icon corner clear."""
+    """The picture sits right of centre, leaving the icon corner and the dock clear."""
     s = Surface(w, h, scheme)
-    cx, cy, span = w * 0.78, h * 0.46, h * 0.82
     if style == "glow":
-        s.ghost(brand, cx, cy, span, rot=GHOST_ROT[brand])
+        s.ghost(brand, w * 0.78, h * 0.46, h * 0.82, rot=GHOST_ROT[brand])
+    elif style == "quiet":
+        s.outline(brand, w * 0.78, h * 0.46, h * 0.82, rot=GHOST_ROT[brand])
+    elif style == "graph":
+        s.constellation(brand, w * 0.66, h * 0.5, h * 0.30, quiet=(0.30, 0.06, 0.0, 0.08))
+    elif style == "blocks":
+        s.mosaic(brand, w * 0.66, h * 0.5, h * 0.66, cell=h / 44)
+    elif style == "orbit":
+        s.orbit(brand, w * 0.66, h * 0.5, h * 0.24)
     else:
-        s.outline(brand, cx, cy, span, rot=GHOST_ROT[brand])
+        raise ValueError(style)
     return s.svg()
 
 
 def wallpaper_phone(w: int, h: int, brand: str, scheme: str, style: str = "glow") -> str:
-    """Portrait: the icon sits below the clock and above the dock."""
+    """Portrait: the picture sits below the clock and above the dock."""
     s = Surface(w, h, scheme)
-    cx, cy, span = w * 0.5, h * 0.50, w * 0.92
+    cx, cy = w * 0.5, h * 0.47
     if style == "glow":
-        s.ghost(brand, cx, cy, span, rot=GHOST_ROT[brand])
+        s.ghost(brand, cx, h * 0.5, w * 0.92, rot=GHOST_ROT[brand])
+    elif style == "quiet":
+        s.outline(brand, cx, h * 0.5, w * 0.92, rot=GHOST_ROT[brand])
+    elif style == "graph":
+        s.constellation(brand, cx, cy, w * 0.40, quiet=(0.0, 0.16, 0.0, 0.14))
+    elif style == "blocks":
+        s.mosaic(brand, cx, cy, w * 0.78, cell=w / 24)
+    elif style == "orbit":
+        s.orbit(brand, cx, cy, w * 0.30)
     else:
-        s.outline(brand, cx, cy, span, rot=GHOST_ROT[brand])
+        raise ValueError(style)
     return s.svg()
 
 
 def avatar(brand: str, size: int, scheme: str) -> str:
     s = Surface(size, size, scheme)
     s.glow(size * 0.5, size * 0.5, size * 0.6, 0.14 if scheme == "dark" else 0.08)
-    s.icon(brand, size * 0.5, size * 0.5, size * (0.58 if brand == "stella" else 0.68))
+    s.icon(brand, size * 0.5, size * 0.5, size * (0.58 if brand == "stella" else 0.66))
     return s.svg()
 
 
@@ -267,7 +520,8 @@ def ad(
     ceiling = pad + (size * 0.035 / 0.075 * 2.2 if kicker else 0)
     for _ in range(24):
         block = (len(headline) - 1) * size * 1.22 + size * 1.9 + (size * 0.85 if cta else 0)
-        if mark_cy - mark_h / 2 - size * 0.9 - block >= ceiling:
+        wide = max(text_width(ln, size, 700) for ln in headline)
+        if mark_cy - mark_h / 2 - size * 0.9 - block >= ceiling and wide <= w - pad * 2:
             break
         size *= 0.94
     lead = size * 1.22
@@ -330,6 +584,7 @@ def content_card(
 __all__ = [
     "GOLD_BRIGHT",
     "Surface",
+    "WALLPAPER_STYLES",
     "ad",
     "avatar",
     "banner",

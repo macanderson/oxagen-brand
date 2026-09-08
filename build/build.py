@@ -125,9 +125,10 @@ def build_tokens() -> None:
             "baseline": m["baseline"],
         }
     payload = {
-        "version": "2.0.0",
+        "version": "2.1.0",
         "name": "oxagen house system",
         "built_on": "oxagen brand kit (Space Grotesk, Ink and Paper, Bronze Gold)",
+        "icons": {"oxagen": "ox graph", "stella": "asterisk"},
         "gold": {
             "hex": C.GOLD,
             "oklch": {"L": round(gL, 4), "C": round(gC, 4), "H": round(gH, 2)},
@@ -185,6 +186,10 @@ def build_logos(raster: bool) -> list[Path]:
         "adaptive": lockup_svg(adaptive=True),
         "mono-white": lockup_svg(mono=C.PAPER_TEXT),
         "mono-black": lockup_svg(mono=C.INK_TEXT),
+        "sheen-dark": lockup_svg(sheen=True, uid="lk-sd"),
+        "sheen-light": lockup_svg(letters=C.INK_TEXT, sheen=True, uid="lk-sl"),
+        "dark-onground": lockup_svg(background=C.INK),
+        "light-onground": lockup_svg(letters=C.INK_TEXT, background=C.PAPER),
     }
     for name, svg in lk.items():
         made.append(write(f"logo/svg/oxagen-lockup-{name}.svg", svg))
@@ -216,7 +221,7 @@ PHONE = [(1290, 2796, "iphone-pro"), (1179, 2556, "iphone"), (1320, 2868, "iphon
 def build_wallpapers(raster: bool) -> None:
     for b in BRAND_WORDS:
         for scheme in ("dark", "light"):
-            for style in ("glow", "quiet"):
+            for style in SF.WALLPAPER_STYLES:
                 for w, h, tag in DESKTOP:
                     p = write(
                         f"wallpapers/desktop/{b}-desktop-{tag}-{style}-{scheme}.svg",
@@ -258,47 +263,94 @@ def build_social(raster: bool) -> None:
                     png(p, width=w)
 
 
-#: The ad line is the positioning line. Oxagen leads with the four jobs and the
-#: promise the deck leads with; Stella leads with the proof rule that decides
-#: when a run counts as done. No benchmark numbers and no competitor is named
-#: in public art: the deck's comparison is an investor slide, and a number in
-#: an ad is a claim the ad has to keep being true.
-AD_COPY = {
-    "oxagen": {
-        "kicker": "Teach. Govern. Explain. Learn.",
-        "headline": ["Agents that", "prove their work.", "A model you own."],
-        "short": ["A model", "you own."],
-        "cta": "oxagen.sh",
-    },
-    "stella": {
-        "kicker": "The open-source agent",
-        "headline": ["It does not", "say done.", "It proves it."],
-        "short": ["It proves", "it."],
-        "cta": "brew install stella",
-    },
+#: Every ad opens on the reader's pain, the way the voice guide says to.
+#: Oxagen's three pains are the bill, the re-explaining, and the waste; the
+#: fourth line is the September positioning. Stella's is the proof rule that
+#: decides when a run counts as done. No benchmark numbers and no competitor
+#: is named in public art: a number in an ad is a claim the ad has to keep
+#: being true. Each entry is one campaign. `headline` is the tall stack for the
+#: square and the portrait; `wide` is the same words in two long lines for the
+#: landscape, where a four-line stack would shrink to fit; `short` is the line
+#: the 300x250 carries, because a banner is not a poster with the middle line
+#: deleted.
+AD_COPY: dict[str, list[dict[str, object]]] = {
+    "oxagen": [
+        {
+            "slug": "bill",
+            "kicker": "Every token, itemized.",
+            "headline": ["Can you explain", "your AI bill?", "Neither can", "your provider."],
+            "wide": ["Can you explain your AI bill?", "Neither can your provider."],
+            "short": ["Can you explain", "your AI bill?"],
+            "cta": "oxagen.sh",
+        },
+        {
+            "slug": "memory",
+            "kicker": "The context engine remembers.",
+            "headline": ["Never re-explain", "yourself to AI", "ever again."],
+            "wide": ["Never re-explain yourself", "to AI ever again."],
+            "short": ["Never re-explain", "yourself."],
+            "cta": "oxagen.sh",
+        },
+        {
+            "slug": "waste",
+            "kicker": "Fewer tokens. Same answers.",
+            "headline": ["Stop wasting", "money on AI."],
+            "short": ["Stop wasting", "money on AI."],
+            "cta": "oxagen.sh",
+        },
+        {
+            "slug": "proof",
+            "kicker": "Teach. Govern. Explain. Learn.",
+            "headline": ["Agents that", "prove their work.", "A model you own."],
+            "wide": ["Agents that prove their work.", "A model you own."],
+            "short": ["A model", "you own."],
+            "cta": "oxagen.sh",
+        },
+    ],
+    "stella": [
+        {
+            "slug": "proof",
+            "kicker": "The open-source agent",
+            "headline": ["It does not", "say done.", "It proves it."],
+            "wide": ["It does not say done.", "It proves it."],
+            "short": ["It proves", "it."],
+            "cta": "brew install stella",
+        },
+        {
+            "slug": "check",
+            "kicker": "The open-source agent",
+            "headline": ["A green check", "is not", "an answer."],
+            "wide": ["A green check", "is not an answer."],
+            "short": ["Proof, not", "a green check."],
+            "cta": "brew install stella",
+        },
+    ],
 }
 AD_SIZES = [(1080, 1080, "square"), (1080, 1350, "portrait"), (1200, 628, "landscape"), (300, 250, "mpu")]
 
 
+def ad_svg(brand: str, campaign: dict[str, object], w: int, h: int, tag: str, scheme: str) -> str:
+    small = tag == "mpu"
+    key = "short" if small else ("wide" if tag == "landscape" and "wide" in campaign else "headline")
+    return SF.ad(
+        w, h, brand, scheme,
+        kicker="" if small else str(campaign["kicker"]),
+        headline=list(campaign[key]),  # type: ignore[call-overload]
+        cta="" if small else str(campaign["cta"]),
+    )
+
+
 def build_ads(raster: bool) -> None:
     for b in BRAND_WORDS:
-        copy = AD_COPY[b]
-        for scheme in ("dark", "light"):
-            for w, h, tag in AD_SIZES:
-                # A banner is not a poster with the middle line deleted; the
-                # small formats carry their own line.
-                head = copy["short"] if tag == "mpu" else copy["headline"]
-                p = write(
-                    f"ads/{b}-{tag}-{w}x{h}-{scheme}.svg",
-                    SF.ad(
-                        w, h, b, scheme,
-                        kicker=copy["kicker"] if tag != "mpu" else "",
-                        headline=head,
-                        cta=copy["cta"] if tag != "mpu" else "",
-                    ),
-                )
-                if raster:
-                    png(p, width=w)
+        for campaign in AD_COPY[b]:
+            for scheme in ("dark", "light"):
+                for w, h, tag in AD_SIZES:
+                    p = write(
+                        f"ads/{b}-{campaign['slug']}-{tag}-{w}x{h}-{scheme}.svg",
+                        ad_svg(b, campaign, w, h, tag, scheme),
+                    )
+                    if raster:
+                        png(p, width=w)
 
 
 CONTENT = {

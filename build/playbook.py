@@ -14,13 +14,18 @@ from pathlib import Path
 import color as C
 import glyphs as G
 import surfaces as SF
-from build import AD_COPY, CONTENT, TAGLINES
+from build import AD_COPY, CONTENT, TAGLINES, ad_svg
 from marks import (
     BRANDS,
+    OXG,
+    OXG_BOX,
     SHIMMER_PERIOD,
     asterisk,
+    favicon_svg,
     icon_svg,
     lockup_svg,
+    oxg_mark,
+    oxg_parts,
     sheen_defs,
     spinner_svg,
     spinner_wordmark_svg,
@@ -145,6 +150,52 @@ def misuse_panel(kind: str, brand: str) -> str:
         f'<svg viewBox="{vb}" role="img" aria-label="incorrect use" class="diagram">'
         f"{body}<line x1=\"-20\" y1=\"-20\" x2=\"{w + 20:.0f}\" y2=\"{h + 20:.0f}\" stroke=\"#C0392B\" stroke-width=\"1.2\" opacity=\"0.55\"/></svg>"
     )
+
+
+def icon_construction() -> str:
+    """The ox graph in its box with its radii and the diagonals drawn over it."""
+    p = oxg_parts()
+    cx, cy, rr, rw = p["ring"]  # type: ignore[misc]
+    box = OXG_BOX
+    x0, y0, x1, y1 = p["ink"]  # type: ignore[misc]
+    guides = [
+        f'<rect x="0.5" y="0.5" width="{box - 1:g}" height="{box - 1:g}" fill="none" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.35"/>',
+        f'<rect x="{x0:.2f}" y="{y0:.2f}" width="{x1 - x0:.2f}" height="{y1 - y0:.2f}" fill="none" stroke="{C.GOLD}" stroke-width="0.6" stroke-dasharray="3 3" opacity="0.7"/>',
+        f'<path d="M0 0L{box:g} {box:g}M{box:g} 0L0 {box:g}" stroke="currentColor" stroke-width="0.4" opacity="0.3"/>',
+        f'<circle cx="{cx:g}" cy="{cy:g}" r="{OXG["leaf_d"]:g}" fill="none" stroke="currentColor" stroke-width="0.4" stroke-dasharray="2 2" opacity="0.35"/>',
+        f'<circle cx="{cx:g}" cy="{cy:g}" r="{rr:g}" fill="none" stroke="{C.GOLD}" stroke-width="0.5" opacity="0.8"/>',
+    ]
+    labels = [
+        (0, -3, f"box {box:g} · ink {x1 - x0:.0f} · blocks {OXG['leaf']:g} at r {OXG['leaf_d']:g}"),
+        (0, box + 7, f"node r {rr:g} · stroke {rw:g} · wire {OXG['edge_w']:g} · gap {OXG['gap']:g}"),
+    ]
+    text = "".join(
+        f'<text x="{x:.1f}" y="{y:.1f}" font-size="3.4" fill="currentColor" opacity="0.7">{esc(t)}</text>' for x, y, t in labels
+    )
+    return (
+        f'<svg viewBox="-4 -8 {box + 8:g} {box + 18:g}" role="img" aria-label="ox graph construction" class="diagram">'
+        f'<g opacity="0.9">{oxg_mark("currentColor", C.GOLD, opacity=0.55)}</g>{"".join(guides)}{text}</svg>'
+    )
+
+
+def icon_family() -> str:
+    """Both icons at the same optical size on one line, the way they meet in the product."""
+    st = icon_svg("stella", uid=uid("fam")).split(">", 1)[1].rsplit("</svg>", 1)[0]
+    ox = icon_svg("oxagen", letters="currentColor", uid=uid("fam")).split(">", 1)[1].rsplit("</svg>", 1)[0]
+    return (
+        '<svg viewBox="0 0 220 96" role="img" aria-label="the two icons" class="diagram">'
+        f'<g transform="translate(8,0)">{st}</g><g transform="translate(116,0)">{ox}</g>'
+        '<path d="M110 20V76" stroke="currentColor" stroke-width="0.5" opacity="0.3"/></svg>'
+    )
+
+
+def favicon_row(brand: str) -> str:
+    """The favicon at 16, 32 and 48, at true pixel size, from the PNGs the kit ships."""
+    cells = "".join(
+        f'<div><img src="icons/{brand}-icon-{s}.png" width="{s}" height="{s}" alt="{brand} favicon {s}"><span>{s}</span></div>'
+        for s in (16, 32, 48)
+    )
+    return f'<div class="fav-row">{cells}<div><img src="icons/{brand}-icon-180.png" width="64" height="64" alt="{brand} app icon"><span>180 · app</span></div></div>'
 
 
 def swatch_row(name: str, hexv: str, note: str) -> str:
@@ -278,6 +329,10 @@ td.num{{font-variant-numeric:tabular-nums}}
 .files span{{color:var(--muted)}}
 footer{{padding:48px 0 80px;border-top:1px solid var(--rule);color:var(--muted);font-size:13.5px}}
 .shimmer-demo svg{{width:min(100%,420px);height:auto}}
+.favs{{display:flex;gap:28px;flex-wrap:wrap;margin-top:14px}}
+.fav-row{{display:flex;align-items:flex-end;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px}}
+.fav-row img{{display:block;image-rendering:auto}}
+.fav-row span{{font-size:11.5px;color:var(--muted);display:block;text-align:center;margin-top:6px}}
 """
 
 
@@ -304,12 +359,19 @@ def build_html() -> str:
     )
 
     walls = "".join(
-        plate(SF.wallpaper_desktop(1600, 900, b, s), f"{b} desktop · {s} · glow", cls="tight")
-        for b, s in (("oxagen", "dark"), ("stella", "light"), ("stella", "dark"), ("oxagen", "light"))
+        plate(SF.wallpaper_desktop(1600, 900, b, s, st), f"{b} desktop · {st} · {s}", cls="tight")
+        for b, s, st in (
+            ("oxagen", "dark", "graph"),
+            ("oxagen", "light", "blocks"),
+            ("stella", "dark", "orbit"),
+            ("stella", "light", "graph"),
+            ("oxagen", "dark", "glow"),
+            ("stella", "light", "quiet"),
+        )
     )
     phones = "".join(
         plate(SF.wallpaper_phone(430, 932, b, s, st), f"{b} iphone · {st} · {s}", cls="tight")
-        for b, s, st in (("stella", "dark", "glow"), ("oxagen", "dark", "quiet"), ("oxagen", "light", "glow"), ("stella", "light", "quiet"))
+        for b, s, st in (("oxagen", "dark", "blocks"), ("stella", "dark", "graph"), ("oxagen", "light", "orbit"), ("stella", "light", "glow"))
     )
     social = "".join(
         [
@@ -328,16 +390,16 @@ def build_html() -> str:
         ]
     )
     ads = []
-    for b, w, h, s in (("oxagen", 1080, 1350, "dark"), ("stella", 1080, 1080, "dark"), ("stella", 1200, 628, "light"), ("oxagen", 300, 250, "light")):
-        cp = AD_COPY[b]
-        small = w == 300
-        ads.append(
-            plate(
-                SF.ad(w, h, b, s, kicker="" if small else cp["kicker"], headline=cp["short"] if small else cp["headline"], cta="" if small else cp["cta"]),
-                f"{b} · {w}×{h} · {s}",
-                cls="tight",
-            )
-        )
+    for b, slug, w, h, tag, s in (
+        ("oxagen", "bill", 1080, 1350, "portrait", "dark"),
+        ("oxagen", "memory", 1080, 1080, "square", "light"),
+        ("oxagen", "waste", 1200, 628, "landscape", "dark"),
+        ("oxagen", "bill", 300, 250, "mpu", "light"),
+        ("stella", "proof", 1080, 1080, "square", "dark"),
+        ("stella", "check", 1200, 628, "landscape", "light"),
+    ):
+        cp = next(c for c in AD_COPY[b] if c["slug"] == slug)
+        ads.append(plate(ad_svg(b, cp, w, h, tag, s), f"{b} · {slug} · {w}×{h} · {s}", cls="tight"))
     cards = []
     for b, s in (("stella", "dark"), ("oxagen", "light")):
         kind, title, meta, body = CONTENT[b][0]
@@ -345,16 +407,16 @@ def build_html() -> str:
 
     files = [
         ("playbook.html", "this document"),
-        ("build/", "color.py · glyphs.py · marks.py · surfaces.py · build.py · playbook.py"),
+        ("build/", "color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · playbook.py"),
         ("build/reference/", "the kit wordmark and logomark this system is checked against"),
         ("fonts/", "Space Grotesk, variable and static, with its licence"),
         ("tokens/", "house-tokens.css · house-tokens.json"),
         ("logo/svg, logo/png", "wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles"),
         ("icons/", "favicons and app icons, 16 to 512"),
         ("spinners/", "the house motion, animated SVG, no script"),
-        ("wallpapers/", "desktop 4K/5K/6K · iphone ×3 · glow | quiet · dark | light"),
+        ("wallpapers/", "desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit · dark | light"),
         ("social/", "avatar · x · linkedin · youtube · open graph · dark | light"),
-        ("ads/", "1080×1080 · 1080×1350 · 1200×628 · 300×250"),
+        ("ads/", "bill · memory · waste · proof · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
         ("content/", "changelog · essay · release · field note cards, 1200×675"),
     ]
     files_html = "".join(f'<div class="mono">{esc(k)}</div><span>{esc(v)}</span>' for k, v in files)
@@ -376,7 +438,7 @@ def build_html() -> str:
 <main class="wrap">
 
 <section class="hero">
-<p class="eyebrow">Oxagen house system · v2</p>
+<p class="eyebrow">Oxagen house system · v2.1</p>
 <h1>One house.<br>Two names. One gold.</h1>
 <p class="lead">Everything a customer sees from Oxagen and Stella comes from one system: Space Grotesk, warm ink and paper, and a single gold that each name carries in exactly one glyph.</p>
 <div class="grid g2 plates">
@@ -398,7 +460,7 @@ def build_html() -> str:
 <li><b>Gold is identity, and one action per screen.</b> It is never a surface, and it never means a state.</li>
 <li><b>Gold as text on paper becomes gold-deep.</b> The mark keeps its metal; words do not.</li>
 <li><b>Nothing sits to the left of stella.</b> The asterisk is the only mark. Oxagen's lockup is the one exception, and only for Oxagen.</li>
-<li><b>The icon is the only picture we own.</b> No stock illustration, no gradient mesh, no 3D render. A surface that needs an image uses a bigger icon.</li>
+<li><b>The icon and its parts are the only pictures we own.</b> A node, an edge, a context block. No stock illustration, no gradient mesh, no 3D render. A surface that needs a picture builds one from those parts, or uses a bigger icon.</li>
 </ul>
 </section>
 
@@ -423,10 +485,12 @@ def build_html() -> str:
 {plate(inline(wordmark_svg("stella", sheen=True, uid=uid("v"))), "sheen: the metallic gradient, for hero sizes", cls="ink wm")}
 </div>
 <h3>The oxagen lockup</h3>
-<p>Oxagen alone has a lockup: the monogram at four thirds of the wordmark's height, a gap of a fifth, then the word. Use it where a square mark and a name are needed together. Stella has no lockup; its asterisk is already in the word.</p>
+<p>Oxagen alone has a lockup: the ox graph, then the word. The graph is centred on the x-height band, the band the letters <code>o x a e n</code> live in, and stands a third taller than it, so its blocks reach a little above the x-height and a little below the baseline. The gap is four tenths of the x-height. Every number is measured from the font. Use the lockup where a square mark and a name are needed together. Stella has no lockup; its asterisk is already in the word.</p>
 <div class="grid g2">
 {plate(inline(lockup_svg(uid=uid("lk"))), "oxagen lockup · on ink", cls="ink big")}
 {plate(inline(lockup_svg(letters=C.INK_TEXT, uid=uid("lk"))), "oxagen lockup · on paper", cls="paper big")}
+{plate(inline(lockup_svg(sheen=True, uid=uid("lk"))), "oxagen lockup · sheen, for hero sizes", cls="ink big")}
+{plate(inline(lockup_svg(mono="currentColor", uid=uid("lk"))), "oxagen lockup · mono", cls="big")}
 </div>
 <h3>Minimum sizes</h3>
 <p>Wordmark 88 px wide on screen, 24 mm in print. Icon 24 px, 8 mm. Lockup 120 px, 32 mm. Below that, use the favicon.</p>
@@ -443,8 +507,12 @@ def build_html() -> str:
 
 <section id="icons">
 <p class="eyebrow">Icons</p>
-<h2>The asterisk and the ox</h2>
-<p>Where a square is required, Stella uses its asterisk and Oxagen uses the kit's continuous <code>ox</code>: an open loop whose right edge is absorbed into an asymmetric x. Gold appears only on the two short segments the loop and the x share, so the symbol stays one gesture. It must not be rebuilt as a circle with a cross laid over it.</p>
+<h2>The asterisk and the ox graph</h2>
+<p>Where a square is required, Stella uses its asterisk and Oxagen uses the ox graph: a hollow node at the centre, the <code>o</code>, wired to four context blocks on the diagonals, the <code>x</code>. One node connected to many, and every edge runs both ways. The blocks and their edges are gold; the node takes the letter colour, exactly as the wordmark paints <code>ox</code>. It is drawn from nine primitives (a ring, four lines, four rounded squares) and nothing else, so it survives a 16 px favicon and a 6K wallpaper alike. Do not add nodes, do not fill the ring, do not rotate it off the diagonals.</p>
+<div class="grid g2">
+{plate(icon_construction(), "construction: the 96 box, the ring, the wires, the blocks")}
+{plate(icon_family(), "the family: asterisk and ox graph, side by side")}
+</div>
 <div class="grid g4">
 {plate(inline(icon_svg("stella", uid=uid("i"))), "stella icon · on ink", cls="ink icon")}
 {plate(inline(icon_svg("oxagen", uid=uid("i"))), "oxagen icon · on ink", cls="ink icon")}
@@ -455,7 +523,8 @@ def build_html() -> str:
 {plate(inline(icon_svg("stella", background=C.PAPER, letters=C.INK_TEXT, radius=20, sheen=True, uid=uid("i"))), "stella tile · paper", cls="icon")}
 {plate(inline(icon_svg("oxagen", background=C.PAPER, letters=C.INK_TEXT, radius=20, sheen=True, uid=uid("i"))), "oxagen tile · paper", cls="icon")}
 </div>
-<p style="margin-top:18px">At 16 to 48 px the ox monogram does not survive, so Oxagen's favicon is the kit's simplified gold x alone. Stella's asterisk survives as itself.</p>
+<p style="margin-top:18px">At 16 to 48 px both icons survive as themselves. The ox graph's strokes are set a third heavier for the favicon, so the wires do not fall between pixels.</p>
+<div class="favs">{favicon_row("oxagen")}{favicon_row("stella")}</div>
 </section>
 
 <section id="colour">
@@ -485,7 +554,7 @@ def build_html() -> str:
 <section id="motion">
 <p class="eyebrow">Motion</p>
 <h2>Light passes over the metal</h2>
-<p>The house motion is the shimmer: a band of light crosses the gold glyph every {SHIMMER_PERIOD:g} seconds. Stella's asterisk turns a sixth of a turn, its own symmetry, as the light passes. Oxagen's monogram draws itself on, the way the kit animates it, and the gold arrives last. All of it is CSS inside the SVG; it runs in an <code>&lt;img&gt;</code> with no script, and <code>prefers-reduced-motion</code> lands it on a still mark.</p>
+<p>The house motion is the shimmer: a band of light crosses the gold glyph every {SHIMMER_PERIOD:g} seconds. Stella's asterisk turns a sixth of a turn, its own symmetry, as the light passes. Oxagen's graph assembles: the node draws on, the four wires run out from it, and the blocks land at their ends. All of it is CSS inside the SVG; it runs in an <code>&lt;img&gt;</code> with no script, and <code>prefers-reduced-motion</code> lands it on a still mark.</p>
 <div class="grid g4">
 {plate(inline(spinner_svg("stella", uid=uid("sp"))), "stella spinner", cls="ink sp")}
 {plate(inline(spinner_svg("oxagen", uid=uid("sp"))), "oxagen spinner", cls="ink sp")}
@@ -501,14 +570,16 @@ def build_html() -> str:
 <section id="surfaces">
 <p class="eyebrow">Surfaces</p>
 <h2>One composition rule</h2>
-<p>A surface is a ground, one warm bloom of the metal, one oversized ghost of the brand's own icon placed off-centre, and at most a few lines of type. Every surface below is the vector the kit ships, not a screenshot.</p>
-<h3>Wallpapers</h3>
+<p>A surface is a ground, one warm bloom of the metal, the brand's own icon placed off-centre, and at most a few lines of type. When a surface needs more than a mark, it builds the picture from the icon's own parts. Every surface below is the vector the kit ships, not a screenshot.</p>
+<h3>Wallpapers, five ways</h3>
+<p><b>graph</b> scatters nodes across the ground, wires each to its two nearest neighbours, and runs gold edges from the icon's blocks to the nodes nearest them: the one-to-many, drawn. <b>blocks</b> rebuilds the icon from context blocks on a grid, each tile a shade brighter or deeper than the next, with a bloom of fainter blocks around it. <b>orbit</b> hangs five rings of nodes off the mark, each node wired inward to the ring inside it. <b>glow</b> and <b>quiet</b> are the mark alone, as a bloom and as a hairline. Every node is placed by a seeded random, so the same file comes out of every build.</p>
 <div class="grid g2">{walls}</div>
 <div class="grid g4" style="margin-top:18px">{phones}</div>
 <h3>Social</h3>
 <div class="grid g4">{social}</div>
 <div class="grid g2" style="margin-top:18px">{banners}</div>
 <h3>Ads</h3>
+<p>Every ad opens on the reader's pain, then the mark answers it. Oxagen runs four lines: the bill, the re-explaining, the waste, and the September positioning. Stella runs two: the proof rule, and the green check. Each line ships in the four sizes, on ink and on paper.</p>
 <div class="grid g2">{"".join(ads)}</div>
 <h3>Content cards</h3>
 <div class="grid g2">{"".join(cards)}</div>

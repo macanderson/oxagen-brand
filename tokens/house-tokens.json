@@ -1,7 +1,11 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "name": "oxagen house system",
   "built_on": "oxagen brand kit (Space Grotesk, Ink and Paper, Bronze Gold)",
+  "icons": {
+    "oxagen": "ox graph",
+    "stella": "asterisk"
+  },
   "gold": {
     "hex": "#D6962C",
     "oklch": {
