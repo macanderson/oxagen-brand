@@ -17,15 +17,17 @@ import surfaces as SF
 from build import AD_COPY, CONTENT, TAGLINES, ad_svg
 from marks import (
     BRANDS,
-    OX_TEXT,
-    OX_TRACKING,
-    OX_WEIGHT,
+    HIVE,
+    HIVE_CELLS,
+    HIVE_HALF,
     SHIMMER_PERIOD,
     asterisk,
     favicon_svg,
+    hive,
+    hive_centre,
+    icon_body,
     icon_svg,
     lockup_svg,
-    ox_lettermark,
     sheen_defs,
     spinner_svg,
     spinner_wordmark_svg,
@@ -153,46 +155,51 @@ def misuse_panel(kind: str, brand: str) -> str:
 
 
 def icon_construction() -> str:
-    """The lettermark on its type lines: baseline, x-height, cap-height, ink box.
+    """The hive on its grid: the cell centres, the two pitches, the ink box.
 
-    The mark is letters, so what there is to show is where the font puts
-    them, not a set of radii. The only number here that is a decision rather
-    than a measurement is the tracking.
+    The mark is cells on a honeycomb, so what there is to show is the grid
+    they sit on -- a centre for each cell, the pitch along a row and the
+    pitch between rows -- and the box the outline reaches. Every number is
+    one of the five in `HIVE`.
     """
-    m = ox_lettermark()
-    x0, y0, x1, y1 = m["bounds"]  # type: ignore[misc]
-    w, h = float(x1) - float(x0), float(y1) - float(y0)
-    base, xh, cap = 0.0, float(m["x_height"]), float(m["cap_height"])  # type: ignore[arg-type]
-    pad = w * 0.08
-
-    def hline(y: float, colour: str, dash: str, op: float) -> str:
-        return (
-            f'<line x1="{float(x0) - pad:.2f}" y1="{y:.2f}" x2="{float(x1) + pad:.2f}" y2="{y:.2f}" '
-            f'stroke="{colour}" stroke-width="0.7" stroke-dasharray="{dash}" opacity="{op:g}"/>'
-        )
-
+    h = hive()
+    x0, y0, x1, y1 = h["bounds"]  # type: ignore[misc]
+    w, ht = float(x1) - float(x0), float(y1) - float(y0)
+    pad = w * 0.10
     guides = [
-        f'<rect x="{float(x0):.2f}" y="{float(y0):.2f}" width="{w:.2f}" height="{h:.2f}" fill="none" '
-        f'stroke="{C.GOLD}" stroke-width="0.8" stroke-dasharray="4 4" opacity="0.7"/>',
-        hline(base, "currentColor", "0", 0.55),
-        hline(base - xh, "currentColor", "3 3", 0.35),
-        hline(base - cap, "currentColor", "3 3", 0.35),
+        f'<rect x="{float(x0):.2f}" y="{float(y0):.2f}" width="{w:.2f}" height="{ht:.2f}" fill="none" '
+        f'stroke="{C.GOLD}" stroke-width="0.25" stroke-dasharray="1.2 1.2" opacity="0.7"/>',
     ]
+    dots = []
+    for col, row, kind in HIVE_CELLS:
+        cx, cy = hive_centre(col, row)
+        dots.append(f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="0.45" fill="{C.GOLD}"/>')
+    # the row pitch, measured between the first two rows on the left
+    ax, ay = hive_centre(0, 0)
+    bx, by = hive_centre(0, 1)
+    cx2, cy2 = hive_centre(1, 0)
+    guides.append(
+        f'<path d="M{float(x0) - pad * 0.45:.2f} {ay:.2f}H{ax:.2f}M{float(x0) - pad * 0.45:.2f} {by:.2f}H{bx:.2f}" '
+        f'stroke="currentColor" stroke-width="0.25" stroke-dasharray="0.8 0.8" opacity="0.4"/>'
+        f'<path d="M{ax:.2f} {float(y0) - pad * 0.45:.2f}V{ay:.2f}M{cx2:.2f} {float(y0) - pad * 0.45:.2f}V{cy2:.2f}" '
+        f'stroke="currentColor" stroke-width="0.25" stroke-dasharray="0.8 0.8" opacity="0.4"/>'
+    )
     labels = [
-        (float(x0), float(y0) - 8, f"{OX_TEXT} · Space Grotesk {OX_WEIGHT} · tracking {OX_TRACKING:+.2f} em"),
-        (float(x0), float(y1) + 16, f"ink {w:.0f} x {h:.0f} · cap {cap:.0f} · x-height {xh:.0f}"),
+        (float(x0), float(y0) - pad * 0.6, f"cell r {HIVE['r']:g} · w {HIVE['w']:g} · stroke {HIVE['stroke']:g}"),
+        (float(x0), float(y1) + pad * 0.9, f"pitch {HIVE['px']:g} along a row · {HIVE['py']:g} between rows"),
+        (float(x0), float(y1) + pad * 1.5, f"the half cell at {HIVE_HALF:g} · filled cells reach the outline's outer edge"),
     ]
     text = "".join(
-        f'<text x="{x:.1f}" y="{y:.1f}" font-size="7" fill="currentColor" opacity="0.7">{esc(t)}</text>'
+        f'<text x="{x:.2f}" y="{y:.2f}" font-size="1.6" fill="currentColor" opacity="0.7">{esc(t)}</text>'
         for x, y, t in labels
     )
-    vx, vy = float(x0) - pad, float(y0) - 20
-    vw, vh = w + pad * 2, h + 44
+    vx, vy = float(x0) - pad, float(y0) - pad * 1.4
+    vw, vh = w + pad * 2, ht + pad * 3.6
     return (
         f'<svg viewBox="{vx:.2f} {vy:.2f} {vw:.2f} {vh:.2f}" role="img" '
-        f'aria-label="Ox lettermark construction" class="diagram">'
-        f'<path d="{m["path"]}" fill="currentColor" opacity="0.55"/>'
-        f'{"".join(guides)}{text}</svg>'
+        f'aria-label="hive construction" class="diagram">'
+        f'<g opacity="0.55">{icon_body("oxagen", letters="currentColor")}</g>'
+        f'{"".join(guides)}{"".join(dots)}{text}</svg>'
     )
 
 
@@ -456,7 +463,7 @@ def build_html() -> str:
 <main class="wrap">
 
 <section class="hero">
-<p class="eyebrow">Oxagen house system · v2.1</p>
+<p class="eyebrow">Oxagen house system · v2.2</p>
 <h1>One house.<br>Two names. One gold.</h1>
 <p class="lead">Everything a customer sees from Oxagen and Stella comes from one system: Space Grotesk, warm ink and paper, and a single gold that each name carries in exactly one glyph.</p>
 <div class="grid g2 plates">
@@ -478,7 +485,7 @@ def build_html() -> str:
 <li><b>Gold is identity, and one action per screen.</b> It is never a surface, and it never means a state.</li>
 <li><b>Gold as text on paper becomes gold-deep.</b> The mark keeps its metal; words do not.</li>
 <li><b>Nothing sits to the left of stella.</b> The asterisk is the only mark. Oxagen's lockup is the one exception, and only for Oxagen.</li>
-<li><b>The Ox mark is one colour.</b> It takes the colour of whatever it sits on -- paper on ink, ink on paper, <code>currentColor</code> in the adaptive files -- and it never carries the metal. The gold stays where the kit put it: on the <code>x</code> of the word.</li>
+<li><b>The hive is two colours, and only two.</b> Its outlines take the colour of whatever it sits on -- paper on ink, ink on paper, <code>currentColor</code> in the adaptive files -- and its two lit cells take the metal. Nothing else in it is ever coloured, and a mono file paints all of it one colour.</li>
 <li><b>The icon is the only picture we own.</b> No stock illustration, no gradient mesh, no 3D render. A surface that needs a picture builds one out of the icon -- its outline, its mosaic, a field around it -- or simply uses a bigger one.</li>
 </ul>
 </section>
@@ -504,7 +511,7 @@ def build_html() -> str:
 {plate(inline(wordmark_svg("stella", sheen=True, uid=uid("v"))), "sheen: the metallic gradient, for hero sizes", cls="ink wm")}
 </div>
 <h3>The oxagen lockup</h3>
-<p>Oxagen alone has a lockup: the mark in a plate, a gap, then the word. The plate stands a third taller than the wordmark's box and the mark is reversed out of it. That plate is doing real work. Set plainly, <code>Ox oxagen</code> stutters -- the mark is the word's own first two letters at the word's own size, so the eye reads one misspelt word instead of a mark and a name. Reversing the mark out of a plate separates them at the root: the plate is an object, the word is text, and no letterform had to be compromised to tell them apart. It costs nothing in colour either, because a plate with letters punched through it is still one path and one fill. Every number is measured from the font. Stella has no lockup; its asterisk is already in the word.</p>
+<p>Oxagen alone has a lockup: the hive, a gap, then the word. The hive stands a quarter taller than the wordmark's box and centres on it; the gap is a little over half an x-height. The wordmark on its own is still the preferred mark -- the lockup is for the places that want a picture beside the name, a masthead or an app's title bar. Stella has no lockup; its asterisk is already in the word.</p>
 <div class="grid g2">
 {plate(inline(lockup_svg(uid=uid("lk"))), "oxagen lockup · on ink", cls="ink big")}
 {plate(inline(lockup_svg(letters=C.INK_TEXT, uid=uid("lk"))), "oxagen lockup · on paper", cls="paper big")}
@@ -526,12 +533,12 @@ def build_html() -> str:
 
 <section id="icons">
 <p class="eyebrow">Icons</p>
-<h2>The asterisk and the Ox</h2>
-<p>Where a square is required, Stella uses its asterisk and Oxagen uses <code>Ox</code>: the word's own first two letters, capitalised the way a name is. It is not drawn. Like the wordmark and like the asterisk, it is outlines straight out of Space Grotesk, so the mark and the word can never drift apart -- set at the display weight, because an icon needs more mass than a word, and fitted {OX_TRACKING:+.2f} em tighter than the font would set them, because two letters standing alone are a drawing and not a word. That is the only number here that was decided rather than measured.</p>
-<p>The mark carries no metal. It is one colour, and that colour is whatever the surface gives it. A mark that is two colours has to be redrawn for every ground it lands on; a mark that is one colour is placed and forgotten, and it can be handed to an operating system that will tint it however it likes. Do not add a second colour, do not outline it, do not set it in another face or weight.</p>
+<h2>The asterisk and the hive</h2>
+<p>Where a square is required, Stella uses its asterisk and Oxagen uses the hive: six hexagonal cells on a honeycomb grid, four drawn as an outline and two filled with the metal, one of them at half strength. It is the knowledge graph as a picture -- a lattice, with the parts Oxagen has learned lit up -- and it is built from five numbers, not drawn: a cell's height and width, the pitch along a row, the pitch between rows, and the outline's weight. The cells are a touch wider than a regular hexagon, which is what makes the cluster stand square.</p>
+<p>The hive is two colours. Its outlines take the colour of the surface it sits on, and its two lit cells take the metal -- flat gold in the plain files, and the metal lit from above in the tiles. Do not add a third colour, do not fill the outlined cells, do not rotate it, and do not move a cell.</p>
 <div class="grid g2">
-{plate(icon_construction(), "construction: the type lines the mark is set on")}
-{plate(icon_family(), "the family: asterisk and Ox, side by side")}
+{plate(icon_construction(), "construction: the grid the cells sit on")}
+{plate(icon_family(), "the family: asterisk and hive, side by side")}
 </div>
 <div class="grid g4">
 {plate(inline(icon_svg("stella", uid=uid("i"))), "stella icon · on ink", cls="ink icon")}
@@ -543,7 +550,7 @@ def build_html() -> str:
 {plate(inline(icon_svg("stella", background=C.PAPER, letters=C.INK_TEXT, radius=20, sheen=True, uid=uid("i"))), "stella tile · paper", cls="icon")}
 {plate(inline(icon_svg("oxagen", background=C.PAPER, letters=C.INK_TEXT, radius=20, sheen=True, uid=uid("i"))), "oxagen tile · paper", cls="icon")}
 </div>
-<p style="margin-top:18px">At 16 to 48 px both icons survive as themselves, and neither is redrawn to get there. <code>Ox</code> was fitted at 16 px in the first place: the display weight keeps the stems on the pixel grid and the tight fit keeps the <code>O</code>'s counter open. Only the fill fraction changes -- at 16 px the mark takes almost the whole square, because the padding a 256 px tile wants is four pixels a favicon cannot spare.</p>
+<p style="margin-top:18px">At 16 to 48 px both icons survive as themselves, and neither is redrawn to get there. The hive is six cells on a grid, which is what a 16 px grid can hold; only its outline is thickened, so the ink cells do not fall between pixels. The fill fraction goes up too -- at 16 px the mark takes almost the whole square, because the padding a 256 px tile wants is four pixels a favicon cannot spare. The small PNGs come from a favicon tile on ink, because an outline on nothing is no favicon on a tab that happens to be its colour.</p>
 <div class="favs">{favicon_row("oxagen")}{favicon_row("stella")}</div>
 </section>
 
@@ -574,7 +581,7 @@ def build_html() -> str:
 <section id="motion">
 <p class="eyebrow">Motion</p>
 <h2>Light passes over the metal</h2>
-<p>The house motion is the shimmer: a band of light crosses the mark every {SHIMMER_PERIOD:g} seconds. Stella's asterisk turns a sixth of a turn, its own symmetry, as the light passes over its gold. Oxagen's <code>Ox</code> has no metal for light to catch, so it takes the same band in value instead: the mark is held at a third strength and the band brings it up to full. Same band, same tilt, same easing -- one gesture, made in hue on the one mark and in brightness on the other. All of it is CSS inside the SVG; it runs in an <code>&lt;img&gt;</code> with no script, and <code>prefers-reduced-motion</code> lands it on a still mark at full strength.</p>
+<p>The house motion is the shimmer: a band of light crosses the mark every {SHIMMER_PERIOD:g} seconds. Stella's asterisk turns a sixth of a turn, its own symmetry, as the light passes over its gold. The hive takes the same band over all of it: its outline is held at a third strength and the band brings it up to full, and its two cells catch the highlight as the band crosses them. Same band, same tilt, same easing -- one gesture, made in hue on the metal and in brightness on the ink. All of it is CSS inside the SVG; it runs in an <code>&lt;img&gt;</code> with no script, and <code>prefers-reduced-motion</code> lands it on a still mark at full strength.</p>
 <div class="grid g4">
 {plate(inline(spinner_svg("stella", uid=uid("sp"))), "stella spinner", cls="ink sp")}
 {plate(inline(spinner_svg("oxagen", uid=uid("sp"))), "oxagen spinner", cls="ink sp")}

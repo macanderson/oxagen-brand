@@ -26,7 +26,7 @@ from color import (
 )
 from geom import Point, dist, nearest, rng, scatter
 from glyphs import glyph_paths, text_path, text_width, wordmark
-from marks import BRANDS, icon_body, icon_geometry, icon_hit, sheen_defs
+from marks import BRANDS, icon_body, icon_geometry, icon_hit, metal_defs, sheen_defs
 
 #: Process-global, not per-surface. Several of these compositions are inlined
 #: into one HTML document by the playbook, and `id` is document-scoped: a
@@ -48,8 +48,8 @@ def icon_ports(brand: str) -> list[Point]:
     """Where an edge may leave the icon, in its own units.
 
     Six points on the ellipse the mark's ink box inscribes, so a constellation
-    hangs off the shape rather than off its corners. Both marks are outlines
-    now, so neither needs a special case.
+    hangs off the shape rather than off its corners. Neither mark needs a
+    special case: both fill their box.
     """
     g = icon_geometry(brand)
     cx, cy = float(g["cx"]), float(g["cy"])  # type: ignore[arg-type]
@@ -74,6 +74,7 @@ class Surface:
         self.body: list[str] = []
         self.defs: list[str] = []
         self._sheen: str | None = None
+        self._metal: str | None = None
 
     @property
     def short(self) -> float:
@@ -86,6 +87,14 @@ class Surface:
             self.defs.append(sheen_defs(uid))
             self._sheen = f"url(#sheen-{uid})"
         return self._sheen
+
+    def metal(self) -> str:
+        """The metal lit from above, for the hive's cells when they are painted whole."""
+        if not self._metal:
+            uid = _sid()
+            self.defs.append(metal_defs(uid))
+            self._metal = f"url(#metal-{uid})"
+        return self._metal
 
     # -- pieces ---------------------------------------------------------
 
@@ -165,7 +174,7 @@ class Surface:
     def icon(self, brand: str, cx: float, cy: float, span: float, *, sheen: bool = True) -> "Surface":
         """The icon at full strength."""
         t, _ = self._placed(brand, cx, cy, span, 0.0)
-        accent = self.sheen() if sheen else GOLD
+        accent = (self.metal() if brand == "oxagen" else self.sheen()) if sheen else GOLD
         self.body.append(f"<g {t}>{icon_body(brand, letters=self.text, accent=accent)}</g>")
         return self
 

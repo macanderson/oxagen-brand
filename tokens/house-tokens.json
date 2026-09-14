@@ -1,16 +1,52 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "name": "oxagen house system",
   "built_on": "oxagen brand kit (Space Grotesk, Ink and Paper, Bronze Gold)",
   "icons": {
     "oxagen": {
-      "kind": "lettermark",
-      "text": "Ox",
-      "family": "Space Grotesk",
-      "weight": 700,
-      "tracking_em": -0.06,
-      "colours": 1,
-      "note": "one colour, taken from the surface; never the metal"
+      "kind": "hive",
+      "cells": [
+        {
+          "col": 0,
+          "row": 0,
+          "kind": "ink"
+        },
+        {
+          "col": 1,
+          "row": 0,
+          "kind": "ink"
+        },
+        {
+          "col": 0,
+          "row": 1,
+          "kind": "ink"
+        },
+        {
+          "col": 1,
+          "row": 1,
+          "kind": "gold"
+        },
+        {
+          "col": 0,
+          "row": 2,
+          "kind": "gold-half"
+        },
+        {
+          "col": 1,
+          "row": 2,
+          "kind": "ink"
+        }
+      ],
+      "cell": {
+        "r": 6.08,
+        "w": 5.8,
+        "px": 13.08,
+        "py": 10.24,
+        "stroke": 1.0
+      },
+      "half": 0.55,
+      "colours": 2,
+      "note": "outlines take the surface's ink; the two lit cells take the metal"
     },
     "stella": {
       "kind": "glyph",

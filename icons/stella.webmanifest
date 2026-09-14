@@ -1,0 +1,33 @@
+{
+  "name": "Stella",
+  "short_name": "Stella",
+  "description": "It does the work and proves it finished.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#10100F",
+  "theme_color": "#10100F",
+  "icons": [
+    {
+      "src": "stella-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "stella-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "stella-icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "stella-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

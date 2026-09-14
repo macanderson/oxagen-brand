@@ -4,7 +4,7 @@ The block mosaics and the constellations ask, thousands of times per canvas,
 whether a point lies inside a brand mark. Stella's asterisk is a font outline
 (cubics and quadratics), so it is flattened once into polygons and tested with
 the non-zero winding rule, the same rule the renderer fills it with. Oxagen's
-graph is built from primitives and tests itself analytically in `marks`.
+hive is built from primitives and tests itself analytically in `marks`.
 
 The random here is `random.Random` seeded from a string. Python guarantees
 `random()` reproduces the same sequence for the same seed across versions,

@@ -9,24 +9,26 @@ Two wordmarks, one face, one metal.
              drawing, and it is never redrawn.
 
 Each brand has one icon for squares. Stella's is the asterisk. Oxagen's is
-the `Ox` lettermark: the word's own first two letters, capitalised the way a
-name is, set in the house face and fitted tighter than the font would set
-them. It carries no metal. The mark is one colour, whatever colour the
-surface it sits on gives it, and it says the company's name at 16 px.
+the hive: six hexagonal cells on a honeycomb grid, four drawn as an outline
+in the surface's own ink and two filled with the metal, one of them at half
+strength. The cells are the knowledge graph as a picture -- a lattice, with
+the parts Oxagen has learned lit up in gold -- and they are primitives, so
+the mark is a handful of numbers rather than a drawing.
 
 The house motion is the shimmer: a band of light passes over the mark. On the
-metal it is a gold highlight; on the one-colour lettermark it is the same
-gesture in value, the mark held low and the band bringing it up. It is
-declarative CSS inside the SVG, so it runs in an `<img>` with no script, and
+metal it is a gold highlight; on the hive's ink it is the same gesture in
+value, the outline held low and the band bringing it up. It is declarative
+CSS inside the SVG, so it runs in an `<img>` with no script, and
 `prefers-reduced-motion` lands it on a still mark.
 """
 
 from __future__ import annotations
 
+import math
 from functools import lru_cache
 
 from color import GOLD, GOLD_BRIGHT, GOLD_DEEP, INK, INK_TEXT, PAPER, PAPER_TEXT
-from geom import path_hit
+from geom import Point, path_hit
 from glyphs import LOGO_WEIGHT, EM, font, glyph_paths, set_line, union_bounds, wordmark
 
 #: What each brand is made of. `accent` is the one glyph painted in the metal.
@@ -74,6 +76,23 @@ def sheen_defs(uid: str) -> str:
         f'<stop offset="0.38" stop-color="{GOLD}"/>'
         f'<stop offset="0.56" stop-color="{GOLD_BRIGHT}"/>'
         f'<stop offset="0.74" stop-color="{GOLD}"/>'
+        f'<stop offset="1" stop-color="{GOLD_DEEP}"/></linearGradient>'
+    )
+
+
+def metal_defs(uid: str) -> str:
+    """The metal lit from above: bright at the top-left, deep at the bottom-right.
+
+    The sheen's three colours in one pass rather than a streak. It is what
+    the hive's cells take when they are asked for the metal, because a
+    cell is a face, and a face under one light is bright on the side the
+    light comes from and deep on the other. Applied in the cell's own box,
+    so every cell is lit the same way.
+    """
+    return (
+        f'<linearGradient id="metal-{uid}" x1="0" y1="0" x2="1" y2="1">'
+        f'<stop offset="0" stop-color="{GOLD_BRIGHT}"/>'
+        f'<stop offset="0.5" stop-color="{GOLD}"/>'
         f'<stop offset="1" stop-color="{GOLD_DEEP}"/></linearGradient>'
     )
 
@@ -169,52 +188,151 @@ def wordmark_svg(
 
 
 # --------------------------------------------------------------------------
-# the Ox lettermark
+# the hive
 # --------------------------------------------------------------------------
 
-#: The mark is the word's own first two letters, capitalised the way a name
-#: is: `Ox`. It is set in the house face at the display weight, and fitted
-#: tighter than the font would set them, because two letters standing alone
-#: are a drawing and not a word. Nothing about it is redrawn: like the
-#: wordmark and like Stella's asterisk, it is outlines straight out of the
-#: font, so the mark and the word can never drift apart.
-#:
-#: The mark carries no metal. It is one colour, always, and that colour is
-#: whatever the surface gives it -- paper on ink, ink on paper,
-#: `currentColor` in the adaptive files. The gold stays where the kit put it:
-#: on the `x` of the wordmark.
-OX_TEXT = "Ox"
-OX_WEIGHT = 700  # the display weight: an icon needs more mass than a word
-OX_TRACKING = -0.06  # ems, fitted by eye at 16 px and again at 256 px
+#: The hive's geometry, measured from the drawing it was approved as
+#: (September 2026) and nothing else. A cell is a pointy-top hexagon,
+#: `r` from centre to top, `w` from centre to side -- a touch wider than a
+#: regular hexagon would be, which is what keeps the cluster reading as a
+#: square. Rows sit `py` apart and cells `px` apart along a row, with the
+#: middle row shifted half a pitch, the way a honeycomb is. `stroke` is the
+#: outline at this scale; the favicon thickens it, and nothing else does.
+HIVE = {
+    "r": 6.08,
+    "w": 5.80,
+    "px": 13.08,
+    "py": 10.24,
+    "stroke": 1.0,
+}
+
+#: Which cells there are, and what each is. `(col, row)` on the grid; the
+#: middle row is the offset one. `ink` is an outline in the surface colour,
+#: `gold` is filled with the metal, `gold-half` the same at half strength.
+HIVE_CELLS: tuple[tuple[int, int, str], ...] = (
+    (0, 0, "ink"),
+    (1, 0, "ink"),
+    (0, 1, "ink"),
+    (1, 1, "gold"),
+    (0, 2, "gold-half"),
+    (1, 2, "ink"),
+)
+HIVE_HALF = 0.55  # the half-strength cell's opacity
+
+
+def hive_centre(col: int, row: int) -> Point:
+    """Where a cell sits, in the hive's own units. Cell (0, 0) is the origin."""
+    return (col * HIVE["px"] + (HIVE["px"] / 2 if row == 1 else 0.0), row * HIVE["py"])
+
+
+def hive_scale(kind: str, weight: float = 1.0) -> float:
+    """How far a cell is grown from the outline's centreline.
+
+    A filled cell is drawn out to the outline's outer edge, so the two kinds
+    stand the same size on the page; an outlined cell stays on its
+    centreline and lets the stroke reach out to meet it.
+    """
+    if kind == "ink":
+        return 1.0
+    return (HIVE["r"] + HIVE["stroke"] * weight / 2) / HIVE["r"]
+
+
+def hive_polygon(cx: float, cy: float, scale: float = 1.0) -> list[Point]:
+    """The six corners of one cell, clockwise from the top."""
+    r, w = HIVE["r"] * scale, HIVE["w"] * scale
+    return [(cx, cy - r), (cx + w, cy - r / 2), (cx + w, cy + r / 2), (cx, cy + r), (cx - w, cy + r / 2), (cx - w, cy - r / 2)]
+
+
+def _poly_d(pts: list[Point]) -> str:
+    return "M" + "L".join(f"{x:.3f} {y:.3f}" for x, y in pts) + "Z"
 
 
 @lru_cache(maxsize=None)
-def ox_lettermark() -> dict[str, object]:
-    """`Ox` at the logo em, one path, with its ink box and its type metrics.
+def hive() -> dict[str, object]:
+    """Every cell placed, and the ink box round all of them.
 
-    The metrics come back with it because the playbook draws them: the mark
-    is letters, so its construction drawing is a baseline, an x-height and a
-    cap-height, not a set of radii.
+    The box is measured to the outside of the outline, the same edge the
+    filled cells are drawn to, so the mark centres on what is actually
+    painted.
     """
-    recs = set_line(OX_TEXT, 0.0, 0.0, EM, OX_WEIGHT, OX_TRACKING * EM)
-    x0, y0, x1, y1 = union_bounds(recs)
-    f = font(OX_WEIGHT)
-    upm = float(f["head"].unitsPerEm)
+    cells = []
+    for col, row, kind in HIVE_CELLS:
+        cx, cy = hive_centre(col, row)
+        cells.append({"cx": cx, "cy": cy, "kind": kind, "outer": hive_polygon(cx, cy, hive_scale("gold"))})
+    xs = [x for c in cells for x, _ in c["outer"]]  # type: ignore[union-attr]
+    ys = [y for c in cells for _, y in c["outer"]]  # type: ignore[union-attr]
+    x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
     return {
-        "path": " ".join(str(r["path"]) for r in recs if r["path"]),
-        "glyphs": recs,
+        "cells": cells,
+        "path": " ".join(_poly_d(c["outer"]) for c in cells),  # type: ignore[arg-type]
         "bounds": (x0, y0, x1, y1),
         "cx": (x0 + x1) / 2,
         "cy": (y0 + y1) / 2,
         "w": x1 - x0,
         "h": y1 - y0,
-        "baseline": 0.0,
-        "x_height": f["OS/2"].sxHeight * EM / upm,
-        "cap_height": f["OS/2"].sCapHeight * EM / upm,
-        "em": EM,
-        "weight": OX_WEIGHT,
-        "tracking": OX_TRACKING,
     }
+
+
+def hive_mark(
+    ink: str = PAPER_TEXT,
+    gold: str = GOLD,
+    *,
+    weight: float = 1.0,
+    ink_opacity: float = 1.0,
+    cls: bool = False,
+) -> str:
+    """The hive in its own units: four outlines in `ink`, two cells in `gold`.
+
+    `weight` thickens the outline without moving the cells, which is what
+    the favicon needs at 16 px. `ink_opacity` is for the spinner, which
+    holds the outline low while the light is elsewhere. `cls` tags each
+    cell with its kind so a stylesheet can reach it.
+    """
+    sw = HIVE["stroke"] * weight
+    out = ['<g data-mark="hive">']
+    for c in hive()["cells"]:  # type: ignore[union-attr]
+        kind = str(c["kind"])
+        k = f' class="{kind}"' if cls else ""
+        if kind == "ink":
+            pts = hive_polygon(float(c["cx"]), float(c["cy"]))
+            op = f' stroke-opacity="{ink_opacity:g}"' if ink_opacity < 1 else ""
+            out.append(
+                f'<path{k} d="{_poly_d(pts)}" fill="none" stroke="{ink}" '
+                f'stroke-width="{sw:g}" stroke-linejoin="miter"{op}/>'
+            )
+        else:
+            pts = hive_polygon(float(c["cx"]), float(c["cy"]), hive_scale(kind, weight))
+            op = f' opacity="{HIVE_HALF:g}"' if kind == "gold-half" else ""
+            out.append(f'<path{k} d="{_poly_d(pts)}" fill="{gold}"{op}/>')
+    out.append("</g>")
+    return "".join(out)
+
+
+def _in_hex(px: float, py: float, cx: float, cy: float, scale: float) -> bool:
+    """Whether a point lies inside one cell grown by `scale`."""
+    r, w = HIVE["r"] * scale, HIVE["w"] * scale
+    ax, ay = abs(px - cx), abs(py - cy)
+    return ax <= w and ay <= r - (r / 2) * (ax / w)
+
+
+def hive_hit(px: float, py: float, *, weight: float = 1.6) -> bool:
+    """Whether (px, py), in the hive's own units, lands on its ink.
+
+    A filled cell counts everywhere inside it; an outlined cell counts only
+    on its outline, taken a little heavier than drawn so a mosaic built
+    from it stays joined up.
+    """
+    sw = HIVE["stroke"] * weight
+    for c in hive()["cells"]:  # type: ignore[union-attr]
+        cx, cy, kind = float(c["cx"]), float(c["cy"]), str(c["kind"])
+        if kind != "ink":
+            if _in_hex(px, py, cx, cy, hive_scale(kind)):
+                return True
+        else:
+            grow = sw / 2 / HIVE["r"]
+            if _in_hex(px, py, cx, cy, 1 + grow) and not _in_hex(px, py, cx, cy, 1 - grow):
+                return True
+    return False
 
 
 # --------------------------------------------------------------------------
@@ -245,23 +363,30 @@ ICON_FILL = {"stella": 0.60, "oxagen": 0.72}  # the icon's long edge over the bo
 
 
 def icon_geometry(brand: str) -> dict[str, object]:
-    """The icon's ink box in its own drawing units, and how to paint it."""
+    """The icon's ink box in its own drawing units, and how to paint it.
+
+    `path` is the icon as closed outlines -- the glyph contour for the
+    asterisk, the six cells for the hive -- for the surfaces that trace the
+    mark rather than paint it.
+    """
     if brand == "stella":
         a = asterisk()
         return {"kind": "asterisk", "bounds": a["bounds"], "cx": a["cx"], "cy": a["cy"],
                 "w": a["w"], "h": a["h"], "path": a["path"]}
-    m = ox_lettermark()
-    return {"kind": "letters", "bounds": m["bounds"], "cx": m["cx"], "cy": m["cy"],
-            "w": m["w"], "h": m["h"], "path": m["path"]}
+    h = hive()
+    return {"kind": "hive", "bounds": h["bounds"], "cx": h["cx"], "cy": h["cy"],
+            "w": h["w"], "h": h["h"], "path": h["path"]}
 
 
 def icon_hit(brand: str):
     """A point test in the icon's own units, for mosaics and fields.
 
-    Both icons are font outlines now, so both are tested the same way: the
-    non-zero winding rule against the flattened contour.
+    The asterisk is a font outline, so it is flattened and tested by the
+    non-zero winding rule. The hive is primitives and tests itself.
     """
-    return path_hit(str(icon_geometry(brand)["path"]))
+    if brand == "stella":
+        return path_hit(str(icon_geometry(brand)["path"]))
+    return hive_hit
 
 
 def icon_body(
@@ -271,17 +396,20 @@ def icon_body(
     accent: str = GOLD,
     mono: str | None = None,
     cls: bool = False,
+    weight: float = 1.0,
+    ink_opacity: float = 1.0,
 ) -> str:
-    """The icon's drawing in its own units. Both icons are one path, one fill.
+    """The icon's drawing in its own units.
 
-    Stella's asterisk is the wordmark's gold glyph, so it takes `accent`.
-    Oxagen's lettermark carries no metal, so it takes `letters` and ignores
-    `accent` entirely -- the one place in this file where the two brands
-    differ in which colour a mark is handed.
+    Stella's asterisk is the wordmark's gold glyph, one path in `accent`.
+    Oxagen's hive is two colours: its outlines take `letters`, the colour
+    of the surface's own text, and its filled cells take `accent`. `mono`
+    paints all of it one colour.
     """
     g = icon_geometry(brand)
-    fill = mono or (accent if g["kind"] == "asterisk" else letters)
-    return f'<path class="mark" d="{g["path"]}" fill="{fill}"/>'
+    if g["kind"] == "asterisk":
+        return f'<path class="mark" d="{g["path"]}" fill="{mono or accent}"/>'
+    return hive_mark(mono or letters, mono or accent, weight=weight, ink_opacity=ink_opacity, cls=cls)
 
 
 def icon_transform(brand: str, box: float, fill: float | None = None) -> tuple[str, float]:
@@ -306,12 +434,14 @@ def icon_svg(
     mono: str | None = None,
     adaptive: bool = False,
     sheen: bool = False,
+    weight: float = 1.0,
     uid: str | None = None,
 ) -> str:
     """The brand's icon centred in a square.
 
-    `sheen` only ever reaches Stella's asterisk: the metal is the accent, and
-    Oxagen's lettermark has no accent to fill.
+    `sheen` fills whatever is gold with the metal: the asterisk takes the
+    sheen, the hive's two lit cells take the metal lit from above. The
+    hive's outlines never take either.
     """
     uid = uid or _uid(brand, "ic")
     bg = ""
@@ -322,97 +452,68 @@ def icon_svg(
     if adaptive:
         letters = "currentColor"
         style = ADAPTIVE_STYLE
-    if sheen and not mono and icon_geometry(brand)["kind"] == "asterisk":
-        defs = f"<defs>{sheen_defs(uid)}</defs>"
-        accent = f"url(#sheen-{uid})"
+    if sheen and not mono:
+        if brand == "stella":
+            defs, accent = f"<defs>{sheen_defs(uid)}</defs>", f"url(#sheen-{uid})"
+        else:
+            defs, accent = f"<defs>{metal_defs(uid)}</defs>", f"url(#metal-{uid})"
     t, _ = icon_transform(brand, box, fill)
     return (
         f"{_head(box, box, BRANDS[brand]['label'] + ' mark')}{defs}{bg}"
-        f'<g transform="{t}">{icon_body(brand, letters=letters, accent=accent, mono=mono)}</g>'
+        f'<g transform="{t}">{icon_body(brand, letters=letters, accent=accent, mono=mono, weight=weight)}</g>'
         f"{style}</svg>"
     )
 
 
-def favicon_svg(brand: str, *, box: float = 96.0, background: str | None = None, adaptive: bool = False) -> str:
+#: How much heavier the hive's outline is drawn at favicon size. At 16 px
+#: the outline as drawn is under half a pixel and vanishes; at this weight
+#: it holds a pixel and a half at 32 px, the size a tab actually shows.
+FAVICON_WEIGHT = 2.4
+
+
+def favicon_svg(
+    brand: str, *, box: float = 96.0, background: str | None = None, radius: float | None = None, adaptive: bool = False
+) -> str:
     """The 16 to 48 px mark: the icon, filling more of the square.
 
     Neither mark is redrawn for small sizes. Stella's asterisk survives as
-    itself, and `Ox` survives because it was fitted at 16 px in the first
-    place -- the display weight keeps the stems on the pixel grid and the
-    tight fit keeps the O's counter open. Only the fill fraction changes:
-    the mark takes almost the whole square, because at 16 px the padding a
+    itself. The hive survives because it is six cells on a grid, which is
+    what a 16 px grid can hold; only its outline is thickened, so the ink
+    cells do not fall between pixels. The fill fraction goes up too: the
+    mark takes almost the whole square, because at 16 px the padding a
     256 px tile wants is four pixels it cannot spare.
     """
-    fill = 0.78 if brand == "stella" else 0.90
-    return icon_svg(brand, box=box, background=background, fill=fill, adaptive=adaptive, uid="fav")
-
-
-# --------------------------------------------------------------------------
-# the oxagen lockup: the mark in a plate, a gap, the word
-# --------------------------------------------------------------------------
-
-#: The plate: a rounded square the mark is reversed out of.
-#:
-#: Set plainly, `Ox oxagen` stutters -- the mark is the word's own first two
-#: letters at the word's own size, so the eye reads one misspelt word rather
-#: than a mark and a name. Reversing the mark out of a plate fixes it at the
-#: root: the plate is an object, the word is text, and nothing about the
-#: letterforms had to be compromised to tell them apart. It also costs
-#: nothing in colour -- a plate with letters punched through it is one path
-#: and one fill, so the lockup obeys the same one-colour rule as the icon.
-LOCKUP_PLATE = 1.30  # the plate's side, over the wordmark's height
-LOCKUP_INSET = 0.72  # the mark's width, over the plate's side
-LOCKUP_RADIUS = 0.24  # the plate's corner, over its side
-
-
-def _rounded_rect(x: float, y: float, w: float, h: float, r: float) -> str:
-    return (
-        f"M{x + r:.3f} {y:.3f}H{x + w - r:.3f}A{r:.3f} {r:.3f} 0 0 1 {x + w:.3f} {y + r:.3f}"
-        f"V{y + h - r:.3f}A{r:.3f} {r:.3f} 0 0 1 {x + w - r:.3f} {y + h:.3f}H{x + r:.3f}"
-        f"A{r:.3f} {r:.3f} 0 0 1 {x:.3f} {y + h - r:.3f}V{y + r:.3f}"
-        f"A{r:.3f} {r:.3f} 0 0 1 {x + r:.3f} {y:.3f}Z"
+    if brand == "stella":
+        return icon_svg(brand, box=box, background=background, radius=radius, fill=0.78, adaptive=adaptive, uid="fav")
+    return icon_svg(
+        brand, box=box, background=background, radius=radius, fill=0.88, adaptive=adaptive,
+        weight=FAVICON_WEIGHT, uid="fav",
     )
 
 
+# --------------------------------------------------------------------------
+# the oxagen lockup: the hive, a gap, the word
+# --------------------------------------------------------------------------
+
+#: The hive stands a little taller than the wordmark's box and centres on
+#: it. A gap of a little over half an x-height keeps the two apart without
+#: letting them drift.
+LOCKUP_MARK = 1.24  # the hive's long edge, over the wordmark's height
+LOCKUP_GAP = 0.62  # the gap, over the x-height
+
+
 def lockup_metrics() -> dict[str, float]:
-    """The plate, the gap, and the word: every number derived, none typed twice."""
+    """The mark, the gap, and the word: every number derived, none typed twice."""
     m = wordmark("oxagen")
     f = font()
     xh = f["OS/2"].sxHeight * EM / float(f["head"].unitsPerEm)
-    om = ox_lettermark()
-    side = float(m["height"]) * LOCKUP_PLATE  # type: ignore[arg-type]
     return {
         "w": float(m["width"]),  # type: ignore[arg-type]
         "h": float(m["height"]),  # type: ignore[arg-type]
         "xh": xh,
-        "plate": side,
-        "radius": side * LOCKUP_RADIUS,
-        "mark_w": side * LOCKUP_INSET,
-        "gap": xh * 0.62,
+        "mark": float(m["height"]) * LOCKUP_MARK,  # type: ignore[arg-type]
+        "gap": xh * LOCKUP_GAP,
     }
-
-
-def lockup_plate(colour: str, side: float, uid: str, *, x: float = 0.0, y: float = 0.0) -> str:
-    """The plate with `Ox` punched out of it: one path, one fill, one colour.
-
-    A mask rather than a shared `fill-rule`: the `O` brings its own counter as
-    a reverse-wound contour, and an even-odd union of plate and letters would
-    fill that counter back in as a solid dot.
-    """
-    om = ox_lettermark()
-    x0, y0 = float(om["bounds"][0]), float(om["bounds"][1])  # type: ignore[index]
-    s = side * LOCKUP_INSET / float(om["w"])  # type: ignore[arg-type]
-    tx = x + (side - float(om["w"]) * s) / 2 - x0 * s  # type: ignore[arg-type]
-    ty = y + (side - float(om["h"]) * s) / 2 - y0 * s  # type: ignore[arg-type]
-    return (
-        f'<mask id="plate-{uid}" maskUnits="userSpaceOnUse" x="{x:.3f}" y="{y:.3f}" '
-        f'width="{side:.3f}" height="{side:.3f}">'
-        f'<rect x="{x:.3f}" y="{y:.3f}" width="{side:.3f}" height="{side:.3f}" fill="#fff"/>'
-        f'<path transform="translate({tx:.3f},{ty:.3f}) scale({s:.6f})" d="{om["path"]}" fill="#000"/>'
-        f"</mask>"
-        f'<path class="mark" mask="url(#plate-{uid})" fill="{colour}" '
-        f'd="{_rounded_rect(x, y, side, side, side * LOCKUP_RADIUS)}"/>'
-    )
 
 
 def lockup_svg(
@@ -425,30 +526,38 @@ def lockup_svg(
     sheen: bool = False,
     uid: str | None = None,
 ) -> str:
-    """The primary lockup: the plate, a gap, then the word, centred on each other.
+    """The primary lockup: the hive, a gap, then the word, centred on each other.
 
-    The plate takes the letter colour and never the metal. `sheen` reaches
-    only the wordmark's own gold `x`, the one gold glyph the lockup has.
+    The hive's outlines take the letter colour and its lit cells take the
+    metal, exactly as the icon does. `sheen` reaches every gold in it: the
+    wordmark's `x` takes the sheen, the hive's cells the metal lit from
+    above, each as it does on its own.
     """
     lm = lockup_metrics()
     m = wordmark("oxagen")
     plain, gold = glyph_paths(m, {"x"})
-    side = lm["plate"]
-    h = max(lm["h"], side)
-    w = side + lm["gap"] + lm["w"]
+    g = icon_geometry("oxagen")
+    s = lm["mark"] / max(float(g["w"]), float(g["h"]))  # type: ignore[arg-type]
+    mw, mh = float(g["w"]) * s, float(g["h"]) * s  # type: ignore[arg-type]
+    h = max(lm["h"], mh)
+    w = mw + lm["gap"] + lm["w"]
     uid = uid or "lk"
     bg = f'<rect width="{w:.3f}" height="{h:.3f}" fill="{background}"/>' if background else ""
     style, defs = "", ""
     if adaptive:
         letters, style = "currentColor", ADAPTIVE_STYLE
     ink, gold_c = (mono, mono) if mono else (letters, accent)
+    cell_c = gold_c
     if sheen and not mono:
-        defs = f"<defs>{sheen_defs(uid)}</defs>"
-        gold_c = f"url(#sheen-{uid})"
+        defs = f"<defs>{sheen_defs(uid)}{metal_defs(uid)}</defs>"
+        gold_c, cell_c = f"url(#sheen-{uid})", f"url(#metal-{uid})"
+    tx = mw / 2 - float(g["cx"]) * s  # type: ignore[arg-type]
+    ty = h / 2 - float(g["cy"]) * s  # type: ignore[arg-type]
     return (
         f"{_head(w, h, 'oxagen')}{defs}{bg}"
-        f'{lockup_plate(ink, side, uid, y=(h - side) / 2)}'
-        f'<g transform="translate({side + lm["gap"]:.3f},{(h - lm["h"]) / 2:.3f})">'
+        f'<g transform="translate({tx:.3f},{ty:.3f}) scale({s:.6f})">'
+        f'{icon_body("oxagen", letters=ink, accent=cell_c, mono=mono)}</g>'
+        f'<g transform="translate({mw + lm["gap"]:.3f},{(h - lm["h"]) / 2:.3f})">'
         f'<path class="letters" d="{plain}" fill="{ink}"/>'
         f'<path class="accent" d="{gold}" fill="{gold_c}"/></g>{style}</svg>'
     )
@@ -458,56 +567,54 @@ def lockup_svg(
 # the house motion
 # --------------------------------------------------------------------------
 
-#: What the shimmer becomes on a mark that has no metal to catch the light.
-MONO_REST = 0.30  # how far down the mark is held between passes
+#: What the shimmer becomes on the hive's ink, which has no metal to catch the light.
+MONO_REST = 0.30  # how far down the outline is held between passes
 
 
-def mono_sweep(
+def mark_sweep(
     uid: str,
-    clip_d: str,
+    body_rest: str,
+    body_lit: str,
     bounds: tuple[float, float, float, float],
-    colour: str,
     *,
     period: float = SHIMMER_PERIOD,
-    rest: float = MONO_REST,
 ) -> tuple[str, str, str]:
-    """The shimmer in value: the mark held low, a band bringing it up to full.
+    """The shimmer over a drawing that is not one path: (defs, body, style).
 
-    The gold shimmer works by laying a brighter gold over gold. A one-colour
-    mark has no brighter colour to lay over it, so the same gesture is made
-    in opacity instead: the whole mark is drawn through its own outline as a
-    clip, held at `rest`, and a soft band at full strength crosses it. It is
-    the same band, the same tilt and the same easing as `shimmer`.
+    `shimmer` clips a band of brighter gold to a glyph outline. A mark made
+    of strokes and fills has no single outline to clip to, so the band is a
+    mask instead: `body_rest` is drawn as the mark stands between passes,
+    and `body_lit` -- the same mark at full strength, its gold at the
+    highlight -- is revealed through a soft band that crosses it. Same
+    band, same tilt, same easing as `shimmer`.
 
-    `prefers-reduced-motion` does not simply hide the band -- that would leave
-    a mark at a third strength -- it stops the animation and returns the mark
-    to full.
+    `prefers-reduced-motion` does not simply hide the band -- that would
+    leave the mark at rest -- it stops the animation and shows the lit
+    mark whole.
     """
     x0, y0, x1, y1 = bounds
     w, h = x1 - x0, y1 - y0
     band = w * 0.55
     defs = (
-        f'<clipPath id="shim-{uid}"><path d="{clip_d}"/></clipPath>'
         f'<linearGradient id="shimg-{uid}" x1="0" y1="0" x2="1" y2="0">'
-        f'<stop offset="0" stop-color="{colour}" stop-opacity="0"/>'
-        f'<stop offset="0.5" stop-color="{colour}" stop-opacity="1"/>'
-        f'<stop offset="1" stop-color="{colour}" stop-opacity="0"/></linearGradient>'
+        f'<stop offset="0" stop-color="#fff" stop-opacity="0"/>'
+        f'<stop offset="0.5" stop-color="#fff" stop-opacity="1"/>'
+        f'<stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+        f'<mask id="shim-{uid}" maskUnits="userSpaceOnUse" '
+        f'x="{x0 - band * 2 - h:.2f}" y="{y0 - h * 0.1:.2f}" width="{w + band * 4 + h * 2:.2f}" height="{h * 1.2:.2f}">'
+        f'<rect class="sweep-{uid}" x="{x0 - band - h * 0.4:.2f}" y="{y0 - h * 0.1:.2f}" width="{band:.2f}" '
+        f'height="{h * 1.2:.2f}" fill="url(#shimg-{uid})" transform="skewX(-18)"/></mask>'
     )
     body = (
-        f'<g clip-path="url(#shim-{uid})">'
-        f'<rect class="base-{uid}" x="{x0:.2f}" y="{y0:.2f}" width="{w:.2f}" height="{h:.2f}" '
-        f'fill="{colour}"/>'
-        f'<rect class="sweep-{uid}" x="{x0 - band - h * 0.4:.2f}" y="{y0 - h * 0.1:.2f}" '
-        f'width="{band:.2f}" height="{h * 1.2:.2f}" fill="url(#shimg-{uid})" '
-        f'transform="skewX(-18)"/></g>'
+        f'<g class="rest-{uid}">{body_rest}</g>'
+        f'<g class="lit-{uid}" mask="url(#shim-{uid})">{body_lit}</g>'
     )
     style = (
-        f".base-{uid}{{opacity:{rest:g}}}"
         f".sweep-{uid}{{animation:sweep-{uid} {period:g}s cubic-bezier(.45,0,.2,1) infinite}}"
         f"@keyframes sweep-{uid}{{0%{{transform:skewX(-18deg) translateX(0)}}"
         f"55%,100%{{transform:skewX(-18deg) translateX({w + band + h * 0.8:.2f}px)}}}}"
         f"@media(prefers-reduced-motion:reduce)"
-        f"{{.base-{uid}{{opacity:1}}.sweep-{uid}{{animation:none;opacity:0}}}}"
+        f"{{.rest-{uid}{{display:none}}.lit-{uid}{{mask:none}}.sweep-{uid}{{animation:none}}}}"
     )
     return defs, body, style
 
@@ -544,13 +651,15 @@ def spinner_svg(
             f'<path d="{g["path"]}" fill="{GOLD}"/>{b}</g></g>'
             f"<style>{turn}{st}</style></svg>"
         )
-    # On a tile the mark takes the tile's opposite; standing on nothing it takes
-    # the page, the same one-colour rule the icon files follow.
+    # On a tile the outline takes the tile's opposite; standing on nothing it
+    # takes the page, the same rule the icon files follow. The gold is gold.
     if background is None:
         colour, adapt = "currentColor", ADAPTIVE_STYLE
     else:
         colour, adapt = (INK_TEXT if background == PAPER else PAPER_TEXT), ""
-    d, b, st = mono_sweep(uid, str(g["path"]), g["bounds"], colour, period=SPIN_PERIOD)  # type: ignore[arg-type]
+    rest = icon_body(brand, letters=colour, accent=GOLD, ink_opacity=MONO_REST)
+    lit = icon_body(brand, letters=colour, accent=GOLD_BRIGHT)
+    d, b, st = mark_sweep(uid, rest, lit, g["bounds"], period=SPIN_PERIOD)  # type: ignore[arg-type]
     return (
         f"{_head(box, box, 'oxagen loading')}<defs>{d}</defs>{bg}"
         f'<g transform="{t}">{b}</g><style>{st}</style>{adapt}</svg>'
@@ -568,8 +677,8 @@ if __name__ == "__main__":
         print(f"{b:7} wordmark {m['width']:g} x {m['height']:g}")
         g = icon_geometry(b)
         print(f"{b:7} icon {g['kind']} ink {g['w']:.1f} x {g['h']:.1f}")
-    om = ox_lettermark()
-    print(f"ox      {OX_TEXT!r} wght {OX_WEIGHT} track {OX_TRACKING:+.2f}em "
-          f"ink {om['w']:.1f} x {om['h']:.1f} (ratio {float(om['w']) / float(om['h']):.2f})")
+    hv = hive()
+    print(f"hive    {len(HIVE_CELLS)} cells, ink {hv['w']:.1f} x {hv['h']:.1f} "
+          f"(ratio {float(hv['w']) / float(hv['h']):.2f})")  # type: ignore[arg-type]
     lm = lockup_metrics()
     print("lockup", {k: round(v, 2) for k, v in lm.items()})

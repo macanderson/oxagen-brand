@@ -126,18 +126,17 @@ def build_tokens() -> None:
             "baseline": m["baseline"],
         }
     payload = {
-        "version": "2.1.0",
+        "version": "2.2.0",
         "name": "oxagen house system",
         "built_on": "oxagen brand kit (Space Grotesk, Ink and Paper, Bronze Gold)",
         "icons": {
             "oxagen": {
-                "kind": "lettermark",
-                "text": MK.OX_TEXT,
-                "family": "Space Grotesk",
-                "weight": MK.OX_WEIGHT,
-                "tracking_em": MK.OX_TRACKING,
-                "colours": 1,
-                "note": "one colour, taken from the surface; never the metal",
+                "kind": "hive",
+                "cells": [{"col": c, "row": r, "kind": k} for c, r, k in MK.HIVE_CELLS],
+                "cell": {k: v for k, v in MK.HIVE.items()},
+                "half": MK.HIVE_HALF,
+                "colours": 2,
+                "note": "outlines take the surface's ink; the two lit cells take the metal",
             },
             "stella": {"kind": "glyph", "text": "*", "family": "Space Grotesk",
                        "weight": G.LOGO_WEIGHT, "colours": 1, "note": "the metal"},
@@ -431,29 +430,86 @@ def build_content(raster: bool) -> None:
                     png(p, width=1200)
 
 
-def build_favicons(raster: bool) -> None:
-    """The SVG favicon, and the PNG fallbacks a browser or a home screen asks for.
+def ico(pngs: list[Path], out: Path) -> None:
+    """Pack PNGs into one `.ico`, the file a browser still asks for first.
 
-    The SVG is adaptive: a browser that takes an SVG favicon gets a mark that
-    follows the tab's own colour scheme, which is the whole point of a
-    one-colour mark.
+    An ICO is a directory of images; since Vista the images may be PNGs
+    whole, and every browser that runs today reads them that way. Written
+    by hand, because it is forty lines of header and not worth a dependency.
+    """
+    import struct
+
+    blobs = [q.read_bytes() for q in pngs]
+    head = struct.pack("<HHH", 0, 1, len(blobs))
+    offset = 6 + 16 * len(blobs)
+    entries = b""
+    for q, blob in zip(pngs, blobs):
+        w, h = struct.unpack(">II", blob[16:24])
+        entries += struct.pack("<BBBBHHII", w % 256, h % 256, 0, 0, 1, 32, len(blob), offset)
+        offset += len(blob)
+    out.write_bytes(head + entries + b"".join(blobs))
+
+
+#: What a home screen wants, by name. `maskable` is drawn to the platform's
+#: safe zone: full-bleed ink, the mark inside the centre four-fifths, so a
+#: launcher that crops to a circle or a squircle does not clip a cell.
+MASKABLE_FILL = {"stella": 0.50, "oxagen": 0.56}
+
+
+def build_favicons(raster: bool) -> None:
+    """The favicon, the app icons, and the files a PWA points at.
+
+    The SVG favicon is adaptive: a browser that takes an SVG favicon gets a
+    mark whose ink follows the tab's own colour scheme.
 
     A PNG cannot adapt, and that is what decides where each brand's small
-    sizes come from. Stella's asterisk is gold, and gold is legible on a light
-    tab and a dark one alike, so it rasterises on nothing. Oxagen's `Ox` is
-    one colour: on nothing it would be paper on a paper-coloured tab, which is
-    no favicon at all. So Oxagen's PNGs come from its tile at every size --
-    opaque, and legible wherever the tab is painted. Both brands take 180 and
-    up from the tile regardless, because a home-screen icon is a tile.
+    sizes come from. Stella's asterisk is gold, and gold is legible on a
+    light tab and a dark one alike, so it rasterises on nothing. The hive's
+    outline is one colour: on nothing it would be paper on a paper-coloured
+    tab, which is no favicon at all. So Oxagen's small PNGs come from a
+    favicon tile -- the favicon's heavier outline on an ink ground, shipped
+    beside the SVG it is a render of. Both brands take 180 and up from the
+    icon tile, because a home-screen icon is a tile and at that size the
+    outline as drawn holds.
+
+    Beside the PNGs: a `.ico` packing 16, 32 and 48; a maskable 192 and 512
+    for Android and the desktop installers; and a `.webmanifest` that names
+    all of them, ready to copy into an app's public folder.
     """
     for b in BRAND_WORDS:
         fav = write(f"logo/svg/{b}-favicon.svg", favicon_svg(b, adaptive=True))
+        small = write(f"logo/svg/{b}-favicon-tile.svg", favicon_svg(b, background=C.INK, radius=14)) if b == "oxagen" else fav
+        mask = write(f"logo/svg/{b}-icon-maskable.svg", icon_svg(b, background=C.INK, fill=MASKABLE_FILL[b], sheen=True, uid=f"{b}-mk"))
+        write(f"icons/{b}.webmanifest", manifest(b))
         if not raster:
             continue
         tile = ROOT / f"logo/svg/{b}-icon-tile-dark.svg"
         for size in (16, 32, 48, 180, 192, 512):
-            src = tile if (size > 48 or b == "oxagen") else fav
-            png(src, width=size, height=size, out=ROOT / "icons" / f"{b}-icon-{size}.png")
+            png(tile if size > 48 else small, width=size, height=size, out=ROOT / "icons" / f"{b}-icon-{size}.png")
+        for size in (192, 512):
+            png(mask, width=size, height=size, out=ROOT / "icons" / f"{b}-icon-maskable-{size}.png")
+        ico([ROOT / "icons" / f"{b}-icon-{n}.png" for n in (16, 32, 48)], ROOT / "icons" / f"{b}-favicon.ico")
+
+
+def manifest(brand: str) -> str:
+    """A web app manifest for the brand, pointing at the icons this build writes."""
+    name = str(BRANDS[brand]["label"])
+    payload = {
+        "name": name.capitalize() if brand == "oxagen" else "Stella",
+        "short_name": name.capitalize() if brand == "oxagen" else "Stella",
+        "description": TAGLINES[brand],
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": C.INK,
+        "theme_color": C.INK,
+        "icons": [
+            {"src": f"{brand}-icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": f"{brand}-icon-512.png", "sizes": "512x512", "type": "image/png"},
+            {"src": f"{brand}-icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+            {"src": f"{brand}-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+        ],
+    }
+    return json.dumps(payload, indent=2) + "\n"
 
 
 def check() -> int:
