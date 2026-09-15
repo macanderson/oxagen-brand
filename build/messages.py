@@ -91,7 +91,10 @@ KEBAB = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 
 #: The floor of the prospect blocklist, in case the rule file is edited away.
 PROSPECT_RULE = "rule-prospect-markers"
-PROSPECT_FLOOR = ("Dan,", "Cary", "design partners", "council of nine")
+#: Prospect names are never tracked: a public blocklist would publish them. Put them,
+#: one per line, in this gitignored file; the check reads it when present.
+PROSPECT_FLOOR = ("design partners", "council of nine")
+LOCAL_PROSPECTS_NAME = "prospect-names.local.txt"
 
 #: Words the brand allows although an older list avoided them.
 AVOID_ALLOWED = {"workforce", "autonomous"}
@@ -309,6 +312,12 @@ def prose_problems(text: str) -> list[str]:
 def blocklists(entries: list[dict]) -> tuple[list[tuple[str, str]], list[str]]:
     """(phrase, rule id) for claim phrases, and the prospect markers."""
     claims, prospects = [], list(PROSPECT_FLOOR)
+    local = MESSAGES / "rules" / LOCAL_PROSPECTS_NAME
+    if local.exists():
+        for line in local.read_text().splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and line not in prospects:
+                prospects.append(line)
     for e in entries:
         if e.get("kind") != "rule" or e.get("status") == "retired":
             continue

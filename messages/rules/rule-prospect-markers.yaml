@@ -3,10 +3,8 @@ brand: oxagen
 kind: rule
 order: 10
 title: No prospect names, deal details, or investor figures.
-long: This repository is public. Keep prospects, deals, and investor figures in outreach tools. The check fails on the markers listed in this file.
+long: This repository is public. Keep prospects, deals, and investor figures in outreach tools. The check fails on the markers listed in this file, and on the names in the untracked local file messages/rules/prospect-names.local.txt, which never enters git because a blocklist of names would publish them.
 phrases:
-- Dan,
-- Cary
 - design partners
 - council of nine
 audience:
