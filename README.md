@@ -7,6 +7,9 @@ the social art, the ads, and the content cards.
 **Start with [`playbook.html`](playbook.html).** It shows every asset, adapts
 to light and dark, and works offline.
 
+**Writing copy? Use [`message-bank.html`](message-bank.html).** It holds every
+live line, the pitch, proof points, and example prose, with the held lines marked.
+
 ## The decision
 
 The Oxagen brand kit is the house kit. It already had the right bones: Space
@@ -57,6 +60,7 @@ lockup; its asterisk is already in the word.
 
 ```
 playbook.html      the document. Read this first.
+message-bank.html  lines, pitch, proof points, and example prose for copy.
 build/             color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against
 fonts/             Space Grotesk, variable and static, with its licence

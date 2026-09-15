@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oxagen message bank</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ink:#10100F; --void:#0A0A09; --panel:#181715; --hl:#201F1C; --border:#292722; --rule:#34322D;
+  --fg:#F2EEE5; --body:#DDD8CD; --muted:#9B958A; --dim:#6E6A62;
+  --gold:#D6962C; --gold-bright:#F1C364; --gold-deep:#8B5E1A; --accent-text:#D6962C; --on-gold:#10100F;
+  --st-allowed:#57A97C; --st-approval:#5B93D6; --st-denied:#C66A4A;
+  --st-proven:#3FA2A2; --st-failed:#C0453C; --st-critical:#D6455E;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --font:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --ink:#F2EEE5; --void:#E9E3D8; --panel:#F8F5EE; --hl:#EFEAE0; --border:#D8CDBD; --rule:#C9BFAE;
+  --fg:#10100F; --body:#2A2823; --muted:#6B665C; --dim:#8C877C; --accent-text:#8B5E1A;
+  --st-allowed:#2F7D52; --st-approval:#2E6BA8; --st-denied:#9B4526;
+  --st-proven:#1F7676; --st-failed:#992F28; --st-critical:#AE2540;
+}}
+:root[data-theme="light"]{
+  --ink:#F2EEE5; --void:#E9E3D8; --panel:#F8F5EE; --hl:#EFEAE0; --border:#D8CDBD; --rule:#C9BFAE;
+  --fg:#10100F; --body:#2A2823; --muted:#6B665C; --dim:#8C877C; --accent-text:#8B5E1A;
+  --st-allowed:#2F7D52; --st-approval:#2E6BA8; --st-denied:#9B4526;
+  --st-proven:#1F7676; --st-failed:#992F28; --st-critical:#AE2540;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--body);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+a{color:var(--accent-text);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+h1,h2,h3{margin:0;color:var(--fg);letter-spacing:-.02em;text-wrap:balance}
+h1{font-size:clamp(30px,5vw,46px);font-weight:700;line-height:1.05}
+h2{font-size:24px;font-weight:600;line-height:1.15}
+h3{font-size:16px;font-weight:600}
+p{margin:0 0 14px;max-width:70ch}
+code{font-family:var(--mono);font-size:.88em;background:var(--hl);padding:1px 5px;border-radius:4px}
+pre{font-family:var(--mono);font-size:12.5px;line-height:1.55;background:var(--void);color:var(--body);border:1px solid var(--border);padding:16px 18px;border-radius:12px;overflow:auto;margin:0;tab-size:2}
+pre code{background:none;padding:0;font-size:inherit;color:inherit}
+.file{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin:18px 0 6px}
+.mono{font-family:var(--mono);font-size:.9em}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}
+.eyebrow.q{color:var(--muted)}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:24px}
+header.top{border-bottom:1px solid var(--rule);padding-block:26px 0;position:sticky;top:0;background:var(--ink);z-index:5}
+header.top .bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:14px}
+header.top svg{height:21px;width:auto;color:var(--fg);display:block}
+header.top .tag{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+nav.sub{display:flex;gap:16px;overflow-x:auto;padding-bottom:14px;font-size:13.5px;scrollbar-width:none}
+nav.sub::-webkit-scrollbar{display:none}
+nav.sub a{color:var(--muted);white-space:nowrap;border-bottom:none}
+nav.sub a:hover{color:var(--fg)}
+.btn{font-family:var(--font);font-weight:600;font-size:13.5px;border:1px solid var(--border);border-radius:8px;padding:8px 13px;cursor:pointer;white-space:nowrap;color:var(--fg);background:transparent}
+.btn:hover{border-color:var(--rule);background:var(--hl)}
+.btn.primary{background:var(--gold);color:var(--on-gold);border-color:var(--gold-deep)}
+.btn.primary:hover{background:var(--gold-bright)}
+.btn[data-done="1"]{background:var(--st-allowed);border-color:var(--st-allowed);color:var(--ink)}
+.hero{padding-block:52px 46px}
+.hero .lead{font-size:19px;line-height:1.5;color:var(--fg);max-width:60ch;margin-top:18px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+section{padding-block:44px;border-top:1px solid var(--border)}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:17px 19px}
+.panel h3{margin-bottom:9px}
+.panel p:last-child{margin-bottom:0}
+.tw{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:var(--panel);margin-block:20px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:600;white-space:nowrap;background:var(--hl)}
+tr:last-child td{border-bottom:0}
+ol.method{counter-reset:m;list-style:none;padding:0;margin:0;display:grid;gap:14px}
+ol.method li{counter-increment:m;padding-left:42px;position:relative}
+ol.method li::before{content:counter(m);position:absolute;left:0;top:1px;width:27px;height:27px;border-radius:8px;
+  background:var(--hl);border:1px solid var(--rule);color:var(--fg);font-family:var(--mono);font-size:12px;
+  font-weight:700;display:grid;place-items:center}
+ol.method b{color:var(--fg)}
+.note{border-left:2px solid var(--rule);padding:3px 0 3px 14px;color:var(--muted);font-size:14px;max-width:66ch}
+.loop{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--panel);margin-top:30px}
+.loop div{padding:14px 16px;border-bottom:1px solid var(--border);font-size:14px}
+.loop div:last-child{border-bottom:0}
+.loop b{display:block;color:var(--fg);font-family:var(--mono);font-size:12px;margin-bottom:3px}
+@media(min-width:900px){.loop{grid-template-columns:repeat(5,1fr)}.loop div{border-bottom:0;border-right:1px solid var(--border)}.loop div:last-child{border-right:0}}
+.verdicts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
+.verdicts .v{border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--panel)}
+.verdicts .v b{display:block;font-family:var(--mono);font-size:13px;color:var(--fg);margin-bottom:6px}
+.verdicts .v.held{border-style:double;border-width:3px}
+.verdicts .v.signed{border-style:dashed}
+.verdicts .v.rejected{border-style:solid}
+.phase{border-top:1px solid var(--border);padding:20px 0}
+.phase:first-child{border-top:0}
+.phase h3{margin-bottom:8px}
+.phase .gate{font-size:14.5px;background:var(--hl);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:10px}
+.phase .gate b{color:var(--fg)}
+.promptbox{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px}
+.promptbox .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.promptbox pre{max-height:440px}
+details summary{cursor:pointer;font-weight:600;padding:10px 0;color:var(--fg)}
+footer{border-top:1px solid var(--rule);padding-block:34px 70px;color:var(--muted);font-size:13px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--border);color:var(--fg);padding:10px 16px;border-radius:8px;font-size:13.5px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:640px){h1{font-size:27px}.hero .lead{font-size:16.5px}}
+
+.ex{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:20px 22px;margin:14px 0}
+.ex .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:10px}
+.ex h4{margin:0 0 8px;font-size:22px;letter-spacing:-.02em;color:var(--fg);line-height:1.1}
+.ex p{margin:0 0 8px}.ex p:last-child{margin:0}
+.ex .action{display:inline-block;margin-top:8px;font-weight:600;font-size:13.5px;border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--fg)}
+.pair{display:grid;grid-template-columns:1fr;gap:12px;margin:12px 0 20px}@media(min-width:760px){.pair{grid-template-columns:1fr 1fr}}
+.pair div{border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--panel);font-size:14.5px}
+.pair b{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.pair .after{border-style:double;border-width:3px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="bar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 574.244 106.313" role="img" aria-label="oxagen"><g transform="translate(0,0) scale(2.842952)"><path d="M6.300 0.000L12.600 3.320L12.600 9.960L6.300 13.280L0.000 9.960L0.000 3.320ZM1.000 3.885L1.000 9.395L6.300 12.150L11.600 9.395L11.600 3.885L6.300 1.130Z M19.376 0.000L25.676 3.320L25.676 9.960L19.376 13.280L13.076 9.960L13.076 3.320ZM14.076 3.885L14.076 9.395L19.376 12.150L24.676 9.395L24.676 3.885L19.376 1.130Z M12.838 10.240L19.138 13.560L19.138 20.200L12.838 23.520L6.538 20.200L6.538 13.560ZM7.538 14.125L7.538 19.635L12.838 22.390L18.138 19.635L18.138 14.125L12.838 11.370Z M19.376 20.480L25.676 23.800L25.676 30.440L19.376 33.760L13.076 30.440L13.076 23.800ZM14.076 24.365L14.076 29.875L19.376 32.630L24.676 29.875L24.676 24.365L19.376 21.610Z" fill="currentColor"/><path d="M25.914 10.240L32.214 13.560L32.214 20.200L25.914 23.520L19.614 20.200L19.614 13.560Z M6.300 20.480L12.600 23.800L12.600 30.440L6.300 33.760L0.000 30.440L0.000 23.800Z" fill="#D6962C"/></g><g transform="translate(120.376,13.067)"><path d="M33.9083 68.758Q24.1657 68.758 16.4786 64.7737Q8.79142 60.7894 4.39571 53.2965Q0 45.8035 0 35.3862V33.3718Q0 22.9544 4.39571 15.4615Q8.79142 7.96854 16.4786 3.98427Q24.1657 0 33.9083 0Q43.6509 0 51.3381 3.98427Q59.0252 7.96854 63.4209 15.4615Q67.8166 22.9544 67.8166 33.3718V35.3862Q67.8166 45.8035 63.4209 53.2965Q59.0252 60.7894 51.3381 64.7737Q43.6509 68.758 33.9083 68.758ZM33.9083 55.3486Q42.1895 55.3486 47.4689 50.0198Q52.7484 44.691 52.7484 35.0142V33.7437Q52.7484 24.067 47.5233 18.7382Q42.2981 13.4094 33.9083 13.4094Q25.6502 13.4094 20.3592 18.7382Q15.0683 24.067 15.0683 33.7437V35.0142Q15.0683 44.691 20.3592 50.0198Q25.6502 55.3486 33.9083 55.3486Z M176.569 68.758Q169.637 68.758 164.119 66.3453Q158.601 63.9327 155.387 59.2935Q152.173 54.6542 152.173 48.0088Q152.173 41.3403 155.387 36.8558Q158.601 32.3712 164.27 30.1017Q169.94 27.8323 177.174 27.8323H196.047V23.8925Q196.047 18.7316 192.874 15.5274Q189.701 12.3232 182.99 12.3232Q176.411 12.3232 173.049 15.3842Q169.686 18.4452 168.627 23.3593L154.691 18.7315Q156.27 13.6133 159.748 9.39702Q163.225 5.18071 169.049 2.59035Q174.874 0 183.208 0Q195.972 0 203.326 6.42816Q210.681 12.8563 210.681 24.9392V50.4707Q210.681 54.4204 214.368 54.4204H219.795V66.9148H209.197Q204.464 66.9148 201.442 64.5334Q198.42 62.1521 198.42 58.1563V57.8864H196.126Q195.392 59.6967 193.399 62.2985Q191.406 64.9004 187.388 66.8292Q183.369 68.758 176.569 68.758ZM179.05 56.4348Q186.581 56.4348 191.314 52.1592Q196.047 47.8837 196.047 40.6031V39.2405H178.175Q173.175 39.2405 170.208 41.3881Q167.241 43.5358 167.241 47.5513Q167.241 51.5668 170.34 54.0008Q173.439 56.4348 179.05 56.4348Z M227.767 34.6423V32.6279Q227.767 22.3817 231.86 15.0863Q235.953 7.79081 242.768 3.8954Q249.582 0 257.706 0Q266.935 0 271.762 3.33256Q276.589 6.66512 278.81 10.4107H281.042V1.8432H295.801V79.33Q295.801 85.6989 292.104 89.4725Q288.408 93.2462 282.079 93.2462H238.369V80.0541H277.023Q280.779 80.0541 280.779 76.1043V57.2775H278.547Q277.161 59.5683 274.665 61.8904Q272.168 64.2125 268.057 65.7414Q263.946 67.2702 257.706 67.2702Q249.582 67.2702 242.756 63.3748Q235.93 59.4794 231.848 52.1724Q227.767 44.8655 227.767 34.6423ZM261.938 54.0781Q270.151 54.0781 275.573 48.8612Q280.996 43.6443 280.996 34.2704V32.9999Q280.996 23.4943 275.627 18.3432Q270.259 13.1921 261.938 13.1921Q253.749 13.1921 248.315 18.3432Q242.881 23.4943 242.881 32.9999V34.2704Q242.881 43.6443 248.315 48.8612Q253.749 54.0781 261.938 54.0781Z M344.764 68.758Q334.998 68.758 327.583 64.6108Q320.167 60.4636 316.031 52.9048Q311.896 45.346 311.896 35.1689V33.589Q311.896 23.3889 315.977 15.8416Q320.059 8.2944 327.397 4.1472Q334.735 0 344.385 0Q353.881 0 360.956 4.1867Q368.031 8.37341 371.981 15.8515Q375.931 23.3297 375.931 33.2895V38.6974H327.181Q327.468 46.3334 332.587 50.9496Q337.707 55.5658 345.198 55.5658Q352.522 55.5658 356.101 52.3534Q359.681 49.141 361.553 45.0629L373.985 51.4813Q372.119 55.0656 368.63 59.1042Q365.141 63.1428 359.394 65.9504Q353.648 68.758 344.764 68.758ZM327.313 27.2892H360.622Q360.095 20.7986 355.7 16.9954Q351.304 13.1921 344.277 13.1921Q337.055 13.1921 332.691 16.9954Q328.327 20.7986 327.313 27.2892Z M391.548 66.9148V1.8432H406.353V10.9769H408.585Q410.303 7.25429 414.832 3.99908Q419.361 0.743866 428.435 0.743866Q435.956 0.743866 441.695 4.12911Q447.434 7.51435 450.651 13.5903Q453.868 19.6663 453.868 27.9442V66.9148H438.8V29.1226Q438.8 21.1969 434.891 17.3492Q430.983 13.5015 423.9 13.5015Q415.872 13.5015 411.244 18.8237Q406.617 24.146 406.617 33.9445V66.9148Z" fill="currentColor"/><path d="M73.9979 66.9148 98.2261 34.0696 74.3764 1.8432H91.9626L107.9 24.3499H110.131L126.068 1.8432H143.654L119.805 34.0696L144.033 66.9148H126.206L110.131 44.0065H107.9L91.8244 66.9148Z" fill="#D6962C"/></g></svg><span class="tag">message bank &middot; 2026-09-15</span></div>
+<nav class="sub"><a href="#claim">Claim</a><a href="#lines">Lines</a><a href="#pitch">Pitch</a><a href="#keys">Access</a><a href="#proof">Proof points</a><a href="#buyers">Buyers</a><a href="#voice">Voice</a><a href="#words">Words</a><a href="#examples">Examples</a><a href="#avoid">What not to say</a></nav></div></header>
+<main class="wrap">
+<section class="hero" style="border-top:0;padding-top:0">
+<p class="eyebrow">Message bank</p>
+<h1>Can you explain your AI bill? Neither can your provider.</h1>
+<p class="lead">Every line, pitch, proof point, and example Oxagen uses today, in one place. Copy from here, not from memory. The source is the <span class="mono">oxagen-branding</span> skill in this repo. When the two disagree, the skill wins and this page is rebuilt.</p>
+<div class="hero-actions"><a class="btn primary" href="#lines" style="display:inline-flex;align-items:center">Pick a line</a></div>
+</section>
+
+<section id="claim"><p class="eyebrow q">The claim</p><h2>One mandate, four clauses</h2>
+<p>Every other layer covers one clause of an agent's mandate and stops. Identity says who the agent is. Gateways say which tools it can call. Billing says what it consumed. Prompt repos say what it was told. Oxagen binds all of it into one object, enforces it on every call, and keeps a record an outside party can read.</p>
+<p><b>The category is the agent control plane:</b> the control plane for every agent an enterprise runs, whoever built it. A control plane does not run the workload. It decides what the workload may do, hands it what it needs, and keeps the record. Oxagen does not run agents.</p>
+<p>Not observability, governance, evals, guardrails, or a trust layer. Each is owned by someone, and each one means watch and report. Name the category by what it does.</p>
+<div class="tw"><table><thead><tr><th>Clause</th><th>Who sets it</th><th>What it says</th></tr></thead><tbody>
+<tr><td><b>Access</b></td><td>Security</td><td>Which identity the agent acts as, which systems it may ask for, which data and graph scope it may read, which actions it may request</td></tr>
+<tr><td><b>Budget and rules</b></td><td>FinOps</td><td>What it may spend, under which commercial terms, and the rules it must obey: approval thresholds, allowed vendors, decision rules</td></tr>
+<tr><td><b>Equipment</b></td><td>Engineering</td><td>The knowledge it is handed at the start of a job, the skills and tools it may use, the steering it runs under</td></tr>
+<tr><td><b>Record</b></td><td>The platform</td><td>What the run read, what it changed, what proved it, what it cost</td></tr>
+</tbody></table></div>
+<p class="note">Lead with the clause the reader owns. A security lead reads access first. A finance lead reads budget first. An engineering lead reads equipment first, then the record.</p></section>
+
+<section id="lines"><p class="eyebrow q">Lines</p><h2>Four live lines. Do not write a fifth.</h2>
+<div class="tw"><table><thead><tr><th>Line</th><th>Use it for</th><th>Why it works</th></tr></thead><tbody>
+<tr><td><b>Can you explain your AI bill? Neither can your provider.</b></td><td>The top of the site, cold email subject lines, the bill ad</td><td>Names the pain the buyer feels this month, and the product proves it today: every call priced by token class, attributed to the person, agent, run, turn, and step.</td></tr>
+<tr><td><b>Stop wasting money on AI.</b></td><td>The Oxagen product page, the waste ad</td><td>Fewer tokens, same answers. The claim the record can back now.</td></tr>
+<tr><td><b>Never re-explain yourself to AI ever again.</b></td><td>The memory ad, the knowledge graph section</td><td>Taught once, known by every agent you run.</td></tr>
+<tr><td><b>Don't hand your agents the keys.</b></td><td>The access section of the site, the security page, cold email to security leads</td><td>Names the thing every security lead has already done and regrets. The next sentence is the product: the agent asks, a rule you wrote answers.</td></tr>
+</tbody></table></div>
+<div class="verdicts"><div class="v held" style="grid-column:1/-1"><b>Held until the dod ships</b>Decision, 2026-09-15. These lines stay out of the site, ads, and outreach until the definition of done is live. When it ships they move back to the top, and nothing else on this page changes.</div></div>
+<div class="tw"><table><thead><tr><th>Held line</th><th>Use it for, once live</th><th>Why it works</th></tr></thead><tbody>
+<tr><td><b>The agent doesn't get to decide it's done.</b></td><td>Rooms, decks, the top of the site, cold email subject lines</td><td>Names the failure every engineering lead has lived. The reader finishes the thought.</td></tr>
+<tr><td><b>Define done before the agent starts. Prove it after.</b></td><td>Product pages, docs intros, anything explaining both halves</td><td>Both halves in one sentence: the visible dod and the hidden witness.</td></tr>
+<tr><td><b>Runs that end with a verdict, not a claim.</b></td><td>Finance, procurement, the CFO slide</td><td>Says the meter follows the outcome without saying the word pricing.</td></tr>
+<tr><td><b>Prove it to someone who doesn't trust you.</b></td><td>The verify feature, audit and insurance conversations</td><td>Names the outside dependency, which is the moat.</td></tr>
+<tr><td><b>Steer. Govern. Observe.</b></td><td>Footer and favicon-sized places</td><td>Retained from the earlier system. Never the lead.</td></tr>
+</tbody></table></div></section>
+
+<section id="pitch"><p class="eyebrow q">The pitch</p><h2>Three sentences, then one</h2>
+<div class="ex"><div class="lbl">Three sentences</div><p>Your agents run on a token somebody pasted in, spend against a budget nobody set, and finish when they say they are finished. Oxagen puts each agent under a mandate: security sets what it may ask for, FinOps sets what it may spend and the rules it obeys, engineering sets what it knows and what it may use, and the platform enforces all of it on every call. Every run leaves one record, what it read, what it changed, what it cost, and what proved it, that an auditor can read without trusting you.</p></div>
+<div class="ex"><div class="lbl">One sentence</div><p>Oxagen is the control plane for the agents an enterprise runs: one mandate per agent, set by the teams accountable for it, enforced on every call, recorded on every run.</p></div></section>
+
+<section id="keys"><p class="eyebrow q">Access</p><h2>The keys stay with you</h2>
+<p>The wrong model, the one every other tool assumes, is a service account: the agent gets a token with everything it might ever need, and the team hopes it uses only some of it. Oxagen's model is a request. The agent holds an identity and a mandate, and nothing else. When a task needs a system, a scope, or an action the mandate does not already cover, the agent asks for it at the moment of use.</p>
+<ol class="method">
+<li><b>The agent asks.</b> Never "the agent has access to Slack" or "connect your agent to Slack". Say "the agent can request Slack" or "Slack is in the agent's mandate".</li>
+<li><b>The rule decides.</b> Name the three answers when there is room: allowed, denied, routed to a person.</li>
+<li><b>The record keeps the answer.</b> Every request is a row with the rule that answered it and, when routed, the name of the person who did.</li>
+<li><b>The key never moves.</b> The credential stays in Oxagen and the agent never sees it. There is no key to hand over, so there is nothing for the agent to leak.</li>
+<li><b>No fear.</b> The reader has already pasted a token into an agent and knows it. Tell them what the request looks like and who answers it.</li>
+</ol></section>
+
+<section id="proof"><p class="eyebrow q">Proof points</p><h2>Stated so they survive a rebuttal</h2>
+<div class="grid g2">
+<div class="panel"><h3>Live</h3>
+<p><b>One object, enforced at the call.</b> Identity, knowledge scope, permitted action, commercial terms, outcome, and audit record are one typed contract, checked when the agent calls, not reconstructed after the incident.</p>
+<p><b>The meter is a row, not an estimate.</b> Every governed action is priced and attributed to the person, the agent, the run, the turn, and the step. The bill page and the record page read the same rows.</p>
+<p><b>Three answers, one rule.</b> A decision rule names a capability, a condition, and one effect: allow, deny, or require approval. The kernel checks it before the handler runs, so a denied action never reaches the code that would have done it.</p>
+<p><b>Your keys, your graph, your model.</b> Own model keys, own graph endpoint, hosting at cost. There is no cloud the product pulls toward.</p>
+<p><b>Whoever built the agent.</b> Claude Code, the Agent SDK, a custom loop. The wrapper records and gates from beside the agent. Oxagen never has to run it.</p></div>
+<div class="panel"><h3>Held with the dod lines</h3>
+<p><b>Pre-committed, not post-hoc.</b> The dod is locked before the agent moves, and its position in the run's chain proves it.</p>
+<p><b>Two halves, on purpose.</b> The dod is visible to the agent, so drift is caught where it happens. The witness is hidden, so gaming is caught where it hides.</p>
+<p><b>No model in the verdict.</b> <span class="mono">decide()</span> is a pure function of the run's frames.</p>
+<p><b>Third parties depend on the record.</b> <span class="mono">oxagen dod verify</span> runs with no account and no network.</p>
+<p><b>The meter follows the proof.</b> Charge for proven runs. Report runs and governed actions as secondary meters.</p></div>
+</div>
+<p class="note" style="margin-top:20px">Never name a competitor. Describe the category behavior: tools that record, a token with everything the agent might ever need, scores written after the fact, a second model grading the first. The reader supplies the names.</p></section>
+
+<section id="buyers"><p class="eyebrow q">Buyers</p><h2>Three readers, one mandate</h2>
+<div class="grid g3">
+<div class="panel"><h3>Security lead, after a month</h3><p>"The agents don't have a token any more. They ask, and I can read every answer."</p></div>
+<div class="panel"><h3>Finance lead, on the Spend page</h3><p>"I can say which agent spent what, on whose behalf, under which rule."</p></div>
+<div class="panel"><h3>Engineering lead, terminal agents</h3><p>"I stopped reading agent PRs to find out if they were done."</p></div>
+</div>
+<p class="note" style="margin-top:20px">Coding teams first, because everyone using a terminal agent today is a customer.</p>
+<h3 style="margin-top:28px">The demo, in order</h3>
+<p>Type a prompt in Claude Code. Show the mandate the agent runs under. Let it request a push to a protected branch and get denied, with the rule id. Let it request one to a release branch and watch it route to a person, answer it from the Access page, and see the run resume. Open the run and show the request beside the tool call with its cost. Twenty minutes, one denied request, one routed request, one record.</p></section>
+
+<section id="voice"><p class="eyebrow q">Voice</p><h2>A senior engineer who has read the logs</h2>
+<p>Plain, specific, unhurried, dry, and honest to the record. It states facts, names numbers, and stops. No exclamation points, no em dashes, no semicolons in customer copy, sentence case headings, Oxford comma.</p>
+<div class="pair"><div><b>Before</b>Connect your agent to GitHub, Slack, and your database in one click.</div><div class="after"><b>After</b>The agent asks for GitHub when the task needs it. A rule you wrote answers, or a person you named does. The key stays in Oxagen.</div></div>
+<div class="pair"><div><b>Before</b>Requests are auto-approved so your agents never wait.</div><div class="after"><b>After</b>Reads of the public repo are allowed by rule. A push to main is denied by rule. A push to a release branch waits on the release owner.</div></div>
+<div class="pair"><div><b>Before</b>Enterprise-grade secret management keeps your credentials safe.</div><div class="after"><b>After</b>The agent never sees the key. There is nothing for it to leak.</div></div>
+<div class="pair"><div><b>Before</b>Fast, seamless setup.</div><div class="after"><b>After</b>Two hooks. Sixty seconds. The first screen shows your own numbers.</div></div>
+<div class="pair"><div><b>Before</b>Cryptographically attested, tamper-evident evidence chains with Merkle-rooted seals.</div><div class="after"><b>After</b>Every frame is hash-chained to the one before it, and the seal signs the whole run. Anyone with the export can recompute the result.</div></div></section>
+
+<section id="words"><p class="eyebrow q">Words</p><h2>Use these. Avoid those.</h2>
+<div class="grid g2">
+<div class="panel"><h3>Use</h3><p><b>The mandate.</b> mandate, clause, request, rule, allowed, denied, routed, connection, credential.</p><p><b>The record.</b> run, turn, step, frame, operator, agent, workspace, governed action, seal, export.</p><p><b>Verbs.</b> ask, request, allow, deny, route, answer, record, seal, read, show, cost.</p></div>
+<div class="panel"><h3>Avoid</h3><p><b>Empty.</b> seamless, robust, powerful, revolutionary, comprehensive, end-to-end, intelligent, magic.</p><p><b>Emotional and fear.</b> excited, thrilled, finally, imagine, liability, unchecked, protect.</p><p><b>Owned categories.</b> observability, governance as a noun, evals, guardrails, trust layer.</p><p><b>Handing over the keys.</b> connect your agent to, give the agent access to, the agent's API key, service account, auto-approve.</p><p><b>Wrong vocabulary.</b> session, trace, attempt, execution, invocation, AI-powered, agentic.</p></div>
+</div>
+<div class="tw"><table><thead><tr><th>Bad</th><th>Good</th></tr></thead><tbody>
+<tr><td>connect your agent to GitHub</td><td>the agent can request GitHub</td></tr>
+<tr><td>the agent has access to Slack</td><td>Slack is in the agent's mandate</td></tr>
+<tr><td>securely stores your keys</td><td>the credential stays in Oxagen</td></tr>
+<tr><td>auto-approved</td><td>allowed by rule</td></tr>
+<tr><td>escalated to a human</td><td>routed to a person</td></tr>
+<tr><td>least-privilege access</td><td>the agent asks for what the task needs, when it needs it</td></tr>
+<tr><td>comprehensive observability</td><td>every frame with its cost beside it</td></tr>
+<tr><td>leverage, utilize, enable you to</td><td>use, lets you, or cut it</td></tr>
+</tbody></table></div>
+<p class="note">Full tables are in <span class="mono">skills/oxagen-branding/references/words.md</span>.</p></section>
+
+<section id="examples"><p class="eyebrow q">Example prose</p><h2>Finished copy per surface</h2>
+<div class="ex"><div class="lbl">Product page, the access section</div>
+<h4>Don't hand your agents the keys</h4><p>An agent under Oxagen holds an identity and a mandate. It does not hold a token to GitHub, a password to the database, or a standing grant to anything. When a task needs one of those, the agent asks. The request carries who started the task, which agent is asking, which tool it wants, and which data it would reach.</p>
+<h4 style="margin-top:16px">A rule you wrote answers</h4><p>The team that owns the system writes the rule. Reads of the public repo: allowed. A push to main: denied. A push to a release branch: routed to the release owner, who sees the request with the diff beside it and answers from the Access page. Allowed and denied requests settle inside the same call. Routed requests wait for the person, and the run waits with them.</p>
+<h4 style="margin-top:16px">The key never moves</h4><p>The credential stays in Oxagen, encrypted under a key you own. Oxagen makes the connection on the agent's behalf and closes it when the action is done. The agent never sees the key. The record shows every use: the request, the rule that answered it, and the person who signed it.</p></div>
+
+<div class="ex"><div class="lbl">Docs, writing a rule</div><p>Write one rule for each thing an agent may ask for. A rule names a capability, a condition, and one of three effects: allow, deny, or require approval. Requests that match allow or deny settle inside the call and leave a row with the rule id. Requests that match require approval wait for the person the rule names, and the run waits with them. Rules are checked after identity, so a rule can narrow what an agent may do and never widen it.</p></div>
+
+<div class="ex"><div class="lbl">Sales email, security lead (the name is a placeholder)</div><p><b>Subject:</b> Don't hand your agents the keys</p><p>Hi Sam,</p><p>Your coding agents run with a GitHub token that can push to every repo, because that was the only way to get them working. Nobody chose that. It is how tokens work.</p><p>Oxagen gives the agent an identity instead of a token. When a run needs GitHub, the agent asks, a rule you wrote answers, and the request is a row in the record with the rule that answered it. I can show you one denied push and one routed to a person in twenty minutes, on your repos.</p><p>Mac</p></div>
+
+<div class="ex"><div class="lbl">UI strings and errors</div>
+<div class="tw" style="margin:0"><table><tbody>
+<tr><td>Access page, allowed</td><td class="mono">allowed by rule repo-read</td></tr>
+<tr><td>Access page, denied</td><td class="mono">denied by rule no-push-main</td></tr>
+<tr><td>Access page, routed</td><td class="mono">waiting on Priya, rule release-branch</td></tr>
+<tr><td>Request card body</td><td>Push to <span class="mono">release/2026.09</span> requested by stella for Dana's task. Reaches 14 files in <span class="mono">apps/api</span>.</td></tr>
+<tr><td>Connection row</td><td>GitHub, held by the workspace. The agent never sees the key.</td></tr>
+<tr><td>Empty state, no rules</td><td>This workspace has no rules. Requests are answered by identity alone. Write the first rule under Access.</td></tr>
+<tr><td>Error, denied</td><td>Request denied by rule <span class="mono">no-push-main</span>. Push to a branch and open a pull request.</td></tr>
+<tr><td>Error, routed</td><td>Request is waiting on Priya, rule <span class="mono">release-branch</span>. The run resumes when she answers.</td></tr>
+</tbody></table></div></div>
+<p class="note" style="margin-top:20px">Ad art lives in <span class="mono">ads/</span>. Every ad takes its headline from a live line above.</p></section>
+
+<section id="avoid"><p class="eyebrow q">What not to say</p><h2>And why</h2>
+<ol class="method">
+<li><b>Trust layer, safety, guardrails.</b> These sell fear. The buyer is not afraid. They are annoyed.</li>
+<li><b>AI-powered verification.</b> The verdict has no AI in it. That is the point.</li>
+<li><b>Connect your agent to, give the agent access to, the agent's API key.</b> Each one hands over the keys in the copy even when the product does not.</li>
+<li><b>Auto-approve, as a feature.</b> A rule that allows is a decision someone wrote down. Say "allowed by rule".</li>
+<li><b>Any dod line, before the dod ships.</b> The lines are approved and held. Using them early claims what the record cannot yet show.</li>
+<li><b>Prospect names, deal details, or investor figures.</b> This repo is public. Keep them in outreach, never in the bank.</li>
+</ol></section>
+</main>
+<footer><div class="wrap"><p style="margin:0">Oxagen message bank, September 2026. Built from <span class="mono">skills/oxagen-branding/references</span>. Supersedes the positioning page of 2026-09-14.</p></div></footer>
+</body>
+</html>
