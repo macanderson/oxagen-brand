@@ -2993,7 +2993,7 @@
         "04"
       ],
       "replaced_by": "keys-credential-stays",
-      "notes": "Was the fourth access rule, with a promise that there is nothing for the agent to leak.",
+      "notes": "Was the fourth access rule. It carried a promise about leaks that credential custody cannot make.",
       "group": "retired",
       "path": "messages/retired/retired-key-never-moves.yaml"
     },
