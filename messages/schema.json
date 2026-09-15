@@ -53,7 +53,7 @@
     {"if": {"properties": {"release": {"const": "held"}}, "required": ["release"]}, "then": {"required": ["gate"]}},
     {"if": {"properties": {"release": {"const": "launch"}}, "required": ["release"]}, "then": {"not": {"required": ["gate"]}}},
     {"if": {"properties": {"kind": {"const": "ad"}}}, "then": {"required": ["kicker", "headline", "short_lines", "cta"]}},
-    {"if": {"properties": {"kind": {"const": "pair"}}}, "then": {"required": ["before", "after"]}},
+    {"if": {"properties": {"kind": {"const": "pair"}, "status": {"not": {"const": "retired"}}}}, "then": {"required": ["before", "after"]}},
     {"if": {"properties": {"status": {"const": "approved"}, "release": {"const": "launch"},
                            "kind": {"enum": ["headline", "eyebrow", "pitch", "section", "card", "entry-point", "proof", "email", "announcement", "ad"]}},
             "required": ["status", "release"]},
