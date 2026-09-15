@@ -224,7 +224,7 @@ For bounded tasks with a dod:
 
 - The dod on disk does not match the lock. Restore `$OXAGEN_RUN_DIR/dod.toml` or start a new run.
 - Check `unit` timed out after 600 seconds. Raise `timeout_s` in the dod or split the command.
-- No dod matched task `github:macanderson/oxagen#2701`. Oxagen drafted one; review it at `$OXAGEN_RUN_DIR/dod.toml`.
+- No dod matched task `github:macanderson/oxagen#2701`. Oxagen drafted one. Review it at `$OXAGEN_RUN_DIR/dod.toml`.
 
 ## Ad directions
 
