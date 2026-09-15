@@ -420,14 +420,20 @@ def build_html() -> str:
         ("oxagen", "memory", 1080, 1080, "square", "light"),
         ("oxagen", "waste", 1200, 628, "landscape", "dark"),
         ("oxagen", "bill", 300, 250, "mpu", "light"),
+        ("oxagen", "fleet", 1080, 1080, "square", "dark"),
+        ("oxagen", "keys", 1200, 628, "landscape", "light"),
         ("stella", "proof", 1080, 1080, "square", "dark"),
         ("stella", "check", 1200, 628, "landscape", "light"),
     ):
         cp = next(c for c in AD_COPY[b] if c["slug"] == slug)
         ads.append(plate(ad_svg(b, cp, w, h, tag, s), f"{b} · {slug} · {w}×{h} · {s}", cls="tight"))
     cards = []
-    for b, s in (("stella", "dark"), ("oxagen", "light")):
-        kind, title, meta, body = CONTENT[b][0]
+    for b, want, s in (
+        ("stella", "Changelog", "dark"),
+        ("oxagen", "Field note", "light"),
+        ("oxagen", "Fleet note", "dark"),
+    ):
+        kind, title, meta, body = next(c for c in CONTENT[b] if c[0] == want)
         cards.append(plate(SF.content_card(1200, 675, b, s, kind=kind, title=title, meta=meta, body=body), f"{b} · {kind.lower()} card · {s}", cls="tight"))
 
     files = [
@@ -441,8 +447,8 @@ def build_html() -> str:
         ("spinners/", "the house motion, animated SVG, no script"),
         ("wallpapers/", "desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit · dark | light"),
         ("social/", "avatar · x · linkedin · youtube · open graph · dark | light"),
-        ("ads/", "bill · memory · waste · proof · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
-        ("content/", "changelog · essay · release · field note cards, 1200×675"),
+        ("ads/", "bill · memory · waste · proof · fleet · keys · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
+        ("content/", "changelog · essay · release · field note · fleet note cards, 1200×675"),
     ]
     files_html = "".join(f'<div class="mono">{esc(k)}</div><span>{esc(v)}</span>' for k, v in files)
 
@@ -606,7 +612,8 @@ def build_html() -> str:
 <div class="grid g4">{social}</div>
 <div class="grid g2" style="margin-top:18px">{banners}</div>
 <h3>Ads</h3>
-<p>Every ad opens on the reader's pain and then answers it in one line. The headline is the problem -- the bill, re-explaining yourself, wasted spend -- and under it sits a single sentence saying what Oxagen does about it. Those four answer lines are the four things the product does, one to an ad: it <b>teaches</b> your agents your business, <b>governs</b> what they may do, <b>explains</b> every run, and <b>learns</b> from each one. No ad carries more than one of them, and between them the four carry all of it, so the promise is made whole by the campaign rather than crammed onto a single poster. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form: that line is the reason the ad exists. Stella runs two lines: the proof rule, and the green check. Each ships in the four sizes, on ink and on paper.</p>
+<p>Every ad opens on the reader's pain and then answers it in one line. The headline is the problem -- the bill, re-explaining yourself, wasted spend, the fleet you cannot see, the keys you already handed over -- and under it sits a single sentence saying what Oxagen does about it. Those six answer lines are the six things the product does, one to an ad: it <b>teaches</b> your agents your business, <b>governs</b> what they may do, <b>explains</b> every run, <b>learns</b> from each one, <b>runs</b> them as a fleet, and <b>holds</b> the credential so the agent never does. No ad carries more than one of them, and between them the six carry all of it, so the promise is made whole by the campaign rather than crammed onto a single poster. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form: that line is the reason the ad exists. Stella runs two lines: the proof rule, and the green check. Each ships in the four sizes, on ink and on paper.</p>
+<p>Five of the six take the ghost in the top right. The <b>fleet</b> ad takes the orbit instead, laid back behind the type: rings of nodes wired inward to one mark is the only composition the kit already owns that reads as many agents under one mandate. It is not a new shape; it is the wallpaper's, at ad scale and at ad strength.</p>
 <div class="grid g2">{"".join(ads)}</div>
 <h3>Content cards</h3>
 <div class="grid g2">{"".join(cards)}</div>

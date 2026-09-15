@@ -275,23 +275,21 @@ def build_social(raster: bool) -> None:
                     png(p, width=w)
 
 
-#: Every ad opens on the reader's pain, the way the voice guide says to.
-#: Oxagen's three pains are the bill, the re-explaining, and the waste; the
-#: fourth line is the September positioning. Stella's is the proof rule that
-#: decides when a run counts as done. No benchmark numbers and no competitor
-#: is named in public art: a number in an ad is a claim the ad has to keep
-#: being true. Each entry is one campaign. `headline` is the tall stack for the
-#: square and the portrait; `wide` is the same words in two long lines for the
-#: landscape, where a four-line stack would shrink to fit; `short` is the line
-#: the 300x250 carries, because a banner is not a poster with the middle line
-#: The ad line is the positioning line. Every Oxagen ad opens on the reader's
-#: own problem -- the bill, re-explaining yourself, wasted spend -- and then
-#: answers it in one line. Those four answer lines are the four things the
-#: product does, one per ad: it teaches your agents your business, governs
-#: what they may do, explains every run, and learns from each one. No ad
-#: carries more than one of them, and between them the four ads carry all of
-#: it, so the promise is made whole by the campaign rather than crammed into
-#: a single poster.
+#: Every ad opens on the reader's pain and answers it in one line, the way the
+#: voice guide says to. Oxagen has six: the bill, re-explaining yourself,
+#: wasted spend, the mandate, the fleet, and the keys. Each answer line is one
+#: thing the product does -- it explains every run, teaches your agents your
+#: business, learns from each one, governs what they may do, runs them as a
+#: fleet, and holds the credential so the agent never does -- and no ad carries
+#: more than one of them, so the promise is made whole by the campaign rather
+#: than crammed into a single poster. Stella's two are the proof rule that
+#: decides when a run counts as done.
+#:
+#: Each entry is one campaign. `headline` is the tall stack for the square and
+#: the portrait; `wide` is the same words in two long lines for the landscape,
+#: where a four-line stack would shrink to fit; `short` is what the 300x250
+#: carries, because a banner is not a poster with its middle line deleted.
+#: `picture` names the composition in the top right and defaults to the ghost.
 #:
 #: No benchmark numbers and no competitor is named in public art: the deck's
 #: comparison is an investor slide, and a number in an ad is a claim the ad
@@ -342,6 +340,35 @@ AD_COPY: dict[str, list[dict[str, object]]] = {
             "subshort": "A role. A budget. A boundary.",
             "cta": "oxagen.sh",
         },
+        {
+            "slug": "fleet",
+            "kicker": "Answer. Fund. Hold. Stop.",
+            "headline": ["Run your agents", "as a fleet."],
+            "wide": ["Run your agents as a fleet."],
+            "short": ["Run your agents", "as a fleet."],
+            # runs them as a fleet. The orbit is the only composition here that
+            # reads as many agents under one mandate, so this is the one ad
+            # that does not take the ghost.
+            "subline": "Every agent you run on one page, with its mandate, its requests, and its spend.",
+            "subshort": "Every agent on one page.",
+            "cta": "See your fleet \u00b7 oxagen.sh",
+            "picture": "orbit",
+        },
+        {
+            "slug": "keys",
+            "kicker": "Ask. Answer. Record.",
+            # A poster sets a real apostrophe. Space Grotesk has quoteright;
+            # the typewriter quote is for code, and none of this is code.
+            "headline": ["Don\u2019t hand", "your agents", "the keys."],
+            "wide": ["Don\u2019t hand your agents", "the keys."],
+            "short": ["Don\u2019t hand your", "agents the keys."],
+            # holds the credential so the agent never does. This is the one
+            # place the kit is allowed to write "hand over": it is the line
+            # that says not to.
+            "subline": "The agent asks, a rule you wrote answers, the key stays in Oxagen.",
+            "subshort": "The agent asks. A rule answers.",
+            "cta": "See a request \u00b7 oxagen.sh",
+        },
     ],
     "stella": [
         {
@@ -382,6 +409,7 @@ def ad_svg(brand: str, campaign: dict[str, object], w: int, h: int, tag: str, sc
         headline=list(campaign[key]),  # type: ignore[call-overload]
         subline=str(sub),
         cta="" if small else str(campaign["cta"]),
+        picture=str(campaign.get("picture", "ghost")),
     )
 
 
@@ -405,6 +433,13 @@ CONTENT = {
         ("Release", ["Oxagen platform"], "oxagen.sh/changelog",
          ["+ agent identity, roles, and budgets on every call",
           "+ every run saved as a trace beside its data"]),
+        # The card an operator's weekly fleet report goes out on. Its panel is
+        # the fleet's week in three rows, not a terminal: Space Grotesk is not
+        # a code face, so nothing here is set as command output.
+        ("Fleet note", ["What the fleet", "asked for this week"], "The weekly fleet report",
+         ["9 agents ran under mandate",
+          "4 requests routed to a person",
+          "1 agent held at its budget"]),
     ],
     "stella": [
         ("Changelog", ["Parallel tool calls,", "now measured"], "30 Aug 2026 · Engineering",

@@ -230,6 +230,23 @@ class Surface:
         """A short bar of the metal: the one accent a surface gets besides the mark."""
         return self.rect(x, y, w, h, self.sheen(), rx=h / 2)
 
+    def behind(self, alpha: float, draw) -> "Surface":
+        """Draw a composition and lay the whole field back, so type reads over it.
+
+        A wallpaper's picture owns the canvas. An ad's does not, because the ad
+        has words in front of it. `ghost` carries its own strength, but a
+        constellation or an orbit is drawn at full weight, so the ad draws one
+        and then pushes it back to roughly the ghost's. The gradients the
+        composition registered stay in `defs`, where they belong; only the
+        painted fragments move into the dimmed group.
+        """
+        cut = len(self.body)
+        draw()
+        frag = "".join(self.body[cut:])
+        del self.body[cut:]
+        self.body.append(f'<g opacity="{alpha:g}">{frag}</g>')
+        return self
+
     # -- the icon's vocabulary, at scale ----------------------------------
 
     def _block(self, x: float, y: float, side: float, fill: str, alpha: float) -> str:
@@ -544,6 +561,7 @@ def ad(
     kicker: str = "",
     subline: str = "",
     cta: str = "",
+    picture: str = "ghost",
 ) -> str:
     """Kicker, a short headline set tight, the answer line, a rule, then the mark.
 
@@ -555,10 +573,24 @@ def ad(
     says what Oxagen does about it. It is set at a little under half the
     headline and in the full text colour rather than the muted one, because
     it is the substance of the ad and not a caption to it.
+
+    `picture` is which of the mark's own compositions sits in the top right.
+    `ghost` is the mark oversized, which is what an ad about one thing wants.
+    `orbit` is rings of nodes wired inward to the mark, which is the fleet
+    drawn: many agents, one mandate. Nothing else is offered, because nothing
+    else is a shape the marks already contain.
     """
     s = Surface(w, h, scheme)
     short = min(w, h)
-    s.ghost(brand, w * 0.90, h * 0.12, short * 0.8, rot=GHOST_ROT[brand])
+    if picture == "ghost":
+        s.ghost(brand, w * 0.90, h * 0.12, short * 0.8, rot=GHOST_ROT[brand])
+    elif picture == "orbit":
+        s.behind(
+            0.52 if s.dark else 0.58,
+            lambda: s.orbit(brand, w * 0.88, h * 0.13, short * 0.15, seed="ad"),
+        )
+    else:
+        raise ValueError(picture)
 
     pad = w * 0.085
     mark_w = short * 0.40
@@ -583,7 +615,13 @@ def ad(
     s.wordmark(brand, pad, mark_cy, mark_w, anchor="start")
     y = mark_cy - mark_h / 2 - size * 0.9
     if cta:
-        s.line(cta, pad, y, size * 0.46, weight=500, fill=s.muted)
+        # Measured the same way the answer line is. The fit loop above only
+        # bounds the headline, so a call to action longer than a domain would
+        # otherwise be the one line free to run past the margin.
+        c = size * 0.46
+        while c > size * 0.24 and text_width(cta, c, 500) > w - pad * 2:
+            c *= 0.96
+        s.line(cta, pad, y, c, weight=500, fill=s.muted)
         y -= size * 0.85
     rule_h = max(3.0, short * 0.011)
     s.rule(pad, y - rule_h, short * 0.13, rule_h)

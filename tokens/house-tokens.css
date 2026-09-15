@@ -11,7 +11,7 @@
  */
 
 :root {
-  --ox-gold: #D6962C; /* the metal: identity, one action per screen */
+  --ox-gold: #D6962C; /* the gold: identity, one action per screen. flat, always */
   --ox-gold-bright: #F1C364; /* the shimmer highlight; hover on ink */
   --ox-gold-deep: #8B5E1A; /* gold as text on paper; small gold details there */
   --ox-ink: #10100F; /* the dark canvas */
