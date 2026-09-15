@@ -70,8 +70,9 @@ icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webma
 spinners/          the house motion, animated SVG, no script
 wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit · dark | light
 social/            avatar · x · linkedin · youtube · open graph · dark | light
-ads/               bill · memory · waste · proof · 1080×1080 · 1080×1350 · 1200×628 · 300×250
-content/           changelog · essay · release · field note cards, 1200×675
+ads/               bill · memory · waste · proof · fleet · keys · 1080×1080 · 1080×1350 · 1200×628 · 300×250
+content/           changelog · essay · release · field note · fleet note cards, 1200×675
+skills/            the oxagen-branding Claude Code skill and its installer
 ```
 
 ## Every pixel here is generated
@@ -88,6 +89,24 @@ brew install harfbuzz librsvg          # hb-shape and rsvg-convert
 .venv/bin/python build/build.py --svg     # skip the raster pass
 .venv/bin/python build/playbook.py        # rebuild the document
 ```
+
+## Install the branding skill
+
+`skills/oxagen-branding/` is the Claude Code skill that carries the positioning,
+the voice, the vocabulary, and worked examples, beside the marks it describes.
+It is the source of truth for every word either brand publishes. The oxagen
+monorepo vendors it through its own sync script; everything else installs it
+from here.
+
+```sh
+skills/install.sh                          # link it into ~/.claude/skills, for every project on this machine
+skills/install.sh --project ~/Projects/x   # copy it into one project's .claude/skills
+skills/install.sh --check                  # does the installed skill match this checkout?
+```
+
+The per-user install is a symlink, so `git pull` here is the update. This skill
+supersedes the older `brand-voice-guidelines` skill some machines still carry
+under `~/.claude/skills`; the installer leaves that one alone.
 
 For a PWA, copy `icons/oxagen-*.png`, `icons/oxagen-favicon.ico` and
 `icons/oxagen.webmanifest` into the app's public folder and point at them:
