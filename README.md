@@ -7,8 +7,9 @@ the social art, the ads, and the content cards.
 **Start with [`playbook.html`](playbook.html).** It shows every asset, adapts
 to light and dark, and works offline.
 
-**Writing copy? Use [`message-bank.html`](message-bank.html).** It holds every
-live line, the pitch, proof points, and example prose, with the held lines marked.
+**Writing copy? Start in [`messages/`](messages/).** The registry holds every
+line with its status, scope, evidence, and owner. [`message-bank.html`](message-bank.html)
+is generated from it and shows every line, the held ones marked with their gate.
 
 ## The decision
 
@@ -60,8 +61,9 @@ lockup; its asterisk is already in the word.
 
 ```
 playbook.html      the document. Read this first.
-message-bank.html  lines, pitch, proof points, and example prose for copy.
-build/             color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · playbook.py
+message-bank.html  generated from messages/: every line, pitch, card, ad, and rule, with its status.
+messages/          the message registry: one YAML file per line, schema.json, findings.yaml, index.json (generated)
+build/             color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against
 fonts/             Space Grotesk, variable and static, with its licence
 tokens/            house-tokens.css · house-tokens.json
@@ -70,7 +72,7 @@ icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webma
 spinners/          the house motion, animated SVG, no script
 wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit · dark | light
 social/            avatar · x · linkedin · youtube · open graph · dark | light
-ads/               bill · memory · waste · proof · fleet · keys · 1080×1080 · 1080×1350 · 1200×628 · 300×250
+ads/               from messages/ads/: mission-control · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
 content/           changelog · essay · release · field note · fleet note cards, 1200×675
 skills/            the oxagen-branding Claude Code skill and its installer
 ```
@@ -82,13 +84,39 @@ it. Every SVG is emitted from `build/`. The colours live in one file,
 `build/color.py`, so a change there moves every asset on the next run.
 
 ```sh
-python3 -m venv .venv && .venv/bin/pip install fonttools brotli
+python3 -m venv .venv && .venv/bin/pip install fonttools brotli pyyaml
 brew install harfbuzz librsvg          # hb-shape and rsvg-convert
-.venv/bin/python build/build.py --check   # verify the face and the palette, write nothing
+.venv/bin/python build/build.py --check   # verify the face, the palette, and the registry, write nothing
 .venv/bin/python build/build.py           # every asset
 .venv/bin/python build/build.py --svg     # skip the raster pass
+.venv/bin/python build/build.py --only ads social   # only these steps
 .venv/bin/python build/playbook.py        # rebuild the document
 ```
+
+## Messages
+
+Every line either brand publishes lives in [`messages/`](messages/), one YAML
+file per entry: the headline or card itself, its short and long forms, who
+reads it, where it is used, whether it is approved, whether it ships at launch
+or waits for a capability, the scope sentence its short forms must keep, the
+evidence it needs, its owner, and the date to review it. Retired lines stay in
+the registry beside what replaced them. [`messages/README.md`](messages/README.md)
+describes every field.
+
+**A copy change starts in `messages/`.** `message-bank.html`,
+`messages/index.json`, the ad copy, and the social taglines are generated from
+it, so nothing downstream is edited by hand and nobody keeps a count of lines.
+
+```sh
+python3 build/messages.py --check          # validate the registry and confirm the generated files are current
+python3 build/messages.py                  # write message-bank.html and messages/index.json
+.venv/bin/python build/build.py --only ads social   # render the ads and taglines from the registry
+```
+
+The check fails on missing fields, a held entry without a gate, dashes or
+exclamation points, words the voice guide avoids, unscoped claims, prospect
+names, retired text in an approved entry, and any file in `ads/` that no
+approved, launch-released ad entry produces.
 
 ## Install the branding skill
 
@@ -141,10 +169,10 @@ the kit's Bronze Gold, or if any text token drops below AA on its ground.
   mesh, no 3D render. A surface that needs a picture builds one out of the
   icon -- its outline, its mosaic, a field around it (the `quiet`, `blocks`,
   `graph` and `orbit` wallpapers) -- or simply uses a bigger one.
-- **Every ad opens on the reader's pain, and answers it in one line.** The
-  bill, the re-explaining, the waste. Under the headline sits one sentence
-  saying what Oxagen does about it: it teaches your agents your business,
-  governs what they may do, explains every run, or learns from each one. One
-  of the four to an ad, all four across the campaign.
+- **Every ad explains one operator decision, and keeps its scope.** Mission
+  Control introduces the control plane; authority, equipment, spend, and the
+  keys each take one ad. The short forms keep the scope of the long ones:
+  governed, recorded, mediated. Ad copy comes only from approved,
+  launch-released entries in `messages/ads/`.
 - **Space Grotesk is not a code face.** Terminal output and code stay in the
   system monospace.

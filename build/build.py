@@ -3,6 +3,10 @@
     python3 build/build.py --check    # verify the face and the palette, write nothing
     python3 build/build.py            # write every asset
     python3 build/build.py --svg      # skip the PNG raster pass (fast)
+    python3 build/build.py --only ads social   # rebuild only these steps
+
+Ad copy and taglines come from the message registry in `messages/`, read by
+`build/messages.py`, which needs PyYAML (`.venv/bin/pip install pyyaml`).
 
 Rasterising needs `rsvg-convert` (`brew install librsvg`); shaping needs
 `hb-shape` (`brew install harfbuzz`). Every PNG here is a render of the SVG
@@ -22,6 +26,7 @@ from pathlib import Path
 import color as C
 import glyphs as G
 import marks as MK
+import messages as MS
 import surfaces as SF
 from marks import (
     BRANDS,
@@ -36,17 +41,25 @@ from marks import (
 ROOT = Path(__file__).resolve().parent.parent
 BRAND_WORDS = ("oxagen", "stella")
 
-#: Every directory the build owns. Emptied before a run, so a renamed asset
-#: cannot leave its old name behind.
-GENERATED = ("logo", "icons", "spinners", "wallpapers", "social", "ads", "content", "tokens")
-
-#: Straight from the September 2026 positioning deck, so the art cannot say
-#: something the company has stopped saying. Oxagen's is the deck's own
-#: subtitle; Stella's is the deck's one-line description of the agent.
-TAGLINES = {
-    "oxagen": "Agents that prove their work. A model you own.",
-    "stella": "It does the work and proves it finished.",
+#: Every build step and the directories it owns. A step empties its own
+#: directories before it writes, so a renamed asset cannot leave its old name
+#: behind, and `--only` never touches a directory another step owns.
+STEPS: dict[str, tuple[str, ...]] = {
+    "tokens": ("tokens",),
+    "logos": ("logo",),
+    "icons": ("icons",),
+    "spinners": ("spinners",),
+    "wallpapers": ("wallpapers",),
+    "social": ("social",),
+    "ads": ("ads",),
+    "content": ("content",),
 }
+GENERATED = tuple(d for dirs in STEPS.values() for d in dirs)
+
+#: The social and manifest taglines, from approved, launch-released registry
+#: entries (`hero-headline` and `stella-tagline`), so the art cannot say
+#: something the company has stopped saying.
+TAGLINES = MS.taglines()
 DOMAINS = {"stella": "stella.oxagen.sh", "oxagen": "oxagen.sh"}
 
 
@@ -275,121 +288,23 @@ def build_social(raster: bool) -> None:
                     png(p, width=w)
 
 
-#: Every ad opens on the reader's pain and answers it in one line, the way the
-#: voice guide says to. Oxagen has six: the bill, re-explaining yourself,
-#: wasted spend, the mandate, the fleet, and the keys. Each answer line is one
-#: thing the product does -- it explains every run, teaches your agents your
-#: business, learns from each one, governs what they may do, runs them as a
-#: fleet, and holds the credential so the agent never does -- and no ad carries
-#: more than one of them, so the promise is made whole by the campaign rather
-#: than crammed into a single poster. Stella's two are the proof rule that
-#: decides when a run counts as done.
+#: Every campaign is an approved, launch-released `kind: ad` entry in
+#: `messages/ads/`. Held and retired entries are not rendered, and
+#: `build/messages.py --check` fails on any file in `ads/` that no entry
+#: produces. The Oxagen campaign follows the operator's job: Mission Control
+#: introduces the control plane, and each of the others explains one decision
+#: an operator makes, with its scope kept in the short form.
 #:
-#: Each entry is one campaign. `headline` is the tall stack for the square and
-#: the portrait; `wide` is the same words in two long lines for the landscape,
-#: where a four-line stack would shrink to fit; `short` is what the 300x250
-#: carries, because a banner is not a poster with its middle line deleted.
-#: `picture` names the composition in the top right and defaults to the ghost.
+#: Each campaign carries `headline`, the tall stack for the square and the
+#: portrait; `wide`, the same words in long lines for the landscape, where a
+#: four-line stack would shrink to fit; and `short`, what the 300x250 carries,
+#: because a banner is not a poster with its middle line deleted. `picture`
+#: names the composition in the top right and defaults to the ghost.
 #:
-#: No benchmark numbers and no competitor is named in public art: the deck's
-#: comparison is an investor slide, and a number in an ad is a claim the ad
-#: has to keep being true.
-AD_COPY: dict[str, list[dict[str, object]]] = {
-    "oxagen": [
-        {
-            "slug": "bill",
-            "kicker": "Every token, itemized.",
-            "headline": ["Can you explain", "your AI bill?", "Neither can", "your provider."],
-            "wide": ["Can you explain your AI bill?", "Neither can your provider."],
-            "short": ["Can you explain", "your AI bill?"],
-            # explains every run
-            "subline": "Oxagen explains every run: what it did, and what it cost.",
-            "subshort": "Every run explains itself.",
-            "cta": "oxagen.sh",
-        },
-        {
-            "slug": "memory",
-            "kicker": "The context engine remembers.",
-            "headline": ["Never re-explain", "yourself to AI", "ever again."],
-            "wide": ["Never re-explain yourself", "to AI ever again."],
-            "short": ["Never re-explain", "yourself."],
-            # teaches your agents your business
-            "subline": "Teach Oxagen your business once. Every agent you run has it.",
-            "subshort": "Taught once. Known by all.",
-            "cta": "oxagen.sh",
-        },
-        {
-            "slug": "waste",
-            "kicker": "Fewer tokens. Same answers.",
-            "headline": ["Stop wasting", "money on AI."],
-            "wide": ["Stop wasting money on AI."],
-            "short": ["Stop wasting", "money on AI."],
-            # learns from each one
-            "subline": "Oxagen learns from every run, and the next one costs less.",
-            "subshort": "Each run costs less.",
-            "cta": "oxagen.sh",
-        },
-        {
-            "slug": "proof",
-            "kicker": "Teach. Govern. Explain. Learn.",
-            "headline": ["Agents that", "prove their work.", "A model you own."],
-            "wide": ["Agents that prove their work.", "A model you own."],
-            "short": ["A model", "you own."],
-            # governs what they may do
-            "subline": "Oxagen governs what your agents may do: a role, a budget, a boundary.",
-            "subshort": "A role. A budget. A boundary.",
-            "cta": "oxagen.sh",
-        },
-        {
-            "slug": "fleet",
-            "kicker": "Answer. Fund. Hold. Stop.",
-            "headline": ["Run your agents", "as a fleet."],
-            "wide": ["Run your agents as a fleet."],
-            "short": ["Run your agents", "as a fleet."],
-            # runs them as a fleet. The orbit is the only composition here that
-            # reads as many agents under one mandate, so this is the one ad
-            # that does not take the ghost.
-            "subline": "Every agent you run on one page, with its mandate, its requests, and its spend.",
-            "subshort": "Every agent on one page.",
-            "cta": "See your fleet \u00b7 oxagen.sh",
-            "picture": "orbit",
-        },
-        {
-            "slug": "keys",
-            "kicker": "Ask. Answer. Record.",
-            # A poster sets a real apostrophe. Space Grotesk has quoteright;
-            # the typewriter quote is for code, and none of this is code.
-            "headline": ["Don\u2019t hand", "your agents", "the keys."],
-            "wide": ["Don\u2019t hand your agents", "the keys."],
-            "short": ["Don\u2019t hand your", "agents the keys."],
-            # holds the credential so the agent never does. This is the one
-            # place the kit is allowed to write "hand over": it is the line
-            # that says not to.
-            "subline": "The agent asks, a rule you wrote answers, the key stays in Oxagen.",
-            "subshort": "The agent asks. A rule answers.",
-            "cta": "See a request \u00b7 oxagen.sh",
-        },
-    ],
-    "stella": [
-        {
-            "slug": "proof",
-            "kicker": "The open-source agent",
-            "headline": ["It does not", "say done.", "It proves it."],
-            "wide": ["It does not say done.", "It proves it."],
-            "short": ["It proves", "it."],
-            "cta": "brew install stella",
-        },
-        {
-            "slug": "check",
-            "kicker": "The open-source agent",
-            "headline": ["A green check", "is not", "an answer."],
-            "wide": ["A green check", "is not an answer."],
-            "short": ["Proof, not", "a green check."],
-            "cta": "brew install stella",
-        },
-    ],
-}
-AD_SIZES = [(1080, 1080, "square"), (1080, 1350, "portrait"), (1200, 628, "landscape"), (300, 250, "mpu")]
+#: No benchmark numbers and no competitor is named in public art: a number in
+#: an ad is a claim the ad has to keep being true.
+AD_COPY: dict[str, list[dict[str, object]]] = MS.ad_campaigns()
+AD_SIZES = MS.AD_SIZES
 
 
 def ad_svg(brand: str, campaign: dict[str, object], w: int, h: int, tag: str, scheme: str) -> str:
@@ -431,7 +346,7 @@ CONTENT = {
         ("Field note", ["The meter runs.", "The knowledge", "leaves."], "The field manual", None),
         ("Essay", ["Own the model that", "learns your business"], "Engineering notes", None),
         ("Release", ["Oxagen platform"], "oxagen.sh/changelog",
-         ["+ agent identity, roles, and budgets on every call",
+         ["+ agent identity, roles, and budgets on governed calls",
           "+ every run saved as a trace beside its data"]),
         # The card an operator's weekly fleet report goes out on. Its panel is
         # the fleet's week in three rows, not a terminal: Space Grotesk is not
@@ -549,9 +464,13 @@ def manifest(brand: str) -> str:
 
 def check() -> int:
     problems = C.verify() + G.verify()
+    errors, _warnings, _context = MS.validate(MS.load(), MS.load_findings())
+    problems += [f"messages: {e}" for e in errors]
     for p in problems:
         print("problem:", p)
     if not problems:
+        ads = sum(len(v) for v in AD_COPY.values())
+        print(f"check: {ads} ads and {len(TAGLINES)} taglines come from approved, launch-released registry entries")
         m = G.wordmark("oxagen")
         print(f"check: oxagen reproduces the kit wordmark ({m['width']:g} x {m['height']:g}, em {G.EM:.2f})")
         print(f"check: gold {C.GOLD} is the reference {C.REFERENCE_GOLD} lifted by {C.GOLD_LIFT}")
@@ -563,6 +482,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--svg", action="store_true", help="skip the raster pass")
     ap.add_argument("--check", action="store_true", help="verify, write nothing")
+    ap.add_argument("--only", nargs="+", choices=list(STEPS), metavar="STEP",
+                    help=f"build only these steps ({', '.join(STEPS)}); empties only their directories")
     args = ap.parse_args()
     if args.check:
         sys.exit(check())
@@ -572,27 +493,30 @@ def main() -> None:
     if check():
         sys.exit("the kit does not verify; not writing")
 
-    for d in GENERATED:
-        shutil.rmtree(ROOT / d, ignore_errors=True)
+    steps = set(args.only or STEPS)
+    if "logos" in steps:
+        steps.add("icons")  # the favicons are written into logo/svg beside the marks
+    for step in STEPS:
+        if step in steps:
+            for d in STEPS[step]:
+                shutil.rmtree(ROOT / d, ignore_errors=True)
     (ROOT / "logo/png").mkdir(parents=True, exist_ok=True)
     (ROOT / "icons").mkdir(parents=True, exist_ok=True)
 
-    build_tokens()
-    print("tokens        ok")
-    build_logos(raster)
-    print("logos         ok")
-    build_favicons(raster)
-    print("icons         ok")
-    build_spinners()
-    print("spinners      ok")
-    build_wallpapers(raster)
-    print("wallpapers    ok")
-    build_social(raster)
-    print("social        ok")
-    build_ads(raster)
-    print("ads           ok")
-    build_content(raster)
-    print("content       ok")
+    run = {
+        "tokens": build_tokens,
+        "logos": lambda: build_logos(raster),
+        "icons": lambda: build_favicons(raster),
+        "spinners": build_spinners,
+        "wallpapers": lambda: build_wallpapers(raster),
+        "social": lambda: build_social(raster),
+        "ads": lambda: build_ads(raster),
+        "content": lambda: build_content(raster),
+    }
+    for step in STEPS:
+        if step in steps:
+            run[step]()
+            print(f"{step:<13} ok")
 
     n = sum(1 for _ in ROOT.rglob("*") if _.is_file() and _.suffix in {".svg", ".png"} and ".venv" not in _.parts)
     print(f"\n{n} files under {ROOT}")
