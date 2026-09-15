@@ -1,0 +1,16 @@
+id: retired-explains-every-run
+brand: oxagen
+kind: headline
+title: 'Oxagen explains every run: what it did, and what it cost.'
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '03'
+- '06'
+replaced_by: finance-headline
+notes: Was the bill ad subline.

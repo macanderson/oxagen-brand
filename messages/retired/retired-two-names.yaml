@@ -1,0 +1,15 @@
+id: retired-two-names
+brand: oxagen
+kind: rule
+title: The category has two names and Oxagen owns both.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '07'
+replaced_by: rule-naming
+notes: Was the category rule in the branding skill.

@@ -1,0 +1,19 @@
+id: pair-handing-keys
+brand: oxagen
+kind: pair
+order: 6
+title: Handing over the keys
+before: Connect your agent to GitHub, Slack, and your database in one click.
+after: The agent asks for GitHub when the task needs it. A rule you wrote answers, or a person you named does. For mediated connections, the credential stays in Oxagen.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '04'

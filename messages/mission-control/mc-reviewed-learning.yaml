@@ -1,0 +1,22 @@
+id: mc-reviewed-learning
+brand: oxagen
+kind: card
+order: 14
+title: Turn a lesson from one run into steering for the next.
+short: Capture what agents learn, review the supporting evidence, and publish new steering through a pull request.
+long: A useful discovery should survive the run that made it. Oxagen links learned records to the work behind them and proposes changes to shared steering. Your team reviews the proposal in its own repository. Merge publishes the change, giving future runs the lesson and your team a versioned history of what went into force.
+cta: Follow a lesson into the next run
+audience:
+- engineering
+clause: equipment
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Engineering owner: follow one learned record to a reviewed pull request and to a later run that received the steering.'
+owner: engineering owner
+review_by: '2026-10-15'
+findings:
+- '10'
+notes: Launch card 14. The launch card title said a rule for the next run. A rule answers requests, and a lesson becomes steering.

@@ -1,0 +1,22 @@
+id: section-audit
+brand: oxagen
+kind: section
+order: 5
+title: Follow the action back to its authority.
+long: Review which agent requested an action, on whose behalf, which rule answered, and who approved it when a person was required. Inspect the recorded result and cost alongside that decision. For runs with completion checks, export the record so another person can recompute the recorded verdict without an Oxagen account or network connection.
+audience:
+- security
+- finance
+clause: record
+surfaces:
+- product-page
+status: approved
+release: launch
+qualifier: An exported verdict does not establish that every requirement was captured or that every action was correct.
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '10'
+notes: Auditability describes the evidence available for review. Use proven only beside a defined witness result and its scope.

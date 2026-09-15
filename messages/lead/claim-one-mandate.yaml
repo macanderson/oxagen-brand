@@ -1,0 +1,23 @@
+id: claim-one-mandate
+brand: oxagen
+kind: pitch
+title: One mandate, four clauses
+long: Identity systems say who the agent is. Gateways say which tools it can call. Billing says what it consumed. Prompt repositories say what it was told. Oxagen binds those into one mandate per agent, checks it on the actions routed through Oxagen, and keeps a record another person can read.
+audience:
+- platform
+- security
+- finance
+- engineering
+clause: none
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+qualifier: Checked on the actions routed through Oxagen.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '10'

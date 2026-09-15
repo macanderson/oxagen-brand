@@ -1,0 +1,15 @@
+id: retired-run-agents-as-fleet
+brand: oxagen
+kind: headline
+title: Run your agents as a fleet.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '07'
+replaced_by: hero-headline
+notes: Was the fleet ad. Fleet stays as the Fleet page name.

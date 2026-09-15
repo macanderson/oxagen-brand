@@ -1,0 +1,29 @@
+id: ad-stella-check
+brand: stella
+kind: ad
+order: 2
+title: A green check is not an answer.
+cta: brew install stella
+kicker: The open-source agent
+headline:
+- A green check
+- is not
+- an answer.
+wide:
+- A green check
+- is not an answer.
+short_lines:
+- Proof, not
+- a green check.
+audience:
+- engineering
+clause: record
+surfaces:
+- ads
+status: approved
+release: launch
+evidence: 'Stella owner: the proof rule these ads name is Stella''s documented witness behavior.'
+owner: Stella owner
+review_by: '2026-10-15'
+findings: []
+notes: Unchanged from the September 2026 campaign.

@@ -1,0 +1,24 @@
+id: rule-outreach
+brand: oxagen
+kind: rule
+order: 9
+title: Ask. Do not assert the prospect's setup.
+long: Outreach opens with a diagnostic question. Buyer statements are labelled hypothetical. Traction numbers, partner counts, and setup durations stay out of copy until an owner supplies dated evidence and publication approval.
+phrases:
+- sixty seconds
+- 60 seconds
+- two hooks
+- paying customers
+- customer council
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- 08

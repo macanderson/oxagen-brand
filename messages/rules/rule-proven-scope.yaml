@@ -1,0 +1,19 @@
+id: rule-proven-scope
+brand: oxagen
+kind: rule
+order: 3
+title: Proven sits beside a witness flip and its scope.
+long: Use proven only where a witness flipped, and say which requirement it covers. A held dod is done, not proven.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '10'

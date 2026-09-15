@@ -1,0 +1,20 @@
+id: dod-passing-verdict
+brand: oxagen
+kind: glossary
+order: 40
+title: Passing verdict
+long: A passing verdict means the specified checks held. Your team decides whether those checks are sufficient for the task. When checks fail, the record shows the reasons and whether the agent continued, waited for a person, or reached its retry limit.
+audience:
+- engineering
+- security
+clause: record
+surfaces:
+- docs
+- product-page
+status: approved
+release: launch
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '10'

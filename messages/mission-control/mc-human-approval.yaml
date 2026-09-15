@@ -1,0 +1,23 @@
+id: mc-human-approval
+brand: oxagen
+kind: card
+order: 4
+title: Put the decision in the right hands.
+short: Route the requests that need judgment to the people responsible, with the action and its context ready to review.
+long: Your rules decide when a person needs to look. Oxagen pauses the governed request and shows the reviewer which agent asked, what it wants to do, and the authority it would use. The run resumes with the answer recorded. Routine requests can proceed under the rules you already set.
+cta: See an approval
+audience:
+- security
+- operator
+clause: access
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '03'
+notes: Launch card 4.

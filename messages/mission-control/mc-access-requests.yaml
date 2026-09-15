@@ -1,0 +1,25 @@
+id: mc-access-requests
+brand: oxagen
+kind: card
+order: 3
+title: Answer each request when the agent makes it.
+short: The agent requests an action. Your rule allows it, denies it, or routes it to a person. For mediated connections, the credential stays in Oxagen.
+long: A read from GitHub and a push to a protected branch deserve different answers. For actions routed through Oxagen, each request meets the rules your team wrote. When an allowed request uses a mediated connection, Oxagen uses the connection credential on the agent's behalf, and the agent does not receive it. You can read what the agent requested, which rule answered, and who signed an approval.
+cta: Follow an access request
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: For actions routed through Oxagen, and for mediated connections.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary. Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '04'
+notes: Launch card 3. Launch card 3. Its original title is the access-keys headline, which leads the access section. The original credential sentence was not scoped to mediated connections.

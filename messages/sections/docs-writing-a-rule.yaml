@@ -1,0 +1,20 @@
+id: docs-writing-a-rule
+brand: oxagen
+kind: section
+order: 10
+title: Write one rule for each thing an agent may ask for.
+long: 'A rule names a capability, a condition, and one of three effects: allow, deny, or require approval. For requests routed through Oxagen, requests that match allow or deny settle inside the call and leave a row with the rule id. Requests that match require approval wait for the person the rule names, and the run waits with them. Rules are checked after identity, so a rule can narrow what an agent may do and cannot widen it. In observe mode, the decision is recorded, not enforced.'
+audience:
+- platform
+- security
+clause: access
+surfaces:
+- docs
+status: approved
+release: launch
+qualifier: For requests routed through Oxagen. Observe mode is recorded, not enforced.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: platform owner
+review_by: '2026-10-15'
+findings:
+- '03'

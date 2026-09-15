@@ -1,0 +1,18 @@
+id: rule-no-handing-keys
+brand: oxagen
+kind: rule
+order: 17
+title: Do not hand over the keys in the copy.
+long: Connect your agent to, give the agent access to, and the agent's API key each hand over the keys in the copy even where the product does not.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '04'

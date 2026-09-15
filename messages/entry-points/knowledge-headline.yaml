@@ -1,0 +1,22 @@
+id: knowledge-headline
+brand: oxagen
+kind: entry-point
+order: 3
+title: Give agents the business context their work requires.
+long: Put approved business context within the agent's permitted knowledge scope. Define which sources it can use and review those sources as the business changes.
+cta: Explore the context behind a run
+audience:
+- knowledge
+- engineering
+clause: equipment
+surfaces:
+- site-knowledge
+status: approved
+release: launch
+qualifier: Within the agent's permitted knowledge scope.
+evidence: 'Knowledge owner: demonstrate scoped retrieval, source attribution, corrections, deletion, and an agent denied access to another scope before claiming reuse across agents.'
+owner: knowledge owner
+review_by: '2026-10-15'
+findings:
+- '05'
+notes: Explain retrieval and updates. No universal recall, and no promise that later runs cost less.

@@ -1,0 +1,23 @@
+id: mc-spend-attribution
+brand: oxagen
+kind: card
+order: 7
+title: Read your AI bill down to the work.
+short: Follow spend from the organization to the operator, agent, run, and individual call that incurred it.
+long: Open a spend total and keep going until you reach the work behind it. Oxagen records model usage by token class, the rate applied, and the agent and operator responsible. Finance and engineering read the same underlying records, with measured, reported, and estimated costs identified.
+cta: Follow the spend
+audience:
+- finance
+- engineering
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '06'
+notes: Launch card 7.

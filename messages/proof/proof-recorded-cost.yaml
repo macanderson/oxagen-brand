@@ -1,0 +1,20 @@
+id: proof-recorded-cost
+brand: oxagen
+kind: proof
+order: 2
+title: Cost is a recorded row.
+long: Each governed action carries its recorded cost, attributed to the person, the agent, and the run, with measured, reported, and estimated costs marked. The Spend page and the run record read the same rows.
+audience:
+- finance
+clause: budget
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+evidence: 'Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '02'
+- '06'

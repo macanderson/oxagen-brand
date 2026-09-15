@@ -1,0 +1,25 @@
+id: witness-checkable-evidence
+brand: oxagen
+kind: card
+order: 26
+title: Let the next reviewer check your work.
+short: Share the recorded evidence and evaluator versions behind a Witness verdict so another party can check the result.
+long: Witness ties its result to the requirement, the captured inputs, and the exact evaluators that checked them. Its signed record links to the evidence behind each verdict. A reviewer can recompute the result from those inputs and compare it with the recorded answer.
+cta: Inspect the witness evidence
+audience:
+- security
+- engineering
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- witness
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: Launch card 26.

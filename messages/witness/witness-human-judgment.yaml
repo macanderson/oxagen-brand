@@ -1,0 +1,25 @@
+id: witness-human-judgment
+brand: oxagen
+kind: card
+order: 25
+title: Make room for judgment. Name who made it.
+short: Keep taste, tone, and other human decisions visible alongside the mechanical evidence.
+long: A schema can settle whether an output has the required fields. Brand tone still needs a reviewer. Witness routes those judgment calls to a person and records the signature separately. Anyone reading the result can see what the oracles established and what a human accepted.
+cta: See how judgment is recorded
+audience:
+- engineering
+- operator
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- witness
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: Launch card 25.

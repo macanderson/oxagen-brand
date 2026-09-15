@@ -1,0 +1,23 @@
+id: proof-pre-committed
+brand: oxagen
+kind: proof
+order: 6
+title: Pre-committed, not reconstructed.
+long: The dod is locked before the agent's first tool call, and its position in the run's chain shows it.
+audience:
+- engineering
+- security
+clause: record
+surfaces:
+- product-page
+- decks
+status: approved
+release: held
+gate:
+- dod
+qualifier: For bounded tasks with a dod.
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'

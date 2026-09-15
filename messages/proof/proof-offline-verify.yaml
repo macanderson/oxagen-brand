@@ -1,0 +1,23 @@
+id: proof-offline-verify
+brand: oxagen
+kind: proof
+order: 9
+title: Another person can recompute the verdict.
+long: oxagen dod verify runs on an export with no account and no network, and returns the verdict the recorded checks produce.
+audience:
+- engineering
+- security
+clause: record
+surfaces:
+- product-page
+- decks
+status: approved
+release: held
+gate:
+- dod
+qualifier: The verdict covers the specified checks.
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'

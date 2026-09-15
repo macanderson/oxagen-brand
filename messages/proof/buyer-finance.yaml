@@ -1,0 +1,20 @@
+id: buyer-finance
+brand: oxagen
+kind: proof
+order: 23
+title: Hypothetical buyer statement, finance lead
+short: I can say which agent spent what, on whose behalf, under which rule.
+audience:
+- finance
+clause: budget
+surfaces:
+- rooms
+- decks
+status: approved
+release: launch
+evidence: 'Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup.'
+owner: sales owner
+review_by: '2026-10-15'
+findings:
+- 08
+notes: Hypothetical. Not a testimonial. Never attribute it to a person or a company. Publish an actual testimonial only with dated attribution permission.

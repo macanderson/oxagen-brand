@@ -1,0 +1,21 @@
+id: glossary-proven
+brand: oxagen
+kind: glossary
+order: 40
+title: Proven
+long: 'Proven means a witness flipped: the required check failed on the target baseline and passed on the change. It covers the requirement that witness checks and nothing broader.'
+audience:
+- engineering
+- security
+clause: record
+surfaces:
+- docs
+status: approved
+release: held
+gate:
+- witness
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '10'

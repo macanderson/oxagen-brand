@@ -1,0 +1,17 @@
+id: retired-pitch-three-sentences
+brand: oxagen
+kind: pitch
+title: Your agents run on a token somebody pasted in, spend against a budget nobody set, and finish when they say they are finished.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '01'
+- '03'
+- 08
+replaced_by: pitch-short
+notes: First sentence of the retired three-sentence pitch, which also promised enforcement on every call.

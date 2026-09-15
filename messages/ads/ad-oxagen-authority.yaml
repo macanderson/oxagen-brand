@@ -1,0 +1,33 @@
+id: ad-oxagen-authority
+brand: oxagen
+kind: ad
+order: 2
+title: Which agent can do what?
+cta: Inspect agent authority · oxagen.sh
+kicker: Allowed. Denied. Routed.
+headline:
+- Which agent
+- can do what?
+wide:
+- Which agent can do what?
+short_lines:
+- Which agent
+- can do what?
+subline: Set authority and review the decisions behind governed actions.
+subshort: Review each governed decision.
+scope_terms:
+- governed
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- ads
+status: approved
+release: launch
+qualifier: Decisions are recorded for governed actions.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '03'

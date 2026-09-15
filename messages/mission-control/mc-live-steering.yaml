@@ -1,0 +1,23 @@
+id: mc-live-steering
+brand: oxagen
+kind: card
+order: 5
+title: Change course while the work is happening.
+short: Add a constraint, correct an assumption, or redirect a live run. See when your instruction reaches the agent.
+long: Open a run and send the correction where it matters. Deliver steering after the current step, at the next turn, or by interrupting where the connection supports it. Oxagen records the instruction and its delivery status, so you can tell whether it is still waiting or has entered the agent's context.
+cta: Steer a live run
+audience:
+- operator
+- engineering
+clause: operations
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: Interrupts where the connection supports them.
+evidence: 'Product owner: demonstrate delivery after the current step, at the next turn, and by interrupt, for each supported connection.'
+owner: product owner
+review_by: '2026-10-15'
+findings: []
+notes: Launch card 5.

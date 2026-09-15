@@ -1,0 +1,21 @@
+id: stella-relationship
+brand: oxagen
+kind: headline
+title: Stella is an agent. Oxagen is Mission Control for the workforce.
+audience:
+- engineering
+- operator
+clause: none
+surfaces:
+- stella-readme
+- product-page
+status: candidate
+release: held
+gate:
+- stella-integration
+evidence: 'Product owner: confirm the launch integration. Show Stella as one supported agent where that is accurate, and keep the platform story broad enough for other supported agents.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '07'
+notes: Shared branding does not establish shared proof mechanisms or identical capabilities.

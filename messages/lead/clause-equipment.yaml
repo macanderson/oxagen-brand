@@ -1,0 +1,18 @@
+id: clause-equipment
+brand: oxagen
+kind: glossary
+order: 3
+title: Equipment
+long: The knowledge the agent is handed at the start of a job, the skills and tools it may use, and the steering it runs under.
+audience:
+- engineering
+clause: equipment
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '10'

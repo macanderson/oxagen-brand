@@ -1,0 +1,27 @@
+id: mc-mandates
+brand: oxagen
+kind: card
+order: 2
+title: Set the terms your agents work under.
+short: Set access, budget, rules, tools, and steering in one mandate, whichever team owns each part.
+long: A mandate is the one object an agent works under. It names what the agent may request, what it may spend, and which tools and instructions it may use. Oxagen checks those terms on governed calls and records the decision, so the people setting the limits can see how they were applied.
+cta: Explore a mandate
+audience:
+- platform
+- security
+- finance
+- engineering
+clause: none
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: Checked on governed calls.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '10'
+notes: Launch card 2. The launch card named security, FinOps, and engineering as the owners. The copy no longer requires a particular org chart.

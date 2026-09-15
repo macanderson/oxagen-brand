@@ -1,0 +1,25 @@
+id: finance-headline
+brand: oxagen
+kind: entry-point
+order: 2
+title: See which agent spent what, and on whose behalf.
+long: Review recorded costs by person, agent, and run. Inspect the usage and rate behind a charge, then use that record to decide where to change a budget.
+cta: Inspect workforce spend
+cta_destination: Show the budget, recorded cost, attribution, rate source, exclusions, and the relationship to provider invoices.
+audience:
+- finance
+clause: budget
+surfaces:
+- site-finance
+- finance-email
+- ads
+status: approved
+release: launch
+qualifier: The costs shown are the costs Oxagen recorded.
+evidence: 'Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '02'
+- '06'
+notes: Claim savings only for measured workloads and stated conditions.

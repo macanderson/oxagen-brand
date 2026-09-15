@@ -1,0 +1,23 @@
+id: ie-ongoing
+brand: oxagen
+kind: card
+order: 32
+title: Set the terms for work that keeps going.
+short: Manage an ongoing responsibility through authority, budgets, rules, and human review. Define done when the task calls for it.
+long: Some assignments end with a deliverable. Others continue across many runs. Set the agent's permitted actions, spending limits, tools, and approval rules for the responsibility it holds. Inspect individual runs and intervene when needed. Apply a definition of done to bounded tasks within that work without pretending the whole responsibility is finished.
+cta: Define an agent's mandate
+audience:
+- operator
+- platform
+clause: operations
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: Launch card 32.

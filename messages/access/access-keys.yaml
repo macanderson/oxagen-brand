@@ -1,0 +1,26 @@
+id: access-keys
+brand: oxagen
+kind: headline
+order: 0
+title: Don't hand your agents the keys.
+short: The agent asks. A rule you wrote answers. For mediated connections, the credential stays in Oxagen.
+long: An agent under Oxagen has its own identity and a mandate. When a task needs a system, a scope, or an action the mandate does not already cover, the agent asks for it at the moment of use. A rule allows the request, denies it, or routes it to a person, and the record keeps the answer. For mediated connections, Oxagen uses the connection credential on the agent's behalf, and the agent does not receive it.
+cta: Follow an access request
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- site-access-section
+- security-page
+- security-email
+- ads
+status: approved
+release: launch
+qualifier: For mediated connections.
+evidence: 'Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '04'

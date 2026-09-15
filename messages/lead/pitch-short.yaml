@@ -1,0 +1,21 @@
+id: pitch-short
+brand: oxagen
+kind: pitch
+title: Short pitch
+long: 'Your operators decide what each agent is responsible for, what it may do, and what it needs to work. Oxagen gives those decisions a home: an agent identity, a mandate for authority and budget, assigned tools and skills, and a record of governed activity. For bounded work, define completion before it starts. For ongoing work, manage the agent''s authority, requests, and spend as it operates.'
+audience:
+- operator
+- platform
+clause: operations
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+evidence: 'Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '07'
+- '10'

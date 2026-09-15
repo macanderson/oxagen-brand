@@ -1,0 +1,16 @@
+id: retired-buyer-no-token
+brand: oxagen
+kind: proof
+title: The agents don't have a token any more. They ask, and I can read every answer.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '04'
+- 08
+replaced_by: buyer-security
+notes: Read as a testimonial and overstated credential custody.

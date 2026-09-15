@@ -1,0 +1,18 @@
+id: keys-record-keeps-answer
+brand: oxagen
+kind: rule
+order: 4
+title: The record keeps the answer.
+long: Each request routed through Oxagen is a row with the rule that answered it and, when routed, the name of the person who did.
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '03'

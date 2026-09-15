@@ -1,0 +1,19 @@
+id: pair-automation
+brand: oxagen
+kind: pair
+order: 7
+title: Automation as the sell
+before: Requests are auto-approved so your agents never wait.
+after: Reads of the public repo are allowed by rule. A push to main is denied by rule. A push to a release branch waits on the release owner.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '03'

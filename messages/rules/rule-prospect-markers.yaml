@@ -1,0 +1,23 @@
+id: rule-prospect-markers
+brand: oxagen
+kind: rule
+order: 10
+title: No prospect names, deal details, or investor figures.
+long: This repository is public. Keep prospects, deals, and investor figures in outreach tools. The check fails on the markers listed in this file.
+phrases:
+- Dan,
+- Cary
+- design partners
+- council of nine
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- 08

@@ -1,0 +1,24 @@
+id: ie-agent-identity
+brand: oxagen
+kind: card
+order: 29
+title: Give each agent an identity you can govern.
+short: Register each agent as a principal in a supported identity system, with its own roles, scope, and accountable operator.
+long: Each agent has a named place in your identity and access management system. Assign its roles, limit the resources it can request, and keep delegated authority within the operator's own permissions. Review its activity under that identity, and suspend or revoke its authority when its responsibility changes.
+cta: Explore agent identity
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: In supported identity systems.
+evidence: 'Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report. Name the supported identity systems before launch, and describe the implemented relationship to each, not only an internal agent ID.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '04'
+notes: Launch card 29.

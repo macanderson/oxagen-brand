@@ -1,0 +1,19 @@
+id: pair-assertion
+brand: oxagen
+kind: pair
+order: 5
+title: Asserting the prospect's setup
+before: Your coding agents run with a GitHub token that can push to every repo.
+after: When an agent requests a repository action, can your team see which rule allowed it and who approved it? A walkthrough can show a denied request, an approval request, and the resulting record.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- 08

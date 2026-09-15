@@ -1,0 +1,18 @@
+id: clause-budget
+brand: oxagen
+kind: glossary
+order: 2
+title: Budget and rules
+long: What the agent may spend, under which commercial terms, and the rules it must obey, such as approval thresholds and allowed vendors.
+audience:
+- finance
+clause: budget
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '10'

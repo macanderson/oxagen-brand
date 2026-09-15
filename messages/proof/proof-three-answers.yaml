@@ -1,0 +1,21 @@
+id: proof-three-answers
+brand: oxagen
+kind: proof
+order: 3
+title: Three answers, one rule.
+long: 'A rule names a capability, a condition, and one effect: allow, deny, or route to a person. For governed calls, Oxagen checks it before the handler runs, so a denied action does not reach the code that would have done it.'
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+qualifier: For governed calls.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: platform owner
+review_by: '2026-10-15'
+findings:
+- '03'

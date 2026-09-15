@@ -1,0 +1,25 @@
+id: witness-isolation
+brand: oxagen
+kind: card
+order: 22
+title: Keep the witness beyond the agent's reach.
+short: The agent works on the change. Witness runs separately, with its checks and environment hidden from the agent.
+long: Oxagen keeps the witness outside the agent's repository, tools, and working environment. By default, the agent receives only pass or fail. Changes that interfere with the witness's foundations are recorded as tampering. Your team controls any additional disclosure, and the record keeps what was shared.
+cta: Explore witness isolation
+audience:
+- engineering
+- security
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- witness
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: Launch card 22.

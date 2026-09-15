@@ -1,0 +1,26 @@
+id: email-operators
+brand: oxagen
+kind: email
+order: 2
+title: Who sets the authority for your agents?
+long: |-
+  When your team adds an autonomous agent, where do you set its identity, authority, tools, skills, and budget? Where do you review the actions it takes?
+
+  Oxagen brings those decisions into Mission Control. A walkthrough follows one agent from its mandate through an approval request and the resulting record. It also shows how an operator defines completion for a bounded task and manages an ongoing responsibility.
+cta: Explore Mission Control
+audience:
+- operator
+- platform
+clause: operations
+surfaces:
+- sales-email
+status: approved
+release: launch
+evidence: 'Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup.'
+owner: sales owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '07'
+- 08
+notes: The title is the subject line.

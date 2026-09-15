@@ -1,0 +1,21 @@
+id: rule-enforcement-scope
+brand: oxagen
+kind: rule
+order: 4
+title: Scope every enforcement claim.
+long: Say for actions routed through Oxagen, or governed calls. Observe mode is recorded, not enforced. A workspace with no rules answers requests by identity alone.
+phrases:
+- on every call
+- enforced everywhere
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '03'

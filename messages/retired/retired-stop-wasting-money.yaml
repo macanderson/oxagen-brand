@@ -1,0 +1,15 @@
+id: retired-stop-wasting-money
+brand: oxagen
+kind: headline
+title: Stop wasting money on AI.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '02'
+replaced_by: finance-headline
+notes: Was the waste ad and the product page.

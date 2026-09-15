@@ -1,0 +1,19 @@
+id: proof-your-keys
+brand: oxagen
+kind: proof
+order: 4
+title: Your model keys, your graph.
+long: Bring your own model keys and your own graph endpoint. Hosting is billed at cost.
+audience:
+- security
+- platform
+clause: none
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+evidence: 'Platform owner: demonstrate a workspace running on its own model keys and its own graph endpoint.'
+owner: platform owner
+review_by: '2026-10-15'
+findings: []

@@ -1,0 +1,20 @@
+id: glossary-mandate
+brand: oxagen
+kind: glossary
+title: Mandate
+short: Set an agent's authority, budget, tools, and skills in its mandate. Review the record of the work Oxagen governs.
+long: 'A mandate is the one object an agent works under: its access, its budget and rules, its equipment, and the record Oxagen keeps of its governed work.'
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- product-page
+- docs-intro
+status: approved
+release: launch
+owner: design owner
+review_by: '2026-10-15'
+findings:
+- '10'
+notes: Define mandate once, beside the task it governs, the first time a page uses it.

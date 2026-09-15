@@ -1,0 +1,26 @@
+id: witness-spend-by-outcome
+brand: oxagen
+kind: card
+order: 27
+title: See what your AI spend accomplished.
+short: Track spend on witness-proven runs separately from human-accepted work and work without proof.
+long: Oxagen connects run cost to its recorded outcome. See spend on runs with a witness flip, human-accepted results, and work that remains unproven. Compare cost per proven run across agents and over time. Each proven result links back to the requirement and the witness that flipped.
+cta: Explore spend by outcome
+audience:
+- finance
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- witness
+qualifier: Proven means a witness flipped for a stated requirement.
+evidence: 'FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '02'
+notes: Launch card 27.

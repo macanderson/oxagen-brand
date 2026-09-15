@@ -1,0 +1,29 @@
+id: ad-stella-proof
+brand: stella
+kind: ad
+order: 1
+title: It does not say done. It proves it.
+cta: brew install stella
+kicker: The open-source agent
+headline:
+- It does not
+- say done.
+- It proves it.
+wide:
+- It does not say done.
+- It proves it.
+short_lines:
+- It proves
+- it.
+audience:
+- engineering
+clause: record
+surfaces:
+- ads
+status: approved
+release: launch
+evidence: 'Stella owner: the proof rule these ads name is Stella''s documented witness behavior.'
+owner: Stella owner
+review_by: '2026-10-15'
+findings: []
+notes: Unchanged from the September 2026 campaign.

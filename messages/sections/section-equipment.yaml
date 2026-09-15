@@ -1,0 +1,20 @@
+id: section-equipment
+brand: oxagen
+kind: section
+order: 2
+title: Give each agent the tools and skills its work requires.
+long: Manage the tools and skills available to your workforce, then assign them through each agent's mandate. Pair the equipment with the authority to use it and the business context the agent is permitted to read.
+audience:
+- engineering
+- platform
+clause: equipment
+surfaces:
+- product-page
+status: approved
+release: launch
+evidence: 'Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.'
+owner: engineering owner
+review_by: '2026-10-15'
+findings:
+- '05'
+- '07'

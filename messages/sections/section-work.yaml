@@ -1,0 +1,21 @@
+id: section-work
+brand: oxagen
+kind: section
+order: 3
+title: Define completion when the work has an endpoint.
+long: For a bounded task, set the checks and human decisions that determine completion before the agent starts. Oxagen locks those criteria into the run and records the results. For an ongoing responsibility, set the authority, budget, and review points that keep the work accountable over time.
+audience:
+- engineering
+- operator
+clause: record
+surfaces:
+- product-page
+status: approved
+release: launch
+qualifier: A passing verdict means the specified checks held. Your team decides whether those checks are sufficient for the task.
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: When checks fail, the record shows the reasons and whether the agent continued, waited for a person, or reached its retry limit.

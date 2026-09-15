@@ -1,0 +1,21 @@
+id: proof-one-object
+brand: oxagen
+kind: proof
+order: 1
+title: One object, checked at the governed call.
+long: Identity, knowledge scope, permitted action, commercial terms, outcome, and audit record are one typed contract, checked when the agent makes a governed call, not reconstructed after the incident.
+audience:
+- security
+- platform
+clause: none
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+qualifier: For actions routed through Oxagen.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: platform owner
+review_by: '2026-10-15'
+findings:
+- '03'

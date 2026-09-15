@@ -1,0 +1,18 @@
+id: clause-access
+brand: oxagen
+kind: glossary
+order: 1
+title: Access
+long: Which identity the agent acts as, which systems it may request, which data and knowledge scope it may read, and which actions it may request.
+audience:
+- security
+clause: access
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '10'
