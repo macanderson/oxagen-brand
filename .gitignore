@@ -5,3 +5,4 @@ __pycache__/
 # Agent worktrees carry their own checkouts and virtualenvs. This repo is
 # public; nothing from a scratch worktree belongs in it.
 .claude/worktrees/
+.DS_Store
