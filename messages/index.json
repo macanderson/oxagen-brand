@@ -424,7 +424,7 @@
         "Don’t hand your",
         "agents the keys."
       ],
-      "subline": "The agent asks. A rule answers. For mediated connections, the credential stays in Oxagen.",
+      "subline": "The agent asks. A rule answers. Mediated credentials stay in Oxagen.",
       "subshort": "Mediated credentials stay in Oxagen.",
       "scope_terms": [
         "mediated"

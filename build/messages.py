@@ -717,7 +717,8 @@ class Page:
                               f'<p>{T(e["short"])}</p><details><summary>Long copy</summary>{paras(e["long"])}</details>'
                               f'<p><span class="action">{T(e["cta"])}</span></p>{q}{self.meta(e)}</div>')
             parts.append(f'<h3 class="group" id="cards-{A(g)}">{T(labels[g])}</h3><div class="grid g2">{"".join(panels)}</div>')
-        nav = " ".join(f'<a href="#cards-{A(g)}">{T(labels[g])}</a>' for g in CARD_GROUPS)
+        links = [f'<a href="#cards-{A(g)}">{T(labels[g])}</a>' for g in CARD_GROUPS]
+        nav = ", ".join(links[:-1]) + ", or " + links[-1]
         return (f'<section id="cards"><p class="eyebrow q">Feature cards</p><h2>Title, short, long, and action for each feature</h2>'
                 f'<p>Cards marked held stay off the site until their gate ships. The definition of done cards belong to the bounded-task group only, never a lead. Jump to {nav}.</p>{"".join(parts)}</section>')
 
