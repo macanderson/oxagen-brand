@@ -1,10 +1,17 @@
-"""The house colours: one metal, two grounds, and the warm greys between.
+"""The house colours: one gold, two grounds, and the warm greys between.
 
 The grounds and the greys are the Oxagen brand kit's Ink and Paper as shipped.
-The metal is that kit's Bronze Gold lifted a step in OKLCH: a little lighter, a
+The gold is that kit's Bronze Gold lifted a step in OKLCH: a little lighter, a
 little more saturated, and a few degrees toward yellow, so it reads as gold
 rather than bronze. The lift is derived here, not typed, and `verify()` fails
 if the pinned hex ever stops matching its derivation.
+
+**The gold is flat.** One value, one fill, everywhere it appears: the wordmark's
+`x`, the asterisk, the hive's lit cells, a rule, a chip, a node. There is no
+sheen, no metallic ramp, no lit-from-above version of it, and the build fails if
+one reappears. A gradient is a texture, and a texture dates; a flat colour is a
+fact. `gold-bright` and `gold-deep` are not shades of a gradient either: the
+first is a moment of motion, the second is gold set as type on paper.
 
 Gold is identity and at most one action per screen. It is never a surface and
 it never encodes a state. Both wordmarks paint exactly one glyph in it.
@@ -86,7 +93,7 @@ def contrast(a: str, b: str) -> float:
 
 
 # --------------------------------------------------------------------------
-# the metal
+# the gold
 # --------------------------------------------------------------------------
 
 #: Bronze Gold as shipped in the Oxagen brand kit (`wordmark-color-light.svg`,
@@ -98,8 +105,8 @@ REFERENCE_GOLD = "#C58A32"
 #: sandy when lighter, and a nudge toward yellow so it reads gold, not copper.
 GOLD_LIFT = (0.043, 0.014, 1.8)
 
-GOLD = "#D6962C"  # the metal: identity, one action per screen
-GOLD_BRIGHT = "#F1C364"  # the highlight the shimmer passes through
+GOLD = "#D6962C"  # the gold: identity, one action per screen. flat, always
+GOLD_BRIGHT = "#F1C364"  # the highlight the shimmer passes through, in motion only
 GOLD_DEEP = "#8B5E1A"  # gold as text on paper, and small details there
 
 #: What the two gold neighbours are: the same hue, moved in lightness only.
@@ -135,7 +142,7 @@ DIM_INK = "#8C877C"  # the quietest text on paper
 
 #: (token, value, use). This list is the palette. Nothing else is.
 TOKENS: list[tuple[str, str, str]] = [
-    ("gold", GOLD, "the metal: identity, one action per screen"),
+    ("gold", GOLD, "the gold: identity, one action per screen. flat, always"),
     ("gold-bright", GOLD_BRIGHT, "the shimmer highlight; hover on ink"),
     ("gold-deep", GOLD_DEEP, "gold as text on paper; small gold details there"),
     ("ink", INK, "the dark canvas"),
