@@ -1,0 +1,37 @@
+id: ad-oxagen-keys
+brand: oxagen
+kind: ad
+order: 6
+title: Don’t hand your agents the keys.
+cta: See a request · oxagen.sh
+kicker: Ask. Answer. Record.
+headline:
+- Don’t hand
+- your agents
+- the keys.
+wide:
+- Don’t hand your agents
+- the keys.
+short_lines:
+- Don’t hand your
+- agents the keys.
+subline: The agent asks. A rule answers. Mediated credentials stay in Oxagen.
+subshort: Mediated credentials stay in Oxagen.
+scope_terms:
+- mediated
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- ads
+status: approved
+release: launch
+qualifier: For mediated connections.
+evidence: 'Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.'
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '04'
+notes: The one place the kit writes hand over the keys is the line that says not to.

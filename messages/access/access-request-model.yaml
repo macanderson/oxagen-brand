@@ -1,0 +1,22 @@
+id: access-request-model
+brand: oxagen
+kind: section
+order: 1
+title: The request model
+long: The usual model hands the agent a token with everything it might ever need and hopes it uses only some of it. Oxagen's model is a request. The agent holds its own identity and a mandate. When a task needs a system, a scope, or an action the mandate does not already cover, the agent asks for it at the moment of use.
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- product-page
+- security-page
+status: approved
+release: launch
+qualifier: For actions routed through Oxagen.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '04'

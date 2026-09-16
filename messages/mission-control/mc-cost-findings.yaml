@@ -1,0 +1,24 @@
+id: mc-cost-findings
+brand: oxagen
+kind: card
+order: 10
+title: Find the expensive habit. See what to change.
+short: Spot unused cache writes, oversized tool lists, repeated calls, and provider retries, with their cost attached.
+long: Oxagen turns recorded spend into specific findings. See which change invalidated a cache, which tool definitions consumed prompt space without being used, or where repeated calls added cost. Each finding links to the recorded calls behind it and the cost they added, so you can choose what to fix first.
+cta: Inspect a cost finding
+audience:
+- finance
+- engineering
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: Savings are stated only for measured workloads under stated conditions.
+evidence: 'FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '02'
+notes: Launch card 10. The launch card promised an estimated saving and ended on Find your next saving. Both were removed until a measured workload backs them.

@@ -1,0 +1,18 @@
+id: rule-registry-source
+brand: oxagen
+kind: rule
+order: 12
+title: The registry is the source of truth.
+long: Every published line starts as an entry in messages/. The message bank, the index, and the ads are generated from it. Nothing keeps a hand count of lines.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- 09

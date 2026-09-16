@@ -1,0 +1,4637 @@
+{
+  "source": "messages/",
+  "generated_by": "build/messages.py",
+  "counts": {
+    "entries": 160,
+    "status": {
+      "approved": 132,
+      "candidate": 3,
+      "retired": 25
+    },
+    "release": {
+      "held": 23,
+      "launch": 112
+    },
+    "group": {
+      "lead": 13,
+      "sections": 7,
+      "entry-points": 3,
+      "access": 9,
+      "proof": 15,
+      "mission-control": 16,
+      "definition-of-done": 5,
+      "witness": 9,
+      "identity-equipment": 5,
+      "outreach": 4,
+      "ads": 8,
+      "voice": 22,
+      "rules": 19,
+      "retired": 25
+    }
+  },
+  "findings": [
+    {
+      "id": "01",
+      "priority": "P1",
+      "title": "Completion dominates a product that also manages ongoing work",
+      "rule": "Present completion as an optional control for bounded tasks, and manage ongoing work through authority, budget, and review points."
+    },
+    {
+      "id": "02",
+      "priority": "P1",
+      "title": "A lower bill is promised without a boundary",
+      "rule": "State cost visibility, and claim a saving only for a measured workload under stated conditions."
+    },
+    {
+      "id": "03",
+      "priority": "P1",
+      "title": "Enforcement language exceeds its stated scope",
+      "rule": "Scope every enforcement claim to actions routed through Oxagen, and call observe mode recorded, not enforced."
+    },
+    {
+      "id": "04",
+      "priority": "P1",
+      "title": "Identity, connection credentials, and assurance need distinct claims",
+      "rule": "Keep agent identity, credential custody for mediated connections, and assurance as separate claims, with no leak promise and no SOC 2 attestation claim."
+    },
+    {
+      "id": "05",
+      "priority": "P1",
+      "title": "Memory promises conflict with scoped knowledge",
+      "rule": "Promise business context within the agent's permitted scope, not universal recall."
+    },
+    {
+      "id": "06",
+      "priority": "P2",
+      "title": "The bill headline argues about providers",
+      "rule": "Lead finance copy with attribution to the agent and the person, with no comparison to providers."
+    },
+    {
+      "id": "07",
+      "priority": "P2",
+      "title": "The operator's full job is missing from the lead",
+      "rule": "Lead with Mission Control as the product and the agent control plane as the category, and show the operator's full job."
+    },
+    {
+      "id": "08",
+      "priority": "P2",
+      "title": "Sales copy presumes incompetence and hides proof status",
+      "rule": "Ask diagnostic questions, label buyer statements hypothetical, and publish no traction, setup time, or prospect details without dated evidence."
+    },
+    {
+      "id": "09",
+      "priority": "P2",
+      "title": "The approved message bank has already drifted",
+      "rule": "Keep one registry as the source of truth and generate the message bank and ads from it, with no hand-kept counts."
+    },
+    {
+      "id": "10",
+      "priority": "P2",
+      "title": "The glossary makes the first explanation harder",
+      "rule": "Define mandate once beside the task, use run, request, rule, check, and cost in first-contact copy, and keep frames and witness verdicts for detail pages."
+    }
+  ],
+  "entries": [
+    {
+      "id": "access-credential-custody",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 8,
+      "title": "Identity and credential custody",
+      "long": "Each agent has its own identity. For mediated connections, Oxagen uses the connection credential on the agent's behalf without giving that credential to the agent. The agent's own identity and authentication are separate from the downstream credential held for a connection.",
+      "audience": [
+        "security"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "security-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For mediated connections.",
+      "evidence": "Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "group": "access",
+      "path": "messages/access/access-credential-custody.yaml"
+    },
+    {
+      "id": "access-keys",
+      "brand": "oxagen",
+      "kind": "headline",
+      "order": 0,
+      "title": "Don't hand your agents the keys.",
+      "short": "The agent asks. A rule you wrote answers. For mediated connections, the credential stays in Oxagen.",
+      "long": "An agent under Oxagen has its own identity and a mandate. When a task needs a system, a scope, or an action the mandate does not already cover, the agent asks for it at the moment of use. A rule allows the request, denies it, or routes it to a person, and the record keeps the answer. For mediated connections, Oxagen uses the connection credential on the agent's behalf, and the agent does not receive it.",
+      "cta": "Follow an access request",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "site-access-section",
+        "security-page",
+        "security-email",
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For mediated connections.",
+      "evidence": "Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "04"
+      ],
+      "group": "access",
+      "path": "messages/access/access-keys.yaml"
+    },
+    {
+      "id": "access-request-model",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 1,
+      "title": "The request model",
+      "long": "The usual model hands the agent a token with everything it might ever need and hopes it uses only some of it. Oxagen's model is a request. The agent holds its own identity and a mandate. When a task needs a system, a scope, or an action the mandate does not already cover, the agent asks for it at the moment of use.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page",
+        "security-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For actions routed through Oxagen.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "04"
+      ],
+      "group": "access",
+      "path": "messages/access/access-request-model.yaml"
+    },
+    {
+      "id": "access-section-example",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 9,
+      "title": "Product page, the access section",
+      "rows": [
+        {
+          "label": "Don't hand your agents the keys.",
+          "text": "An agent under Oxagen has its own identity and a mandate. For mediated connections, it does not receive a token to GitHub or a password to the database. When a task needs one of those systems, the agent asks. The request carries who started the task, which agent is asking, which tool it wants, and which data it would reach."
+        },
+        {
+          "label": "A rule you wrote answers.",
+          "text": "The team that owns the system writes the rule. Reads of the public repo: allowed. A push to main: denied. A push to a release branch: routed to the release owner, who sees the request with the diff beside it and answers from the Access page. Allowed and denied requests settle inside the same call. Routed requests wait for the person, and the run waits with them."
+        },
+        {
+          "label": "For mediated connections, the credential stays in Oxagen.",
+          "text": "Oxagen holds the credential and makes the connection on the agent's behalf when a rule allows the request. The agent does not receive the credential. The record shows each use: the request, the rule that answered it, and the person who signed it."
+        }
+      ],
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For mediated connections.",
+      "evidence": "Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "04"
+      ],
+      "group": "access",
+      "path": "messages/access/access-section-example.yaml"
+    },
+    {
+      "id": "ad-oxagen-authority",
+      "brand": "oxagen",
+      "kind": "ad",
+      "order": 2,
+      "title": "Which agent can do what?",
+      "cta": "Inspect agent authority · oxagen.sh",
+      "kicker": "Allowed. Denied. Routed.",
+      "headline": [
+        "Which agent",
+        "can do what?"
+      ],
+      "wide": [
+        "Which agent can do what?"
+      ],
+      "short_lines": [
+        "Which agent",
+        "can do what?"
+      ],
+      "subline": "Set authority and review the decisions behind governed actions.",
+      "subshort": "Review each governed decision.",
+      "scope_terms": [
+        "governed"
+      ],
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Decisions are recorded for governed actions.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "ads",
+      "path": "messages/ads/ad-oxagen-authority.yaml"
+    },
+    {
+      "id": "ad-oxagen-completion",
+      "brand": "oxagen",
+      "kind": "ad",
+      "order": 4,
+      "title": "Define the finish line before work starts.",
+      "cta": "See a checked run · oxagen.sh",
+      "kicker": "For bounded tasks.",
+      "headline": [
+        "Define the",
+        "finish line before",
+        "work starts."
+      ],
+      "wide": [
+        "Define the finish line",
+        "before work starts."
+      ],
+      "short_lines": [
+        "Define the finish",
+        "line first."
+      ],
+      "subline": "For bounded tasks, set completion checks and review their results.",
+      "subshort": "For bounded tasks, set the checks.",
+      "scope_terms": [
+        "bounded"
+      ],
+      "audience": [
+        "engineering",
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "qualifier": "For bounded tasks.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Not rendered until the dod ships.",
+      "group": "ads",
+      "path": "messages/ads/ad-oxagen-completion.yaml"
+    },
+    {
+      "id": "ad-oxagen-equipment",
+      "brand": "oxagen",
+      "kind": "ad",
+      "order": 3,
+      "title": "Equip each agent for its work.",
+      "cta": "Explore agent equipment · oxagen.sh",
+      "kicker": "Tools. Skills. Mandate.",
+      "headline": [
+        "Equip each agent",
+        "for its work."
+      ],
+      "wide": [
+        "Equip each agent for its work."
+      ],
+      "short_lines": [
+        "Equip each agent",
+        "for its work."
+      ],
+      "subline": "Manage tools and skills through the agent’s mandate.",
+      "subshort": "Tools and skills, by mandate.",
+      "scope_terms": [
+        "mandate"
+      ],
+      "audience": [
+        "engineering",
+        "platform"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Assigned through the agent's mandate.",
+      "evidence": "Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "group": "ads",
+      "path": "messages/ads/ad-oxagen-equipment.yaml"
+    },
+    {
+      "id": "ad-oxagen-finance",
+      "brand": "oxagen",
+      "kind": "ad",
+      "order": 5,
+      "title": "See which agent spent what.",
+      "cta": "Inspect workforce spend · oxagen.sh",
+      "kicker": "Person. Agent. Run.",
+      "headline": [
+        "See which agent",
+        "spent what."
+      ],
+      "wide": [
+        "See which agent spent what."
+      ],
+      "short_lines": [
+        "See which agent",
+        "spent what."
+      ],
+      "subline": "Inspect recorded costs by person, agent, and run.",
+      "subshort": "Recorded cost by agent and run.",
+      "scope_terms": [
+        "recorded"
+      ],
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Recorded costs, with no savings claim.",
+      "evidence": "Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims. FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "06"
+      ],
+      "group": "ads",
+      "path": "messages/ads/ad-oxagen-finance.yaml"
+    },
+    {
+      "id": "ad-oxagen-keys",
+      "brand": "oxagen",
+      "kind": "ad",
+      "order": 6,
+      "title": "Don’t hand your agents the keys.",
+      "cta": "See a request · oxagen.sh",
+      "kicker": "Ask. Answer. Record.",
+      "headline": [
+        "Don’t hand",
+        "your agents",
+        "the keys."
+      ],
+      "wide": [
+        "Don’t hand your agents",
+        "the keys."
+      ],
+      "short_lines": [
+        "Don’t hand your",
+        "agents the keys."
+      ],
+      "subline": "The agent asks. A rule answers. Mediated credentials stay in Oxagen.",
+      "subshort": "Mediated credentials stay in Oxagen.",
+      "scope_terms": [
+        "mediated"
+      ],
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For mediated connections.",
+      "evidence": "Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "04"
+      ],
+      "notes": "The one place the kit writes hand over the keys is the line that says not to.",
+      "group": "ads",
+      "path": "messages/ads/ad-oxagen-keys.yaml"
+    },
+    {
+      "id": "ad-oxagen-mission-control",
+      "brand": "oxagen",
+      "kind": "ad",
+      "order": 1,
+      "title": "Mission Control for your autonomous agents.",
+      "cta": "Explore Mission Control · oxagen.sh",
+      "kicker": "Identity. Authority. Equipment.",
+      "headline": [
+        "Mission Control",
+        "for your",
+        "autonomous agents."
+      ],
+      "wide": [
+        "Mission Control for",
+        "your autonomous agents."
+      ],
+      "short_lines": [
+        "Mission Control",
+        "for your agents."
+      ],
+      "subline": "Set identity, authority, tools, and skills. Oversee the work.",
+      "subshort": "Set authority. Oversee the work.",
+      "picture": "orbit",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "07"
+      ],
+      "notes": "The primary campaign introduces the control plane. It takes the orbit, the one composition that reads as many agents under one control plane.",
+      "group": "ads",
+      "path": "messages/ads/ad-oxagen-mission-control.yaml"
+    },
+    {
+      "id": "ad-stella-check",
+      "brand": "stella",
+      "kind": "ad",
+      "order": 2,
+      "title": "A green check is not an answer.",
+      "cta": "brew install stella",
+      "kicker": "The open-source agent",
+      "headline": [
+        "A green check",
+        "is not",
+        "an answer."
+      ],
+      "wide": [
+        "A green check",
+        "is not an answer."
+      ],
+      "short_lines": [
+        "Proof, not",
+        "a green check."
+      ],
+      "audience": [
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Stella owner: the proof rule these ads name is Stella's documented witness behavior.",
+      "owner": "Stella owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "notes": "Unchanged from the September 2026 campaign.",
+      "group": "ads",
+      "path": "messages/ads/ad-stella-check.yaml"
+    },
+    {
+      "id": "ad-stella-proof",
+      "brand": "stella",
+      "kind": "ad",
+      "order": 1,
+      "title": "It does not say done. It proves it.",
+      "cta": "brew install stella",
+      "kicker": "The open-source agent",
+      "headline": [
+        "It does not",
+        "say done.",
+        "It proves it."
+      ],
+      "wide": [
+        "It does not say done.",
+        "It proves it."
+      ],
+      "short_lines": [
+        "It proves",
+        "it."
+      ],
+      "audience": [
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Stella owner: the proof rule these ads name is Stella's documented witness behavior.",
+      "owner": "Stella owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "notes": "Unchanged from the September 2026 campaign.",
+      "group": "ads",
+      "path": "messages/ads/ad-stella-proof.yaml"
+    },
+    {
+      "id": "announcement-launch",
+      "brand": "oxagen",
+      "kind": "announcement",
+      "order": 1,
+      "title": "Launch announcement",
+      "long": "An autonomous agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. Oxagen is Mission Control for that workforce.\n\nGive each agent an identity. Set its authority and budget, assign tools and skills, and review requests that need a person's decision. The record connects governed actions to the agent, the rule, and the person responsible.\n\nSome work has a finish line. Define its completion criteria before the agent starts and review the recorded results afterward. Other work continues. Keep its authority, activity, and spend in view as it runs.\n\nExplore Mission Control to follow an agent from its assigned mandate to a recorded action.",
+      "cta": "Explore Mission Control",
+      "audience": [
+        "operator",
+        "platform",
+        "engineering"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "launch-post",
+        "changelog"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries. Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "07"
+      ],
+      "group": "outreach",
+      "path": "messages/outreach/announcement-launch.yaml"
+    },
+    {
+      "id": "buyer-engineering",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 24,
+      "title": "Hypothetical buyer statement, engineering lead",
+      "short": "For bounded tasks, I read the check results before I read the diff.",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "rooms",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup.",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "notes": "Hypothetical. Not a testimonial. Never attribute it to a person or a company. Publish an actual testimonial only with dated attribution permission.",
+      "group": "proof",
+      "path": "messages/proof/buyer-engineering.yaml"
+    },
+    {
+      "id": "buyer-finance",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 23,
+      "title": "Hypothetical buyer statement, finance lead",
+      "short": "I can say which agent spent what, on whose behalf, under which rule.",
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "rooms",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup.",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "notes": "Hypothetical. Not a testimonial. Never attribute it to a person or a company. Publish an actual testimonial only with dated attribution permission.",
+      "group": "proof",
+      "path": "messages/proof/buyer-finance.yaml"
+    },
+    {
+      "id": "buyer-operator",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 21,
+      "title": "Hypothetical buyer statement, operator",
+      "short": "I can see what each agent may do, what it needs, and what it costs, and change it in one place.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "rooms",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup.",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "notes": "Hypothetical. Not a testimonial. Never attribute it to a person or a company. Publish an actual testimonial only with dated attribution permission.",
+      "group": "proof",
+      "path": "messages/proof/buyer-operator.yaml"
+    },
+    {
+      "id": "buyer-security",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 22,
+      "title": "Hypothetical buyer statement, security lead",
+      "short": "Agents ask for what the task needs, and I can read which rule answered each request routed through Oxagen.",
+      "audience": [
+        "security"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "rooms",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup.",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "notes": "Hypothetical. Not a testimonial. Never attribute it to a person or a company. Publish an actual testimonial only with dated attribution permission.",
+      "group": "proof",
+      "path": "messages/proof/buyer-security.yaml"
+    },
+    {
+      "id": "claim-one-mandate",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "title": "One mandate, four clauses",
+      "long": "Identity systems say who the agent is. Gateways say which tools it can call. Billing says what it consumed. Prompt repositories say what it was told. Oxagen binds those into one mandate per agent, checks it on the actions routed through Oxagen, and keeps a record another person can read.",
+      "audience": [
+        "platform",
+        "security",
+        "finance",
+        "engineering"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Checked on the actions routed through Oxagen.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "10"
+      ],
+      "group": "lead",
+      "path": "messages/lead/claim-one-mandate.yaml"
+    },
+    {
+      "id": "clause-access",
+      "brand": "oxagen",
+      "kind": "glossary",
+      "order": 1,
+      "title": "Access",
+      "long": "Which identity the agent acts as, which systems it may request, which data and knowledge scope it may read, and which actions it may request.",
+      "audience": [
+        "security"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "group": "lead",
+      "path": "messages/lead/clause-access.yaml"
+    },
+    {
+      "id": "clause-budget",
+      "brand": "oxagen",
+      "kind": "glossary",
+      "order": 2,
+      "title": "Budget and rules",
+      "long": "What the agent may spend, under which commercial terms, and the rules it must obey, such as approval thresholds and allowed vendors.",
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "group": "lead",
+      "path": "messages/lead/clause-budget.yaml"
+    },
+    {
+      "id": "clause-equipment",
+      "brand": "oxagen",
+      "kind": "glossary",
+      "order": 3,
+      "title": "Equipment",
+      "long": "The knowledge the agent is handed at the start of a job, the skills and tools it may use, and the steering it runs under.",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "group": "lead",
+      "path": "messages/lead/clause-equipment.yaml"
+    },
+    {
+      "id": "clause-record",
+      "brand": "oxagen",
+      "kind": "glossary",
+      "order": 4,
+      "title": "Record",
+      "long": "What the run read, what it changed, what it cost, and which checks it passed. The platform keeps it.",
+      "audience": [
+        "security",
+        "finance",
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "group": "lead",
+      "path": "messages/lead/clause-record.yaml"
+    },
+    {
+      "id": "demo-walkthrough",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 30,
+      "title": "The demo, in order",
+      "long": "Show an agent's identity and the mandate it works under. Let it request a push to a protected branch and get denied, with the rule id. Let it request a push to a release branch and watch the request route to a person, answer it from the Access page, and see the run resume. Open the run and show the request beside the tool call with its cost. Then show an ongoing agent with its budget and open requests, and a bounded task with its completion checks.",
+      "audience": [
+        "operator",
+        "security",
+        "engineering"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "sales-demo"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup. Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "07",
+        "08"
+      ],
+      "notes": "Run it on a prepared workspace. Do not promise it on a prospect's repositories without agreed setup.",
+      "group": "proof",
+      "path": "messages/proof/demo-walkthrough.yaml"
+    },
+    {
+      "id": "docs-writing-a-rule",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 10,
+      "title": "Write one rule for each thing an agent may ask for.",
+      "long": "A rule names a capability, a condition, and one of three effects: allow, deny, or require approval. For requests routed through Oxagen, requests that match allow or deny settle inside the call and leave a row with the rule id. Requests that match require approval wait for the person the rule names, and the run waits with them. Rules are checked after identity, so a rule can narrow what an agent may do and cannot widen it. In observe mode, the decision is recorded, not enforced.",
+      "audience": [
+        "platform",
+        "security"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "docs"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For requests routed through Oxagen. Observe mode is recorded, not enforced.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "platform owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "sections",
+      "path": "messages/sections/docs-writing-a-rule.yaml"
+    },
+    {
+      "id": "dod-define-before",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 17,
+      "title": "Define done before the work starts.",
+      "short": "For a bounded task, lock the required checks before the first tool call. The agent can read its definition of done without rewriting the terms.",
+      "long": "Describe the task and let Oxagen draft its definition of done, or supply your own for work that repeats. Specify the commands that must pass, the files that must be present, the paths a change may touch, and any human review required. Oxagen locks the criteria before the agent starts using tools.",
+      "cta": "See a definition of done",
+      "audience": [
+        "engineering",
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "qualifier": "For bounded tasks.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Launch card 17.",
+      "group": "definition-of-done",
+      "path": "messages/definition-of-done/dod-define-before.yaml"
+    },
+    {
+      "id": "dod-human-signoff",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 19,
+      "title": "Keep your judgment in the definition of done.",
+      "short": "Mechanical checks can hold while a run waits for a named reviewer. Pending stays visible until the decision is recorded.",
+      "long": "Some requirements need a person: whether a change matches the intent, whether the wording is right, whether the result is ready to use. Include that review in the definition of done. Oxagen keeps the verdict pending after mechanical checks hold until the required human decision arrives.",
+      "cta": "See a pending review",
+      "audience": [
+        "engineering",
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Launch card 19.",
+      "group": "definition-of-done",
+      "path": "messages/definition-of-done/dod-human-signoff.yaml"
+    },
+    {
+      "id": "dod-not-your-call",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 18,
+      "title": "The agent doesn't get to decide it's done.",
+      "short": "When the agent tries to stop, Oxagen runs the checks. A broken check sends it back with a specific reason.",
+      "long": "The agent reaches a stopping point. The wrapper runs the locked checks where the agent works. If they break and retries remain, it blocks the stop and returns the failing check IDs so the agent can continue. If retries run out, the run ends broken with its reasons recorded. Done means the specified checks held, and your team decides whether those checks are enough.",
+      "cta": "Watch a blocked stop",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "qualifier": "For bounded tasks with a definition of done.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Launch card 18. Bounded-task section only. Never a lead, a hero, an ad headline, or an email subject.",
+      "group": "definition-of-done",
+      "path": "messages/definition-of-done/dod-not-your-call.yaml"
+    },
+    {
+      "id": "dod-passing-verdict",
+      "brand": "oxagen",
+      "kind": "glossary",
+      "order": 40,
+      "title": "Passing verdict",
+      "long": "A passing verdict means the specified checks held. Your team decides whether those checks are sufficient for the task. When checks fail, the record shows the reasons and whether the agent continued, waited for a person, or reached its retry limit.",
+      "audience": [
+        "engineering",
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "docs",
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "10"
+      ],
+      "group": "definition-of-done",
+      "path": "messages/definition-of-done/dod-passing-verdict.yaml"
+    },
+    {
+      "id": "dod-reproducible-verdicts",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 20,
+      "title": "Check the verdict from the evidence.",
+      "short": "The recorded checks determine whether the definition of done held. The same evidence produces the same verdict.",
+      "long": "Oxagen settles the definition of done with a deterministic decision function. A model can draft the criteria, but it cannot choose the verdict. Review the locked criteria, the check results, and any outstanding human decisions to see exactly why the run is held, pending, or broken. A held verdict means the specified checks held, not that every requirement was captured.",
+      "cta": "Inspect a verdict",
+      "audience": [
+        "engineering",
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Launch card 20.",
+      "group": "definition-of-done",
+      "path": "messages/definition-of-done/dod-reproducible-verdicts.yaml"
+    },
+    {
+      "id": "email-operators",
+      "brand": "oxagen",
+      "kind": "email",
+      "order": 2,
+      "title": "Who sets the authority for your agents?",
+      "long": "When your team adds an autonomous agent, where do you set its identity, authority, tools, skills, and budget? Where do you review the actions it takes?\n\nOxagen brings those decisions into Mission Control. A walkthrough follows one agent from its mandate through an approval request and the resulting record. It also shows how an operator defines completion for a bounded task and manages an ongoing responsibility.",
+      "cta": "Explore Mission Control",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "sales-email"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup.",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "07",
+        "08"
+      ],
+      "notes": "The title is the subject line.",
+      "group": "outreach",
+      "path": "messages/outreach/email-operators.yaml"
+    },
+    {
+      "id": "email-repository-question",
+      "brand": "oxagen",
+      "kind": "email",
+      "order": 4,
+      "title": "Which rule allowed that push?",
+      "long": "When an agent requests a repository action, can your team see which rule allowed it and who approved it?\n\nA walkthrough can show a denied request, an approval request, and the resulting record.",
+      "cta": "See a request",
+      "audience": [
+        "security",
+        "engineering"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "sales-email"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup.",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "notes": "The title is the subject line. Written from the review's rewrite for finding 08.",
+      "group": "outreach",
+      "path": "messages/outreach/email-repository-question.yaml"
+    },
+    {
+      "id": "email-security",
+      "brand": "oxagen",
+      "kind": "email",
+      "order": 3,
+      "title": "Which identity and rule authorized that agent action?",
+      "long": "When an agent requests an action, can your team connect it to the agent's identity, the authority it was assigned, and the person responsible?\n\nOxagen applies your rules to requests handled through the platform and records the decision. A walkthrough shows the agent's mandate, a denied request, one routed to a person, and the record each leaves.",
+      "cta": "Inspect an agent's authority",
+      "audience": [
+        "security"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "sales-email"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Requests handled through the platform.",
+      "evidence": "Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup. Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "04",
+        "08"
+      ],
+      "notes": "The title is the subject line.",
+      "group": "outreach",
+      "path": "messages/outreach/email-security.yaml"
+    },
+    {
+      "id": "finance-headline",
+      "brand": "oxagen",
+      "kind": "entry-point",
+      "order": 2,
+      "title": "See which agent spent what, and on whose behalf.",
+      "long": "Review recorded costs by person, agent, and run. Inspect the usage and rate behind a charge, then use that record to decide where to change a budget.",
+      "cta": "Inspect workforce spend",
+      "cta_destination": "Show the budget, recorded cost, attribution, rate source, exclusions, and the relationship to provider invoices.",
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "site-finance",
+        "finance-email",
+        "ads"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "The costs shown are the costs Oxagen recorded.",
+      "evidence": "Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "06"
+      ],
+      "notes": "Claim savings only for measured workloads and stated conditions.",
+      "group": "entry-points",
+      "path": "messages/entry-points/finance-headline.yaml"
+    },
+    {
+      "id": "glossary-mandate",
+      "brand": "oxagen",
+      "kind": "glossary",
+      "title": "Mandate",
+      "short": "Set an agent's authority, budget, tools, and skills in its mandate. Review the record of the work Oxagen governs.",
+      "long": "A mandate is the one object an agent works under: its access, its budget and rules, its equipment, and the record Oxagen keeps of its governed work.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "product-page",
+        "docs-intro"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "design owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "notes": "Define mandate once, beside the task it governs, the first time a page uses it.",
+      "group": "lead",
+      "path": "messages/lead/glossary-mandate.yaml"
+    },
+    {
+      "id": "glossary-proven",
+      "brand": "oxagen",
+      "kind": "glossary",
+      "order": 40,
+      "title": "Proven",
+      "long": "Proven means a witness flipped: the required check failed on the target baseline and passed on the change. It covers the requirement that witness checks and nothing broader.",
+      "audience": [
+        "engineering",
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "docs"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "witness"
+      ],
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "10"
+      ],
+      "group": "witness",
+      "path": "messages/witness/glossary-proven.yaml"
+    },
+    {
+      "id": "hero-eyebrow",
+      "brand": "oxagen",
+      "kind": "eyebrow",
+      "title": "The control plane for your agent workforce",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "site-hero"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Mission Control is the product name. The agent control plane is the technical category.",
+      "group": "lead",
+      "path": "messages/lead/hero-eyebrow.yaml"
+    },
+    {
+      "id": "hero-headline",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Mission Control for your autonomous agents.",
+      "short": "Give each agent an identity. Set its authority, budget, tools, and skills. Define completion when the work has an endpoint, and oversee ongoing work through its requests, activity, and spend. Oxagen keeps the record of the actions it governs.",
+      "cta": "Explore Mission Control",
+      "cta_destination": "A product walkthrough showing agent identity, mandate, tool and skill assignment, an allowed action, a request for approval, and the resulting record, with an ongoing agent and a bounded task with completion criteria.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "site-hero",
+        "ads",
+        "social",
+        "web-manifest"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Oxagen keeps the record of the actions it governs.",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "07"
+      ],
+      "notes": "Under the action: Follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.",
+      "group": "lead",
+      "path": "messages/lead/hero-headline.yaml"
+    },
+    {
+      "id": "ie-agent-identity",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 29,
+      "title": "Give each agent an identity you can govern.",
+      "short": "Register each agent as a principal in a supported identity system, with its own roles, scope, and accountable operator.",
+      "long": "Each agent has a named place in your identity and access management system. Assign its roles, limit the resources it can request, and keep delegated authority within the operator's own permissions. Review its activity under that identity, and suspend or revoke its authority when its responsibility changes.",
+      "cta": "Explore agent identity",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "In supported identity systems.",
+      "evidence": "Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report. Name the supported identity systems before launch, and describe the implemented relationship to each, not only an internal agent ID.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "notes": "Launch card 29.",
+      "group": "identity-equipment",
+      "path": "messages/identity-equipment/ie-agent-identity.yaml"
+    },
+    {
+      "id": "ie-audit-admin",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 33,
+      "title": "Keep the decisions behind the workforce on record.",
+      "short": "Review who changed an agent's authority, approved a request, or adjusted its budget alongside the work that followed.",
+      "long": "Operating an agent workforce includes the decisions people make about it. Oxagen records governed administrative actions as well as agent activity. Follow a role change, approval, budget adjustment, or revocation to the responsible identity and supporting record. Give reviewers the history behind the current settings.",
+      "cta": "Inspect the audit record",
+      "audience": [
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Governed administrative actions.",
+      "evidence": "Security owner: follow a role change, an approval, a budget adjustment, and a revocation to the responsible identity and its record.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "notes": "Launch card 33.",
+      "group": "identity-equipment",
+      "path": "messages/identity-equipment/ie-audit-admin.yaml"
+    },
+    {
+      "id": "ie-ongoing",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 32,
+      "title": "Set the terms for work that keeps going.",
+      "short": "Manage an ongoing responsibility through authority, budgets, rules, and human review. Define done when the task calls for it.",
+      "long": "Some assignments end with a deliverable. Others continue across many runs. Set the agent's permitted actions, spending limits, tools, and approval rules for the responsibility it holds. Inspect individual runs and intervene when needed. Apply a definition of done to bounded tasks within that work without pretending the whole responsibility is finished.",
+      "cta": "Define an agent's mandate",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Launch card 32.",
+      "group": "identity-equipment",
+      "path": "messages/identity-equipment/ie-ongoing.yaml"
+    },
+    {
+      "id": "ie-skills",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 31,
+      "title": "Choose the procedures your agents can use.",
+      "short": "Manage skills, approve what agents can find and load, and see which skills reached the work.",
+      "long": "A skill captures a procedure your agents can follow. Oxagen governs which skills are in scope and how much context they may consume. Review configuration changes through pull requests and inspect what each run loaded, what was withheld, and why. The agent's harness carries out the procedure.",
+      "cta": "Explore the skill catalog",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.",
+      "owner": "engineering owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Launch card 31. Skill version approval was removed from the customer copy until it is demonstrated.",
+      "group": "identity-equipment",
+      "path": "messages/identity-equipment/ie-skills.yaml"
+    },
+    {
+      "id": "ie-tools",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 30,
+      "title": "Decide which tools belong in each agent's hands.",
+      "short": "Manage the tool catalog and control which tools each agent can discover and request.",
+      "long": "Equip agents for their responsibilities from a governed tool catalog. Set access by role and scope, then inspect the toolbelt the agent actually sees. Each request still meets your rules before the action proceeds. A tool's presence in the catalog does not grant every agent permission to use it.",
+      "cta": "Build an agent's toolbelt",
+      "audience": [
+        "engineering",
+        "platform"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.",
+      "owner": "engineering owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Launch card 30. Version access was removed from the customer copy until version pinning is demonstrated.",
+      "group": "identity-equipment",
+      "path": "messages/identity-equipment/ie-tools.yaml"
+    },
+    {
+      "id": "keys-agent-asks",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 2,
+      "title": "The agent asks.",
+      "long": "Say the agent can request Slack, or that Slack is in the agent's mandate. Do not write that the agent has access to Slack.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "access",
+      "path": "messages/access/keys-agent-asks.yaml"
+    },
+    {
+      "id": "keys-credential-stays",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 5,
+      "title": "For mediated connections, the credential stays in Oxagen.",
+      "long": "Oxagen uses the connection credential on the agent's behalf and the agent does not receive it. The agent's own identity and authentication are separate from that downstream credential. Say where the credential is held and what the record shows, and make no promise about what cannot leak.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "group": "access",
+      "path": "messages/access/keys-credential-stays.yaml"
+    },
+    {
+      "id": "keys-no-fear",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 6,
+      "title": "No fear.",
+      "long": "Tell the reader what the request looks like and who answers it. Do not assume what they have already done with a token.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "group": "access",
+      "path": "messages/access/keys-no-fear.yaml"
+    },
+    {
+      "id": "keys-record-keeps-answer",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 4,
+      "title": "The record keeps the answer.",
+      "long": "Each request routed through Oxagen is a row with the rule that answered it and, when routed, the name of the person who did.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "access",
+      "path": "messages/access/keys-record-keeps-answer.yaml"
+    },
+    {
+      "id": "keys-rule-decides",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 3,
+      "title": "The rule decides.",
+      "long": "Name the three answers when there is room: allowed, denied, routed to a person.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "access",
+      "path": "messages/access/keys-rule-decides.yaml"
+    },
+    {
+      "id": "knowledge-headline",
+      "brand": "oxagen",
+      "kind": "entry-point",
+      "order": 3,
+      "title": "Give agents the business context their work requires.",
+      "long": "Put approved business context within the agent's permitted knowledge scope. Define which sources it can use and review those sources as the business changes.",
+      "cta": "Explore the context behind a run",
+      "audience": [
+        "knowledge",
+        "engineering"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "site-knowledge"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Within the agent's permitted knowledge scope.",
+      "evidence": "Knowledge owner: demonstrate scoped retrieval, source attribution, corrections, deletion, and an agent denied access to another scope before claiming reuse across agents.",
+      "owner": "knowledge owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "05"
+      ],
+      "notes": "Explain retrieval and updates. No universal recall, and no promise that later runs cost less.",
+      "group": "entry-points",
+      "path": "messages/entry-points/knowledge-headline.yaml"
+    },
+    {
+      "id": "mc-access-requests",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 3,
+      "title": "Answer each request when the agent makes it.",
+      "short": "The agent requests an action. Your rule allows it, denies it, or routes it to a person. For mediated connections, the credential stays in Oxagen.",
+      "long": "A read from GitHub and a push to a protected branch deserve different answers. For actions routed through Oxagen, each request meets the rules your team wrote. When an allowed request uses a mediated connection, Oxagen uses the connection credential on the agent's behalf, and the agent does not receive it. You can read what the agent requested, which rule answered, and who signed an approval.",
+      "cta": "Follow an access request",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For actions routed through Oxagen, and for mediated connections.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary. Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "04"
+      ],
+      "notes": "Launch card 3. Launch card 3. Its original title is the access-keys headline, which leads the access section. The original credential sentence was not scoped to mediated connections.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-access-requests.yaml"
+    },
+    {
+      "id": "mc-budgets",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 8,
+      "title": "Give each agent a spending limit.",
+      "short": "Set budgets by agent, operator, workspace, or organization. Enforce hard limits at supported call boundaries.",
+      "long": "Set the budget where accountability sits. Oxagen checks hard budgets before model calls through its proxy and applies supported controls through the wrapper. A budget-triggered pause appears in the run with its reason, so the operator can decide whether to fund more work or stop there.",
+      "cta": "Set an agent budget",
+      "audience": [
+        "finance",
+        "operator"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "budgets"
+      ],
+      "qualifier": "Hard limits apply at supported call boundaries.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary. Finance owner: show a budget-triggered pause in a run with its reason.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "notes": "Launch card 8.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-budgets.yaml"
+    },
+    {
+      "id": "mc-business-context",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 15,
+      "title": "Put your business context into the work.",
+      "short": "Give agents relevant knowledge and published steering within their permitted scope, at the start of a run and as the task develops.",
+      "long": "Oxagen retrieves context from your organization's knowledge graph within the run's scope and context budget. Code, business knowledge, and reviewed lessons can reach the agent alongside the task. The run records what was supplied and where it came from, so you can inspect the information behind a decision.",
+      "cta": "Explore the context behind a run",
+      "audience": [
+        "knowledge",
+        "engineering"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Within the agent's permitted knowledge scope.",
+      "evidence": "Knowledge owner: demonstrate scoped retrieval, source attribution, corrections, deletion, and an agent denied access to another scope before claiming reuse across agents.",
+      "owner": "knowledge owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "05"
+      ],
+      "notes": "Launch card 15.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-business-context.yaml"
+    },
+    {
+      "id": "mc-cost-findings",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 10,
+      "title": "Find the expensive habit. See what to change.",
+      "short": "Spot unused cache writes, oversized tool lists, repeated calls, and provider retries, with their cost attached.",
+      "long": "Oxagen turns recorded spend into specific findings. See which change invalidated a cache, which tool definitions consumed prompt space without being used, or where repeated calls added cost. Each finding links to the recorded calls behind it and the cost they added, so you can choose what to fix first.",
+      "cta": "Inspect a cost finding",
+      "audience": [
+        "finance",
+        "engineering"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Savings are stated only for measured workloads under stated conditions.",
+      "evidence": "FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02"
+      ],
+      "notes": "Launch card 10. The launch card promised an estimated saving and ended on Find your next saving. Both were removed until a measured workload backs them.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-cost-findings.yaml"
+    },
+    {
+      "id": "mc-fleet",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 1,
+      "title": "Your agents. Their work. One place to act.",
+      "short": "See what each enrolled agent is doing, what it needs, and what it costs. Answer, steer, fund, or stop it from Mission Control.",
+      "long": "An agent waiting for approval. Another nearing its budget. A third working from the wrong assumption. Mission Control brings their runs, requests, mandates, and spend into one view. Open the run, read what happened, and take the next action with the record beside you.",
+      "cta": "Open the Fleet page",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Agents enrolled in Oxagen, with the controls each integration supports.",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries. Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "07"
+      ],
+      "notes": "Launch card 1.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-fleet.yaml"
+    },
+    {
+      "id": "mc-fork-compare",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 12,
+      "title": "Try another path from the moment that mattered.",
+      "short": "Fork a supported recording with its captured context and tool responses to explore how a different decision changes the work.",
+      "long": "Start from a recorded point instead of reconstructing the run by hand. Oxagen supplies the captured context and recorded tool responses while the model makes a fresh call. Compare the resulting runs to see where they diverge. A failure becomes a concrete case you can investigate again.",
+      "cta": "Explore a forked run",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Product owner: demonstrate a fork from a supported recording with captured context and recorded tool responses.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "notes": "Launch card 12.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-fork-compare.yaml"
+    },
+    {
+      "id": "mc-human-approval",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 4,
+      "title": "Put the decision in the right hands.",
+      "short": "Route the requests that need judgment to the people responsible, with the action and its context ready to review.",
+      "long": "Your rules decide when a person needs to look. Oxagen pauses the governed request and shows the reviewer which agent asked, what it wants to do, and the authority it would use. The run resumes with the answer recorded. Routine requests can proceed under the rules you already set.",
+      "cta": "See an approval",
+      "audience": [
+        "security",
+        "operator"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "notes": "Launch card 4.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-human-approval.yaml"
+    },
+    {
+      "id": "mc-live-steering",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 5,
+      "title": "Change course while the work is happening.",
+      "short": "Add a constraint, correct an assumption, or redirect a live run. See when your instruction reaches the agent.",
+      "long": "Open a run and send the correction where it matters. Deliver steering after the current step, at the next turn, or by interrupting where the connection supports it. Oxagen records the instruction and its delivery status, so you can tell whether it is still waiting or has entered the agent's context.",
+      "cta": "Steer a live run",
+      "audience": [
+        "operator",
+        "engineering"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Interrupts where the connection supports them.",
+      "evidence": "Product owner: demonstrate delivery after the current step, at the next turn, and by interrupt, for each supported connection.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "notes": "Launch card 5.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-live-steering.yaml"
+    },
+    {
+      "id": "mc-mandates",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 2,
+      "title": "Set the terms your agents work under.",
+      "short": "Set access, budget, rules, tools, and steering in one mandate, whichever team owns each part.",
+      "long": "A mandate is the one object an agent works under. It names what the agent may request, what it may spend, and which tools and instructions it may use. Oxagen checks those terms on governed calls and records the decision, so the people setting the limits can see how they were applied.",
+      "cta": "Explore a mandate",
+      "audience": [
+        "platform",
+        "security",
+        "finance",
+        "engineering"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Checked on governed calls.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "10"
+      ],
+      "notes": "Launch card 2. The launch card named security, FinOps, and engineering as the owners. The copy no longer requires a particular org chart.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-mandates.yaml"
+    },
+    {
+      "id": "mc-pause-revoke",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 6,
+      "title": "Stop the next action at the boundary.",
+      "short": "Pause a run or revoke authority for an agent, a tool, or a workspace. Oxagen records what the control stopped.",
+      "long": "When a run needs attention, pause it at the next supported boundary. When authority needs to end, revoke it at the scope that fits: one agent, one connection, a class of tools, or the organization. Governed calls meet the new restriction before proceeding, and the affected runs show the reason.",
+      "cta": "Explore run controls",
+      "audience": [
+        "operator",
+        "security"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "At the next supported boundary, for governed calls.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "platform owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "notes": "Launch card 6.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-pause-revoke.yaml"
+    },
+    {
+      "id": "mc-reconciliation",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 9,
+      "title": "Match the bill to the record.",
+      "short": "Reconcile recorded spend with provider usage and invoices. Open a difference and see the unmatched entries.",
+      "long": "Oxagen matches provider charges to recorded calls where request identifiers are available, then to usage totals and invoice lines. Differences become visible exceptions with the records attached. You can see how much spend is matched, what remains unresolved, and where the numbers diverge.",
+      "cta": "Inspect a reconciliation",
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "reconciliation"
+      ],
+      "evidence": "Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "06"
+      ],
+      "notes": "Launch card 9.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-reconciliation.yaml"
+    },
+    {
+      "id": "mc-reviewed-learning",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 14,
+      "title": "Turn a lesson from one run into steering for the next.",
+      "short": "Capture what agents learn, review the supporting evidence, and publish new steering through a pull request.",
+      "long": "A useful discovery should survive the run that made it. Oxagen links learned records to the work behind them and proposes changes to shared steering. Your team reviews the proposal in its own repository. Merge publishes the change, giving future runs the lesson and your team a versioned history of what went into force.",
+      "cta": "Follow a lesson into the next run",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Engineering owner: follow one learned record to a reviewed pull request and to a later run that received the steering.",
+      "owner": "engineering owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "notes": "Launch card 14. The launch card title said a rule for the next run. A rule answers requests, and a lesson becomes steering.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-reviewed-learning.yaml"
+    },
+    {
+      "id": "mc-rule-simulation",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 13,
+      "title": "See what a rule would change before it does.",
+      "short": "Test a proposed rule against your agents' recorded calls before putting it into force.",
+      "long": "A tighter rule can stop the wrong action and interrupt useful work. Oxagen shows how a proposed version would have answered real requests: which would be denied, which would need approval, and which would become allowed. Review those differences before activating the change.",
+      "cta": "Preview a rule change",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Platform owner: replay a proposed rule against recorded calls and show the denied, routed, and newly allowed differences.",
+      "owner": "platform owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "notes": "Launch card 13.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-rule-simulation.yaml"
+    },
+    {
+      "id": "mc-run-playback",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 11,
+      "title": "See what the agent saw.",
+      "short": "Step through a recorded run with its instructions, tool results, decisions, and accumulated cost in view.",
+      "long": "Scrub to the moment a run changed direction. Where the recording retains full content, you can read the context the agent received, what it asked, what came back, and what it had spent by then. Playback skips long waits while preserving the real elapsed time. Each run shows the playback capabilities its evidence supports.",
+      "cta": "Play back a run",
+      "audience": [
+        "engineering",
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Where the recording retains full content.",
+      "evidence": "Product owner: show which runs retain full content and which playback capabilities each run's evidence supports.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "notes": "Launch card 11.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-run-playback.yaml"
+    },
+    {
+      "id": "mc-signed-records",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 16,
+      "title": "Share the evidence with the answer.",
+      "short": "Export a signed run record with its actions, decisions, costs, and evidence for independent inspection.",
+      "long": "Oxagen links recorded frames in a hash chain and signs the run's close. An exported record lets a reviewer check its integrity outside the product. It identifies what the gateway observed, what the agent's wrapper reported, and where evidence is missing, so the strength of the record stays visible.",
+      "cta": "Inspect a run export",
+      "audience": [
+        "security",
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Security owner: export a signed run record and check its integrity outside the product, including where evidence is missing.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "notes": "Launch card 16. The title no longer says hand over, which the kit keeps for the line about the keys.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-signed-records.yaml"
+    },
+    {
+      "id": "mc-spend-attribution",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 7,
+      "title": "Read your AI bill down to the work.",
+      "short": "Follow spend from the organization to the operator, agent, run, and individual call that incurred it.",
+      "long": "Open a spend total and keep going until you reach the work behind it. Oxagen records model usage by token class, the rate applied, and the agent and operator responsible. Finance and engineering read the same underlying records, with measured, reported, and estimated costs identified.",
+      "cta": "Follow the spend",
+      "audience": [
+        "finance",
+        "engineering"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "06"
+      ],
+      "notes": "Launch card 7.",
+      "group": "mission-control",
+      "path": "messages/mission-control/mc-spend-attribution.yaml"
+    },
+    {
+      "id": "pair-abstraction",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 2,
+      "title": "Abstraction",
+      "before": "Oxagen provides comprehensive governance and observability for autonomous agents across your organization.",
+      "after": "Give each agent an identity, set its authority and budget, and review the record of the actions Oxagen governs.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "07"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-abstraction.yaml"
+    },
+    {
+      "id": "pair-adjective-evidence",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 9,
+      "title": "Adjective instead of evidence",
+      "before": "Fast, seamless setup.",
+      "after": "Run one prompt through a wrapped agent. The first screen shows that run's requests, the rules that answered them, and its cost.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-adjective-evidence.yaml"
+    },
+    {
+      "id": "pair-assertion",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 5,
+      "title": "Asserting the prospect's setup",
+      "before": "Your coding agents run with a GitHub token that can push to every repo.",
+      "after": "When an agent requests a repository action, can your team see which rule allowed it and who approved it? A walkthrough can show a denied request, an approval request, and the resulting record.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-assertion.yaml"
+    },
+    {
+      "id": "pair-automation",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 7,
+      "title": "Automation as the sell",
+      "before": "Requests are auto-approved so your agents never wait.",
+      "after": "Reads of the public repo are allowed by rule. A push to main is denied by rule. A push to a release branch waits on the release owner.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-automation.yaml"
+    },
+    {
+      "id": "pair-enthusiasm",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 1,
+      "title": "Enthusiasm",
+      "before": "We're excited to introduce a revolutionary new way to manage AI agents.",
+      "after": "Mission Control for your autonomous agents.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-enthusiasm.yaml"
+    },
+    {
+      "id": "pair-fear",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 4,
+      "title": "Fear",
+      "before": "Unchecked agents are a liability waiting to happen. Protect your organization today.",
+      "after": "When an agent requests a repository action, can your team see which rule allowed it and who approved it?",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-fear.yaml"
+    },
+    {
+      "id": "pair-handing-keys",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 6,
+      "title": "Handing over the keys",
+      "before": "Connect your agent to GitHub, Slack, and your database in one click.",
+      "after": "The agent asks for GitHub when the task needs it. A rule you wrote answers, or a person you named does. For mediated connections, the credential stays in Oxagen.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-handing-keys.yaml"
+    },
+    {
+      "id": "pair-jargon",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 10,
+      "title": "Jargon for its own sake",
+      "before": "Cryptographically attested, tamper-evident evidence chains with Merkle-rooted seals.",
+      "after": "Every frame is hash-chained to the one before it, and the seal signs the whole run. Anyone with the export can check its integrity.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-jargon.yaml"
+    },
+    {
+      "id": "pair-marketing-we",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 11,
+      "title": "Marketing we",
+      "before": "We believe agents should be accountable.",
+      "after": "The record connects each governed action to the agent, the rule, and the person responsible.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-marketing-we.yaml"
+    },
+    {
+      "id": "pair-overclaiming",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 3,
+      "title": "Overclaiming",
+      "before": "Every run is verified and proven correct.",
+      "after": "A passing verdict means the specified checks held. Your team decides whether those checks are enough. Proven applies only when a witness flipped, and only to what that witness checks.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "10"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-overclaiming.yaml"
+    },
+    {
+      "id": "pair-passive",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 12,
+      "title": "Passive voice",
+      "before": "The definition of done is locked before tool execution begins.",
+      "after": "The wrapper locks the dod before the agent's first tool call.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-passive.yaml"
+    },
+    {
+      "id": "pair-vault-talk",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 8,
+      "title": "Vault talk",
+      "before": "Enterprise-grade secret management keeps your credentials safe.",
+      "after": "For mediated connections, Oxagen uses the connection credential on the agent's behalf. The agent does not receive it, and the record shows each use.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "group": "voice",
+      "path": "messages/voice/pair-vault-talk.yaml"
+    },
+    {
+      "id": "pitch-one-sentence",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "title": "Oxagen is Mission Control for an autonomous agent workforce: assign identities, set authority, equip agents with tools and skills, and oversee their work through a shared control plane.",
+      "audience": [
+        "operator",
+        "platform",
+        "security",
+        "finance",
+        "engineering"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "rooms",
+        "decks",
+        "bios",
+        "docs-intro"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "group": "lead",
+      "path": "messages/lead/pitch-one-sentence.yaml"
+    },
+    {
+      "id": "pitch-product-page",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "title": "Product page introduction",
+      "long": "Oxagen is Mission Control for the operators managing an autonomous agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence for governed work together in one control plane.",
+      "cta": "Explore Mission Control",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "07"
+      ],
+      "notes": "Adapted from the recommended lead in the Mission Control launch cards. Its title is not a second headline: the hero headline leads.",
+      "group": "lead",
+      "path": "messages/lead/pitch-product-page.yaml"
+    },
+    {
+      "id": "pitch-short",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "title": "Short pitch",
+      "long": "Your operators decide what each agent is responsible for, what it may do, and what it needs to work. Oxagen gives those decisions a home: an agent identity, a mandate for authority and budget, assigned tools and skills, and a record of governed activity. For bounded work, define completion before it starts. For ongoing work, manage the agent's authority, requests, and spend as it operates.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "07",
+        "10"
+      ],
+      "group": "lead",
+      "path": "messages/lead/pitch-short.yaml"
+    },
+    {
+      "id": "proof-meter-follows-proof",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 10,
+      "title": "The meter follows the proof.",
+      "long": "Charge for proven runs. Report runs and governed actions as secondary meters.",
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "qualifier": "Proven means a witness flipped.",
+      "evidence": "FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "02"
+      ],
+      "notes": "Needs a pricing decision before release: charging for proven runs may conflict with billing by use.",
+      "group": "proof",
+      "path": "messages/proof/proof-meter-follows-proof.yaml"
+    },
+    {
+      "id": "proof-no-model-in-verdict",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 8,
+      "title": "No model in the verdict.",
+      "long": "decide() is a pure function of the run's frames. A model can draft the checks, and it cannot choose the verdict.",
+      "audience": [
+        "engineering",
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "group": "proof",
+      "path": "messages/proof/proof-no-model-in-verdict.yaml"
+    },
+    {
+      "id": "proof-offline-verify",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 9,
+      "title": "Another person can recompute the verdict.",
+      "long": "oxagen dod verify runs on an export with no account and no network, and returns the verdict the recorded checks produce.",
+      "audience": [
+        "engineering",
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "qualifier": "The verdict covers the specified checks.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "group": "proof",
+      "path": "messages/proof/proof-offline-verify.yaml"
+    },
+    {
+      "id": "proof-one-object",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 1,
+      "title": "One object, checked at the governed call.",
+      "long": "Identity, knowledge scope, permitted action, commercial terms, outcome, and audit record are one typed contract, checked when the agent makes a governed call, not reconstructed after the incident.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For actions routed through Oxagen.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "platform owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "proof",
+      "path": "messages/proof/proof-one-object.yaml"
+    },
+    {
+      "id": "proof-pre-committed",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 6,
+      "title": "Pre-committed, not reconstructed.",
+      "long": "The dod is locked before the agent's first tool call, and its position in the run's chain shows it.",
+      "audience": [
+        "engineering",
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod"
+      ],
+      "qualifier": "For bounded tasks with a dod.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "group": "proof",
+      "path": "messages/proof/proof-pre-committed.yaml"
+    },
+    {
+      "id": "proof-recorded-cost",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 2,
+      "title": "Cost is a recorded row.",
+      "long": "Each governed action carries its recorded cost, attributed to the person, the agent, and the run, with measured, reported, and estimated costs marked. The Spend page and the run record read the same rows.",
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "06"
+      ],
+      "group": "proof",
+      "path": "messages/proof/proof-recorded-cost.yaml"
+    },
+    {
+      "id": "proof-three-answers",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 3,
+      "title": "Three answers, one rule.",
+      "long": "A rule names a capability, a condition, and one effect: allow, deny, or route to a person. For governed calls, Oxagen checks it before the handler runs, so a denied action does not reach the code that would have done it.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For governed calls.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "platform owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "proof",
+      "path": "messages/proof/proof-three-answers.yaml"
+    },
+    {
+      "id": "proof-two-halves",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 7,
+      "title": "Two halves, on purpose.",
+      "long": "The dod is visible to the agent, so drift shows where it happens. The witness is hidden, so a change that only satisfies the visible checks does not earn a flip.",
+      "audience": [
+        "engineering",
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "dod",
+        "witness"
+      ],
+      "qualifier": "For bounded tasks with a dod and a witness.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "10"
+      ],
+      "group": "proof",
+      "path": "messages/proof/proof-two-halves.yaml"
+    },
+    {
+      "id": "proof-whoever-built",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 5,
+      "title": "Whoever built the agent.",
+      "long": "Claude Code, the Agent SDK, or a custom loop, with a supported wrapper beside it. The wrapper records and gates governed calls from beside the agent. Oxagen does not run it.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "With a supported wrapper.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "platform owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "proof",
+      "path": "messages/proof/proof-whoever-built.yaml"
+    },
+    {
+      "id": "proof-your-keys",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 4,
+      "title": "Your model keys, your graph.",
+      "long": "Bring your own model keys and your own graph endpoint. Hosting is billed at cost.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "product-page",
+        "decks"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Platform owner: demonstrate a workspace running on its own model keys and its own graph endpoint.",
+      "owner": "platform owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "proof",
+      "path": "messages/proof/proof-your-keys.yaml"
+    },
+    {
+      "id": "retired-agents-prove-their-work",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Agents that prove their work. A model you own.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "01",
+        "02"
+      ],
+      "replaced_by": "hero-headline",
+      "notes": "Was the proof ad and the Oxagen social and manifest tagline.",
+      "group": "retired",
+      "path": "messages/retired/retired-agents-prove-their-work.yaml"
+    },
+    {
+      "id": "retired-buyer-no-token",
+      "brand": "oxagen",
+      "kind": "proof",
+      "title": "The agents don't have a token any more. They ask, and I can read every answer.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "04",
+        "08"
+      ],
+      "replaced_by": "buyer-security",
+      "notes": "Read as a testimonial and overstated credential custody.",
+      "group": "retired",
+      "path": "messages/retired/retired-buyer-no-token.yaml"
+    },
+    {
+      "id": "retired-buyer-stopped-reading-prs",
+      "brand": "oxagen",
+      "kind": "proof",
+      "title": "I stopped reading agent PRs to find out if they were done.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "01",
+        "08"
+      ],
+      "replaced_by": "buyer-engineering",
+      "notes": "Read as a testimonial.",
+      "group": "retired",
+      "path": "messages/retired/retired-buyer-stopped-reading-prs.yaml"
+    },
+    {
+      "id": "retired-each-run-costs-less",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Each run costs less.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "02"
+      ],
+      "replaced_by": "finance-headline",
+      "notes": "Was the waste ad short subline.",
+      "group": "retired",
+      "path": "messages/retired/retired-each-run-costs-less.yaml"
+    },
+    {
+      "id": "retired-every-agent-one-page",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Every agent you run on one page, with its mandate, its requests, and its spend.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "03",
+        "07"
+      ],
+      "replaced_by": "section-operations",
+      "notes": "Was the fleet ad subline.",
+      "group": "retired",
+      "path": "messages/retired/retired-every-agent-one-page.yaml"
+    },
+    {
+      "id": "retired-explain-your-ai-bill",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Can you explain your AI bill? Neither can your provider.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "06"
+      ],
+      "replaced_by": "finance-headline",
+      "notes": "Was the site hero, a cold email subject line, and the bill ad.",
+      "group": "retired",
+      "path": "messages/retired/retired-explain-your-ai-bill.yaml"
+    },
+    {
+      "id": "retired-explains-every-run",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Oxagen explains every run: what it did, and what it cost.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "03",
+        "06"
+      ],
+      "replaced_by": "finance-headline",
+      "notes": "Was the bill ad subline.",
+      "group": "retired",
+      "path": "messages/retired/retired-explains-every-run.yaml"
+    },
+    {
+      "id": "retired-four-live-lines",
+      "brand": "oxagen",
+      "kind": "rule",
+      "title": "Four live lines. Do not write a fifth.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "09"
+      ],
+      "replaced_by": "rule-registry-source",
+      "notes": "A hand-kept count that had already drifted.",
+      "group": "retired",
+      "path": "messages/retired/retired-four-live-lines.yaml"
+    },
+    {
+      "id": "retired-github-token-email",
+      "brand": "oxagen",
+      "kind": "email",
+      "title": "Your coding agents run with a GitHub token that can push to every repo, because that was the only way to get them working.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "08"
+      ],
+      "replaced_by": "email-security",
+      "notes": "Asserted the prospect's setup.",
+      "group": "retired",
+      "path": "messages/retired/retired-github-token-email.yaml"
+    },
+    {
+      "id": "retired-key-never-moves",
+      "brand": "oxagen",
+      "kind": "rule",
+      "title": "The key never moves.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "04"
+      ],
+      "replaced_by": "keys-credential-stays",
+      "notes": "Was the fourth access rule. It carried a promise about leaks that credential custody cannot make.",
+      "group": "retired",
+      "path": "messages/retired/retired-key-never-moves.yaml"
+    },
+    {
+      "id": "retired-never-re-explain",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Never re-explain yourself to AI ever again.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "05"
+      ],
+      "replaced_by": "knowledge-headline",
+      "notes": "Was the memory ad and the knowledge graph section.",
+      "group": "retired",
+      "path": "messages/retired/retired-never-re-explain.yaml"
+    },
+    {
+      "id": "retired-next-run-costs-less",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Oxagen learns from every run, and the next one costs less.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "02"
+      ],
+      "replaced_by": "finance-headline",
+      "notes": "Was the waste ad subline.",
+      "group": "retired",
+      "path": "messages/retired/retired-next-run-costs-less.yaml"
+    },
+    {
+      "id": "retired-nothing-to-leak",
+      "brand": "oxagen",
+      "kind": "pair",
+      "title": "The agent never sees the key. There is nothing for it to leak.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "04"
+      ],
+      "replaced_by": "keys-credential-stays",
+      "notes": "Was the vault talk voice pair.",
+      "group": "retired",
+      "path": "messages/retired/retired-nothing-to-leak.yaml"
+    },
+    {
+      "id": "retired-pitch-enforced-every-call",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "title": "Oxagen is the control plane for the agents an enterprise runs: one mandate per agent, set by the teams accountable for it, enforced on every call, recorded on every run.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "03",
+        "07"
+      ],
+      "replaced_by": "pitch-one-sentence",
+      "notes": "Was the one-sentence pitch.",
+      "group": "retired",
+      "path": "messages/retired/retired-pitch-enforced-every-call.yaml"
+    },
+    {
+      "id": "retired-pitch-three-sentences",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "title": "Your agents run on a token somebody pasted in, spend against a budget nobody set, and finish when they say they are finished.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "01",
+        "03",
+        "08"
+      ],
+      "replaced_by": "pitch-short",
+      "notes": "First sentence of the retired three-sentence pitch, which also promised enforcement on every call.",
+      "group": "retired",
+      "path": "messages/retired/retired-pitch-three-sentences.yaml"
+    },
+    {
+      "id": "retired-prove-it-after",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Define done before the agent starts. Prove it after.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "01",
+        "07"
+      ],
+      "replaced_by": null,
+      "notes": "not carried into the launch registry after the 2026-09-15 review",
+      "group": "retired",
+      "path": "messages/retired/retired-prove-it-after.yaml"
+    },
+    {
+      "id": "retired-prove-to-someone",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Prove it to someone who doesn't trust you.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "01",
+        "07"
+      ],
+      "replaced_by": null,
+      "notes": "not carried into the launch registry after the 2026-09-15 review",
+      "group": "retired",
+      "path": "messages/retired/retired-prove-to-someone.yaml"
+    },
+    {
+      "id": "retired-run-agents-as-fleet",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Run your agents as a fleet.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "07"
+      ],
+      "replaced_by": "hero-headline",
+      "notes": "Was the fleet ad. Fleet stays as the Fleet page name.",
+      "group": "retired",
+      "path": "messages/retired/retired-run-agents-as-fleet.yaml"
+    },
+    {
+      "id": "retired-steer-govern-observe",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Steer. Govern. Observe.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "01",
+        "07"
+      ],
+      "replaced_by": null,
+      "notes": "not carried into the launch registry after the 2026-09-15 review",
+      "group": "retired",
+      "path": "messages/retired/retired-steer-govern-observe.yaml"
+    },
+    {
+      "id": "retired-stop-wasting-money",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Stop wasting money on AI.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "02"
+      ],
+      "replaced_by": "finance-headline",
+      "notes": "Was the waste ad and the product page.",
+      "group": "retired",
+      "path": "messages/retired/retired-stop-wasting-money.yaml"
+    },
+    {
+      "id": "retired-taught-once",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Taught once. Known by all.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "05"
+      ],
+      "replaced_by": "knowledge-headline",
+      "notes": "Was the memory ad short subline.",
+      "group": "retired",
+      "path": "messages/retired/retired-taught-once.yaml"
+    },
+    {
+      "id": "retired-teach-oxagen-once",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Teach Oxagen your business once. Every agent you run has it.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "05"
+      ],
+      "replaced_by": "knowledge-headline",
+      "notes": "Was the memory ad subline.",
+      "group": "retired",
+      "path": "messages/retired/retired-teach-oxagen-once.yaml"
+    },
+    {
+      "id": "retired-two-hooks-sixty-seconds",
+      "brand": "oxagen",
+      "kind": "pair",
+      "title": "Two hooks. Sixty seconds. The first screen shows your own numbers.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "08"
+      ],
+      "replaced_by": "pair-adjective-evidence",
+      "notes": "A setup duration without dated evidence.",
+      "group": "retired",
+      "path": "messages/retired/retired-two-hooks-sixty-seconds.yaml"
+    },
+    {
+      "id": "retired-two-names",
+      "brand": "oxagen",
+      "kind": "rule",
+      "title": "The category has two names and Oxagen owns both.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "07"
+      ],
+      "replaced_by": "rule-naming",
+      "notes": "Was the category rule in the branding skill.",
+      "group": "retired",
+      "path": "messages/retired/retired-two-names.yaml"
+    },
+    {
+      "id": "retired-verdict-not-claim",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Runs that end with a verdict, not a claim.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "brand owner",
+      "findings": [
+        "01",
+        "07"
+      ],
+      "replaced_by": null,
+      "notes": "not carried into the launch registry after the 2026-09-15 review",
+      "group": "retired",
+      "path": "messages/retired/retired-verdict-not-claim.yaml"
+    },
+    {
+      "id": "rule-completion-optional",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 2,
+      "title": "Completion is a control for bounded tasks.",
+      "long": "The definition of done applies to work with an endpoint. Ongoing responsibilities are managed through authority, budget, and review points. A passing verdict means the specified checks held, and the team decides whether those checks suffice.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-completion-optional.yaml"
+    },
+    {
+      "id": "rule-cost-claims",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 8,
+      "title": "Show cost. Claim savings only from a measurement.",
+      "long": "Cost visibility is a launch claim. A saving is stated only for a measured workload under stated conditions, with the baseline named. Make no comparison with model providers.",
+      "phrases": [
+        "neither can your provider",
+        "costs less",
+        "stop wasting money",
+        "fewer tokens, same answers"
+      ],
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "06"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-cost-claims.yaml"
+    },
+    {
+      "id": "rule-enforcement-scope",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 4,
+      "title": "Scope every enforcement claim.",
+      "long": "Say for actions routed through Oxagen, or governed calls. Observe mode is recorded, not enforced. A workspace with no rules answers requests by identity alone.",
+      "phrases": [
+        "on every call",
+        "enforced everywhere"
+      ],
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-enforcement-scope.yaml"
+    },
+    {
+      "id": "rule-first-contact-vocabulary",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 11,
+      "title": "First contact uses run, request, rule, check, and cost.",
+      "long": "Define mandate once, beside the task. Frames, seals, and witness verdicts belong in detail pages and docs, with their definitions. Familiar explanatory words may sit around exact UI labels.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-first-contact-vocabulary.yaml"
+    },
+    {
+      "id": "rule-held-lines-wait",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 19,
+      "title": "Held entries wait for their gate.",
+      "long": "An entry with release held stays out of the site, ads, and outreach until every capability in its gate ships. Using it early claims what the record cannot yet show.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "09"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-held-lines-wait.yaml"
+    },
+    {
+      "id": "rule-identity-credentials",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 5,
+      "title": "Identity and credentials are separate claims.",
+      "long": "Each agent has its own identity. For mediated connections, Oxagen uses the connection credential on the agent's behalf and the agent does not receive it. Make no promise about what an agent cannot leak.",
+      "phrases": [
+        "nothing for the agent to leak",
+        "nothing for it to leak",
+        "never sees the key",
+        "never sees the credential"
+      ],
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-identity-credentials.yaml"
+    },
+    {
+      "id": "rule-knowledge-scope",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 7,
+      "title": "Business context stays inside permitted scope.",
+      "long": "Give agents the business context their work requires, within the scope each agent is permitted to read. Make no claim of universal recall or of every agent sharing everything.",
+      "phrases": [
+        "every agent you run has it",
+        "taught once",
+        "re-explain",
+        "never forgets"
+      ],
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "05"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-knowledge-scope.yaml"
+    },
+    {
+      "id": "rule-lead-with-clause",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 13,
+      "title": "Lead with the clause the reader owns.",
+      "long": "A security lead reads access first. A finance lead reads budget first. An engineering lead reads equipment first, then the record. One person may own all four.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "rules",
+      "path": "messages/rules/rule-lead-with-clause.yaml"
+    },
+    {
+      "id": "rule-naming",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 1,
+      "title": "Mission Control is the product. The agent control plane is the category.",
+      "long": "Lead with Mission Control, the experience an operator uses. Name the technical category the agent control plane. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is allowed. Autonomous agents is allowed as a plain description of what Oxagen manages.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-naming.yaml"
+    },
+    {
+      "id": "rule-no-ai-in-verdict",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 16,
+      "title": "No AI-powered verification.",
+      "long": "The verdict has no model in it. That is the point.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-no-ai-in-verdict.yaml"
+    },
+    {
+      "id": "rule-no-auto-approve",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 18,
+      "title": "Auto-approve is not a feature.",
+      "long": "A rule that allows is a decision someone wrote down. Say allowed by rule.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-no-auto-approve.yaml"
+    },
+    {
+      "id": "rule-no-competitors",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 14,
+      "title": "Never name a competitor.",
+      "long": "Describe the category behavior instead: tools that record, a token with everything the agent might ever need, scores written after the fact, a second model grading the first. The reader supplies the names.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "rules",
+      "path": "messages/rules/rule-no-competitors.yaml"
+    },
+    {
+      "id": "rule-no-handing-keys",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 17,
+      "title": "Do not hand over the keys in the copy.",
+      "long": "Connect your agent to, give the agent access to, and the agent's API key each hand over the keys in the copy even where the product does not.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-no-handing-keys.yaml"
+    },
+    {
+      "id": "rule-no-owned-categories",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 15,
+      "title": "Do not name a category someone else owns.",
+      "long": "Not observability, governance as a category, evals, guardrails, or a trust layer. Each is owned, and each means watch and report. Name the category by what it does.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-no-owned-categories.yaml"
+    },
+    {
+      "id": "rule-outreach",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 9,
+      "title": "Ask. Do not assert the prospect's setup.",
+      "long": "Outreach opens with a diagnostic question. Buyer statements are labelled hypothetical. Traction numbers, partner counts, and setup durations stay out of copy until an owner supplies dated evidence and publication approval.",
+      "phrases": [
+        "sixty seconds",
+        "60 seconds",
+        "two hooks",
+        "paying customers",
+        "customer council"
+      ],
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-outreach.yaml"
+    },
+    {
+      "id": "rule-prospect-markers",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 10,
+      "title": "No prospect names, deal details, or investor figures.",
+      "long": "This repository is public. Keep prospects, deals, and investor figures in outreach tools. The check fails on the markers listed in this file, and on the names in the untracked local file messages/rules/prospect-names.local.txt, which never enters git because a blocklist of names would publish them.",
+      "phrases": [
+        "design partners",
+        "council of nine"
+      ],
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-prospect-markers.yaml"
+    },
+    {
+      "id": "rule-proven-scope",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 3,
+      "title": "Proven sits beside a witness flip and its scope.",
+      "long": "Use proven only where a witness flipped, and say which requirement it covers. A held dod is done, not proven.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "10"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-proven-scope.yaml"
+    },
+    {
+      "id": "rule-registry-source",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 12,
+      "title": "The registry is the source of truth.",
+      "long": "Every published line starts as an entry in messages/. The message bank, the index, and the ads are generated from it. Nothing keeps a hand count of lines.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "09"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-registry-source.yaml"
+    },
+    {
+      "id": "rule-soc2-publication",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 6,
+      "title": "State SOC 2 status only from the report.",
+      "long": "State an actual completed examination, report type, covered entity and system, examination period or date, and report access process only when supported by the report. If the launch status is readiness work or support for customer controls, describe that specific status and scope. Do not turn auditable, or an ambition, into an attestation claim. No report has been inspected for this registry, so no entry makes a SOC 2 claim.",
+      "phrases": [
+        "SOC 2 certified",
+        "SOC 2 compliant",
+        "SOC 2 attested",
+        "SOC 2 audited",
+        "SOC 2 report",
+        "SOC 2 Type"
+      ],
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "security owner",
+      "review_by": "2026-10-01",
+      "findings": [
+        "04"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-soc2-publication.yaml"
+    },
+    {
+      "id": "section-audit",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 5,
+      "title": "Follow the action back to its authority.",
+      "long": "Review which agent requested an action, on whose behalf, which rule answered, and who approved it when a person was required. Inspect the recorded result and cost alongside that decision. For runs with completion checks, export the record so another person can recompute the recorded verdict without an Oxagen account or network connection.",
+      "audience": [
+        "security",
+        "finance"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "An exported verdict does not establish that every requirement was captured or that every action was correct.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "10"
+      ],
+      "notes": "Auditability describes the evidence available for review. Use proven only beside a defined witness result and its scope.",
+      "group": "sections",
+      "path": "messages/sections/section-audit.yaml"
+    },
+    {
+      "id": "section-authority",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 1,
+      "title": "Set the authority behind each action.",
+      "long": "Give each agent its own identity in your identity and access management system. Set which actions it may request and which resources it may reach. For actions handled through Oxagen, rules allow the request, deny it, or route it to a person. The record connects the decision to the agent and the person responsible for its work.",
+      "audience": [
+        "security",
+        "platform"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "For actions handled through Oxagen.",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary. Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.",
+      "owner": "security owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "04"
+      ],
+      "notes": "Detail page: name the supported identity systems and explain provisioning, delegation, revocation, and enforcement boundaries. IAM identity must describe the implemented relationship, not only an internal agent ID.",
+      "group": "sections",
+      "path": "messages/sections/section-authority.yaml"
+    },
+    {
+      "id": "section-equipment",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 2,
+      "title": "Give each agent the tools and skills its work requires.",
+      "long": "Manage the tools and skills available to your workforce, then assign them through each agent's mandate. Pair the equipment with the authority to use it and the business context the agent is permitted to read.",
+      "audience": [
+        "engineering",
+        "platform"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.",
+      "owner": "engineering owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "05",
+        "07"
+      ],
+      "group": "sections",
+      "path": "messages/sections/section-equipment.yaml"
+    },
+    {
+      "id": "section-operations",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 4,
+      "title": "Manage the workforce from Mission Control.",
+      "long": "See the agents enrolled in Oxagen, the mandates they work under, their open requests, and their recorded activity and spend. Answer an approval request, change an assignment, or adjust a budget from the operator's view. Agents run in their supported environments, and Oxagen is the control plane that governs their work.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "Use the hold and stop controls supported by each integration.",
+      "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries. Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "platform owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "07"
+      ],
+      "notes": "Describe what a control changes and when it takes effect.",
+      "group": "sections",
+      "path": "messages/sections/section-operations.yaml"
+    },
+    {
+      "id": "section-work",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 3,
+      "title": "Define completion when the work has an endpoint.",
+      "long": "For a bounded task, set the checks and human decisions that determine completion before the agent starts. Oxagen locks those criteria into the run and records the results. For an ongoing responsibility, set the authority, budget, and review points that keep the work accountable over time.",
+      "audience": [
+        "engineering",
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "qualifier": "A passing verdict means the specified checks held. Your team decides whether those checks are sufficient for the task.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "When checks fail, the record shows the reasons and whether the agent continued, waited for a person, or reached its retry limit.",
+      "group": "sections",
+      "path": "messages/sections/section-work.yaml"
+    },
+    {
+      "id": "security-headline",
+      "brand": "oxagen",
+      "kind": "entry-point",
+      "order": 1,
+      "title": "Identity, authority, and a record you can inspect.",
+      "long": "Review how agent identities map to your access controls, how Oxagen handles connection credentials, and what each governed action records. Inspect the supported deployment and integration boundaries before granting authority.",
+      "cta": "Inspect an agent's authority",
+      "cta_destination": "The security page: identity mapping, credential handling for mediated connections, and the record of a governed action.",
+      "audience": [
+        "security"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "security-page"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.",
+      "owner": "security owner",
+      "review_by": "2026-10-01",
+      "findings": [
+        "03",
+        "04"
+      ],
+      "notes": "Any SOC 2 statement on this page follows rule-soc2-publication.",
+      "group": "entry-points",
+      "path": "messages/entry-points/security-headline.yaml"
+    },
+    {
+      "id": "stella-relationship",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Stella is an agent. Oxagen is Mission Control for the workforce.",
+      "audience": [
+        "engineering",
+        "operator"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "stella-readme",
+        "product-page"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "stella-integration"
+      ],
+      "evidence": "Product owner: confirm the launch integration. Show Stella as one supported agent where that is accurate, and keep the platform story broad enough for other supported agents.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Shared branding does not establish shared proof mechanisms or identical capabilities.",
+      "group": "lead",
+      "path": "messages/lead/stella-relationship.yaml"
+    },
+    {
+      "id": "stella-tagline",
+      "brand": "stella",
+      "kind": "headline",
+      "title": "It does the work and proves it finished.",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "social",
+        "web-manifest"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Stella owner: the proof rule the tagline names is Stella's documented witness behavior.",
+      "owner": "Stella owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "notes": "Stella's social and manifest tagline, unchanged.",
+      "group": "lead",
+      "path": "messages/lead/stella-tagline.yaml"
+    },
+    {
+      "id": "ui-strings-access",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 11,
+      "title": "Access page strings and errors",
+      "rows": [
+        {
+          "label": "Access page, allowed",
+          "text": "allowed by rule repo-read"
+        },
+        {
+          "label": "Access page, denied",
+          "text": "denied by rule no-push-main"
+        },
+        {
+          "label": "Access page, routed",
+          "text": "waiting on Priya, rule release-branch"
+        },
+        {
+          "label": "Access page, observe mode",
+          "text": "would be denied by rule no-push-main, recorded in observe mode"
+        },
+        {
+          "label": "Request card body",
+          "text": "Push to release/2026.09 requested by stella for Dana's task. Reaches 14 files in apps/api."
+        },
+        {
+          "label": "Connection row",
+          "text": "GitHub, mediated connection. Oxagen holds the credential and the agent does not receive it."
+        },
+        {
+          "label": "Empty state, no rules",
+          "text": "This workspace has no rules. Requests are answered by identity alone. Write the first rule under Access."
+        },
+        {
+          "label": "Error, denied",
+          "text": "Request denied by rule no-push-main. Push to a branch and open a pull request."
+        },
+        {
+          "label": "Error, routed",
+          "text": "Request is waiting on Priya, rule release-branch. The run resumes when she answers."
+        }
+      ],
+      "audience": [
+        "operator",
+        "security"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "app"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "04"
+      ],
+      "notes": "Priya, Dana, and stella are placeholder names in product examples.",
+      "group": "sections",
+      "path": "messages/sections/ui-strings-access.yaml"
+    },
+    {
+      "id": "witness-checkable-evidence",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 26,
+      "title": "Let the next reviewer check your work.",
+      "short": "Share the recorded evidence and evaluator versions behind a Witness verdict so another party can check the result.",
+      "long": "Witness ties its result to the requirement, the captured inputs, and the exact evaluators that checked them. Its signed record links to the evidence behind each verdict. A reviewer can recompute the result from those inputs and compare it with the recorded answer.",
+      "cta": "Inspect the witness evidence",
+      "audience": [
+        "security",
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "witness"
+      ],
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Launch card 26.",
+      "group": "witness",
+      "path": "messages/witness/witness-checkable-evidence.yaml"
+    },
+    {
+      "id": "witness-flip",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 21,
+      "title": "Show that the change made the difference.",
+      "short": "Witness checks the target baseline and the pull request. Failing before and passing after earns a proven result for that requirement.",
+      "long": "Oxagen runs an independent witness against the pull request's target baseline and its proposed change in the same isolated environment. The required behavior must fail on the baseline and pass on the pull request. A check that passes both earns no proof of the change. The recorded flip shows which requirement the change satisfied, and proven covers that requirement only.",
+      "cta": "See a witness flip",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "witness"
+      ],
+      "qualifier": "Proven covers the requirement the witness checks.",
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "10"
+      ],
+      "notes": "Launch card 21.",
+      "group": "witness",
+      "path": "messages/witness/witness-flip.yaml"
+    },
+    {
+      "id": "witness-human-judgment",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 25,
+      "title": "Make room for judgment. Name who made it.",
+      "short": "Keep taste, tone, and other human decisions visible alongside the mechanical evidence.",
+      "long": "A schema can settle whether an output has the required fields. Brand tone still needs a reviewer. Witness routes those judgment calls to a person and records the signature separately. Anyone reading the result can see what the oracles established and what a human accepted.",
+      "cta": "See how judgment is recorded",
+      "audience": [
+        "engineering",
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "witness"
+      ],
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Launch card 25.",
+      "group": "witness",
+      "path": "messages/witness/witness-human-judgment.yaml"
+    },
+    {
+      "id": "witness-isolation",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 22,
+      "title": "Keep the witness beyond the agent's reach.",
+      "short": "The agent works on the change. Witness runs separately, with its checks and environment hidden from the agent.",
+      "long": "Oxagen keeps the witness outside the agent's repository, tools, and working environment. By default, the agent receives only pass or fail. Changes that interfere with the witness's foundations are recorded as tampering. Your team controls any additional disclosure, and the record keeps what was shared.",
+      "cta": "Explore witness isolation",
+      "audience": [
+        "engineering",
+        "security"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "witness"
+      ],
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01"
+      ],
+      "notes": "Launch card 22.",
+      "group": "witness",
+      "path": "messages/witness/witness-isolation.yaml"
+    },
+    {
+      "id": "witness-oracles",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 23,
+      "title": "Models propose. Oracles decide.",
+      "short": "Turn a requirement into a check with a repeatable answer. Models can help write it. Recorded evidence determines the verdict.",
+      "long": "An oracle is a check with a defined answer. Compare an output with an expected value, validate a schema, check an invariant, or run a pinned command. Oxagen evaluates the captured evidence under fixed conditions. Missing evidence, an evaluator error, or a timeout produces a rejection with a reason.",
+      "cta": "Explore the oracle checks",
+      "audience": [
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "witness"
+      ],
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "notes": "Launch card 23.",
+      "group": "witness",
+      "path": "messages/witness/witness-oracles.yaml"
+    },
+    {
+      "id": "witness-outcome-funding",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 28,
+      "title": "Tie the payment to the result.",
+      "short": "Define the outcome that releases funding and link the release to its Witness evidence.",
+      "long": "For outcome-funded work, set the required result in the witness record before the work begins. A qualifying Witness result triggers the funding release and links the metered outcome to its signed evidence. The payment record shows what earned it and which checks established the result.",
+      "cta": "Follow an outcome to its payment",
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "witness",
+        "outcome-funding"
+      ],
+      "qualifier": "For outcome-funded work.",
+      "evidence": "FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02"
+      ],
+      "notes": "Launch card 28. A specific workflow. Not a claim that charges or provider costs disappear when work fails.",
+      "group": "witness",
+      "path": "messages/witness/witness-outcome-funding.yaml"
+    },
+    {
+      "id": "witness-requirements",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 24,
+      "title": "Decide what would count before anyone builds it.",
+      "short": "Turn a requirement into inputs, expected behavior, limits, and executable examples your team can review.",
+      "long": "Witness Studio helps you express a requirement as something that can be checked. Define the starting state, the requested action, the expected result, and what must remain unchanged. Boundary conditions get examples that must be rejected. A requirement becomes ready when it includes an executable witness.",
+      "cta": "Build a witness record",
+      "audience": [
+        "engineering",
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "witness"
+      ],
+      "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "10"
+      ],
+      "notes": "Launch card 24.",
+      "group": "witness",
+      "path": "messages/witness/witness-requirements.yaml"
+    },
+    {
+      "id": "witness-spend-by-outcome",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 27,
+      "title": "See what your AI spend accomplished.",
+      "short": "Track spend on witness-proven runs separately from human-accepted work and work without proof.",
+      "long": "Oxagen connects run cost to its recorded outcome. See spend on runs with a witness flip, human-accepted results, and work that remains unproven. Compare cost per proven run across agents and over time. Each proven result links back to the requirement and the witness that flipped.",
+      "cta": "Explore spend by outcome",
+      "audience": [
+        "finance"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "witness"
+      ],
+      "qualifier": "Proven means a witness flipped for a stated requirement.",
+      "evidence": "FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.",
+      "owner": "finance owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "02"
+      ],
+      "notes": "Launch card 27.",
+      "group": "witness",
+      "path": "messages/witness/witness-spend-by-outcome.yaml"
+    },
+    {
+      "id": "word-allowed",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 104,
+      "title": "Word swap",
+      "before": "auto-approved",
+      "after": "allowed by rule",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "voice",
+      "path": "messages/voice/word-allowed.yaml"
+    },
+    {
+      "id": "word-control-plane",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 109,
+      "title": "Word swap",
+      "before": "the category has two names",
+      "after": "Mission Control, the agent control plane",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "group": "voice",
+      "path": "messages/voice/word-control-plane.yaml"
+    },
+    {
+      "id": "word-cost-beside",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 107,
+      "title": "Word swap",
+      "before": "comprehensive observability",
+      "after": "each governed action with its cost beside it",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "voice",
+      "path": "messages/voice/word-cost-beside.yaml"
+    },
+    {
+      "id": "word-credential",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 103,
+      "title": "Word swap",
+      "before": "securely stores your keys",
+      "after": "for mediated connections, the credential stays in Oxagen",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "group": "voice",
+      "path": "messages/voice/word-credential.yaml"
+    },
+    {
+      "id": "word-enforcement-scope",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 110,
+      "title": "Word swap",
+      "before": "enforced on every call",
+      "after": "checked on governed calls",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "group": "voice",
+      "path": "messages/voice/word-enforcement-scope.yaml"
+    },
+    {
+      "id": "word-least-privilege",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 106,
+      "title": "Word swap",
+      "before": "least-privilege access",
+      "after": "the agent asks for what the task needs, when it needs it",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "voice",
+      "path": "messages/voice/word-least-privilege.yaml"
+    },
+    {
+      "id": "word-mandate",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 102,
+      "title": "Word swap",
+      "before": "the agent has access to Slack",
+      "after": "Slack is in the agent's mandate",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "voice",
+      "path": "messages/voice/word-mandate.yaml"
+    },
+    {
+      "id": "word-plain-verbs",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 108,
+      "title": "Word swap",
+      "before": "leverage, utilize, enable you to",
+      "after": "use, lets you, or cut it",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "voice",
+      "path": "messages/voice/word-plain-verbs.yaml"
+    },
+    {
+      "id": "word-request",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 101,
+      "title": "Word swap",
+      "before": "connect your agent to GitHub",
+      "after": "the agent can request GitHub",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "voice",
+      "path": "messages/voice/word-request.yaml"
+    },
+    {
+      "id": "word-routed",
+      "brand": "oxagen",
+      "kind": "pair",
+      "order": 105,
+      "title": "Word swap",
+      "before": "escalated to a human",
+      "after": "routed to a person",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "voice-guide"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "brand owner",
+      "review_by": "2026-10-15",
+      "findings": [],
+      "group": "voice",
+      "path": "messages/voice/word-routed.yaml"
+    }
+  ]
+}

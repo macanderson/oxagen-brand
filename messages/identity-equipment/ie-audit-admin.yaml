@@ -1,0 +1,23 @@
+id: ie-audit-admin
+brand: oxagen
+kind: card
+order: 33
+title: Keep the decisions behind the workforce on record.
+short: Review who changed an agent's authority, approved a request, or adjusted its budget alongside the work that followed.
+long: Operating an agent workforce includes the decisions people make about it. Oxagen records governed administrative actions as well as agent activity. Follow a role change, approval, budget adjustment, or revocation to the responsible identity and supporting record. Give reviewers the history behind the current settings.
+cta: Inspect the audit record
+audience:
+- security
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: Governed administrative actions.
+evidence: 'Security owner: follow a role change, an approval, a budget adjustment, and a revocation to the responsible identity and its record.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '03'
+notes: Launch card 33.

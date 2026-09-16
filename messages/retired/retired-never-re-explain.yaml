@@ -1,0 +1,15 @@
+id: retired-never-re-explain
+brand: oxagen
+kind: headline
+title: Never re-explain yourself to AI ever again.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '05'
+replaced_by: knowledge-headline
+notes: Was the memory ad and the knowledge graph section.

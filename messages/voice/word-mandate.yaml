@@ -1,0 +1,18 @@
+id: word-mandate
+brand: oxagen
+kind: pair
+order: 102
+title: Word swap
+before: the agent has access to Slack
+after: Slack is in the agent's mandate
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings: []

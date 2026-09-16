@@ -1,0 +1,22 @@
+id: ie-skills
+brand: oxagen
+kind: card
+order: 31
+title: Choose the procedures your agents can use.
+short: Manage skills, approve what agents can find and load, and see which skills reached the work.
+long: A skill captures a procedure your agents can follow. Oxagen governs which skills are in scope and how much context they may consume. Review configuration changes through pull requests and inspect what each run loaded, what was withheld, and why. The agent's harness carries out the procedure.
+cta: Explore the skill catalog
+audience:
+- engineering
+clause: equipment
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.'
+owner: engineering owner
+review_by: '2026-10-15'
+findings:
+- '07'
+notes: Launch card 31. Skill version approval was removed from the customer copy until it is demonstrated.

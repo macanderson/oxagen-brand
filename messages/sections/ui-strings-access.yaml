@@ -1,0 +1,39 @@
+id: ui-strings-access
+brand: oxagen
+kind: section
+order: 11
+title: Access page strings and errors
+rows:
+- label: Access page, allowed
+  text: allowed by rule repo-read
+- label: Access page, denied
+  text: denied by rule no-push-main
+- label: Access page, routed
+  text: waiting on Priya, rule release-branch
+- label: Access page, observe mode
+  text: would be denied by rule no-push-main, recorded in observe mode
+- label: Request card body
+  text: Push to release/2026.09 requested by stella for Dana's task. Reaches 14 files in apps/api.
+- label: Connection row
+  text: GitHub, mediated connection. Oxagen holds the credential and the agent does not receive it.
+- label: Empty state, no rules
+  text: This workspace has no rules. Requests are answered by identity alone. Write the first rule under Access.
+- label: Error, denied
+  text: Request denied by rule no-push-main. Push to a branch and open a pull request.
+- label: Error, routed
+  text: Request is waiting on Priya, rule release-branch. The run resumes when she answers.
+audience:
+- operator
+- security
+clause: access
+surfaces:
+- app
+status: approved
+release: launch
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '04'
+notes: Priya, Dana, and stella are placeholder names in product examples.

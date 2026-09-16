@@ -1,0 +1,25 @@
+id: dod-human-signoff
+brand: oxagen
+kind: card
+order: 19
+title: Keep your judgment in the definition of done.
+short: Mechanical checks can hold while a run waits for a named reviewer. Pending stays visible until the decision is recorded.
+long: 'Some requirements need a person: whether a change matches the intent, whether the wording is right, whether the result is ready to use. Include that review in the definition of done. Oxagen keeps the verdict pending after mechanical checks hold until the required human decision arrives.'
+cta: See a pending review
+audience:
+- engineering
+- operator
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- dod
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: Launch card 19.

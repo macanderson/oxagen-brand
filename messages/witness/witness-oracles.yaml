@@ -1,0 +1,24 @@
+id: witness-oracles
+brand: oxagen
+kind: card
+order: 23
+title: Models propose. Oracles decide.
+short: Turn a requirement into a check with a repeatable answer. Models can help write it. Recorded evidence determines the verdict.
+long: An oracle is a check with a defined answer. Compare an output with an expected value, validate a schema, check an invariant, or run a pinned command. Oxagen evaluates the captured evidence under fixed conditions. Missing evidence, an evaluator error, or a timeout produces a rejection with a reason.
+cta: Explore the oracle checks
+audience:
+- engineering
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- witness
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '10'
+notes: Launch card 23.

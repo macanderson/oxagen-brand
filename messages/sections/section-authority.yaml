@@ -1,0 +1,22 @@
+id: section-authority
+brand: oxagen
+kind: section
+order: 1
+title: Set the authority behind each action.
+long: Give each agent its own identity in your identity and access management system. Set which actions it may request and which resources it may reach. For actions handled through Oxagen, rules allow the request, deny it, or route it to a person. The record connects the decision to the agent and the person responsible for its work.
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- product-page
+status: approved
+release: launch
+qualifier: For actions handled through Oxagen.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary. Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '04'
+notes: 'Detail page: name the supported identity systems and explain provisioning, delegation, revocation, and enforcement boundaries. IAM identity must describe the implemented relationship, not only an internal agent ID.'

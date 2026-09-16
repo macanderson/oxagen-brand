@@ -1,0 +1,25 @@
+id: proof-two-halves
+brand: oxagen
+kind: proof
+order: 7
+title: Two halves, on purpose.
+long: The dod is visible to the agent, so drift shows where it happens. The witness is hidden, so a change that only satisfies the visible checks does not earn a flip.
+audience:
+- engineering
+- security
+clause: record
+surfaces:
+- product-page
+- decks
+status: approved
+release: held
+gate:
+- dod
+- witness
+qualifier: For bounded tasks with a dod and a witness.
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '10'

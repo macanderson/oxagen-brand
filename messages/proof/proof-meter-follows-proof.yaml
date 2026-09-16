@@ -1,0 +1,24 @@
+id: proof-meter-follows-proof
+brand: oxagen
+kind: proof
+order: 10
+title: The meter follows the proof.
+long: Charge for proven runs. Report runs and governed actions as secondary meters.
+audience:
+- finance
+clause: budget
+surfaces:
+- product-page
+- decks
+status: candidate
+release: held
+gate:
+- dod
+qualifier: Proven means a witness flipped.
+evidence: 'FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '02'
+notes: 'Needs a pricing decision before release: charging for proven runs may conflict with billing by use.'

@@ -1,0 +1,18 @@
+id: word-least-privilege
+brand: oxagen
+kind: pair
+order: 106
+title: Word swap
+before: least-privilege access
+after: the agent asks for what the task needs, when it needs it
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings: []

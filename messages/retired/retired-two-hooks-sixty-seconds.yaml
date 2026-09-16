@@ -1,0 +1,15 @@
+id: retired-two-hooks-sixty-seconds
+brand: oxagen
+kind: pair
+title: Two hooks. Sixty seconds. The first screen shows your own numbers.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- 08
+replaced_by: pair-adjective-evidence
+notes: A setup duration without dated evidence.

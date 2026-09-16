@@ -1,0 +1,24 @@
+id: mc-business-context
+brand: oxagen
+kind: card
+order: 15
+title: Put your business context into the work.
+short: Give agents relevant knowledge and published steering within their permitted scope, at the start of a run and as the task develops.
+long: Oxagen retrieves context from your organization's knowledge graph within the run's scope and context budget. Code, business knowledge, and reviewed lessons can reach the agent alongside the task. The run records what was supplied and where it came from, so you can inspect the information behind a decision.
+cta: Explore the context behind a run
+audience:
+- knowledge
+- engineering
+clause: equipment
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: Within the agent's permitted knowledge scope.
+evidence: 'Knowledge owner: demonstrate scoped retrieval, source attribution, corrections, deletion, and an agent denied access to another scope before claiming reuse across agents.'
+owner: knowledge owner
+review_by: '2026-10-15'
+findings:
+- '05'
+notes: Launch card 15.

@@ -1,0 +1,18 @@
+id: word-cost-beside
+brand: oxagen
+kind: pair
+order: 107
+title: Word swap
+before: comprehensive observability
+after: each governed action with its cost beside it
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings: []

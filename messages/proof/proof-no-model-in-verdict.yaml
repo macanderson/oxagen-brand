@@ -1,0 +1,22 @@
+id: proof-no-model-in-verdict
+brand: oxagen
+kind: proof
+order: 8
+title: No model in the verdict.
+long: decide() is a pure function of the run's frames. A model can draft the checks, and it cannot choose the verdict.
+audience:
+- engineering
+- security
+clause: record
+surfaces:
+- product-page
+- decks
+status: approved
+release: held
+gate:
+- dod
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'

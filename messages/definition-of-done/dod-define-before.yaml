@@ -1,0 +1,26 @@
+id: dod-define-before
+brand: oxagen
+kind: card
+order: 17
+title: Define done before the work starts.
+short: For a bounded task, lock the required checks before the first tool call. The agent can read its definition of done without rewriting the terms.
+long: Describe the task and let Oxagen draft its definition of done, or supply your own for work that repeats. Specify the commands that must pass, the files that must be present, the paths a change may touch, and any human review required. Oxagen locks the criteria before the agent starts using tools.
+cta: See a definition of done
+audience:
+- engineering
+- operator
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- dod
+qualifier: For bounded tasks.
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: Launch card 17.

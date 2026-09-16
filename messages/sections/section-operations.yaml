@@ -1,0 +1,22 @@
+id: section-operations
+brand: oxagen
+kind: section
+order: 4
+title: Manage the workforce from Mission Control.
+long: See the agents enrolled in Oxagen, the mandates they work under, their open requests, and their recorded activity and spend. Answer an approval request, change an assignment, or adjust a budget from the operator's view. Agents run in their supported environments, and Oxagen is the control plane that governs their work.
+audience:
+- operator
+- platform
+clause: operations
+surfaces:
+- product-page
+status: approved
+release: launch
+qualifier: Use the hold and stop controls supported by each integration.
+evidence: 'Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries. Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: platform owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '07'
+notes: Describe what a control changes and when it takes effect.

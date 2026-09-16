@@ -1,0 +1,20 @@
+id: pair-abstraction
+brand: oxagen
+kind: pair
+order: 2
+title: Abstraction
+before: Oxagen provides comprehensive governance and observability for autonomous agents across your organization.
+after: Give each agent an identity, set its authority and budget, and review the record of the actions Oxagen governs.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '07'

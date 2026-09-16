@@ -1,0 +1,44 @@
+review: reviews/2026-09-15-messaging
+date: '2026-09-15'
+commit: 5090ebd4cf12132f78c44991f718e648846d7ceb
+findings:
+- id: '01'
+  priority: P1
+  title: Completion dominates a product that also manages ongoing work
+  rule: Present completion as an optional control for bounded tasks, and manage ongoing work through authority, budget, and review points.
+- id: '02'
+  priority: P1
+  title: A lower bill is promised without a boundary
+  rule: State cost visibility, and claim a saving only for a measured workload under stated conditions.
+- id: '03'
+  priority: P1
+  title: Enforcement language exceeds its stated scope
+  rule: Scope every enforcement claim to actions routed through Oxagen, and call observe mode recorded, not enforced.
+- id: '04'
+  priority: P1
+  title: Identity, connection credentials, and assurance need distinct claims
+  rule: Keep agent identity, credential custody for mediated connections, and assurance as separate claims, with no leak promise and no SOC 2 attestation claim.
+- id: '05'
+  priority: P1
+  title: Memory promises conflict with scoped knowledge
+  rule: Promise business context within the agent's permitted scope, not universal recall.
+- id: '06'
+  priority: P2
+  title: The bill headline argues about providers
+  rule: Lead finance copy with attribution to the agent and the person, with no comparison to providers.
+- id: '07'
+  priority: P2
+  title: The operator's full job is missing from the lead
+  rule: Lead with Mission Control as the product and the agent control plane as the category, and show the operator's full job.
+- id: 08
+  priority: P2
+  title: Sales copy presumes incompetence and hides proof status
+  rule: Ask diagnostic questions, label buyer statements hypothetical, and publish no traction, setup time, or prospect details without dated evidence.
+- id: 09
+  priority: P2
+  title: The approved message bank has already drifted
+  rule: Keep one registry as the source of truth and generate the message bank and ads from it, with no hand-kept counts.
+- id: '10'
+  priority: P2
+  title: The glossary makes the first explanation harder
+  rule: Define mandate once beside the task, use run, request, rule, check, and cost in first-contact copy, and keep frames and witness verdicts for detail pages.

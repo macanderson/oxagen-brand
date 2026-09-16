@@ -1,0 +1,26 @@
+id: witness-outcome-funding
+brand: oxagen
+kind: card
+order: 28
+title: Tie the payment to the result.
+short: Define the outcome that releases funding and link the release to its Witness evidence.
+long: For outcome-funded work, set the required result in the witness record before the work begins. A qualifying Witness result triggers the funding release and links the metered outcome to its signed evidence. The payment record shows what earned it and which checks established the result.
+cta: Follow an outcome to its payment
+audience:
+- finance
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: candidate
+release: held
+gate:
+- witness
+- outcome-funding
+qualifier: For outcome-funded work.
+evidence: 'FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '02'
+notes: Launch card 28. A specific workflow. Not a claim that charges or provider costs disappear when work fails.

@@ -1,0 +1,17 @@
+id: rule-lead-with-clause
+brand: oxagen
+kind: rule
+order: 13
+title: Lead with the clause the reader owns.
+long: A security lead reads access first. A finance lead reads budget first. An engineering lead reads equipment first, then the record. One person may own all four.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings: []

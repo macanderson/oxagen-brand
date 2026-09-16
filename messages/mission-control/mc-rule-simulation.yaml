@@ -1,0 +1,23 @@
+id: mc-rule-simulation
+brand: oxagen
+kind: card
+order: 13
+title: See what a rule would change before it does.
+short: Test a proposed rule against your agents' recorded calls before putting it into force.
+long: 'A tighter rule can stop the wrong action and interrupt useful work. Oxagen shows how a proposed version would have answered real requests: which would be denied, which would need approval, and which would become allowed. Review those differences before activating the change.'
+cta: Preview a rule change
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Platform owner: replay a proposed rule against recorded calls and show the denied, routed, and newly allowed differences.'
+owner: platform owner
+review_by: '2026-10-15'
+findings:
+- '03'
+notes: Launch card 13.

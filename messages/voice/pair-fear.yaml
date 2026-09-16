@@ -1,0 +1,19 @@
+id: pair-fear
+brand: oxagen
+kind: pair
+order: 4
+title: Fear
+before: Unchecked agents are a liability waiting to happen. Protect your organization today.
+after: When an agent requests a repository action, can your team see which rule allowed it and who approved it?
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- 08

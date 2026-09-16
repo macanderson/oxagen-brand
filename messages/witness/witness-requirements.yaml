@@ -1,0 +1,25 @@
+id: witness-requirements
+brand: oxagen
+kind: card
+order: 24
+title: Decide what would count before anyone builds it.
+short: Turn a requirement into inputs, expected behavior, limits, and executable examples your team can review.
+long: Witness Studio helps you express a requirement as something that can be checked. Define the starting state, the requested action, the expected result, and what must remain unchanged. Boundary conditions get examples that must be rejected. A requirement becomes ready when it includes an executable witness.
+cta: Build a witness record
+audience:
+- engineering
+- operator
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- witness
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '10'
+notes: Launch card 24.

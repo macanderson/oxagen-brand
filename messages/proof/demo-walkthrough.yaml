@@ -1,0 +1,23 @@
+id: demo-walkthrough
+brand: oxagen
+kind: proof
+order: 30
+title: The demo, in order
+long: Show an agent's identity and the mandate it works under. Let it request a push to a protected branch and get denied, with the rule id. Let it request a push to a release branch and watch the request route to a person, answer it from the Access page, and see the run resume. Open the run and show the request beside the tool call with its cost. Then show an ongoing agent with its budget and open requests, and a bounded task with its completion checks.
+audience:
+- operator
+- security
+- engineering
+clause: operations
+surfaces:
+- sales-demo
+status: approved
+release: launch
+evidence: 'Sales owner: confirm the demo exists. Founder: date and substantiate partner counts. Customer owner: obtain attribution permission before publishing an actual testimonial. Do not promise the demo on a prospect’s repositories without agreed setup. Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.'
+owner: sales owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '07'
+- 08
+notes: Run it on a prepared workspace. Do not promise it on a prospect's repositories without agreed setup.

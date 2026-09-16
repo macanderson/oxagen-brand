@@ -1,0 +1,25 @@
+id: dod-not-your-call
+brand: oxagen
+kind: card
+order: 18
+title: The agent doesn't get to decide it's done.
+short: When the agent tries to stop, Oxagen runs the checks. A broken check sends it back with a specific reason.
+long: The agent reaches a stopping point. The wrapper runs the locked checks where the agent works. If they break and retries remain, it blocks the stop and returns the failing check IDs so the agent can continue. If retries run out, the run ends broken with its reasons recorded. Done means the specified checks held, and your team decides whether those checks are enough.
+cta: Watch a blocked stop
+audience:
+- engineering
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- dod
+qualifier: For bounded tasks with a definition of done.
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: Launch card 18. Bounded-task section only. Never a lead, a hero, an ad headline, or an email subject.

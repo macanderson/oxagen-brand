@@ -1,0 +1,19 @@
+id: word-enforcement-scope
+brand: oxagen
+kind: pair
+order: 110
+title: Word swap
+before: enforced on every call
+after: checked on governed calls
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '03'

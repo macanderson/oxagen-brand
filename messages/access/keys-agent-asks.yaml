@@ -1,0 +1,17 @@
+id: keys-agent-asks
+brand: oxagen
+kind: rule
+order: 2
+title: The agent asks.
+long: Say the agent can request Slack, or that Slack is in the agent's mandate. Do not write that the agent has access to Slack.
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: security owner
+review_by: '2026-10-15'
+findings: []

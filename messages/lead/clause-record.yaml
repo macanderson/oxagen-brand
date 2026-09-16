@@ -1,0 +1,20 @@
+id: clause-record
+brand: oxagen
+kind: glossary
+order: 4
+title: Record
+long: What the run read, what it changed, what it cost, and which checks it passed. The platform keeps it.
+audience:
+- security
+- finance
+- engineering
+clause: record
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '10'

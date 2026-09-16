@@ -1,0 +1,18 @@
+id: keys-no-fear
+brand: oxagen
+kind: rule
+order: 6
+title: No fear.
+long: Tell the reader what the request looks like and who answers it. Do not assume what they have already done with a token.
+audience:
+- security
+- platform
+clause: access
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- 08

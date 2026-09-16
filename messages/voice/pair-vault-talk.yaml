@@ -1,0 +1,19 @@
+id: pair-vault-talk
+brand: oxagen
+kind: pair
+order: 8
+title: Vault talk
+before: Enterprise-grade secret management keeps your credentials safe.
+after: For mediated connections, Oxagen uses the connection credential on the agent's behalf. The agent does not receive it, and the record shows each use.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '04'

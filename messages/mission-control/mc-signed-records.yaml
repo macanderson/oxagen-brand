@@ -1,0 +1,23 @@
+id: mc-signed-records
+brand: oxagen
+kind: card
+order: 16
+title: Share the evidence with the answer.
+short: Export a signed run record with its actions, decisions, costs, and evidence for independent inspection.
+long: Oxagen links recorded frames in a hash chain and signs the run's close. An exported record lets a reviewer check its integrity outside the product. It identifies what the gateway observed, what the agent's wrapper reported, and where evidence is missing, so the strength of the record stays visible.
+cta: Inspect a run export
+audience:
+- security
+- engineering
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Security owner: export a signed run record and check its integrity outside the product, including where evidence is missing.'
+owner: security owner
+review_by: '2026-10-15'
+findings:
+- '10'
+notes: Launch card 16. The title no longer says hand over, which the kit keeps for the line about the keys.

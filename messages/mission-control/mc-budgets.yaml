@@ -1,0 +1,26 @@
+id: mc-budgets
+brand: oxagen
+kind: card
+order: 8
+title: Give each agent a spending limit.
+short: Set budgets by agent, operator, workspace, or organization. Enforce hard limits at supported call boundaries.
+long: Set the budget where accountability sits. Oxagen checks hard budgets before model calls through its proxy and applies supported controls through the wrapper. A budget-triggered pause appears in the run with its reason, so the operator can decide whether to fund more work or stop there.
+cta: Set an agent budget
+audience:
+- finance
+- operator
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- budgets
+qualifier: Hard limits apply at supported call boundaries.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary. Finance owner: show a budget-triggered pause in a run with its reason.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '03'
+notes: Launch card 8.

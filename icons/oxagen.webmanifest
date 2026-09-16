@@ -1,7 +1,7 @@
 {
   "name": "Oxagen",
   "short_name": "Oxagen",
-  "description": "Agents that prove their work. A model you own.",
+  "description": "Mission Control for your autonomous agents.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#10100F",

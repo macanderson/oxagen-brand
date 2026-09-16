@@ -1,0 +1,17 @@
+id: stella-tagline
+brand: stella
+kind: headline
+title: It does the work and proves it finished.
+audience:
+- engineering
+clause: none
+surfaces:
+- social
+- web-manifest
+status: approved
+release: launch
+evidence: 'Stella owner: the proof rule the tagline names is Stella''s documented witness behavior.'
+owner: Stella owner
+review_by: '2026-10-15'
+findings: []
+notes: Stella's social and manifest tagline, unchanged.

@@ -1,0 +1,33 @@
+id: ad-oxagen-equipment
+brand: oxagen
+kind: ad
+order: 3
+title: Equip each agent for its work.
+cta: Explore agent equipment · oxagen.sh
+kicker: Tools. Skills. Mandate.
+headline:
+- Equip each agent
+- for its work.
+wide:
+- Equip each agent for its work.
+short_lines:
+- Equip each agent
+- for its work.
+subline: Manage tools and skills through the agent’s mandate.
+subshort: Tools and skills, by mandate.
+scope_terms:
+- mandate
+audience:
+- engineering
+- platform
+clause: equipment
+surfaces:
+- ads
+status: approved
+release: launch
+qualifier: Assigned through the agent's mandate.
+evidence: 'Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.'
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '07'

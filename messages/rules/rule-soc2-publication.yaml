@@ -1,0 +1,25 @@
+id: rule-soc2-publication
+brand: oxagen
+kind: rule
+order: 6
+title: State SOC 2 status only from the report.
+long: State an actual completed examination, report type, covered entity and system, examination period or date, and report access process only when supported by the report. If the launch status is readiness work or support for customer controls, describe that specific status and scope. Do not turn auditable, or an ambition, into an attestation claim. No report has been inspected for this registry, so no entry makes a SOC 2 claim.
+phrases:
+- SOC 2 certified
+- SOC 2 compliant
+- SOC 2 attested
+- SOC 2 audited
+- SOC 2 report
+- SOC 2 Type
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: security owner
+review_by: '2026-10-01'
+findings:
+- '04'

@@ -1,0 +1,18 @@
+id: word-request
+brand: oxagen
+kind: pair
+order: 101
+title: Word swap
+before: connect your agent to GitHub
+after: the agent can request GitHub
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings: []

@@ -1,0 +1,25 @@
+id: mc-fleet
+brand: oxagen
+kind: card
+order: 1
+title: Your agents. Their work. One place to act.
+short: See what each enrolled agent is doing, what it needs, and what it costs. Answer, steer, fund, or stop it from Mission Control.
+long: An agent waiting for approval. Another nearing its budget. A third working from the wrong assumption. Mission Control brings their runs, requests, mandates, and spend into one view. Open the run, read what happened, and take the next action with the record beside you.
+cta: Open the Fleet page
+audience:
+- operator
+- platform
+clause: operations
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: Agents enrolled in Oxagen, with the controls each integration supports.
+evidence: 'Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries. Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '03'
+- '07'
+notes: Launch card 1.

@@ -1,0 +1,24 @@
+id: mc-reconciliation
+brand: oxagen
+kind: card
+order: 9
+title: Match the bill to the record.
+short: Reconcile recorded spend with provider usage and invoices. Open a difference and see the unmatched entries.
+long: Oxagen matches provider charges to recorded calls where request identifiers are available, then to usage totals and invoice lines. Differences become visible exceptions with the records attached. You can see how much spend is matched, what remains unresolved, and where the numbers diverge.
+cta: Inspect a reconciliation
+audience:
+- finance
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- reconciliation
+evidence: 'Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims.'
+owner: finance owner
+review_by: '2026-10-15'
+findings:
+- '06'
+notes: Launch card 9.

@@ -1,0 +1,18 @@
+id: word-routed
+brand: oxagen
+kind: pair
+order: 105
+title: Word swap
+before: escalated to a human
+after: routed to a person
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings: []

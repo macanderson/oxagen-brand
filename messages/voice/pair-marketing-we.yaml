@@ -1,0 +1,19 @@
+id: pair-marketing-we
+brand: oxagen
+kind: pair
+order: 11
+title: Marketing we
+before: We believe agents should be accountable.
+after: The record connects each governed action to the agent, the rule, and the person responsible.
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings:
+- '03'

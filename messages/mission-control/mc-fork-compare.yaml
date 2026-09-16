@@ -1,0 +1,21 @@
+id: mc-fork-compare
+brand: oxagen
+kind: card
+order: 12
+title: Try another path from the moment that mattered.
+short: Fork a supported recording with its captured context and tool responses to explore how a different decision changes the work.
+long: Start from a recorded point instead of reconstructing the run by hand. Oxagen supplies the captured context and recorded tool responses while the model makes a fresh call. Compare the resulting runs to see where they diverge. A failure becomes a concrete case you can investigate again.
+cta: Explore a forked run
+audience:
+- engineering
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Product owner: demonstrate a fork from a supported recording with captured context and recorded tool responses.'
+owner: product owner
+review_by: '2026-10-15'
+findings: []
+notes: Launch card 12.

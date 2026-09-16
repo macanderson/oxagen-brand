@@ -416,11 +416,11 @@ def build_html() -> str:
     )
     ads = []
     for b, slug, w, h, tag, s in (
-        ("oxagen", "bill", 1080, 1350, "portrait", "dark"),
-        ("oxagen", "memory", 1080, 1080, "square", "light"),
-        ("oxagen", "waste", 1200, 628, "landscape", "dark"),
-        ("oxagen", "bill", 300, 250, "mpu", "light"),
-        ("oxagen", "fleet", 1080, 1080, "square", "dark"),
+        ("oxagen", "mission-control", 1080, 1350, "portrait", "dark"),
+        ("oxagen", "authority", 1080, 1080, "square", "light"),
+        ("oxagen", "equipment", 1200, 628, "landscape", "dark"),
+        ("oxagen", "finance", 300, 250, "mpu", "light"),
+        ("oxagen", "finance", 1080, 1080, "square", "dark"),
         ("oxagen", "keys", 1200, 628, "landscape", "light"),
         ("stella", "proof", 1080, 1080, "square", "dark"),
         ("stella", "check", 1200, 628, "landscape", "light"),
@@ -438,7 +438,9 @@ def build_html() -> str:
 
     files = [
         ("playbook.html", "this document"),
-        ("build/", "color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · playbook.py"),
+        ("message-bank.html", "every line, generated from messages/"),
+        ("messages/", "the message registry: one YAML file per line, with its status, scope, evidence, and owner"),
+        ("build/", "color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py"),
         ("build/reference/", "the kit wordmark and logomark this system is checked against"),
         ("fonts/", "Space Grotesk, variable and static, with its licence"),
         ("tokens/", "house-tokens.css · house-tokens.json"),
@@ -447,7 +449,7 @@ def build_html() -> str:
         ("spinners/", "the house motion, animated SVG, no script"),
         ("wallpapers/", "desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit · dark | light"),
         ("social/", "avatar · x · linkedin · youtube · open graph · dark | light"),
-        ("ads/", "bill · memory · waste · proof · fleet · keys · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
+        ("ads/", "mission-control · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
         ("content/", "changelog · essay · release · field note · fleet note cards, 1200×675"),
     ]
     files_html = "".join(f'<div class="mono">{esc(k)}</div><span>{esc(v)}</span>' for k, v in files)
@@ -612,8 +614,8 @@ def build_html() -> str:
 <div class="grid g4">{social}</div>
 <div class="grid g2" style="margin-top:18px">{banners}</div>
 <h3>Ads</h3>
-<p>Every ad opens on the reader's pain and then answers it in one line. The headline is the problem -- the bill, re-explaining yourself, wasted spend, the fleet you cannot see, the keys you already handed over -- and under it sits a single sentence saying what Oxagen does about it. Those six answer lines are the six things the product does, one to an ad: it <b>teaches</b> your agents your business, <b>governs</b> what they may do, <b>explains</b> every run, <b>learns</b> from each one, <b>runs</b> them as a fleet, and <b>holds</b> the credential so the agent never does. No ad carries more than one of them, and between them the six carry all of it, so the promise is made whole by the campaign rather than crammed onto a single poster. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form: that line is the reason the ad exists. Stella runs two lines: the proof rule, and the green check. Each ships in the four sizes, on ink and on paper.</p>
-<p>Five of the six take the ghost in the top right. The <b>fleet</b> ad takes the orbit instead, laid back behind the type: rings of nodes wired inward to one mark is the only composition the kit already owns that reads as many agents under one mandate. It is not a new shape; it is the wallpaper's, at ad scale and at ad strength.</p>
+<p>Every ad takes its copy from an approved, launch-released entry in <code>messages/ads/</code>, and <code>build/messages.py --check</code> fails on any file in <code>ads/</code> that no entry produces. The Oxagen campaign follows the operator's job. <b>Mission Control</b> introduces the control plane, and each of the others explains one decision an operator makes: which agent has the <b>authority</b> to do what, how each agent is <b>equipped</b>, which agent <b>spent</b> what, and why the agent does not hold the <b>keys</b>. A short form keeps the scope of its long form, so the banner still says governed, recorded, or mediated where the poster does. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form. A held campaign, such as completion checks for bounded tasks, is written and not rendered until its capability ships. Stella runs two lines: the proof rule, and the green check. Each ships in the four sizes, on ink and on paper.</p>
+<p>Four of the five Oxagen campaigns take the ghost in the top right. The <b>Mission Control</b> ad takes the orbit instead, laid back behind the type: rings of nodes wired inward to one mark is the only composition the kit already owns that reads as many agents under one control plane. It is not a new shape; it is the wallpaper's, at ad scale and at ad strength.</p>
 <div class="grid g2">{"".join(ads)}</div>
 <h3>Content cards</h3>
 <div class="grid g2">{"".join(cards)}</div>
@@ -624,7 +626,7 @@ def build_html() -> str:
 <h2>Every pixel is generated</h2>
 <p>No file in this kit is drawn by hand. Every PNG is a render of the SVG beside it; every SVG is emitted from <code>build/</code>. The colours live in one file, <code>build/color.py</code>, so a change there moves every asset on the next run.</p>
 <div class="files">{files_html}</div>
-<pre><code>python3 -m venv .venv &amp;&amp; .venv/bin/pip install fonttools brotli
+<pre><code>python3 -m venv .venv &amp;&amp; .venv/bin/pip install fonttools brotli pyyaml
 brew install harfbuzz librsvg
 .venv/bin/python build/build.py --check   # verify the face and the palette, write nothing
 .venv/bin/python build/build.py           # every asset

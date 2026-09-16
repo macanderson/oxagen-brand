@@ -1,0 +1,23 @@
+id: pitch-one-sentence
+brand: oxagen
+kind: pitch
+title: 'Oxagen is Mission Control for an autonomous agent workforce: assign identities, set authority, equip agents with tools and skills, and oversee their work through a shared control plane.'
+audience:
+- operator
+- platform
+- security
+- finance
+- engineering
+clause: operations
+surfaces:
+- rooms
+- decks
+- bios
+- docs-intro
+status: approved
+release: launch
+evidence: 'Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '07'

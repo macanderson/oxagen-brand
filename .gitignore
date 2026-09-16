@@ -6,3 +6,7 @@ __pycache__/
 # public; nothing from a scratch worktree belongs in it.
 .claude/worktrees/
 .DS_Store
+
+# Prospect names for the message registry's blocklist. Tracking them would
+# publish them in this public repo.
+messages/rules/*.local.txt

@@ -1,0 +1,23 @@
+id: ie-tools
+brand: oxagen
+kind: card
+order: 30
+title: Decide which tools belong in each agent's hands.
+short: Manage the tool catalog and control which tools each agent can discover and request.
+long: Equip agents for their responsibilities from a governed tool catalog. Set access by role and scope, then inspect the toolbelt the agent actually sees. Each request still meets your rules before the action proceeds. A tool's presence in the catalog does not grant every agent permission to use it.
+cta: Build an agent's toolbelt
+audience:
+- engineering
+- platform
+clause: equipment
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+evidence: 'Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.'
+owner: engineering owner
+review_by: '2026-10-15'
+findings:
+- '07'
+notes: Launch card 30. Version access was removed from the customer copy until version pinning is demonstrated.

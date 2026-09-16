@@ -1,0 +1,24 @@
+id: mc-pause-revoke
+brand: oxagen
+kind: card
+order: 6
+title: Stop the next action at the boundary.
+short: Pause a run or revoke authority for an agent, a tool, or a workspace. Oxagen records what the control stopped.
+long: 'When a run needs attention, pause it at the next supported boundary. When authority needs to end, revoke it at the scope that fits: one agent, one connection, a class of tools, or the organization. Governed calls meet the new restriction before proceeding, and the affected runs show the reason.'
+cta: Explore run controls
+audience:
+- operator
+- security
+clause: operations
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: At the next supported boundary, for governed calls.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: platform owner
+review_by: '2026-10-15'
+findings:
+- '03'
+notes: Launch card 6.

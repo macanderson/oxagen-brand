@@ -1,0 +1,21 @@
+id: proof-whoever-built
+brand: oxagen
+kind: proof
+order: 5
+title: Whoever built the agent.
+long: Claude Code, the Agent SDK, or a custom loop, with a supported wrapper beside it. The wrapper records and gates governed calls from beside the agent. Oxagen does not run it.
+audience:
+- security
+- platform
+clause: none
+surfaces:
+- product-page
+- decks
+status: approved
+release: launch
+qualifier: With a supported wrapper.
+evidence: 'Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.'
+owner: platform owner
+review_by: '2026-10-15'
+findings:
+- '03'

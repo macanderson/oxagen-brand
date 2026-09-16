@@ -1,0 +1,30 @@
+id: announcement-launch
+brand: oxagen
+kind: announcement
+order: 1
+title: Launch announcement
+long: |-
+  An autonomous agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. Oxagen is Mission Control for that workforce.
+
+  Give each agent an identity. Set its authority and budget, assign tools and skills, and review requests that need a person's decision. The record connects governed actions to the agent, the rule, and the person responsible.
+
+  Some work has a finish line. Define its completion criteria before the agent starts and review the recorded results afterward. Other work continues. Keep its authority, activity, and spend in view as it runs.
+
+  Explore Mission Control to follow an agent from its assigned mandate to a recorded action.
+cta: Explore Mission Control
+audience:
+- operator
+- platform
+- engineering
+clause: operations
+surfaces:
+- launch-post
+- changelog
+status: approved
+release: launch
+evidence: 'Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries. Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '07'

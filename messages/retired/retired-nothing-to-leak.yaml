@@ -1,0 +1,15 @@
+id: retired-nothing-to-leak
+brand: oxagen
+kind: pair
+title: The agent never sees the key. There is nothing for it to leak.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '04'
+replaced_by: keys-credential-stays
+notes: Was the vault talk voice pair.

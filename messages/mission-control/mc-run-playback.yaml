@@ -1,0 +1,23 @@
+id: mc-run-playback
+brand: oxagen
+kind: card
+order: 11
+title: See what the agent saw.
+short: Step through a recorded run with its instructions, tool results, decisions, and accumulated cost in view.
+long: Scrub to the moment a run changed direction. Where the recording retains full content, you can read the context the agent received, what it asked, what came back, and what it had spent by then. Playback skips long waits while preserving the real elapsed time. Each run shows the playback capabilities its evidence supports.
+cta: Play back a run
+audience:
+- engineering
+- operator
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: launch
+qualifier: Where the recording retains full content.
+evidence: 'Product owner: show which runs retain full content and which playback capabilities each run''s evidence supports.'
+owner: product owner
+review_by: '2026-10-15'
+findings: []
+notes: Launch card 11.

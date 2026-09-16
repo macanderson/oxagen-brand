@@ -1,0 +1,22 @@
+id: security-headline
+brand: oxagen
+kind: entry-point
+order: 1
+title: Identity, authority, and a record you can inspect.
+long: Review how agent identities map to your access controls, how Oxagen handles connection credentials, and what each governed action records. Inspect the supported deployment and integration boundaries before granting authority.
+cta: Inspect an agent's authority
+cta_destination: 'The security page: identity mapping, credential handling for mediated connections, and the record of a governed action.'
+audience:
+- security
+clause: access
+surfaces:
+- security-page
+status: approved
+release: launch
+evidence: 'Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.'
+owner: security owner
+review_by: '2026-10-01'
+findings:
+- '03'
+- '04'
+notes: Any SOC 2 statement on this page follows rule-soc2-publication.

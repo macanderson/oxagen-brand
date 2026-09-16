@@ -1,0 +1,15 @@
+id: retired-key-never-moves
+brand: oxagen
+kind: rule
+title: The key never moves.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: brand owner
+findings:
+- '04'
+replaced_by: keys-credential-stays
+notes: Was the fourth access rule. It carried a promise about leaks that credential custody cannot make.

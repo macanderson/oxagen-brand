@@ -1,0 +1,25 @@
+id: dod-reproducible-verdicts
+brand: oxagen
+kind: card
+order: 20
+title: Check the verdict from the evidence.
+short: The recorded checks determine whether the definition of done held. The same evidence produces the same verdict.
+long: Oxagen settles the definition of done with a deterministic decision function. A model can draft the criteria, but it cannot choose the verdict. Review the locked criteria, the check results, and any outstanding human decisions to see exactly why the run is held, pending, or broken. A held verdict means the specified checks held, not that every requirement was captured.
+cta: Inspect a verdict
+audience:
+- engineering
+- security
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- dod
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+notes: Launch card 20.

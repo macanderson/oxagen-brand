@@ -1,0 +1,18 @@
+id: word-allowed
+brand: oxagen
+kind: pair
+order: 104
+title: Word swap
+before: auto-approved
+after: allowed by rule
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- voice-guide
+status: approved
+release: launch
+owner: brand owner
+review_by: '2026-10-15'
+findings: []

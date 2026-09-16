@@ -1,0 +1,26 @@
+id: witness-flip
+brand: oxagen
+kind: card
+order: 21
+title: Show that the change made the difference.
+short: Witness checks the target baseline and the pull request. Failing before and passing after earns a proven result for that requirement.
+long: Oxagen runs an independent witness against the pull request's target baseline and its proposed change in the same isolated environment. The required behavior must fail on the baseline and pass on the pull request. A check that passes both earns no proof of the change. The recorded flip shows which requirement the change satisfied, and proven covers that requirement only.
+cta: See a witness flip
+audience:
+- engineering
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: approved
+release: held
+gate:
+- witness
+qualifier: Proven covers the requirement the witness checks.
+evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '10'
+notes: Launch card 21.
