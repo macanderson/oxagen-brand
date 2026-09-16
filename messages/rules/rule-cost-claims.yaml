@@ -5,20 +5,20 @@ order: 8
 title: Show cost. Claim savings only from a measurement.
 long: Cost visibility is a launch claim. A saving is stated only for a measured workload under stated conditions, with the baseline named. Make no comparison with model providers.
 phrases:
-- neither can your provider
-- costs less
-- stop wasting money
-- fewer tokens, same answers
+  - neither can your provider
+  - costs less
+  - stop wasting money
+  - fewer tokens, same answers
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '02'
-- '06'
+  - '02'
+  - '06'

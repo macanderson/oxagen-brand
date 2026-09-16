@@ -3,13 +3,13 @@ brand: oxagen
 kind: pair
 title: Two hooks. Sixty seconds. The first screen shows your own numbers.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- 08
+  - 08
 replaced_by: pair-adjective-evidence
 notes: A setup duration without dated evidence.

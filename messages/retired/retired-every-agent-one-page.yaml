@@ -3,14 +3,14 @@ brand: oxagen
 kind: headline
 title: Every agent you run on one page, with its mandate, its requests, and its spend.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '03'
-- '07'
+  - '03'
+  - '07'
 replaced_by: section-operations
 notes: Was the fleet ad subline.

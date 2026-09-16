@@ -5,14 +5,14 @@ order: 18
 title: Auto-approve is not a feature.
 long: A rule that allows is a decision someone wrote down. Say allowed by rule.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '03'
+  - '03'

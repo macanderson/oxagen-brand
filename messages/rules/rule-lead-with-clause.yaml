@@ -5,13 +5,13 @@ order: 13
 title: Lead with the clause the reader owns.
 long: A security lead reads access first. A finance lead reads budget first. An engineering lead reads equipment first, then the record. One person may own all four.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings: []

@@ -5,14 +5,14 @@ order: 11
 title: First contact uses run, request, rule, check, and cost.
 long: Define mandate once, beside the task. Frames, seals, and witness verdicts belong in detail pages and docs, with their definitions. Familiar explanatory words may sit around exact UI labels.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '10'
+  - '10'

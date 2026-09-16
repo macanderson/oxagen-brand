@@ -5,14 +5,14 @@ order: 19
 title: Held entries wait for their gate.
 long: An entry with release held stays out of the site, ads, and outreach until every capability in its gate ships. Using it early claims what the record cannot yet show.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- 09
+  - 09

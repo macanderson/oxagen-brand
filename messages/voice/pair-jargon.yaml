@@ -6,14 +6,14 @@ title: Jargon for its own sake
 before: Cryptographically attested, tamper-evident evidence chains with Merkle-rooted seals.
 after: Every frame is hash-chained to the one before it, and the seal signs the whole run. Anyone with the export can check its integrity.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- voice-guide
+  - voice-guide
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '10'
+  - '10'

@@ -5,14 +5,14 @@ order: 2
 title: Completion is a control for bounded tasks.
 long: The definition of done applies to work with an endpoint. Ongoing responsibilities are managed through authority, budget, and review points. A passing verdict means the specified checks held, and the team decides whether those checks suffice.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '01'
+  - '01'

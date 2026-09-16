@@ -6,13 +6,13 @@ title: Word swap
 before: leverage, utilize, enable you to
 after: use, lets you, or cut it
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- voice-guide
+  - voice-guide
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings: []

@@ -5,14 +5,14 @@ order: 16
 title: No AI-powered verification.
 long: The verdict has no model in it. That is the point.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '01'
+  - '01'

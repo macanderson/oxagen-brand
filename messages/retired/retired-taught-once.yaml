@@ -3,13 +3,13 @@ brand: oxagen
 kind: headline
 title: Taught once. Known by all.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '05'
+  - '05'
 replaced_by: knowledge-headline
 notes: Was the memory ad short subline.

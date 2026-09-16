@@ -6,16 +6,16 @@ title: Passive voice
 before: The definition of done is locked before tool execution begins.
 after: The wrapper locks the dod before the agent's first tool call.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- voice-guide
+  - voice-guide
 status: approved
 release: held
 gate:
-- dod
-owner: brand owner
+  - dod
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '01'
+  - '01'

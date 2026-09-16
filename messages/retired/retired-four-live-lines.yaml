@@ -3,13 +3,13 @@ brand: oxagen
 kind: rule
 title: Four live lines. Do not write a fifth.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- 09
+  - 09
 replaced_by: rule-registry-source
 notes: A hand-kept count that had already drifted.

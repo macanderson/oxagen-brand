@@ -6,30 +6,30 @@ title: Mission Control for your autonomous agents.
 cta: Explore Mission Control · oxagen.sh
 kicker: Identity. Authority. Equipment.
 headline:
-- Mission Control
-- for your
-- autonomous agents.
+  - Mission Control
+  - for your
+  - autonomous agents.
 wide:
-- Mission Control for
-- your autonomous agents.
+  - Mission Control for
+  - your autonomous agents.
 short_lines:
-- Mission Control
-- for your agents.
+  - Mission Control
+  - for your agents.
 subline: Set identity, authority, tools, and skills. Oversee the work.
 subshort: Set authority. Oversee the work.
 picture: orbit
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: operations
 surfaces:
-- ads
+  - ads
 status: approved
 release: launch
 evidence: 'Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.'
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '01'
-- '07'
+  - '01'
+  - '07'
 notes: The primary campaign introduces the control plane. It takes the orbit, the one composition that reads as many agents under one control plane.

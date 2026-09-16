@@ -6,15 +6,15 @@ title: Overclaiming
 before: Every run is verified and proven correct.
 after: A passing verdict means the specified checks held. Your team decides whether those checks are enough. Proven applies only when a witness flipped, and only to what that witness checks.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- voice-guide
+  - voice-guide
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '01'
-- '10'
+  - '01'
+  - '10'

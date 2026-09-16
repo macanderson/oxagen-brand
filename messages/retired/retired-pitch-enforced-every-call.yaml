@@ -3,14 +3,14 @@ brand: oxagen
 kind: pitch
 title: 'Oxagen is the control plane for the agents an enterprise runs: one mandate per agent, set by the teams accountable for it, enforced on every call, recorded on every run.'
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '03'
-- '07'
+  - '03'
+  - '07'
 replaced_by: pitch-one-sentence
 notes: Was the one-sentence pitch.

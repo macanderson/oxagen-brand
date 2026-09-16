@@ -3,13 +3,13 @@ brand: oxagen
 kind: rule
 title: The key never moves.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '04'
+  - '04'
 replaced_by: keys-credential-stays
 notes: Was the fourth access rule. It carried a promise about leaks that credential custody cannot make.

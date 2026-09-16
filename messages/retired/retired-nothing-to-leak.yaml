@@ -3,13 +3,13 @@ brand: oxagen
 kind: pair
 title: The agent never sees the key. There is nothing for it to leak.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '04'
+  - '04'
 replaced_by: keys-credential-stays
 notes: Was the vault talk voice pair.

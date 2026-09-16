@@ -6,28 +6,28 @@ title: See which agent spent what.
 cta: Inspect workforce spend · oxagen.sh
 kicker: Person. Agent. Run.
 headline:
-- See which agent
-- spent what.
+  - See which agent
+  - spent what.
 wide:
-- See which agent spent what.
+  - See which agent spent what.
 short_lines:
-- See which agent
-- spent what.
+  - See which agent
+  - spent what.
 subline: Inspect recorded costs by person, agent, and run.
 subshort: Recorded cost by agent and run.
 scope_terms:
-- recorded
+  - recorded
 audience:
-- finance
+  - finance
 clause: budget
 surfaces:
-- ads
+  - ads
 status: approved
 release: launch
 qualifier: Recorded costs, with no savings claim.
 evidence: 'Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims. FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.'
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '02'
-- '06'
+  - '02'
+  - '06'

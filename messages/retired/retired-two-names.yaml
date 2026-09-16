@@ -3,13 +3,13 @@ brand: oxagen
 kind: rule
 title: The category has two names and Oxagen owns both.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '07'
+  - '07'
 replaced_by: rule-naming
 notes: Was the category rule in the branding skill.

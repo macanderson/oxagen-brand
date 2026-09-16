@@ -3,14 +3,14 @@ brand: oxagen
 kind: proof
 title: I stopped reading agent PRs to find out if they were done.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '01'
-- 08
+  - '01'
+  - 08
 replaced_by: buyer-engineering
 notes: Read as a testimonial.

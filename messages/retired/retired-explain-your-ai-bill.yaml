@@ -3,13 +3,13 @@ brand: oxagen
 kind: headline
 title: Can you explain your AI bill? Neither can your provider.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '06'
+  - '06'
 replaced_by: finance-headline
 notes: Was the site hero, a cold email subject line, and the bill ad.

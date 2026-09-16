@@ -5,13 +5,13 @@ order: 14
 title: Never name a competitor.
 long: 'Describe the category behavior instead: tools that record, a token with everything the agent might ever need, scores written after the fact, a second model grading the first. The reader supplies the names.'
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings: []

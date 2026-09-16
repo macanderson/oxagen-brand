@@ -3,13 +3,13 @@ brand: oxagen
 kind: headline
 title: Each run costs less.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '02'
+  - '02'
 replaced_by: finance-headline
 notes: Was the waste ad short subline.

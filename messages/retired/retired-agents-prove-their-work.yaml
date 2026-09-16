@@ -3,14 +3,14 @@ brand: oxagen
 kind: headline
 title: Agents that prove their work. A model you own.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '01'
-- '02'
+  - '01'
+  - '02'
 replaced_by: hero-headline
 notes: Was the proof ad and the Oxagen social and manifest tagline.

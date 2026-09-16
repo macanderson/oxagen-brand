@@ -6,13 +6,13 @@ title: Word swap
 before: auto-approved
 after: allowed by rule
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- voice-guide
+  - voice-guide
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings: []

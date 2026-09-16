@@ -5,14 +5,14 @@ order: 15
 title: Do not name a category someone else owns.
 long: Not observability, governance as a category, evals, guardrails, or a trust layer. Each is owned, and each means watch and report. Name the category by what it does.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '07'
+  - '07'

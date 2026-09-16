@@ -5,19 +5,19 @@ order: 7
 title: Business context stays inside permitted scope.
 long: Give agents the business context their work requires, within the scope each agent is permitted to read. Make no claim of universal recall or of every agent sharing everything.
 phrases:
-- every agent you run has it
-- taught once
-- re-explain
-- never forgets
+  - every agent you run has it
+  - taught once
+  - re-explain
+  - never forgets
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- copy-rules
+  - copy-rules
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '05'
+  - '05'

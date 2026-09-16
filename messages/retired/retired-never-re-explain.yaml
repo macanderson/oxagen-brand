@@ -3,13 +3,13 @@ brand: oxagen
 kind: headline
 title: Never re-explain yourself to AI ever again.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- '05'
+  - '05'
 replaced_by: knowledge-headline
 notes: Was the memory ad and the knowledge graph section.

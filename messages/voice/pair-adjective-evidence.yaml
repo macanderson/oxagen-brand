@@ -6,14 +6,14 @@ title: Adjective instead of evidence
 before: Fast, seamless setup.
 after: Run one prompt through a wrapped agent. The first screen shows that run's requests, the rules that answered them, and its cost.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces:
-- voice-guide
+  - voice-guide
 status: approved
 release: launch
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- 08
+  - 08

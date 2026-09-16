@@ -3,13 +3,13 @@ brand: oxagen
 kind: email
 title: Your coding agents run with a GitHub token that can push to every repo, because that was the only way to get them working.
 audience:
-- operator
-- platform
+  - operator
+  - platform
 clause: none
 surfaces: []
 status: retired
-owner: brand owner
+owner: Mac Anderson
 findings:
-- 08
+  - 08
 replaced_by: email-security
 notes: Asserted the prospect's setup.

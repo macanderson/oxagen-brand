@@ -6,33 +6,33 @@ title: Define the finish line before work starts.
 cta: See a checked run · oxagen.sh
 kicker: For bounded tasks.
 headline:
-- Define the
-- finish line before
-- work starts.
+  - Define the
+  - finish line before
+  - work starts.
 wide:
-- Define the finish line
-- before work starts.
+  - Define the finish line
+  - before work starts.
 short_lines:
-- Define the finish
-- line first.
+  - Define the finish
+  - line first.
 subline: For bounded tasks, set completion checks and review their results.
 subshort: For bounded tasks, set the checks.
 scope_terms:
-- bounded
+  - bounded
 audience:
-- engineering
-- operator
+  - engineering
+  - operator
 clause: record
 surfaces:
-- ads
+  - ads
 status: approved
 release: held
 gate:
-- dod
+  - dod
 qualifier: For bounded tasks.
 evidence: 'Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.'
-owner: brand owner
+owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
-- '01'
+  - '01'
 notes: Not rendered until the dod ships.
