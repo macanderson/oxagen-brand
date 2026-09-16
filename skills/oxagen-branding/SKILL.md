@@ -12,6 +12,7 @@ Read this whole file first. Then read the reference for what you are making:
 | Anything with words in it | `references/voice.md`, then `references/words.md` |
 | A headline, hero, ad, tagline, or the first sentence of anything | `references/positioning.md` |
 | Anything about identity, access, credentials, connections, permissions, or tools | `references/positioning.md`, the section *The keys stay with you* |
+| Outreach, a sales brief, or anything that names who Oxagen sells to | `references/positioning.md`, the section *The buyer we are built for* |
 | A page, ad, deck, or UI | `references/system.md` and `assets/tokens.css` |
 | Copy for a specific surface (site, ad, email, docs, UI, launch) | `references/examples.md` |
 

@@ -1,0 +1,22 @@
+id: rule-icp
+brand: oxagen
+kind: rule
+order: 11
+title: Sell to the executive accountable for the agent workforce.
+long: 'The operator is the user. The buyer is the technology executive who answers for the agent workforce and its spend, usually a CIO or a CTO, and who is asked to ship autonomous agents across the company while a modernization program is already in flight. They can see the total. They cannot yet say which agent spent it, on whose behalf, or under which rule. What they buy is the ability to answer: an identity per agent, a mandate a named team wrote, and a record of governed activity another person can read. Qualify on five signals: agents running in more than one team with no single page that lists them, a named person accountable for agent spend who cannot attribute it below the account, a migration or modernization program in flight, security and finance and engineering each writing their part of an agent somewhere different, and a request from above for output the current reporting cannot substantiate. Skip, for now: one team with one agent, agents that only read, no one accountable for the spend, and a mandate to stop agent adoption rather than to operate it. Open with a diagnostic question, not with an assertion about their setup. See rule-outreach.'
+audience:
+- operator
+- platform
+- finance
+clause: none
+surfaces:
+- copy-rules
+- sales-brief
+status: approved
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+- '07'
+- '08'
+notes: 'This entry names who signs, not who the product speaks to on the homepage. The operator stays the primary user audience and the reader of most copy. The full statement, the qualifying and disqualifying signals, and the opening questions are in skills/oxagen-branding/references/positioning.md under The buyer we are built for.'
