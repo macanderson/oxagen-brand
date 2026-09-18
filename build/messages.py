@@ -867,10 +867,10 @@ NAV = (("claim", "Claim"), ("lines", "Lines"), ("pitch", "Pitch"), ("sections", 
 
 EXTRA_CSS = """
 .badge{display:inline-block;font-family:var(--mono);font-size:11px;line-height:1.5;padding:1px 7px;border-radius:6px;border:1px solid var(--border);color:var(--muted);margin:0 6px 6px 0;white-space:nowrap}
-.badge.launch{color:var(--st-allowed);border-color:var(--st-allowed)}
-.badge.held{color:var(--st-approval);border-color:var(--st-approval)}
+.badge.launch{color:var(--state-allowed);border-color:var(--state-allowed)}
+.badge.held{color:var(--state-approval);border-color:var(--state-approval)}
 .badge.candidate{border-style:dashed;color:var(--fg)}
-.badge.retired{color:var(--st-denied);border-color:var(--st-denied)}
+.badge.retired{color:var(--state-denied);border-color:var(--state-denied)}
 .badge.id{color:var(--dim)}
 .meta{margin-top:12px;font-size:13px;color:var(--muted)}
 .meta details summary{padding:2px 0;font-size:12.5px;font-weight:500;color:var(--muted)}
@@ -924,7 +924,7 @@ nav.sub a:hover{color:var(--fg)}
 .btn:hover{border-color:var(--rule);background:var(--hl)}
 .btn.primary{background:var(--gold);color:var(--on-gold);border-color:var(--gold-deep)}
 .btn.primary:hover{background:var(--gold-bright)}
-.btn[data-done="1"]{background:var(--st-allowed);border-color:var(--st-allowed);color:var(--ink)}
+.btn[data-done="1"]{background:var(--state-allowed);border-color:var(--state-allowed);color:var(--ink)}
 .hero{padding-block:52px 46px}
 .hero .lead{font-size:19px;line-height:1.5;color:var(--fg);max-width:60ch;margin-top:18px}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
