@@ -29,7 +29,7 @@ Both are set at one em (the size the kit froze `oxagen` at), so they are the
 same letter size exactly and the same height to within a pixel.
 
 The gold is `#D4AF37`. Its two neighbours are derived from it in OKLCH, not
-picked: `#F1CE65` is the highlight the shimmer passes through, and `#977017`
+picked: `#F1CE65` is the highlight the shimmer passes through, and `#8A7223`
 is gold as text on white, where the metal itself is 2.1:1. Both names carry
 the one value, so the two marks cannot drift apart.
 
@@ -221,7 +221,7 @@ the skill's tokens or logo drift from the build.
   second one, never the whole word.
 - **Gold is identity and at most one action per screen.** It is never a
   surface and it never encodes a state.
-- **Gold as text on white becomes `#977017`.** The mark keeps its metal.
+- **Gold as text on white becomes `#8A7223`.** The mark keeps its metal.
   Words do not.
 - **Gold is never a paragraph or a whole heading.** It is a mark, a metric
   callout, an indicator pill, the focus ring, or the one action.

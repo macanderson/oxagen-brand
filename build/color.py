@@ -104,14 +104,15 @@ REFERENCE_GOLD = "#C58A32"
 GOLD = "#D4AF37"  # the gold: identity, one action per screen. flat, always
 
 #: The two gold neighbours are the same metal moved in OKLCH, not typed.
-#: bright is lighter, for the moment the shimmer passes. deep is darker and a
-#: few degrees warmer, for gold set as type on white, where the metal itself
-#: is 2.1:1 and cannot be text. `verify()` fails if either pinned hex stops
+#: bright is lighter, for the moment the shimmer passes. deep is darker, on
+#: the gold's own OKLCH hue, for gold set as type on white, where the metal
+#: itself is 2.1:1 and cannot be text. Keeping the hue is what lets Stella's
+#: token gate (a shade within 4 degrees of its gold) accept the same value. `verify()` fails if either pinned hex stops
 #: matching its (L, C, H).
 GOLD_BRIGHT_LCH = (0.860, 0.130, 91.0)
-GOLD_DEEP_LCH = (0.570, 0.110, 82.0)
+GOLD_DEEP_LCH = (0.560, 0.100, 91.0)
 GOLD_BRIGHT = "#F1CE65"  # the highlight the shimmer passes through, in motion only
-GOLD_DEEP = "#977017"  # gold as text on paper, and small details there
+GOLD_DEEP = "#8A7223"  # gold as text on paper, and small details there
 
 # --------------------------------------------------------------------------
 # the grounds and the greys
