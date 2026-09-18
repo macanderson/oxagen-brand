@@ -1,9 +1,11 @@
 """Every finished surface: wallpapers, social art, ads, and content cards.
 
-One composition rule holds all of them. A surface is a ground, one warm bloom
-of the metal, the brand's own icon placed off-centre, and at most a few lines
-of type. The icon is the only picture either brand owns, so a surface that
-needs more than a mark builds one out of the icon itself: a constellation of
+One composition rule holds all of them. A surface is a ground, one bloom
+of the metal on obsidian (none on white, which stays bright white edge to
+edge), the brand's own icon placed off-centre, and at most a few lines of
+type. On white, gold appears only where the mark itself is gold. The icon
+is the only picture either brand owns, so a surface that needs more than a
+mark builds one out of the icon itself: a constellation of
 nodes wired to it, a mosaic of blocks in its shape, or rings of nodes in orbit
 around it. Nothing here draws a shape the marks do not already contain. Every
 one of them is placed by a seeded random, so the same file comes out of the
@@ -26,7 +28,7 @@ from color import (
 )
 from geom import Point, dist, nearest, rng, scatter
 from glyphs import glyph_paths, text_path, text_width, wordmark
-from marks import BRANDS, icon_body, icon_geometry, icon_hit, metal_defs, sheen_defs
+from marks import BRANDS, hive_lit, icon_body, icon_geometry, icon_hit, metal_defs, sheen_defs
 
 #: Process-global, not per-surface. Several of these compositions are inlined
 #: into one HTML document by the playbook, and `id` is document-scoped: a
@@ -99,7 +101,13 @@ class Surface:
     # -- pieces ---------------------------------------------------------
 
     def glow(self, cx: float, cy: float, r: float, alpha: float, colour: str = GOLD) -> "Surface":
-        """A soft radial lift of the metal under the ghost, so the ground is not flat."""
+        """A soft radial lift of the metal under the ghost, so the ground is not flat.
+
+        Dark grounds only. On white a bloom of gold reads as a cream wash, and
+        the light ground is bright white, edge to edge.
+        """
+        if not self.dark:
+            return self
         uid = _sid()
         self.defs.append(
             f'<radialGradient id="g-{uid}"><stop offset="0" stop-color="{colour}" '
@@ -155,17 +163,31 @@ class Surface:
         a = (0.16 if self.dark else 0.20) if alpha is None else alpha
         self.glow(cx, cy, span * 0.95, 0.42 if self.dark else 0.34)
         t, _ = self._placed(brand, cx, cy, span, rot)
+        if not self.dark and brand == "stella":
+            # Stella's mark is all gold, so a filled ghost on white is a slab of
+            # pale gold. It is drawn as a hairline instead.
+            return self.outline(brand, cx, cy, span, rot=rot, stroke=GOLD)
+        if not self.dark:
+            # On white the ghost keeps the mark's own two colours: its outline in
+            # ink, faint, and gold only on the glyph or cells that are gold. A
+            # caller's alpha scales it down from full ghost strength.
+            body = icon_body(brand, letters=self.text, accent=GOLD, ink_opacity=0.25)
+            strength = 0.55 if alpha is None else min(0.55, alpha * 2.5)
+            self.body.append(f'<g opacity="{strength:g}" {t}>{body}</g>')
+            return self
         fill = self.sheen()
         self.body.append(f'<g opacity="{a:g}" {t}>{icon_body(brand, letters=fill, accent=fill)}</g>')
         return self
 
-    def outline(self, brand: str, cx: float, cy: float, span: float, *, rot: float = 0.0) -> "Surface":
+    def outline(
+        self, brand: str, cx: float, cy: float, span: float, *, rot: float = 0.0, stroke: str | None = None
+    ) -> "Surface":
         """The icon as a hairline in the metal: the quiet wallpaper."""
         t, s = self._placed(brand, cx, cy, span, rot)
         g = icon_geometry(brand)
         hair = max(1.6, self.short * 0.0012)  # a hairline, but one that survives a thumbnail
         inner = (
-            f'<path d="{g["path"]}" fill="none" stroke="{GOLD}" '
+            f'<path d="{g["path"]}" fill="none" stroke="{stroke or (GOLD if self.dark else self.text)}" '
             f'stroke-width="{hair / s:.4f}" stroke-linejoin="round"/>'
         )
         self.body.append(f'<g opacity="0.85" {t}>{inner}</g>')
@@ -330,7 +352,7 @@ class Surface:
         for i, (x, y) in enumerate(pts):
             near = max(0.0, 1 - dist((x, y), (hx, hy)) / reach)
             if i in gold_nodes:
-                blocks.append(self._block(x, y, short * 0.014, self.sheen(), 0.95))
+                blocks.append(self._block(x, y, short * 0.014, GOLD, 0.95))
             elif r.random() < 0.09:
                 blocks.append(self._block(x, y, short * 0.010, GOLD, 0.35 + 0.45 * near))
             else:
@@ -341,16 +363,16 @@ class Surface:
         self.body.append("".join(blocks))
 
         self.glow(hx, hy, span * 1.4, 0.34 if self.dark else 0.26)
-        self.icon(brand, hx, hy, span)
+        self.icon(brand, hx, hy, span, sheen=False)
         return self
 
     def mosaic(self, brand: str, cx: float, cy: float, span: float, *, cell: float, seed: str = "") -> "Surface":
         """The icon rebuilt from blocks on a grid, with a bloom of blocks around it.
 
         A faint grid of blocks covers the whole ground. Every cell whose centre
-        lands on the icon's ink is painted in the metal, each a shade brighter
-        or deeper than its neighbour so the surface reads as tiles, not a
-        stencil. Cells just outside the ink catch a little gold that fades with
+        lands on the icon's ink is painted in the flat gold, each a shade
+        brighter or deeper than its neighbour so the surface reads as tiles,
+        not a stencil. Cells just outside the ink catch a little gold that fades with
         distance, the bloom drawn in the same blocks.
         """
         r = rng("mosaic", brand, self.w, self.h, seed)
@@ -359,14 +381,15 @@ class Surface:
         rx = side * 0.24
         ox, oy = (cx % cell) - cell / 2, (cy % cell) - cell / 2  # the icon's centre on a cell centre
         uid = _sid()
-        base_a = 0.055 if self.dark else 0.07
-        self.defs.append(
-            f'<pattern id="p-{uid}" x="{ox:.2f}" y="{oy:.2f}" width="{cell:.3f}" height="{cell:.3f}" patternUnits="userSpaceOnUse">'
-            f'<rect x="{gap / 2:.2f}" y="{gap / 2:.2f}" width="{side:.2f}" height="{side:.2f}" rx="{rx:.2f}" '
-            f'fill="{self.text}" opacity="{base_a}"/></pattern>'
-        )
-        self.body.append(f'<rect width="{self.w}" height="{self.h}" fill="url(#p-{uid})"/>')
-        self.glow(cx, cy, span * 0.9, 0.30 if self.dark else 0.22)
+        base_a = 0.055
+        if self.dark:
+            self.defs.append(
+                f'<pattern id="p-{uid}" x="{ox:.2f}" y="{oy:.2f}" width="{cell:.3f}" height="{cell:.3f}" patternUnits="userSpaceOnUse">'
+                f'<rect x="{gap / 2:.2f}" y="{gap / 2:.2f}" width="{side:.2f}" height="{side:.2f}" rx="{rx:.2f}" '
+                f'fill="{self.text}" opacity="{base_a}"/></pattern>'
+            )
+            self.body.append(f'<rect width="{self.w}" height="{self.h}" fill="url(#p-{uid})"/>')
+        self.glow(cx, cy, span * 0.9, 0.30)
 
         hit = icon_hit(brand)
         s, gcx, gcy = self._placement(brand, cx, cy, span, 0.0)
@@ -380,9 +403,11 @@ class Surface:
                 d = dist((x, y), (cx, cy))
                 if d > halo:
                     continue
-                if hit((x - cx) / s + gcx, (y - cy) / s + gcy):
-                    lit.append(self._block(x, y, side, self.sheen(), 0.74 + 0.26 * r.random()))
-                else:
+                ix, iy = (x - cx) / s + gcx, (y - cy) / s + gcy
+                if hit(ix, iy):
+                    gold = self.dark or brand == "stella" or hive_lit(ix, iy)
+                    lit.append(self._block(x, y, side, GOLD if gold else self.text, 0.74 + 0.26 * r.random()))
+                elif self.dark:
                     a = (1 - d / halo) ** 2 * (0.20 if self.dark else 0.16) * (0.7 + 0.3 * r.random())
                     if a > 0.015:
                         warm.append(self._block(x, y, side, GOLD, a))
@@ -438,7 +463,7 @@ class Surface:
             fade = 1 - depth * 0.16
             for x, y in pts:
                 if depth == 0:
-                    nodes.append(self._block(x, y, short * 0.016, self.sheen(), 0.95))
+                    nodes.append(self._block(x, y, short * 0.016, GOLD, 0.95))
                 elif r.random() < 0.22:
                     nodes.append(self._block(x, y, short * 0.011, GOLD, 0.5 * fade))
                 else:
@@ -448,7 +473,7 @@ class Surface:
                     )
         self.body.append("".join(nodes))
         self.glow(cx, cy, span * 1.3, 0.36 if self.dark else 0.28)
-        self.icon(brand, cx, cy, span)
+        self.icon(brand, cx, cy, span, sheen=False)
         return self
 
     # -- output ---------------------------------------------------------

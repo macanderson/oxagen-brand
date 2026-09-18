@@ -14,9 +14,10 @@ is generated from it and shows every line, the held ones marked with their gate.
 ## The decision
 
 The Oxagen brand kit is the house kit. It already had the right bones: Space
-Grotesk, a warm near-black and a warm off-white, and a wordmark whose only
-colour is one gold letter. This system takes that kit as the base and brings
-Stella onto it.
+Grotesk and a wordmark whose only colour is one gold letter. This system takes
+that kit as the base and brings Stella onto it. Since September 2026 it sits
+on obsidian `#09090B` and white, with neutral zinc greys between, so the gold
+is the only warm value on a screen.
 
 - **oxagen** is the kit's wordmark, reproduced from the font: the word in
   Space Grotesk 600, lowercase, its **x** in gold.
@@ -27,11 +28,15 @@ Stella onto it.
 Both are set at one em (the size the kit froze `oxagen` at), so they are the
 same letter size exactly and the same height to within a pixel.
 
-The gold is the kit's Bronze Gold `#C58A32` lifted one step in OKLCH: a little
-lighter, a little richer, a few degrees toward yellow, so it reads as gold
-rather than copper. That is `#D6962C`. `#F1C364` is the highlight the shimmer
-passes through; `#8B5E1A` is gold as text on paper. Both names carry the one
-value, so the two marks cannot drift apart.
+The gold is `#D4AF37`. Its two neighbours are derived from it in OKLCH, not
+picked: `#F1CE65` is the highlight the shimmer passes through, and `#977017`
+is gold as text on white, where the metal itself is 2.1:1. Both names carry
+the one value, so the two marks cannot drift apart.
+
+Three faces set the type, each with one job. Space Grotesk sets the wordmarks
+and h1 to h3. Geist sets h4 to h6 and everything read. Monaspace Neon sets
+code, logs, and data. Two size scales sit on top: marketing for pages read
+once, app for dashboards read all day.
 
 Where a square is required, Stella uses its asterisk and Oxagen uses **the
 hive**: six hexagonal cells on a honeycomb grid, four drawn as an outline and
@@ -63,10 +68,10 @@ lockup; its asterisk is already in the word.
 playbook.html      the document. Read this first.
 message-bank.html  generated from messages/: every line, pitch, card, ad, and rule, with its status.
 messages/          the message registry: one YAML file per line, schema.json, findings.yaml, index.json (generated)
-build/             color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
+build/             color.py · typeset.py · fonts.py · pagecss.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against
-fonts/             Space Grotesk, variable and static, with its licence
-tokens/            house-tokens.css · house-tokens.json
+fonts/             Space Grotesk, Geist and Monaspace Neon webfonts, each with its licence
+tokens/            house-tokens.css · house-tokens.json · house-tailwind.css · house-fonts.css · next-fonts.ts
 logo/svg,png/      wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles
 icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webmanifest
 spinners/          the house motion, animated SVG, no script
@@ -81,7 +86,9 @@ skills/            the oxagen-branding Claude Code skill and its installer
 
 No file in this kit is drawn by hand. Every PNG is a render of the SVG beside
 it. Every SVG is emitted from `build/`. The colours live in one file,
-`build/color.py`, so a change there moves every asset on the next run.
+`build/color.py`, and the type in another, `build/typeset.py`, so a change
+there moves every asset, token file, and the branding skill's own tokens on
+the next run.
 
 ```sh
 python3 -m venv .venv && .venv/bin/pip install fonttools brotli pyyaml
@@ -91,7 +98,56 @@ brew install harfbuzz librsvg          # hb-shape and rsvg-convert
 .venv/bin/python build/build.py --svg     # skip the raster pass
 .venv/bin/python build/build.py --only ads social   # only these steps
 .venv/bin/python build/playbook.py        # rebuild the document
+.venv/bin/python build/messages.py       # rebuild the message bank
+.venv/bin/python github-badges/build.py  # rebuild the GitHub badges
 ```
+
+## Use it in a product
+
+This repo is the design system spec for every Oxagen frontend. A product does
+not copy values out of it. It imports the generated files and re-syncs them
+when the kit changes.
+
+For a Next.js app on Tailwind CSS v4 with shadcn/ui or Base UI:
+
+```css
+/* app/globals.css */
+@import "tailwindcss";
+@import "./house-tailwind.css";   /* imports house-tokens.css beside it */
+```
+
+```tsx
+// app/layout.tsx
+import { fontVariables } from "@/styles/next-fonts";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={fontVariables}>
+      <body className="bg-background text-foreground font-sans">{children}</body>
+    </html>
+  );
+}
+```
+
+`house-tailwind.css` sets the semantic tokens shadcn components bind to
+(`--background`, `--primary`, `--ring`, `--sidebar-*`) for light, `.dark`, and
+the OS preference, adds the palette as `bg-ox-*` and `text-ox-*` utilities,
+routes h1 to h3, h4 to h6, body, and code to their faces, and defines the two
+scales as `text-m-h1` to `text-m-micro` and `text-a-h1` to `text-a-micro`.
+`next-fonts.ts` loads its fonts from `../fonts/`, so vendor `tokens/` and
+`fonts/` side by side.
+
+The oxagen monorepo vendors these files with
+`tools/scripts/sync-brand-assets.mjs`, and CI runs it with `--check`, so a
+product that has fallen behind the kit fails its build.
+
+## Keep agents current
+
+Agents steer from the `oxagen-branding` skill in `skills/`. Its
+`assets/tokens.css` and `assets/logo.svg` are written by the build, and
+`--check` fails if either drifts, so the numbers an agent reads are the
+numbers the products compile. Install the skill as a symlink and `git pull`
+here updates every session on the machine.
 
 ## Messages
 
@@ -146,10 +202,18 @@ For a PWA, copy `icons/oxagen-*.png`, `icons/oxagen-favicon.ico` and
 <link rel="manifest" href="/oxagen.webmanifest">
 ```
 
+Every raster icon also comes on a white tile, named with `-light`
+(`oxagen-icon-light-180.png`, `oxagen-favicon-light.ico`,
+`oxagen-light.webmanifest`), for an app whose shell is light. Point at them
+with `media="(prefers-color-scheme: light)"` or use them in place of the dark
+set.
+
 `--check` reproduces the kit's shipped `oxagen` wordmark from the font (same
 weight, same em, HarfBuzz spacing including kerning) and fails if the geometry
-has moved. It also fails if the pinned gold stops matching its derivation from
-the kit's Bronze Gold, or if any text token drops below AA on its ground.
+has moved. It also fails if a gold neighbour stops matching its OKLCH
+derivation, if any text token drops below AA on its ground, if a type step
+sets Space Grotesk below 20 px, if a webfont loses a face or a feature, or if
+the skill's tokens or logo drift from the build.
 
 ## Rules worth knowing before you use it
 
@@ -157,8 +221,10 @@ the kit's Bronze Gold, or if any text token drops below AA on its ground.
   second one, never the whole word.
 - **Gold is identity and at most one action per screen.** It is never a
   surface and it never encodes a state.
-- **Gold as text on warm paper becomes `#8B5E1A`.** The mark keeps its metal;
-  words do not.
+- **Gold as text on white becomes `#977017`.** The mark keeps its metal.
+  Words do not.
+- **Gold is never a paragraph or a whole heading.** It is a mark, a metric
+  callout, an indicator pill, the focus ring, or the one action.
 - **Nothing sits to the left of stella.** The asterisk is the only mark.
 - **Minimum 88 px** for a wordmark, **24 px** for an icon, **120 px** for the
   lockup. Below that, use the favicon.
@@ -174,5 +240,5 @@ the kit's Bronze Gold, or if any text token drops below AA on its ground.
   keys each take one ad. The short forms keep the scope of the long ones:
   governed, recorded, mediated. Ad copy comes only from approved,
   launch-released entries in `messages/ads/`.
-- **Space Grotesk is not a code face.** Terminal output and code stay in the
-  system monospace.
+- **Space Grotesk is for display only.** Nothing below 20 px, and never code.
+  Code, terminal output, and data are Monaspace Neon.

@@ -335,6 +335,15 @@ def hive_hit(px: float, py: float, *, weight: float = 1.6) -> bool:
     return False
 
 
+def hive_lit(px: float, py: float) -> bool:
+    """Whether (px, py), in the hive's own units, lands on one of its two lit cells."""
+    for c in hive()["cells"]:  # type: ignore[union-attr]
+        kind = str(c["kind"])
+        if kind != "ink" and _in_hex(px, py, float(c["cx"]), float(c["cy"]), hive_scale(kind)):
+            return True
+    return False
+
+
 # --------------------------------------------------------------------------
 # the asterisk
 # --------------------------------------------------------------------------
@@ -472,7 +481,13 @@ FAVICON_WEIGHT = 2.4
 
 
 def favicon_svg(
-    brand: str, *, box: float = 96.0, background: str | None = None, radius: float | None = None, adaptive: bool = False
+    brand: str,
+    *,
+    box: float = 96.0,
+    background: str | None = None,
+    radius: float | None = None,
+    adaptive: bool = False,
+    letters: str = PAPER_TEXT,
 ) -> str:
     """The 16 to 48 px mark: the icon, filling more of the square.
 
@@ -484,9 +499,9 @@ def favicon_svg(
     256 px tile wants is four pixels it cannot spare.
     """
     if brand == "stella":
-        return icon_svg(brand, box=box, background=background, radius=radius, fill=0.78, adaptive=adaptive, uid="fav")
+        return icon_svg(brand, box=box, background=background, radius=radius, fill=0.78, adaptive=adaptive, letters=letters, uid="fav")
     return icon_svg(
-        brand, box=box, background=background, radius=radius, fill=0.88, adaptive=adaptive,
+        brand, box=box, background=background, radius=radius, fill=0.88, adaptive=adaptive, letters=letters,
         weight=FAVICON_WEIGHT, uid="fav",
     )
 

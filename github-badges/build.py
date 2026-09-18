@@ -2,7 +2,7 @@
 
 Every badge is Space Grotesk outlined to paths, so nothing depends on a font
 being installed where GitHub renders it. Colours are the house tokens from
-`../brand/tokens/house-tokens.json`. Gold appears once, as the brand glyph in
+`../tokens/house-tokens.json`. Gold appears once, as the brand glyph in
 the `oxagen` label; it never encodes a state. State is carried by shape: a
 filled square is verified, a hollow square is proving, a struck square is
 refuted.
@@ -25,7 +25,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.ttLib import TTFont
 
 HERE = Path(__file__).resolve().parent
-BRAND = HERE.parent / "brand"
+BRAND = HERE.parent  # the kit root: fonts/ and tokens/ sit beside github-badges/
 TOKENS = json.loads((BRAND / "tokens" / "house-tokens.json").read_text())["tokens"]
 
 INK, PAPER = TOKENS["ink"], TOKENS["paper"]
@@ -57,10 +57,11 @@ def shape(text: str, weight: int) -> list[tuple[str, float, float, float]]:
         raise SystemExit("hb-shape not found: `brew install harfbuzz`")
     font(weight)
     out = subprocess.run(
-        ["hb-shape", "--font-file", str(_TTF[weight]), "--output-format=json", "--no-clusters", text],
+        ["hb-shape", "--font-file", str(_TTF[weight]), "--output-format=json", "--no-clusters", "--no-glyph-names", text],
         capture_output=True, text=True, check=True,
     ).stdout
-    return [(g["g"], g["ax"], g.get("dx", 0), g.get("dy", 0)) for g in json.loads(out)]
+    order = font(weight).getGlyphOrder()  # the subset webfonts carry no glyph names; map ids
+    return [(order[g["g"]], g["ax"], g.get("dx", 0), g.get("dy", 0)) for g in json.loads(out)]
 
 
 def text_path(text: str, size: float, x: float, y: float, weight: int, *, gold: str = "") -> tuple[str, str, float]:

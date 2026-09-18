@@ -12,6 +12,7 @@ gold is the brand glyph in the `oxagen` and `stella*` shield labels.
 | `badge-{verified,proving,refuted}-{dark,light}.svg` | 22 px | status pills in a README or PR description; dark on GitHub dark themes |
 | `shield-oxagen-verified.svg`                        | 20 px | shields.io-style badge, works on either theme                          |
 | `shield-receipt-proven.svg`                         | 20 px | same, for a receipt                                                    |
+| `shield-stella-proven.svg`                          | 20 px | same, for Stella; the asterisk takes the gold                          |
 | `commit-tombstone-{dark,light}.svg`                 | 16 px | the lone square for commit rows                                        |
 
 ```md
@@ -24,4 +25,4 @@ gold is the brand glyph in the `oxagen` and `stella*` shield labels.
 ```
 
 Regenerate with `build.py` (see its docstring). It reads the fonts and tokens
-from `../brand/`, so a token change there moves every badge on the next run.
+from the kit root, so a token change there moves every badge on the next run.
