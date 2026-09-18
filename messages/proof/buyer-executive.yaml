@@ -1,0 +1,21 @@
+id: buyer-executive
+brand: oxagen
+kind: proof
+order: 20
+title: Hypothetical buyer statement, technology executive
+short: I can say which agents did the work, what each one was allowed to do, and what it cost.
+audience:
+- operator
+- platform
+- finance
+clause: record
+surfaces:
+- rooms
+- decks
+status: candidate
+release: launch
+owner: sales owner
+review_by: '2026-10-15'
+findings:
+- '08'
+notes: 'Hypothetical. Not a testimonial. Never attribute it to a person or a company. Candidate until the sales owner validates the wording in interviews with this buyer. See rule-icp.'

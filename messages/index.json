@@ -2,22 +2,22 @@
   "source": "messages/",
   "generated_by": "build/messages.py",
   "counts": {
-    "entries": 160,
+    "entries": 163,
     "status": {
-      "approved": 132,
-      "candidate": 3,
+      "approved": 134,
+      "candidate": 4,
       "retired": 25
     },
     "release": {
       "held": 23,
-      "launch": 112
+      "launch": 115
     },
     "group": {
       "lead": 13,
       "sections": 7,
       "entry-points": 3,
       "access": 9,
-      "proof": 15,
+      "proof": 16,
       "mission-control": 16,
       "definition-of-done": 5,
       "witness": 9,
@@ -25,7 +25,7 @@
       "outreach": 4,
       "ads": 8,
       "voice": 22,
-      "rules": 19,
+      "rules": 21,
       "retired": 25
     }
   },
@@ -257,7 +257,7 @@
       "release": "launch",
       "qualifier": "Decisions are recorded for governed actions.",
       "evidence": "Platform owner: demonstrate allow, deny, approval, missing-rule, observe-mode, and outage cases for each supported integration. Identify requests outside that boundary.",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "03"
@@ -306,7 +306,7 @@
       ],
       "qualifier": "For bounded tasks.",
       "evidence": "Launch acceptance: demonstrate both an ongoing responsibility and a bounded task. Show check failure, retry limits, human review, and verdict recomputation for the latter. Do not imply that passing specified checks establishes universal correctness.",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "01"
@@ -351,7 +351,7 @@
       "release": "launch",
       "qualifier": "Assigned through the agent's mandate.",
       "evidence": "Engineering owner: show how an operator changes an assignment, which version an agent receives, and when the change takes effect. Do not promise centralized revocation or version pinning without demonstrated behavior.",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
@@ -394,7 +394,7 @@
       "release": "launch",
       "qualifier": "Recorded costs, with no savings claim.",
       "evidence": "Finance owner: show a sample cost row, rate source, attribution fields, exclusions, and reconciliation to billed totals. Use an explicit comparison set before making comparative claims. FinOps and engineering: provide a reproducible baseline, task set, model and rate versions, sample size, quality measure, and costs including retries and Oxagen fees. Report the distribution and exceptions, not only an average.",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "02",
@@ -441,7 +441,7 @@
       "release": "launch",
       "qualifier": "For mediated connections.",
       "evidence": "Security owner: demonstrate provisioning, delegation, revocation, credential handling, and audit coverage. Before an attestation claim, verify the report type, entity, system scope, period, and access process against the actual report.",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "03",
@@ -486,7 +486,7 @@
       "status": "approved",
       "release": "launch",
       "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "01",
@@ -628,6 +628,34 @@
       "notes": "Hypothetical. Not a testimonial. Never attribute it to a person or a company. Publish an actual testimonial only with dated attribution permission.",
       "group": "proof",
       "path": "messages/proof/buyer-engineering.yaml"
+    },
+    {
+      "id": "buyer-executive",
+      "brand": "oxagen",
+      "kind": "proof",
+      "order": 20,
+      "title": "Hypothetical buyer statement, technology executive",
+      "short": "I can say which agents did the work, what each one was allowed to do, and what it cost.",
+      "audience": [
+        "operator",
+        "platform",
+        "finance"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "rooms",
+        "decks"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "sales owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "08"
+      ],
+      "notes": "Hypothetical. Not a testimonial. Never attribute it to a person or a company. Candidate until the sales owner validates the wording in interviews with this buyer. See rule-icp.",
+      "group": "proof",
+      "path": "messages/proof/buyer-executive.yaml"
     },
     {
       "id": "buyer-finance",
@@ -2104,7 +2132,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "03",
@@ -2131,7 +2159,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "08"
@@ -2157,7 +2185,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "08"
@@ -2183,7 +2211,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "03"
@@ -2209,7 +2237,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
@@ -2235,7 +2263,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "08"
@@ -2261,7 +2289,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "04"
@@ -2287,7 +2315,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "10"
@@ -2313,7 +2341,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "03"
@@ -2339,7 +2367,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "01",
@@ -2369,7 +2397,7 @@
       "gate": [
         "dod"
       ],
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "01"
@@ -2395,7 +2423,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "04"
@@ -2794,7 +2822,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "01",
         "02"
@@ -2816,7 +2844,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "04",
         "08"
@@ -2838,7 +2866,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "01",
         "08"
@@ -2860,7 +2888,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "02"
       ],
@@ -2881,7 +2909,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "03",
         "07"
@@ -2903,7 +2931,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "06"
       ],
@@ -2924,7 +2952,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "03",
         "06"
@@ -2946,7 +2974,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "09"
       ],
@@ -2967,7 +2995,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "08"
       ],
@@ -2988,7 +3016,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "04"
       ],
@@ -3009,7 +3037,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "05"
       ],
@@ -3030,7 +3058,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "02"
       ],
@@ -3051,7 +3079,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "04"
       ],
@@ -3072,7 +3100,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "03",
         "07"
@@ -3094,7 +3122,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "01",
         "03",
@@ -3117,7 +3145,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "01",
         "07"
@@ -3139,7 +3167,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "01",
         "07"
@@ -3161,7 +3189,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "07"
       ],
@@ -3182,7 +3210,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "01",
         "07"
@@ -3204,7 +3232,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "02"
       ],
@@ -3225,7 +3253,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "05"
       ],
@@ -3246,7 +3274,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "05"
       ],
@@ -3267,7 +3295,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "08"
       ],
@@ -3288,7 +3316,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "07"
       ],
@@ -3309,7 +3337,7 @@
       "clause": "none",
       "surfaces": [],
       "status": "retired",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "findings": [
         "01",
         "07"
@@ -3318,6 +3346,37 @@
       "notes": "not carried into the launch registry after the 2026-09-15 review",
       "group": "retired",
       "path": "messages/retired/retired-verdict-not-claim.yaml"
+    },
+    {
+      "id": "rule-buyer-pain-internal",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 12,
+      "title": "The buyer's pain stays internal.",
+      "long": "What this buyer says in a room is qualification material, not copy. A large invoice for a small change, a review that cannot name the agent or explain why it took the path it took, and pressure from above for output the reporting cannot substantiate: all three belong in discovery notes and in the positioning reference, and none of them belongs in a headline, an ad, a subject line, or a slide. Published copy states the mechanism and lets the reader draw the comparison. Do not sell the fear, do not describe the prospect's setup back to them, and do not argue with what their provider reports. See rule-outreach, rule-no-competitors, and finding 06.",
+      "phrases": [
+        "AI laggard",
+        "10x the output",
+        "half the staff"
+      ],
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "06",
+        "08"
+      ],
+      "group": "rules",
+      "path": "messages/rules/rule-buyer-pain-internal.yaml"
     },
     {
       "id": "rule-completion-optional",
@@ -3336,7 +3395,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "01"
@@ -3367,7 +3426,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "02",
@@ -3397,7 +3456,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "03"
@@ -3422,7 +3481,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "10"
@@ -3447,13 +3506,42 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "09"
       ],
       "group": "rules",
       "path": "messages/rules/rule-held-lines-wait.yaml"
+    },
+    {
+      "id": "rule-icp",
+      "brand": "oxagen",
+      "kind": "rule",
+      "order": 11,
+      "title": "Sell to the executive accountable for the agent workforce.",
+      "long": "The operator is the user. The buyer is the technology executive who answers for the agent workforce and its spend, usually a CIO or a CTO, and who is asked to ship autonomous agents across the company while a modernization program is already in flight. They can see the total. They cannot yet say which agent spent it, on whose behalf, or under which rule. What they buy is the ability to answer: an identity per agent, a mandate a named team wrote, and a record of governed activity another person can read. Qualify on five signals: agents running in more than one team with no single page that lists them, a named person accountable for agent spend who cannot attribute it below the account, a migration or modernization program in flight, security and finance and engineering each writing their part of an agent somewhere different, and a request from above for output the current reporting cannot substantiate. Skip, for now: one team with one agent, agents that only read, no one accountable for the spend, and a mandate to stop agent adoption rather than to operate it. Open with a diagnostic question, not with an assertion about their setup. See rule-outreach.",
+      "audience": [
+        "operator",
+        "platform",
+        "finance"
+      ],
+      "clause": "none",
+      "surfaces": [
+        "copy-rules",
+        "sales-brief"
+      ],
+      "status": "approved",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07",
+        "08"
+      ],
+      "notes": "This entry names who signs, not who the product speaks to on the homepage. The operator stays the primary user audience and the reader of most copy. The full statement, the qualifying and disqualifying signals, and the opening questions are in skills/oxagen-branding/references/positioning.md under The buyer we are built for.",
+      "group": "rules",
+      "path": "messages/rules/rule-icp.yaml"
     },
     {
       "id": "rule-identity-credentials",
@@ -3478,7 +3566,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "04"
@@ -3509,7 +3597,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "05"
@@ -3534,7 +3622,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "rules",
@@ -3557,7 +3645,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
@@ -3582,7 +3670,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "01"
@@ -3607,7 +3695,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "03"
@@ -3632,7 +3720,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "rules",
@@ -3655,7 +3743,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "04"
@@ -3680,7 +3768,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
@@ -3712,7 +3800,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "08"
@@ -3741,7 +3829,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "08"
@@ -3766,7 +3854,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "01",
@@ -3792,7 +3880,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "09"
@@ -4405,7 +4493,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "voice",
@@ -4429,7 +4517,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
@@ -4455,7 +4543,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "voice",
@@ -4479,7 +4567,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "04"
@@ -4505,7 +4593,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "03"
@@ -4531,7 +4619,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "voice",
@@ -4555,7 +4643,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "voice",
@@ -4579,7 +4667,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "voice",
@@ -4603,7 +4691,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "voice",
@@ -4627,7 +4715,7 @@
       ],
       "status": "approved",
       "release": "launch",
-      "owner": "brand owner",
+      "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [],
       "group": "voice",

@@ -1,0 +1,23 @@
+id: rule-buyer-pain-internal
+brand: oxagen
+kind: rule
+order: 12
+title: The buyer's pain stays internal.
+long: 'What this buyer says in a room is qualification material, not copy. A large invoice for a small change, a review that cannot name the agent or explain why it took the path it took, and pressure from above for output the reporting cannot substantiate: all three belong in discovery notes and in the positioning reference, and none of them belongs in a headline, an ad, a subject line, or a slide. Published copy states the mechanism and lets the reader draw the comparison. Do not sell the fear, do not describe the prospect''s setup back to them, and do not argue with what their provider reports. See rule-outreach, rule-no-competitors, and finding 06.'
+phrases:
+- AI laggard
+- 10x the output
+- half the staff
+audience:
+- operator
+- platform
+clause: none
+surfaces:
+- copy-rules
+status: approved
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+- '06'
+- '08'
