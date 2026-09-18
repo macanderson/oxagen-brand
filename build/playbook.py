@@ -12,6 +12,7 @@ import html
 from pathlib import Path
 
 import color as C
+import typeset as T
 import glyphs as G
 import surfaces as SF
 from build import AD_COPY, CONTENT, TAGLINES, ad_svg
@@ -266,33 +267,30 @@ def inline(svg: str) -> str:
 # --------------------------------------------------------------------------
 
 
+FONT_FACES = T.font_faces("fonts/")
+
+
 def css() -> str:
     return f"""
-@font-face{{font-family:"Space Grotesk";font-weight:400;src:url(fonts/space-grotesk-latin-400.woff2) format("woff2")}}
-@font-face{{font-family:"Space Grotesk";font-weight:500;src:url(fonts/space-grotesk-latin-500.woff2) format("woff2")}}
-@font-face{{font-family:"Space Grotesk";font-weight:600;src:url(fonts/space-grotesk-latin-600.woff2) format("woff2")}}
-@font-face{{font-family:"Space Grotesk";font-weight:700;src:url(fonts/space-grotesk-latin-700.woff2) format("woff2")}}
-@font-face{{font-family:"Aeonik";font-weight:400;font-display:swap;src:url(fonts/aeonik-latin-400.woff2) format("woff2")}}
-@font-face{{font-family:"Aeonik";font-weight:500;font-display:swap;src:url(fonts/aeonik-latin-500.woff2) format("woff2")}}
-@font-face{{font-family:"Aeonik";font-weight:600;font-display:swap;src:url(fonts/aeonik-latin-600.woff2) format("woff2")}}
-@font-face{{font-family:"Aeonik";font-weight:700;font-display:swap;src:url(fonts/aeonik-latin-700.woff2) format("woff2")}}
+{FONT_FACES}
 :root{{
   --ink:{C.INK};--void:{C.VOID};--panel:{C.PANEL};--hl:{C.HL};--border:{C.BORDER};--rule:{C.RULE};
   --fg:{C.PAPER_TEXT};--body:{C.TEXT};--muted:{C.MUTED};--dim:{C.DIM};
   --gold:{C.GOLD};--gold-bright:{C.GOLD_BRIGHT};--gold-deep:{C.GOLD_DEEP};--accent-text:{C.GOLD};
   --paper:{C.PAPER};--card:{C.PANEL};
   --shadow:0 1px 0 rgba(255,255,255,.03),0 18px 44px rgba(0,0,0,.5);
-  --ox-font:"Aeonik","Helvetica Neue",Arial,sans-serif;
-  --ox-font-display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --ox-font:{T.GEIST.css_stack};
+  --ox-font-display:{T.SPACE_GROTESK.css_stack};
+  --ox-font-mono:{T.MONASPACE_NEON.css_stack};
 }}
 @media(prefers-color-scheme:light){{:root:not([data-theme="dark"]){{
-  --ink:{C.PAPER};--void:#E9E3D8;--panel:{C.PAPER_PANEL};--hl:#EFEAE0;--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
+  --ink:{C.PAPER};--void:{C.PAPER_VOID};--panel:{C.PAPER_PANEL};--hl:{C.PAPER_HL};--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
   --fg:{C.INK_TEXT};--body:{C.TEXT_INK};--muted:{C.MUTED_INK};--dim:{C.DIM_INK};--accent-text:{C.GOLD_DEEP};
-  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(16,16,15,.08);}}}}
+  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);}}}}
 :root[data-theme="light"]{{
-  --ink:{C.PAPER};--void:#E9E3D8;--panel:{C.PAPER_PANEL};--hl:#EFEAE0;--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
+  --ink:{C.PAPER};--void:{C.PAPER_VOID};--panel:{C.PAPER_PANEL};--hl:{C.PAPER_HL};--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
   --fg:{C.INK_TEXT};--body:{C.TEXT_INK};--muted:{C.MUTED_INK};--dim:{C.DIM_INK};--accent-text:{C.GOLD_DEEP};
-  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(16,16,15,.08);}}
+  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);}}
 *,*::before,*::after{{box-sizing:border-box}}
 html{{scroll-behavior:smooth;scroll-padding-top:78px}}
 @media(prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
@@ -313,10 +311,10 @@ h2{{font-size:32px;line-height:1.1;letter-spacing:-.015em;font-weight:700;margin
 h3{{font-size:19px;font-weight:600;margin:32px 0 10px}}
 p{{max-width:66ch;color:var(--body);margin:0 0 14px}}
 p.lead{{font-size:20px;line-height:1.5;color:var(--fg);max-width:56ch}}
-.mono{{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.92em}}
+.mono{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:.92em}}
 .muted{{color:var(--muted)}}
 a{{color:var(--accent-text)}}
-code{{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.9em;background:var(--hl);padding:.1em .35em;border-radius:4px}}
+code{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:.9em;background:var(--hl);padding:.1em .35em;border-radius:4px}}
 pre{{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;font-size:13.5px;line-height:1.55;color:var(--body)}}
 pre code{{background:none;padding:0}}
 .grid{{display:grid;gap:18px}}
@@ -335,7 +333,7 @@ pre code{{background:none;padding:0}}
 .plate.sp>svg{{width:88px;height:88px}}
 .m0{{margin:0}}
 .cap{{font-size:12.5px;color:var(--muted);margin-top:8px;letter-spacing:.01em}}
-.diagram{{width:100%;height:auto;color:var(--fg);font-family:ui-monospace,"SF Mono",Menlo,monospace}}
+.diagram{{width:100%;height:auto;color:var(--fg);font-family:var(--ox-font-mono)}}
 .hero{{padding:90px 0 60px}}
 .hero .plates{{margin-top:36px}}
 table{{border-collapse:collapse;width:100%;font-size:14px}}
@@ -380,9 +378,14 @@ def build_html() -> str:
     a = asterisk()
 
     tokens_rows = "".join(swatch_row(n, v, note) for n, v, note in C.TOKENS)
+    face_name = {"display": "Space Grotesk", "sans": "Geist", "mono": "Monaspace Neon"}
+    scale_rows = "".join(
+        f"<tr><td class=\"mono\">{m.name}</td><td>{face_name[m.face]}</td>"
+        f"<td class=\"mono\">{m.px} · {m.leading} · {m.weight}</td><td class=\"mono\">{a.px} · {a.leading} · {a.weight}</td></tr>"
+        for m, a in zip(T.MARKETING.steps, T.APP.steps)
+    )
     gold_cards = "".join(
         [
-            gold_card("kit bronze gold", C.REFERENCE_GOLD, "the anchor; not shipped"),
             gold_card("gold", C.GOLD, "the metal. identity and one action per screen"),
             gold_card("gold-bright", C.GOLD_BRIGHT, "what the shimmer passes through; hover on ink"),
             gold_card("gold-deep", C.GOLD_DEEP, "gold as text on paper; small gold details there"),
@@ -478,9 +481,9 @@ def build_html() -> str:
 <main class="wrap">
 
 <section class="hero">
-<p class="eyebrow">Oxagen house system · v2.2</p>
+<p class="eyebrow">Oxagen house system · v2.3</p>
 <h1>One house.<br>Two names. One gold.</h1>
-<p class="lead">Everything a customer sees from Oxagen and Stella comes from one system: Space Grotesk, warm ink and paper, and a single gold that each name carries in exactly one glyph.</p>
+<p class="lead">Everything a customer sees from Oxagen and Stella comes from one system: obsidian and white, three faces, and a single gold that each name carries in exactly one glyph.</p>
 <div class="grid g2 plates">
 {plate(ox_d, "oxagen · on ink", cls="ink wm")}
 {plate(st_d, "stella* · on ink", cls="ink wm")}
@@ -492,9 +495,9 @@ def build_html() -> str:
 <section id="decision">
 <p class="eyebrow">The decision</p>
 <h2>Oxagen's kit is the house kit</h2>
-<p>The Oxagen brand kit already had the right bones: Space Grotesk, a warm near-black and a warm off-white, and a wordmark whose only colour is one gold letter. This system takes that kit as the base and brings Stella onto it.</p>
+<p>The Oxagen brand kit already had the right bones: Space Grotesk and a wordmark whose only colour is one gold letter. This system takes that kit as the base and brings Stella onto it. Since September 2026 it sits on obsidian <span class="mono">{C.INK}</span> and white, with neutral greys between, so the gold is the only warm value on a screen.</p>
 <p><b>oxagen</b> is the kit's wordmark, reproduced from the font: the word in Space Grotesk 600, lowercase, its <b>x</b> in gold. <b>stella*</b> is the same word treatment followed by the font's own asterisk, in the same gold. The asterisk is a character, not a drawing; it was never redrawn, and it must not be.</p>
-<p>The gold is the kit's Bronze Gold lifted one step: a little lighter, a little richer, a few degrees toward yellow, so it reads as gold rather than copper. Both names use it at the same value, so the two marks cannot drift apart.</p>
+<p>The gold is <span class="mono">{C.GOLD}</span>. Both names use it at the same value, so the two marks cannot drift apart.</p>
 <ul class="rules">
 <li><b>One glyph is gold.</b> The x in oxagen, the asterisk in stella. Never a second one.</li>
 <li><b>Gold is identity, and one action per screen.</b> It is never a surface, and it never means a state.</li>
@@ -572,7 +575,7 @@ def build_html() -> str:
 <section id="colour">
 <p class="eyebrow">Colour</p>
 <h2>One metal, two grounds</h2>
-<p>The gold is derived, not picked: the kit's Bronze Gold moved in OKLCH by +{C.GOLD_LIFT[0]:.3f} lightness, +{C.GOLD_LIFT[1]:.3f} chroma and +{C.GOLD_LIFT[2]:.1f}° hue. The build fails if the pinned value stops matching that derivation. gold clears {C.contrast(C.GOLD, C.INK):.1f}:1 on ink; gold-deep clears {C.contrast(C.GOLD_DEEP, C.PAPER):.1f}:1 on paper, which is why gold as <em>text</em> on paper becomes gold-deep.</p>
+<p>The gold is <span class="mono">{C.GOLD}</span>, and its two neighbours are derived from it in OKLCH, not picked: gold-bright is lighter, for the moment the shimmer passes, and gold-deep is darker and a few degrees warmer, for gold set as text on white. The build fails if a pinned value stops matching its derivation. gold clears {C.contrast(C.GOLD, C.INK):.1f}:1 on obsidian; on white it is {C.contrast(C.GOLD, C.PAPER):.1f}:1, which is why gold as <em>text</em> on white becomes gold-deep at {C.contrast(C.GOLD_DEEP, C.PAPER):.1f}:1.</p>
 <div class="grid g4" style="margin:22px 0 34px">{gold_cards}</div>
 <h3>Every token</h3>
 <div style="overflow-x:auto"><table>
@@ -583,14 +586,19 @@ def build_html() -> str:
 
 <section id="type">
 <p class="eyebrow">Type</p>
-<h2>Space Grotesk, four weights</h2>
-<p>One family for both brands, in the product, on the site, in print and in the logos. 600 is the logo weight. 700 for display, 600 for headings, 500 for interface, 400 for reading. The scale is a 1.2 ratio from 16 px.</p>
-<div class="type-row"><span class="mono">700 · display</span><span style="font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.02em">It does not say done. It proves it.</span></div>
-<div class="type-row"><span class="mono">600 · heading</span><span style="font-weight:600;font-size:26px;line-height:1.15">Verified work becomes owned capability.</span></div>
-<div class="type-row"><span class="mono">500 · interface</span><span style="font-weight:500;font-size:16px">Run pipeline · Witness authored · Verdict confirmed</span></div>
-<div class="type-row"><span class="mono">400 · body</span><span style="font-weight:400;font-size:16px;color:var(--body)">A green check is not an answer. The agent writes the test that would have caught the bug, watches it fail, then makes it pass.</span></div>
-<div class="type-row"><span class="mono">ligatures</span><span style="font-size:22px">fi fl · verified · office · flow</span></div>
-<p style="margin-top:20px">Code and terminal output stay in the system monospace. Space Grotesk is not a code face and is never used for one.</p>
+<h2>Three faces, each with one job</h2>
+<p><b>Space Grotesk</b> sets the wordmarks and h1 to h3, and nothing smaller than 20 px: its wide geometric letters lose their shape below that. <b>Geist</b> sets h4 to h6 and everything read: body, labels, buttons, tables, navigation. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
+<div class="type-row"><span class="mono">display · 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Mission Control for your autonomous agents.</span></div>
+<div class="type-row"><span class="mono">display · 600</span><span style="font-family:var(--ox-font-display);font-weight:600;font-size:26px;line-height:1.2">See which agent spent what.</span></div>
+<div class="type-row"><span class="mono">text · 600</span><span style="font-weight:600;font-size:16px">Runs waiting for approval</span></div>
+<div class="type-row"><span class="mono">text · 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
+<div class="type-row"><span class="mono">code · 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:14px">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
+<h3>Two scales</h3>
+<p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a page read once. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for panels, tables, and logs read all day.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>step</th><th>face</th><th>marketing</th><th>app</th></tr></thead>
+<tbody>{scale_rows}</tbody></table></div>
+<p class="muted" style="margin-top:14px;font-size:13.5px">Sizes in px, then line height and weight. <span class="mono">tokens/house-tailwind.css</span> carries both scales as Tailwind v4 utilities; <span class="mono">tokens/next-fonts.ts</span> loads the three faces with next/font.</p>
 </section>
 
 <section id="motion">
@@ -612,7 +620,7 @@ def build_html() -> str:
 <section id="surfaces">
 <p class="eyebrow">Surfaces</p>
 <h2>One composition rule</h2>
-<p>A surface is a ground, one warm bloom of the metal, the brand's own icon placed off-centre, and at most a few lines of type. When a surface needs more than a mark, it builds the picture out of the mark. Every surface below is the vector the kit ships, not a screenshot.</p>
+<p>A surface is a ground, one bloom of the metal, the brand's own icon placed off-centre, and at most a few lines of type. When a surface needs more than a mark, it builds the picture out of the mark. Every surface below is the vector the kit ships, not a screenshot.</p>
 <h3>Wallpapers, five ways</h3>
 <p><b>graph</b> scatters nodes across the ground, wires each to its two nearest neighbours, and runs gold edges from the mark out to the nodes nearest it: the one-to-many, drawn. <b>blocks</b> rebuilds the mark from blocks on a grid, each tile a shade brighter or deeper than the next, with a bloom of fainter blocks around it. <b>orbit</b> hangs five rings of nodes off the mark, each node wired inward to the ring inside it. <b>glow</b> and <b>quiet</b> are the mark alone, as a bloom and as a hairline -- and both are pulled back inside the canvas rather than cropped, because a mark clipped by a few per cent of its width reads as a mistake and not as a crop. Every node is placed by a seeded random, so the same file comes out of every build.</p>
 <div class="grid g2">{walls}</div>
@@ -642,7 +650,7 @@ brew install harfbuzz librsvg
 </section>
 
 </main>
-<footer><div class="wrap">Oxagen house system · built from the Oxagen brand kit · Space Grotesk under the SIL Open Font License</div></footer>
+<footer><div class="wrap">Oxagen house system · built from the Oxagen brand kit · Space Grotesk, Geist and Monaspace Neon under the SIL Open Font License</div></footer>
 <script>
 (function(){{var b=document.getElementById('theme'),r=document.documentElement;
 b.addEventListener('click',function(){{var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',dark?'light':'dark');}});}})();

@@ -1,30 +1,28 @@
 # fonts
 
-Two faces. Space Grotesk sets the wordmarks and the headings; Aeonik sets
-everything that is read rather than seen.
+Three faces, each with one job. Space Grotesk sets the wordmarks and h1 to
+h3. Geist sets h4 to h6 and everything read. Monaspace Neon sets code, logs,
+and data. All three are under the SIL Open Font License, so all three live in
+this repo, each with its licence beside it.
 
-## Space Grotesk — tracked here
+| File | Face | Licence |
+|---|---|---|
+| `SpaceGrotesk-VariableFont_wght.ttf` | Space Grotesk, the source the wordmarks are outlined from at build time | `LICENSE-OFL.txt` |
+| `space-grotesk-latin-{400,500,600,700}.woff2` | Space Grotesk, four static weights for the web | `LICENSE-OFL.txt` |
+| `geist-latin-wght.woff2` | Geist, variable weight 100 to 900 | `LICENSE-OFL-geist.txt` |
+| `monaspace-neon-latin-wght.woff2` | Monaspace Neon, variable weight 200 to 800, upright, normal width | `LICENSE-OFL-monaspace.txt` |
 
-`SpaceGrotesk-VariableFont_wght.ttf` is the source the wordmarks are outlined
-from at build time, and `space-grotesk-latin-{400,500,600,700}.woff2` are the
-subset webfonts the HTML surfaces load. It ships under the SIL Open Font
-License (`LICENSE-OFL.txt`), so it lives in the repo.
+Every webfont covers the same latin subset. `build/fonts.py` makes the Geist
+and Monaspace Neon files from their upstream releases (Geist v1.7.2, Monaspace
+v1.400), keeping texture healing (`calt`) and the code ligatures (`liga`):
 
-## Aeonik — licensed, not tracked
+```sh
+.venv/bin/python build/fonts.py geist "Geist[wght].woff2"
+.venv/bin/python build/fonts.py mono  "Monaspace Neon Var.woff2"
+.venv/bin/python build/fonts.py --check
+```
 
-Aeonik is licensed from [CoType Foundry](https://www.cotypefoundry.com/aeonik)
-and is not on Google Fonts or any public CDN. This repo is public, so the files
-are gitignored and never committed.
+`build/build.py --check` runs the same check.
 
-Drop the licensed webfonts in here, named to match what the CSS asks for:
-
-    fonts/aeonik-latin-400.woff2
-    fonts/aeonik-latin-500.woff2
-    fonts/aeonik-latin-600.woff2
-    fonts/aeonik-latin-700.woff2
-
-Use **Aeonik**, the sans — not Aeonik Fono and not Aeonik Mono.
-
-Until those files are in place, body text falls back to Helvetica Neue and then
-Arial. Nothing breaks; the pages just set their body copy in the fallback.
-Headings and wordmarks are unaffected either way.
+To load the faces, a Next.js app uses `tokens/next-fonts.ts`, and any other
+page imports `tokens/house-fonts.css`.

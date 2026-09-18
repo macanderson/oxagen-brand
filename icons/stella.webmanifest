@@ -4,8 +4,8 @@
   "description": "It does the work and proves it finished.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#10100F",
-  "theme_color": "#10100F",
+  "background_color": "#09090B",
+  "theme_color": "#09090B",
   "icons": [
     {
       "src": "stella-icon-192.png",

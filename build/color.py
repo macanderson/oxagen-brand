@@ -1,10 +1,10 @@
-"""The house colours: one gold, two grounds, and the warm greys between.
+"""The house colours: one gold, two grounds, and the neutral greys between.
 
-The grounds and the greys are the Oxagen brand kit's Ink and Paper as shipped.
-The gold is that kit's Bronze Gold lifted a step in OKLCH: a little lighter, a
-little more saturated, and a few degrees toward yellow, so it reads as gold
-rather than bronze. The lift is derived here, not typed, and `verify()` fails
-if the pinned hex ever stops matching its derivation.
+Obsidian `#09090B` is the dark ground and white the light one, with neutral
+zinc greys between (September 2026). The greys carry no hue, so the gold
+`#D4AF37` is the only warm value on a screen. Its bright and deep neighbours
+are derived from it in OKLCH, not typed, and `verify()` fails if a pinned hex
+ever stops matching its derivation.
 
 **The gold is flat.** One value, one fill, everywhere it appears: the wordmark's
 `x`, the asterisk, the hive's lit cells, a rule, a chip, a node. There is no
@@ -96,49 +96,54 @@ def contrast(a: str, b: str) -> float:
 # the gold
 # --------------------------------------------------------------------------
 
-#: Bronze Gold as shipped in the Oxagen brand kit (`wordmark-color-light.svg`,
-#: the fill of the `x`). Kept only as the anchor the house gold is derived from.
+#: Bronze Gold as shipped in the original Oxagen brand kit, the fill of the
+#: wordmark's `x`. The house gold below replaced it in September 2026; this
+#: stays only so the reference wordmark check in glyphs.py can name it.
 REFERENCE_GOLD = "#C58A32"
 
-#: The lift, in OKLCH: lightness, chroma, hue degrees. "A tad brighter and more
-#: shimmery" -- lighter so it lifts off ink, more chroma so it does not go
-#: sandy when lighter, and a nudge toward yellow so it reads gold, not copper.
-GOLD_LIFT = (0.043, 0.014, 1.8)
+GOLD = "#D4AF37"  # the gold: identity, one action per screen. flat, always
 
-GOLD = "#D6962C"  # the gold: identity, one action per screen. flat, always
-GOLD_BRIGHT = "#F1C364"  # the highlight the shimmer passes through, in motion only
-GOLD_DEEP = "#8B5E1A"  # gold as text on paper, and small details there
-
-#: What the two gold neighbours are: the same hue, moved in lightness only.
-#: (L, C, H) for the highlight; the deep value is the reference kit's Bronze
-#: Deep, unchanged, because it already clears AA on paper.
-GOLD_BRIGHT_LCH = (0.840, 0.125, 84.0)
+#: The two gold neighbours are the same metal moved in OKLCH, not typed.
+#: bright is lighter, for the moment the shimmer passes. deep is darker and a
+#: few degrees warmer, for gold set as type on white, where the metal itself
+#: is 2.1:1 and cannot be text. `verify()` fails if either pinned hex stops
+#: matching its (L, C, H).
+GOLD_BRIGHT_LCH = (0.860, 0.130, 91.0)
+GOLD_DEEP_LCH = (0.570, 0.110, 82.0)
+GOLD_BRIGHT = "#F1CE65"  # the highlight the shimmer passes through, in motion only
+GOLD_DEEP = "#977017"  # gold as text on paper, and small details there
 
 # --------------------------------------------------------------------------
 # the grounds and the greys
 # --------------------------------------------------------------------------
 
-INK = "#10100F"  # the dark canvas
-VOID = "#0A0A09"  # below the canvas: full-bleed backdrops
-PANEL = "#181715"  # panels, cards, code blocks
-HL = "#201F1C"  # a row or line lifted off a panel
-BORDER = "#292722"  # hairlines on ink (the kit's Hairline Dark)
-RULE = "#34322D"  # a heavier rule on ink
+#: Obsidian and white, with neutral greys between. The greys carry no hue, so
+#: the one gold is the only warm thing on the screen and reads as metal
+#: against either ground.
 
-PAPER = "#F2EEE5"  # the warm light canvas
-PAPER_PANEL = "#F8F5EE"  # light panel
-PAPER_BORDER = "#D8CDBD"  # hairlines on paper (the kit's Hairline Light)
-PAPER_RULE = "#C9BFAE"  # a heavier rule on paper
+INK = "#09090B"  # the dark canvas: obsidian
+VOID = "#000000"  # below the canvas: full-bleed backdrops
+PANEL = "#18181B"  # panels, cards, code blocks
+HL = "#27272A"  # a row or line lifted off a panel; the hover surface
+BORDER = "#27272A"  # hairlines on ink
+RULE = "#3F3F46"  # a heavier rule on ink
 
-PAPER_TEXT = PAPER  # primary text on ink: the kit sets type in Paper
-TEXT = "#DDD8CD"  # body text on ink
-MUTED = "#9B958A"  # secondary text on ink
-DIM = "#6E6A62"  # the quietest text on ink
+PAPER = "#FFFFFF"  # the light canvas: white
+PAPER_VOID = "#F4F4F5"  # below paper: full-bleed backdrops
+PAPER_PANEL = "#FFFFFF"  # light panel: a card on white is a hairline, not a tint
+PAPER_HL = "#F4F4F5"  # a row or line lifted off paper; the hover surface there
+PAPER_BORDER = "#E4E4E7"  # hairlines on paper
+PAPER_RULE = "#D4D4D8"  # a heavier rule on paper
+
+PAPER_TEXT = PAPER  # primary text on ink
+TEXT = "#E4E4E7"  # body text on ink
+MUTED = "#A1A1AA"  # secondary text on ink
+DIM = "#71717A"  # the quietest text on ink
 
 INK_TEXT = INK  # primary text on paper
-TEXT_INK = "#2A2823"  # body text on paper
-MUTED_INK = "#6B665C"  # secondary text on paper
-DIM_INK = "#8C877C"  # the quietest text on paper
+TEXT_INK = "#27272A"  # body text on paper
+MUTED_INK = "#71717A"  # secondary text on paper
+DIM_INK = "#A1A1AA"  # the quietest text on paper; never a word that carries meaning
 
 #: (token, value, use). This list is the palette. Nothing else is.
 TOKENS: list[tuple[str, str, str]] = [
@@ -151,8 +156,10 @@ TOKENS: list[tuple[str, str, str]] = [
     ("hl", HL, "a lifted row or line"),
     ("border", BORDER, "hairlines on ink"),
     ("rule", RULE, "a heavier rule on ink"),
-    ("paper", PAPER, "the warm light canvas"),
+    ("paper", PAPER, "the light canvas"),
+    ("paper-void", PAPER_VOID, "below paper"),
     ("paper-panel", PAPER_PANEL, "light panel"),
+    ("paper-hl", PAPER_HL, "a lifted row or line on paper"),
     ("paper-border", PAPER_BORDER, "hairlines on paper"),
     ("paper-rule", PAPER_RULE, "a heavier rule on paper"),
     ("text", PAPER_TEXT, "primary text on ink"),
@@ -171,33 +178,73 @@ MUTED_ON = {"dark": MUTED, "light": MUTED_INK}
 GOLD_TEXT_ON = {"dark": GOLD, "light": GOLD_DEEP}
 BORDER_ON = {"dark": BORDER, "light": PAPER_BORDER}
 
+# --------------------------------------------------------------------------
+# state, for badges and dots
+# --------------------------------------------------------------------------
+
+#: State is carried by border shape (double, dashed, single). These colours
+#: exist for the badge or dot inside a table where shape alone is too small
+#: to read, and are never the only signal. (name, on ink, on paper, use).
+#: The values are the approved September 2026 system's.
+STATES: list[tuple[str, str, str, str]] = [
+    ("allowed", "#57A97C", "#2F7D52", "a request a rule allowed"),
+    ("approval", "#5B93D6", "#2E6BA8", "a request routed to a person"),
+    ("denied", "#C66A4A", "#9B4526", "a request a rule denied"),
+    ("proven", "#3FA2A2", "#1F7676", "the witness's word, beside a witness flip"),
+    ("failed", "#C0453C", "#992F28", "a check that did not hold"),
+    ("critical", "#D6455E", "#AE2540", "a run that needs a person now"),
+]
+STATE = {name: {"dark": d, "light": l} for name, d, l, _ in STATES}
+
+#: The one state colour that is also text and a fill: a destructive action.
+#: On paper it is the failed badge as is. On ink the failed badge is 3.8:1,
+#: so the destructive red is that badge lifted in OKLCH lightness until it
+#: clears AA both as text on ink and as a fill under ink text. The lift is
+#: derived, not typed; `verify()` fails if the pinned hex stops matching.
+DESTRUCTIVE_LIFT = 0.06
+DESTRUCTIVE = {"dark": "#D5584D", "light": STATE["failed"]["light"]}
+DESTRUCTIVE_TEXT_ON = {"dark": INK, "light": PAPER}  # text on a destructive fill
+
 
 # --------------------------------------------------------------------------
 # checks
 # --------------------------------------------------------------------------
 
 
-def derive_gold() -> str:
-    L, C, H = hex_to_oklch(REFERENCE_GOLD)
-    dL, dC, dH = GOLD_LIFT
-    return oklch_hex(L + dL, C + dC, H + dH)
+def derive_destructive() -> str:
+    L, C, H = hex_to_oklch(STATE["failed"]["dark"])
+    return oklch_hex(L + DESTRUCTIVE_LIFT, C, H)
 
 
 def verify() -> list[str]:
     """Every fact the palette claims, checked. Returns the problems found."""
     problems = []
-    if derive_gold() != GOLD:
-        problems.append(f"gold {GOLD} is not the reference gold lifted by {GOLD_LIFT}: {derive_gold()}")
     if oklch_hex(*GOLD_BRIGHT_LCH) != GOLD_BRIGHT:
         problems.append(f"gold-bright {GOLD_BRIGHT} != {oklch_hex(*GOLD_BRIGHT_LCH)}")
-    gL, gC, gH = hex_to_oklch(GOLD)
-    rL, rC, rH = hex_to_oklch(REFERENCE_GOLD)
-    if not (gL > rL and gC > rC):
-        problems.append("gold is not brighter and richer than the reference")
+    if oklch_hex(*GOLD_DEEP_LCH) != GOLD_DEEP:
+        problems.append(f"gold-deep {GOLD_DEEP} != {oklch_hex(*GOLD_DEEP_LCH)}")
+    gL, _, _ = hex_to_oklch(GOLD)
+    if not (GOLD_DEEP_LCH[0] < gL < GOLD_BRIGHT_LCH[0]):
+        problems.append("gold does not sit between its deep and bright neighbours")
+    if derive_destructive() != DESTRUCTIVE["dark"]:
+        problems.append(f"destructive {DESTRUCTIVE['dark']} is not failed lifted by {DESTRUCTIVE_LIFT}: {derive_destructive()}")
+    for theme, ground in GROUNDS.items():
+        red = DESTRUCTIVE[theme]
+        if contrast(red, ground) < 4.5:
+            problems.append(f"destructive on {theme} is {contrast(red, ground):.2f}:1 as text, below AA")
+        if contrast(DESTRUCTIVE_TEXT_ON[theme], red) < 4.5:
+            problems.append(f"text on a destructive fill ({theme}) is {contrast(DESTRUCTIVE_TEXT_ON[theme], red):.2f}:1, below AA")
+    for name, dark, light, _ in STATES:
+        # A badge is a fill or a dot at least 3:1 against its ground (WCAG
+        # 1.4.11, non-text), and never the only signal.
+        if contrast(dark, INK) < 3 or contrast(light, PAPER) < 3:
+            problems.append(f"state {name} is below 3:1 on a ground")
     if contrast(GOLD, INK) < 4.5:
         problems.append(f"gold on ink is {contrast(GOLD, INK):.2f}:1, below AA")
     if contrast(GOLD_DEEP, PAPER) < 4.5:
         problems.append(f"gold-deep on paper is {contrast(GOLD_DEEP, PAPER):.2f}:1, below AA")
+    if contrast(INK, GOLD) < 4.5:
+        problems.append(f"ink on a gold fill is {contrast(INK, GOLD):.2f}:1, below AA")
     for name, value, ground in (
         ("text", PAPER_TEXT, INK),
         ("text-body", TEXT, INK),
@@ -212,10 +259,8 @@ def verify() -> list[str]:
 
 
 if __name__ == "__main__":
-    L, C, H = hex_to_oklch(REFERENCE_GOLD)
-    print(f"reference gold {REFERENCE_GOLD}  L={L:.3f} C={C:.3f} H={H:.1f}")
     L, C, H = hex_to_oklch(GOLD)
-    print(f"house gold     {GOLD}  L={L:.3f} C={C:.3f} H={H:.1f}")
+    print(f"gold        {GOLD}  L={L:.3f} C={C:.3f} H={H:.1f}")
     print()
     hdr = f"{'token':14} {'value':8} {'on ink':>7} {'on paper':>9}"
     print(hdr)
