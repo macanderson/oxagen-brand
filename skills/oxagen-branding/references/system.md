@@ -24,7 +24,9 @@ The semantic colors (`--st-allowed`, `--st-approval`, `--st-denied`, `--st-prove
 
 ## Type
 
-Space Grotesk for everything: headings, body, labels, buttons, tables. Weights 400 to 700. Headings at letter-spacing -0.02em, sentence case. System mono (`ui-monospace, "SF Mono", Menlo, Consolas`) for data: digests, commands, paths, frame kinds, verdict values, ids. No third typeface, ever.
+Two faces, each with one job. **Space Grotesk** is the display face: the wordmarks, h1/h2/h3, and nothing else. **Aeonik** is the text face: body, labels, buttons, tables — everything that is read rather than seen. Weights 400 to 700 in both. Headings at letter-spacing -0.02em, sentence case. System mono (`ui-monospace, "SF Mono", Menlo, Consolas`) for data: digests, commands, paths, frame kinds, verdict values, ids. No fourth typeface, ever.
+
+In CSS that is `--font-display` for headings and `--font` for everything else; the house tokens name them `--ox-font-display` and `--ox-font`. Aeonik is licensed from CoType Foundry and is not on any public CDN, so it is served from `fonts/` and falls back to Helvetica Neue where the files are not deployed.
 
 Sizes on a page: h1 30 to 46px clamped, h2 24px, h3 16px, body 15px at 1.6 line height, table 13.5px, mono 12.5 to 13px, eyebrow 12px uppercase at 0.14em tracking.
 

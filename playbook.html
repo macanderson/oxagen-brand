@@ -10,12 +10,18 @@
 @font-face{font-family:"Space Grotesk";font-weight:500;src:url(fonts/space-grotesk-latin-500.woff2) format("woff2")}
 @font-face{font-family:"Space Grotesk";font-weight:600;src:url(fonts/space-grotesk-latin-600.woff2) format("woff2")}
 @font-face{font-family:"Space Grotesk";font-weight:700;src:url(fonts/space-grotesk-latin-700.woff2) format("woff2")}
+@font-face{font-family:"Aeonik";font-weight:400;font-display:swap;src:url(fonts/aeonik-latin-400.woff2) format("woff2")}
+@font-face{font-family:"Aeonik";font-weight:500;font-display:swap;src:url(fonts/aeonik-latin-500.woff2) format("woff2")}
+@font-face{font-family:"Aeonik";font-weight:600;font-display:swap;src:url(fonts/aeonik-latin-600.woff2) format("woff2")}
+@font-face{font-family:"Aeonik";font-weight:700;font-display:swap;src:url(fonts/aeonik-latin-700.woff2) format("woff2")}
 :root{
   --ink:#10100F;--void:#0A0A09;--panel:#181715;--hl:#201F1C;--border:#292722;--rule:#34322D;
   --fg:#F2EEE5;--body:#DDD8CD;--muted:#9B958A;--dim:#6E6A62;
   --gold:#D6962C;--gold-bright:#F1C364;--gold-deep:#8B5E1A;--accent-text:#D6962C;
   --paper:#F2EEE5;--card:#181715;
   --shadow:0 1px 0 rgba(255,255,255,.03),0 18px 44px rgba(0,0,0,.5);
+  --ox-font:"Aeonik","Helvetica Neue",Arial,sans-serif;
+  --ox-font-display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
 }
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
   --ink:#F2EEE5;--void:#E9E3D8;--panel:#F8F5EE;--hl:#EFEAE0;--border:#D8CDBD;--rule:#C9BFAE;
@@ -28,7 +34,7 @@
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:78px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--ink);color:var(--fg);font-family:"Space Grotesk","Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--ink);color:var(--fg);font-family:var(--ox-font);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
 .bar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--ink) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
 .bar-in{max-width:1180px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:20px}
 .bar svg{height:20px;width:auto;display:block}
@@ -39,6 +45,7 @@ body{margin:0;background:var(--ink);color:var(--fg);font-family:"Space Grotesk",
 section{padding:72px 0;border-top:1px solid var(--rule)}
 section:first-of-type{border-top:0}
 .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}
+h1,h2,h3{font-family:var(--ox-font-display)}
 h1{font-size:clamp(40px,6vw,64px);line-height:1.02;letter-spacing:-.02em;font-weight:700;margin:0 0 20px}
 h2{font-size:32px;line-height:1.1;letter-spacing:-.015em;font-weight:700;margin:0 0 14px}
 h3{font-size:19px;font-weight:600;margin:32px 0 10px}

@@ -10,3 +10,8 @@ __pycache__/
 # Prospect names for the message registry's blocklist. Tracking them would
 # publish them in this public repo.
 messages/rules/*.local.txt
+
+# Aeonik is licensed from CoType Foundry, not open-licensed like Space Grotesk.
+# The webfonts are dropped in locally and never committed to this public repo.
+fonts/aeonik-*.woff2
+fonts/Aeonik*

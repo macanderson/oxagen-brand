@@ -99,7 +99,8 @@
     "dim-ink": "#8C877C"
   },
   "type": {
-    "family": "Space Grotesk",
+    "family": "Aeonik",
+    "display_family": "Space Grotesk",
     "weights": [
       400,
       500,

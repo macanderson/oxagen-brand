@@ -107,7 +107,8 @@ def build_tokens() -> None:
         f"  --ox-gold-sheen: linear-gradient(45deg, {C.GOLD_DEEP} 0%, {C.GOLD} 38%, "
         f"{C.GOLD_BRIGHT} 56%, {C.GOLD} 74%, {C.GOLD_DEEP} 100%);",
         "",
-        '  --ox-font: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;',
+        '  --ox-font: "Aeonik", "Helvetica Neue", Arial, sans-serif;',
+        '  --ox-font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;',
         "  --ox-weight-display: 700;",
         "  --ox-weight-logo: 600;",
         "  --ox-weight-heading: 600;",
@@ -166,7 +167,8 @@ def build_tokens() -> None:
         },
         "tokens": {name: value for name, value, _ in C.TOKENS},
         "type": {
-            "family": "Space Grotesk",
+            "family": "Aeonik",
+            "display_family": "Space Grotesk",
             "weights": list(G.WEIGHTS),
             "logo_weight": G.LOGO_WEIGHT,
             "logo_em": round(G.EM, 3),

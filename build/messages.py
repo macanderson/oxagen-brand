@@ -840,6 +840,7 @@ class Page:
 <meta name="color-scheme" content="dark light">
 <title>Oxagen message bank</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<style>@font-face{{font-family:"Aeonik";font-weight:400;font-display:swap;src:url(fonts/aeonik-latin-400.woff2) format("woff2")}}@font-face{{font-family:"Aeonik";font-weight:500;font-display:swap;src:url(fonts/aeonik-latin-500.woff2) format("woff2")}}@font-face{{font-family:"Aeonik";font-weight:600;font-display:swap;src:url(fonts/aeonik-latin-600.woff2) format("woff2")}}@font-face{{font-family:"Aeonik";font-weight:700;font-display:swap;src:url(fonts/aeonik-latin-700.woff2) format("woff2")}}</style>
 <style>
 {BANK_CSS}{EXTRA_CSS}</style>
 </head>
@@ -895,7 +896,8 @@ BANK_CSS = r""":root{
   --st-allowed:#57A97C; --st-approval:#5B93D6; --st-denied:#C66A4A;
   --st-proven:#3FA2A2; --st-failed:#C0453C; --st-critical:#D6455E;
   --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-  --font:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --font:"Aeonik","Helvetica Neue",Arial,sans-serif;
+  --font-display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
 }
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
   --ink:#F2EEE5; --void:#E9E3D8; --panel:#F8F5EE; --hl:#EFEAE0; --border:#D8CDBD; --rule:#C9BFAE;
@@ -915,7 +917,7 @@ body{margin:0;background:var(--ink);color:var(--body);font-family:var(--font);fo
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
 a{color:var(--accent-text);text-decoration:none;border-bottom:1px solid transparent}
 a:hover{border-bottom-color:currentColor}
-h1,h2,h3{margin:0;color:var(--fg);letter-spacing:-.02em;text-wrap:balance}
+h1,h2,h3{margin:0;color:var(--fg);font-family:var(--font-display);letter-spacing:-.02em;text-wrap:balance}
 h1{font-size:clamp(30px,5vw,46px);font-weight:700;line-height:1.05}
 h2{font-size:24px;font-weight:600;line-height:1.15}
 h3{font-size:16px;font-weight:600}

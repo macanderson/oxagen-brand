@@ -88,5 +88,5 @@ Full guidance, with before and after pairs, is in `references/voice.md`.
 - [ ] Buyer quotes are labelled hypothetical unless an attributed customer approved them
 - [ ] No traction numbers, partner counts, or setup durations without dated evidence
 - [ ] Every claim is one the record can back
-- [ ] Space Grotesk for everything; system mono for data, digests, and commands
+- [ ] Space Grotesk for wordmarks and headings, Aeonik for body and UI; system mono for data, digests, and commands
 - [ ] 12px card radius, 1120px wrap, dark first with the parchment light theme intact

@@ -681,6 +681,113 @@ def content_card(
     return s.svg()
 
 
+def thumbnail(
+    w: int,
+    h: int,
+    brand: str,
+    scheme: str,
+    *,
+    kicker: str,
+    headline: list[str],
+    subline: str = "",
+    picture: str = "orbit",
+) -> str:
+    """A video thumbnail, laid out for the size it is actually first seen at.
+
+    A thumbnail is read twice: once at about 168px wide in a sidebar, and once
+    full size on a watch page. The first reading is the one that decides
+    whether the second happens, so the headline is set far larger here than on
+    an ad of the same proportions, three or four words to a line, and nothing
+    smaller than the answer line is allowed on the canvas at all. At 168px the
+    kicker is a gold smudge and the wordmark is a shape; both are there for the
+    second reading, and neither carries meaning the first reading needs.
+
+    The landscape and the portrait are two layouts, not one layout cropped.
+    Landscape gives the picture the right third and stacks the type from the
+    bottom left, the way the ads do. Portrait puts the picture overhead and
+    sets the type in the middle band, clear of the top bar, clear of the right
+    rail of buttons, and clear of the bottom fifth a short player covers with
+    its own title. A crop would have put the headline under that furniture.
+    """
+    s = Surface(w, h, scheme)
+    short, aspect = min(w, h), w / h
+    portrait = aspect < 0.85
+
+    def draw_picture(cx: float, cy: float, span: float) -> None:
+        if picture == "orbit":
+            s.behind(0.62 if s.dark else 0.66, lambda: s.orbit(brand, cx, cy, span * 0.19, seed="thumb"))
+        elif picture == "graph":
+            s.behind(
+                0.62 if s.dark else 0.66,
+                lambda: s.constellation(brand, cx, cy, span * 0.22, seed="thumb", quiet=(0.34, 0.0, 0.0, 0.10)),
+            )
+        elif picture == "ghost":
+            s.ghost(brand, cx, cy, span * 0.95, rot=GHOST_ROT[brand])
+        else:
+            raise ValueError(picture)
+
+    if portrait:
+        # The short player's own furniture: a top bar, a rail of buttons down
+        # the right, and a title over the bottom fifth. Type stays inside what
+        # is left, and the picture takes the space above it.
+        pad = w * 0.085
+        measure = w * 0.80 - pad  # clear of the right rail
+        floor = h * 0.79
+        draw_picture(w * 0.50, h * 0.235, h * 0.62)
+        size = w * 0.135
+        for _ in range(28):
+            if max(text_width(ln, size, 700) for ln in headline) <= measure:
+                break
+            size *= 0.95
+        lead = size * 1.16
+        top = h * 0.455
+        s.line(kicker, pad, top - size * 0.78, w * 0.042, weight=600, fill=s.gold_text)
+        for i, ln in enumerate(headline):
+            s.line(ln, pad, top + i * lead, size, weight=700)
+        y = top + (len(headline) - 1) * lead + size * 0.86
+        rule_h = max(3.0, short * 0.013)
+        s.rule(pad, y, w * 0.16, rule_h)
+        y += rule_h + size * 0.58
+        if subline:
+            sub = w * 0.049
+            while sub > w * 0.030 and text_width(subline, sub, 500) > measure:
+                sub *= 0.96
+            s.line(subline, pad, y, sub, weight=500)
+        s.wordmark(brand, pad, floor, w * 0.40, anchor="start")
+        return s.svg()
+
+    pad = w * 0.062
+    measure = w * 0.615
+    draw_picture(w * 0.815, h * 0.46, h)
+    mark_w = h * 0.30
+    mark_cy = h - pad - mark_w * mark_aspect(brand) / 2
+
+    size = h * 0.165
+    for _ in range(28):
+        block = (len(headline) - 1) * size * 1.14 + size + (h * 0.075 if subline else 0)
+        wide = max(text_width(ln, size, 700) for ln in headline)
+        if wide <= measure and block <= h * 0.50:
+            break
+        size *= 0.95
+    lead = size * 1.14
+
+    s.wordmark(brand, pad, mark_cy, mark_w, anchor="start")
+    y = mark_cy - mark_w * mark_aspect(brand) / 2 - h * 0.055
+    if subline:
+        sub = h * 0.058
+        while sub > h * 0.036 and text_width(subline, sub, 500) > measure:
+            sub *= 0.96
+        s.line(subline, pad, y, sub, weight=500)
+        y -= h * 0.055
+    rule_h = max(3.0, short * 0.013)
+    s.rule(pad, y - rule_h, h * 0.12, rule_h)
+    y -= rule_h + size * 0.72
+    for i, ln in enumerate(reversed(headline)):
+        s.line(ln, pad, y - i * lead, size, weight=700)
+    s.line(kicker, pad, y - (len(headline) - 1) * lead - size * 0.78, h * 0.046, weight=600, fill=s.gold_text)
+    return s.svg()
+
+
 __all__ = [
     "GOLD_BRIGHT",
     "Surface",
@@ -691,6 +798,7 @@ __all__ = [
     "content_card",
     "mark_aspect",
     "og_card",
+    "thumbnail",
     "wallpaper_desktop",
     "wallpaper_phone",
 ]

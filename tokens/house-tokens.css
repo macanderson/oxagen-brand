@@ -35,7 +35,8 @@
 
   --ox-gold-sheen: linear-gradient(45deg, #8B5E1A 0%, #D6962C 38%, #F1C364 56%, #D6962C 74%, #8B5E1A 100%);
 
-  --ox-font: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --ox-font: "Aeonik", "Helvetica Neue", Arial, sans-serif;
+  --ox-font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --ox-weight-display: 700;
   --ox-weight-logo: 600;
   --ox-weight-heading: 600;

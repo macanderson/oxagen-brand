@@ -6,7 +6,8 @@
   --st-allowed:#57A97C; --st-approval:#5B93D6; --st-denied:#C66A4A;
   --st-proven:#3FA2A2; --st-failed:#C0453C; --st-critical:#D6455E;
   --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-  --font:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --font:"Aeonik","Helvetica Neue",Arial,sans-serif;
+  --font-display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
   --radius:12px; --wrap:1120px;
 }
 :root[data-theme="light"], @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
