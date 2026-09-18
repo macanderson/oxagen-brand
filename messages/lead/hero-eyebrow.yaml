@@ -1,7 +1,7 @@
 id: hero-eyebrow
 brand: oxagen
 kind: eyebrow
-title: The control plane for your agent workforce
+title: The agent control plane
 audience:
 - operator
 - platform
@@ -15,4 +15,4 @@ owner: product owner
 review_by: '2026-10-15'
 findings:
 - '07'
-notes: Mission Control is the product name. The agent control plane is the technical category.
+notes: The category, stated bare so it covers every agent Oxagen governs. Mission Control is the product name. The agent control plane is the technical category.

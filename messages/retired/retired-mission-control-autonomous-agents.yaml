@@ -1,0 +1,15 @@
+id: retired-mission-control-autonomous-agents
+brand: oxagen
+kind: headline
+title: Mission Control for your autonomous agents.
+audience:
+  - operator
+  - platform
+clause: none
+surfaces: []
+status: retired
+owner: Mac Anderson
+findings:
+  - '07'
+replaced_by: hero-headline
+notes: Was the homepage headline, the primary ad, and the social and manifest tagline until 2026-09-18. Oxagen also governs agents that are not autonomous, so the word narrowed the claim. The new line names the operator instead of saying your.

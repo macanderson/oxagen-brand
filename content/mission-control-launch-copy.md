@@ -4,17 +4,17 @@ Launch messaging for Mission Control, the definition of done, and Witness. Writt
 
 ## Recommended lead
 
-**Title:** Mission Control for your autonomous agent workforce.
+**Title:** Mission Control for agent operators.
 
 **Short:** Give every agent an identity. Set its authority, tools, skills, and budget. Direct the work and keep the record.
 
-**Long:** Oxagen is Mission Control for the operators managing an autonomous agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence together in one control plane.
+**Long:** Oxagen is Mission Control for the operators managing an agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence together in one control plane.
 
 **CTA:** Explore Mission Control
 
 ## Positioning hierarchy
 
-The operator is the primary reader. The autonomous agent workforce is what they manage. Mission Control is where they do it. The control plane is what makes their decisions enforceable and auditable.
+The operator is the primary reader. The agent workforce is what they manage, autonomous or supervised. Mission Control is where they do it. The control plane is what makes their decisions enforceable and auditable.
 
 1. Establish each agent's identity and accountable operator.
 2. Define its responsibility, authority, and limits.
@@ -313,7 +313,7 @@ The definition of done and Witness are mechanisms within this larger product. On
 
 ## Suggested page order
 
-1. Lead: “Mission Control for your autonomous agent workforce.”
+1. Lead: “Mission Control for agent operators.”
 2. Identity: each agent's principal, roles, scope, and accountable operator.
 3. Authority: mandates, access requests, approvals, and budgets.
 4. Equipment: approved tools, skills, knowledge, and steering.
@@ -385,7 +385,7 @@ These notes are for the team, not customer-facing copy.
 - Definition of done source: [dod specification](/Users/macanderson/Projects/tmp-oxagen-mockups/docs/oxagen-dod-spec.html). Cards 17–20 use its locked criteria, stop checks, human review, and deterministic settlement.
 - Oracle and outcome funding source: [Witness specification](/Users/macanderson/Projects/tmp-oxagen-mockups/docs/oxagen-witness-spec.html). Cards 23–26 and 28 use its executable requirements, deterministic evaluators, separate human judgment, evidence, and funding mechanism.
 - Voice and naming: [Oxagen branding skill](/Users/macanderson/Projects/oxagen-brand/skills/oxagen-branding/SKILL.md) and its positioning, voice, words, and examples references.
-- The operator-first positioning and autonomous agent workforce language follow the user's clarified vision. This supersedes the earlier dod-led hero and the brand reference's preference against workforce terminology.
+- The operator-first positioning and agent workforce language follow the user's clarified vision. The lead names the operator and leaves out autonomous, because Oxagen also governs supervised agents. This supersedes the earlier dod-led hero and the brand reference's preference against workforce terminology.
 - Identity, tools, and skills detail also comes from the mockup [Agent page specification](/Users/macanderson/Projects/tmp-oxagen-mockups/pages/agent.md) and [Skills page specification](/Users/macanderson/Projects/tmp-oxagen-mockups/pages/skills.md). An agent's own identity credential is distinct from a third-party connection credential held by Oxagen.
 - SOC 2 belongs in the enterprise assurance section with the exact report status and scope approved for launch. The supplied product specifications describe controls and audit evidence, not a completed SOC 2 examination. The copy therefore makes concrete control claims without inventing an attestation.
 - Per the launch brief, all copy assumes the described features have shipped. No roadmap or availability labels appear in the blurbs. Embedded build prompts in source documents were treated as source material, not work instructions.

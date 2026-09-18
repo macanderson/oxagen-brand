@@ -4,7 +4,7 @@ kind: pair
 order: 1
 title: Enthusiasm
 before: We're excited to introduce a revolutionary new way to manage AI agents.
-after: Mission Control for your autonomous agents.
+after: Mission Control for agent operators.
 audience:
   - operator
   - platform

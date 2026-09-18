@@ -402,11 +402,13 @@ def build_html() -> str:
             ("stella", "light", "graph"),
             ("oxagen", "dark", "glow"),
             ("stella", "light", "quiet"),
+            ("oxagen", "dark", "echo"),
+            ("oxagen", "light", "word"),
         )
     )
     phones = "".join(
         plate(SF.wallpaper_phone(430, 932, b, s, st), f"{b} iphone · {st} · {s}", cls="tight")
-        for b, s, st in (("oxagen", "dark", "blocks"), ("stella", "dark", "graph"), ("oxagen", "light", "orbit"), ("stella", "light", "glow"))
+        for b, s, st in (("oxagen", "dark", "blocks"), ("stella", "dark", "graph"), ("oxagen", "light", "orbit"), ("oxagen", "dark", "echo"))
     )
     social = "".join(
         [
@@ -457,7 +459,7 @@ def build_html() -> str:
         ("logo/svg, logo/png", "wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles"),
         ("icons/", "favicons and app icons, 16 to 512"),
         ("spinners/", "the house motion, animated SVG, no script"),
-        ("wallpapers/", "desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit · dark | light"),
+        ("wallpapers/", "desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit | word | echo · dark | light"),
         ("social/", "avatar · x · linkedin · youtube · open graph · dark | light"),
         ("ads/", "mission-control · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
         ("content/", "changelog · essay · release · field note · fleet note cards, 1200×675"),
@@ -588,7 +590,7 @@ def build_html() -> str:
 <p class="eyebrow">Type</p>
 <h2>Three faces, each with one job</h2>
 <p><b>Space Grotesk</b> sets the wordmarks and h1 to h3, and nothing smaller than 20 px: its wide geometric letters lose their shape below that. <b>Geist</b> sets h4 to h6 and everything read: body, labels, buttons, tables, navigation. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
-<div class="type-row"><span class="mono">display · 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Mission Control for your autonomous agents.</span></div>
+<div class="type-row"><span class="mono">display · 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Mission Control for agent operators.</span></div>
 <div class="type-row"><span class="mono">display · 600</span><span style="font-family:var(--ox-font-display);font-weight:600;font-size:26px;line-height:1.2">See which agent spent what.</span></div>
 <div class="type-row"><span class="mono">text · 600</span><span style="font-weight:600;font-size:16px">Runs waiting for approval</span></div>
 <div class="type-row"><span class="mono">text · 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
@@ -621,8 +623,8 @@ def build_html() -> str:
 <p class="eyebrow">Surfaces</p>
 <h2>One composition rule</h2>
 <p>A surface is a ground, one bloom of the metal, the brand's own icon placed off-centre, and at most a few lines of type. When a surface needs more than a mark, it builds the picture out of the mark. Every surface below is the vector the kit ships, not a screenshot.</p>
-<h3>Wallpapers, five ways</h3>
-<p><b>graph</b> scatters nodes across the ground, wires each to its two nearest neighbours, and runs gold edges from the mark out to the nodes nearest it: the one-to-many, drawn. <b>blocks</b> rebuilds the mark from blocks on a grid, each tile a shade brighter or deeper than the next, with a bloom of fainter blocks around it. <b>orbit</b> hangs five rings of nodes off the mark, each node wired inward to the ring inside it. <b>glow</b> and <b>quiet</b> are the mark alone, as a bloom and as a hairline -- and both are pulled back inside the canvas rather than cropped, because a mark clipped by a few per cent of its width reads as a mistake and not as a crop. Every node is placed by a seeded random, so the same file comes out of every build.</p>
+<h3>Wallpapers, seven ways</h3>
+<p><b>graph</b> scatters nodes across the ground, wires each to its two nearest neighbours, and runs gold edges from the mark out to the nodes nearest it: the one-to-many, drawn. <b>blocks</b> rebuilds the mark from blocks on a grid, each tile a shade brighter or deeper than the next, with a bloom of fainter blocks around it. <b>orbit</b> hangs five rings of nodes off the mark, each node wired inward to the ring inside it. <b>glow</b> and <b>quiet</b> are the mark alone, as a bloom and as a hairline -- and both are pulled back inside the canvas rather than cropped, because a mark clipped by a few per cent of its width reads as a mistake and not as a crop. <b>word</b> and <b>echo</b> carry the wordmark and no icon. <b>word</b> is the wordmark alone over its bloom. <b>echo</b> stacks the wordmark above and below itself, each copy fainter than the last and in the surface's ink alone, so the gold stays on the one word that is the mark. Every node is placed by a seeded random, so the same file comes out of every build.</p>
 <div class="grid g2">{walls}</div>
 <div class="grid g4" style="margin-top:18px">{phones}</div>
 <h3>Social</h3>
