@@ -3,8 +3,8 @@ brand: oxagen
 kind: card
 order: 1
 title: Your agents. Their work. One place to act.
-short: See what each enrolled agent is doing, what it needs, and what it costs. Answer, steer, fund, or stop it from Mission Control.
-long: An agent waiting for approval. Another nearing its budget. A third working from the wrong assumption. Mission Control brings their runs, requests, mandates, and spend into one view. Open the run, read what happened, and take the next action with the record beside you.
+short: See what each enrolled agent is doing, what it needs, and what it costs. Answer, steer, fund, or stop it from one console.
+long: An agent waiting for approval. Another nearing its budget. A third working from the wrong assumption. Oxagen brings their runs, requests, mandates, and spend into one view. Open the run, read what happened, and take the next action with the record beside you.
 cta: Open the Fleet page
 audience:
 - operator

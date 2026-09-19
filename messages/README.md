@@ -16,10 +16,10 @@ messages/
   index.json          generated: every entry, sorted, for apps/web and other readers
   lead/               hero headline and eyebrow, pitches, the mandate and its clauses, taglines
   sections/           product page sections, docs, and UI strings
-  entry-points/       the security, finance, and knowledge pages
+  entry-points/       the security, finance, knowledge, and operator review pages
   access/             the access headline and the rules for writing about keys
   proof/              proof points, hypothetical buyer statements, the demo
-  mission-control/    feature cards 1 to 16
+  workforce/          feature cards 1 to 16
   definition-of-done/ feature cards 17 to 20 and the passing verdict
   witness/            feature cards 21 to 28 and the definition of proven
   identity-equipment/ feature cards 29 to 33

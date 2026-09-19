@@ -59,7 +59,7 @@ GROUPS = (
     ("entry-points", "Entry points"),
     ("access", "Access"),
     ("proof", "Proof"),
-    ("mission-control", "Mission Control"),
+    ("workforce", "Workforce"),
     ("definition-of-done", "Definition of done"),
     ("witness", "Witness"),
     ("identity-equipment", "Identity and equipment"),
@@ -69,7 +69,7 @@ GROUPS = (
     ("rules", "Rules"),
     ("retired", "Retired"),
 )
-CARD_GROUPS = ("mission-control", "definition-of-done", "witness", "identity-equipment")
+CARD_GROUPS = ("workforce", "definition-of-done", "witness", "identity-equipment")
 
 #: Every ad ships at these sizes, on both grounds. build.py renders exactly this set.
 AD_SIZES = [(1080, 1080, "square"), (1080, 1350, "portrait"), (1200, 628, "landscape"), (300, 250, "mpu")]
@@ -640,7 +640,7 @@ class Page:
         return f"""<section id="lines"><p class="eyebrow q">Lines</p><h2>Approved messages, with release status and scope</h2>
 <p>The lead lines, then the headlines that open a page or a section. A held line waits for the capability named on its badge. Open any entry for its launch evidence and owner.</p>
 <div class="tw"><table><thead><tr><th>Line</th><th>Use it for</th><th>Scope</th><th>Status</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>
-<p class="note">Mission Control is the product. The agent control plane is the category. <a href="#m-rule-naming">The naming rule</a> has the rest.</p></section>"""
+<p class="note">Workforce management for autonomous agents is the product and the lead. The agent control plane is the technical category. <a href="#m-rule-naming">The naming rule</a> has the rest.</p></section>"""
 
     def pitch(self) -> str:
         blocks = []
