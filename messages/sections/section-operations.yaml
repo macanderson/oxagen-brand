@@ -2,8 +2,8 @@ id: section-operations
 brand: oxagen
 kind: section
 order: 4
-title: Manage the workforce from Mission Control.
-long: See the agents enrolled in Oxagen, the mandates they work under, their open requests, and their recorded activity and spend. Answer an approval request, change an assignment, or adjust a budget from the operator's view. Agents run in their supported environments, and Oxagen is the control plane that governs their work.
+title: Manage the workforce from one console.
+long: See the agents enrolled in Oxagen, the mandates they work under, their open requests, and their recorded activity and spend. Answer an approval request, change an assignment, or adjust a budget from the operator console. Agents run in their supported environments, and Oxagen is the agent control plane that governs their work.
 audience:
 - operator
 - platform

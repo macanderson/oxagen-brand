@@ -4,7 +4,7 @@ kind: pair
 order: 109
 title: Word swap
 before: the category has two names
-after: Mission Control, the agent control plane
+after: workforce management for autonomous agents, the agent control plane
 audience:
   - operator
   - platform

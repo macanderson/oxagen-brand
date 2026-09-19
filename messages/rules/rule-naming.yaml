@@ -2,8 +2,10 @@ id: rule-naming
 brand: oxagen
 kind: rule
 order: 1
-title: Mission Control is the product. The agent control plane is the category.
-long: Lead with Mission Control, the experience an operator uses. Name the technical category the agent control plane. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is allowed. Autonomous agents is allowed in body copy as a plain description of some of what Oxagen manages. It stays out of the headline, because Oxagen governs supervised agents too.
+title: Workforce management for autonomous agents is the product. The agent control plane is the category.
+long: Lead with workforce management for autonomous agents, the job the operator is doing. Name the technical category the agent control plane, for an architecture review, a platform owner's evaluation, or a docs overview. Mission Control is retired as of 2026-09-19, because GitHub's control-plane product carries that name, and it never appears in live copy. Where copy needs to name the place an operator works, say Oxagen or the operator console, lowercase and descriptive. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is the population of agents. Operator is the person. Autonomous agents is allowed in the category line and in body copy as a plain description of what Oxagen manages, and the headline names the workforce rather than narrowing the claim, because Oxagen governs supervised agents too.
+phrases:
+  - mission control
 audience:
   - operator
   - platform
@@ -16,3 +18,4 @@ owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
   - '07'
+notes: Retired entries and the before half of a voice pair are exempt from the phrase check, so the retired lines can still be quoted where they are named as retired.

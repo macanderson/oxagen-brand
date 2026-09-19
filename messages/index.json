@@ -2,23 +2,23 @@
   "source": "messages/",
   "generated_by": "build/messages.py",
   "counts": {
-    "entries": 165,
+    "entries": 168,
     "status": {
-      "approved": 134,
-      "candidate": 4,
-      "retired": 27
+      "approved": 135,
+      "candidate": 5,
+      "retired": 28
     },
     "release": {
-      "held": 23,
+      "held": 25,
       "launch": 115
     },
     "group": {
       "lead": 13,
-      "sections": 7,
-      "entry-points": 3,
+      "sections": 8,
+      "entry-points": 4,
       "access": 9,
       "proof": 16,
-      "mission-control": 16,
+      "workforce": 16,
       "definition-of-done": 5,
       "witness": 9,
       "identity-equipment": 5,
@@ -26,7 +26,7 @@
       "ads": 8,
       "voice": 22,
       "rules": 21,
-      "retired": 27
+      "retired": 28
     }
   },
   "findings": [
@@ -70,7 +70,7 @@
       "id": "07",
       "priority": "P2",
       "title": "The operator's full job is missing from the lead",
-      "rule": "Lead with Mission Control as the product and the agent control plane as the category, and show the operator's full job."
+      "rule": "Lead with workforce management for autonomous agents as the product and the agent control plane as the category, and show the operator's full job, including the review the operator gets."
     },
     {
       "id": "08",
@@ -452,28 +452,32 @@
       "path": "messages/ads/ad-oxagen-keys.yaml"
     },
     {
-      "id": "ad-oxagen-mission-control",
+      "id": "ad-oxagen-workforce",
       "brand": "oxagen",
       "kind": "ad",
       "order": 1,
-      "title": "Mission Control for agent operators.",
-      "cta": "Explore Mission Control · oxagen.sh",
+      "title": "Your agents are a workforce now. Manage them like one.",
+      "cta": "Explore Oxagen · oxagen.sh",
       "kicker": "Identity. Authority. Equipment.",
       "headline": [
-        "Mission Control",
-        "for agent",
-        "operators."
+        "Your agents are",
+        "a workforce now.",
+        "Manage them",
+        "like one."
       ],
       "wide": [
-        "Mission Control for",
-        "agent operators."
+        "Your agents are a workforce now.",
+        "Manage them like one."
       ],
       "short_lines": [
-        "Mission Control",
-        "for agent operators."
+        "Your agents are a workforce now.",
+        "Manage them like one."
       ],
-      "subline": "Set identity, authority, tools, and skills. Oversee the work.",
-      "subshort": "Set authority. Oversee the work.",
+      "subline": "Set identity, authority, tools, and skills. Review the governed work.",
+      "subshort": "Set authority. Review the governed work.",
+      "scope_terms": [
+        "governed"
+      ],
       "picture": "orbit",
       "audience": [
         "operator",
@@ -485,6 +489,7 @@
       ],
       "status": "approved",
       "release": "launch",
+      "qualifier": "Oxagen keeps the record of the actions it governs.",
       "evidence": "Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.",
       "owner": "Mac Anderson",
       "review_by": "2026-10-15",
@@ -492,9 +497,9 @@
         "01",
         "07"
       ],
-      "notes": "The primary campaign introduces the control plane. It takes the orbit, the one composition that reads as many agents under one control plane.",
+      "notes": "The primary campaign states the job. It takes the orbit, the one composition that reads as many agents under one control plane.",
       "group": "ads",
-      "path": "messages/ads/ad-oxagen-mission-control.yaml"
+      "path": "messages/ads/ad-oxagen-workforce.yaml"
     },
     {
       "id": "ad-stella-check",
@@ -578,8 +583,8 @@
       "kind": "announcement",
       "order": 1,
       "title": "Launch announcement",
-      "long": "An agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. Oxagen is Mission Control for that workforce.\n\nGive each agent an identity. Set its authority and budget, assign tools and skills, and review requests that need a person's decision. The record connects governed actions to the agent, the rule, and the person responsible.\n\nSome work has a finish line. Define its completion criteria before the agent starts and review the recorded results afterward. Other work continues. Keep its authority, activity, and spend in view as it runs.\n\nExplore Mission Control to follow an agent from its assigned mandate to a recorded action.",
-      "cta": "Explore Mission Control",
+      "long": "An agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. That job is workforce management, and Oxagen is where it happens.\n\nGive each agent an identity. Set its authority and budget, assign tools and skills, and review requests that need a person's decision. The record connects governed actions to the agent, the rule, and the person responsible.\n\nSome work has a finish line. Define its completion criteria before the agent starts and review the recorded results afterward. Other work continues. Keep its authority, activity, and spend in view as it runs.\n\nExplore Oxagen to follow an agent from its assigned mandate to a recorded action.",
+      "cta": "Explore Oxagen",
       "audience": [
         "operator",
         "platform",
@@ -1093,8 +1098,8 @@
       "kind": "email",
       "order": 2,
       "title": "Who sets the authority for your agents?",
-      "long": "When your team adds an agent, where do you set its identity, authority, tools, skills, and budget? Where do you review the actions it takes?\n\nOxagen brings those decisions into Mission Control. A walkthrough follows one agent from its mandate through an approval request and the resulting record. It also shows how an operator defines completion for a bounded task and manages an ongoing responsibility.",
-      "cta": "Explore Mission Control",
+      "long": "When your team adds an agent, where do you set its identity, authority, tools, skills, and budget? Where do you review the actions it takes?\n\nOxagen brings those decisions into one console. A walkthrough follows one agent from its mandate through an approval request and the resulting record. It also shows how an operator defines completion for a bounded task and manages an ongoing responsibility.",
+      "cta": "Explore Oxagen",
       "audience": [
         "operator",
         "platform"
@@ -1267,7 +1272,7 @@
       "id": "hero-eyebrow",
       "brand": "oxagen",
       "kind": "eyebrow",
-      "title": "The agent control plane",
+      "title": "Workforce management for autonomous agents",
       "audience": [
         "operator",
         "platform"
@@ -1284,7 +1289,7 @@
       "findings": [
         "07"
       ],
-      "notes": "The category, stated bare so it covers every agent Oxagen governs. Mission Control is the product name. The agent control plane is the technical category.",
+      "notes": "The category now leads, so the eyebrow states it plainly and the headline states the job. The agent control plane stays the technical category, for an architecture review or a platform owner's evaluation. No trailing period as an eyebrow; take one when the line runs as a sentence.",
       "group": "lead",
       "path": "messages/lead/hero-eyebrow.yaml"
     },
@@ -1292,9 +1297,9 @@
       "id": "hero-headline",
       "brand": "oxagen",
       "kind": "headline",
-      "title": "Mission Control for agent operators.",
-      "short": "Give each agent an identity. Set its authority, budget, tools, and skills. Define completion when the work has an endpoint, and oversee ongoing work through its requests, activity, and spend. Oxagen keeps the record of the actions it governs.",
-      "cta": "Explore Mission Control",
+      "title": "Your agents are a workforce now. Manage them like one.",
+      "short": "Give each agent an identity. Set its authority and budget, equip it with tools and skills, and review what it did and what its operators spent. Oxagen keeps the record of the actions it governs.",
+      "cta": "Explore Oxagen",
       "cta_destination": "A product walkthrough showing agent identity, mandate, tool and skill assignment, an allowed action, a request for approval, and the resulting record, with an ongoing agent and a bounded task with completion criteria.",
       "audience": [
         "operator",
@@ -1317,7 +1322,7 @@
         "01",
         "07"
       ],
-      "notes": "Names the reader, the operator. It replaced a line that said autonomous, which left out the supervised agents Oxagen also governs, and your, which read oddly. Under the action: Follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.",
+      "notes": "The lead line, approved 2026-09-19. It names the job, workforce management, rather than a product name another company now uses for a control-plane product. The first sentence states what changed for the reader, the second states the job. Under the action: follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.",
       "group": "lead",
       "path": "messages/lead/hero-headline.yaml"
     },
@@ -1652,8 +1657,8 @@
         "04"
       ],
       "notes": "Launch card 3. Launch card 3. Its original title is the access-keys headline, which leads the access section. The original credential sentence was not scoped to mediated connections.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-access-requests.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-access-requests.yaml"
     },
     {
       "id": "mc-budgets",
@@ -1686,8 +1691,8 @@
         "03"
       ],
       "notes": "Launch card 8.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-budgets.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-budgets.yaml"
     },
     {
       "id": "mc-business-context",
@@ -1717,8 +1722,8 @@
         "05"
       ],
       "notes": "Launch card 15.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-business-context.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-business-context.yaml"
     },
     {
       "id": "mc-cost-findings",
@@ -1748,8 +1753,8 @@
         "02"
       ],
       "notes": "Launch card 10. The launch card promised an estimated saving and ended on Find your next saving. Both were removed until a measured workload backs them.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-cost-findings.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-cost-findings.yaml"
     },
     {
       "id": "mc-fleet",
@@ -1757,8 +1762,8 @@
       "kind": "card",
       "order": 1,
       "title": "Your agents. Their work. One place to act.",
-      "short": "See what each enrolled agent is doing, what it needs, and what it costs. Answer, steer, fund, or stop it from Mission Control.",
-      "long": "An agent waiting for approval. Another nearing its budget. A third working from the wrong assumption. Mission Control brings their runs, requests, mandates, and spend into one view. Open the run, read what happened, and take the next action with the record beside you.",
+      "short": "See what each enrolled agent is doing, what it needs, and what it costs. Answer, steer, fund, or stop it from one console.",
+      "long": "An agent waiting for approval. Another nearing its budget. A third working from the wrong assumption. Oxagen brings their runs, requests, mandates, and spend into one view. Open the run, read what happened, and take the next action with the record beside you.",
       "cta": "Open the Fleet page",
       "audience": [
         "operator",
@@ -1780,8 +1785,8 @@
         "07"
       ],
       "notes": "Launch card 1.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-fleet.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-fleet.yaml"
     },
     {
       "id": "mc-fork-compare",
@@ -1807,8 +1812,8 @@
       "review_by": "2026-10-15",
       "findings": [],
       "notes": "Launch card 12.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-fork-compare.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-fork-compare.yaml"
     },
     {
       "id": "mc-human-approval",
@@ -1837,8 +1842,8 @@
         "03"
       ],
       "notes": "Launch card 4.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-human-approval.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-human-approval.yaml"
     },
     {
       "id": "mc-live-steering",
@@ -1866,8 +1871,8 @@
       "review_by": "2026-10-15",
       "findings": [],
       "notes": "Launch card 5.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-live-steering.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-live-steering.yaml"
     },
     {
       "id": "mc-mandates",
@@ -1900,8 +1905,8 @@
         "10"
       ],
       "notes": "Launch card 2. The launch card named security, FinOps, and engineering as the owners. The copy no longer requires a particular org chart.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-mandates.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-mandates.yaml"
     },
     {
       "id": "mc-pause-revoke",
@@ -1931,8 +1936,8 @@
         "03"
       ],
       "notes": "Launch card 6.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-pause-revoke.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-pause-revoke.yaml"
     },
     {
       "id": "mc-reconciliation",
@@ -1963,8 +1968,8 @@
         "06"
       ],
       "notes": "Launch card 9.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-reconciliation.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-reconciliation.yaml"
     },
     {
       "id": "mc-reviewed-learning",
@@ -1992,8 +1997,8 @@
         "10"
       ],
       "notes": "Launch card 14. The launch card title said a rule for the next run. A rule answers requests, and a lesson becomes steering.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-reviewed-learning.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-reviewed-learning.yaml"
     },
     {
       "id": "mc-rule-simulation",
@@ -2022,8 +2027,8 @@
         "03"
       ],
       "notes": "Launch card 13.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-rule-simulation.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-rule-simulation.yaml"
     },
     {
       "id": "mc-run-playback",
@@ -2051,8 +2056,8 @@
       "review_by": "2026-10-15",
       "findings": [],
       "notes": "Launch card 11.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-run-playback.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-run-playback.yaml"
     },
     {
       "id": "mc-signed-records",
@@ -2081,8 +2086,8 @@
         "10"
       ],
       "notes": "Launch card 16. The title no longer says hand over, which the kit keeps for the line about the keys.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-signed-records.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-signed-records.yaml"
     },
     {
       "id": "mc-spend-attribution",
@@ -2111,8 +2116,46 @@
         "06"
       ],
       "notes": "Launch card 7.",
-      "group": "mission-control",
-      "path": "messages/mission-control/mc-spend-attribution.yaml"
+      "group": "workforce",
+      "path": "messages/workforce/mc-spend-attribution.yaml"
+    },
+    {
+      "id": "operator-review-headline",
+      "brand": "oxagen",
+      "kind": "entry-point",
+      "order": 4,
+      "title": "Your agents get a mandate. Your operators get a review.",
+      "short": "See who spent the AI budget, and what it bought.",
+      "long": "One page per person, read from the record and not estimated. It shows what that operator spent, broken out by agent and by workspace, and what the spend bought: for bounded tasks, the outcome beside the dollars.\n\nIt also shows how the person works with their agents, taken from the recorded turns. Turns to completion. Restarts on the same task. Steering overridden by hand instead of written as a rule. Routed requests the operator approved every time. Each habit carries its definition, so the reader can check the number against the rows it came from.\n\nEach habit comes with one recommendation, worded as a rule the operator can adopt. The review reports what the record shows. It does not grade the person: twelve restarts on the same task this week is a fact, and bad prompter is not one.",
+      "cta": "Read an operator review",
+      "cta_destination": "One operator's review, showing spend by agent and workspace read from the same rows the Spend page prices, one prompt habit with its definition, and the rule the review recommends.",
+      "audience": [
+        "finance",
+        "operator",
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "site-operator-review",
+        "product-page"
+      ],
+      "status": "approved",
+      "release": "held",
+      "gate": [
+        "operator-review"
+      ],
+      "qualifier": "The review reads the recorded turns and governed actions Oxagen holds for that operator.",
+      "evidence": "Product owner: demonstrate a per-operator spend row read from the same rows the Spend page prices, one prompt-habit metric with its written definition and the turns behind it, and the rule the review recommends for that habit. Finance owner: reconcile the per-operator total to the billed total and name the exclusions. Do not present a habit as a rating of the person or claim a saving without the measured workload.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "06",
+        "07"
+      ],
+      "notes": "The entry point for the rate job, and the human half of the AI bill. Held until the operator review ships. The habits are facts from the record with their definitions beside them, never a score.",
+      "group": "entry-points",
+      "path": "messages/entry-points/operator-review-headline.yaml"
     },
     {
       "id": "pair-abstraction",
@@ -2226,7 +2269,7 @@
       "order": 1,
       "title": "Enthusiasm",
       "before": "We're excited to introduce a revolutionary new way to manage AI agents.",
-      "after": "Mission Control for agent operators.",
+      "after": "Your agents are a workforce now. Manage them like one.",
       "audience": [
         "operator",
         "platform"
@@ -2435,7 +2478,7 @@
       "id": "pitch-one-sentence",
       "brand": "oxagen",
       "kind": "pitch",
-      "title": "Oxagen is Mission Control for agent operators: assign identities, set authority, equip agents with tools and skills, and oversee their work through a shared control plane.",
+      "title": "Oxagen is workforce management for autonomous agents: give each agent an identity, set its authority and budget, equip it with tools and skills, and review what it did and what its operators spent, through a shared agent control plane.",
       "audience": [
         "operator",
         "platform",
@@ -2458,6 +2501,7 @@
       "findings": [
         "07"
       ],
+      "notes": "The definition, approved 2026-09-19. It names the job first and the agent control plane last, so a reader who wants the category finds it without the product being named after one.",
       "group": "lead",
       "path": "messages/lead/pitch-one-sentence.yaml"
     },
@@ -2466,8 +2510,8 @@
       "brand": "oxagen",
       "kind": "pitch",
       "title": "Product page introduction",
-      "long": "Oxagen is Mission Control for the operators managing an agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence for governed work together in one control plane.",
-      "cta": "Explore Mission Control",
+      "long": "Oxagen is workforce management for the operators running an agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence for governed work together in one agent control plane.",
+      "cta": "Explore Oxagen",
       "audience": [
         "operator",
         "platform"
@@ -2485,7 +2529,7 @@
         "01",
         "07"
       ],
-      "notes": "Adapted from the recommended lead in the Mission Control launch cards. Its title is not a second headline: the hero headline leads.",
+      "notes": "Adapted from the recommended lead in the launch cards. Its title is not a second headline: the hero headline leads.",
       "group": "lead",
       "path": "messages/lead/pitch-product-page.yaml"
     },
@@ -3045,6 +3089,27 @@
       "notes": "Was the fourth access rule. It carried a promise about leaks that credential custody cannot make.",
       "group": "retired",
       "path": "messages/retired/retired-key-never-moves.yaml"
+    },
+    {
+      "id": "retired-mission-control-agent-operators",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Mission Control for agent operators.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "Mac Anderson",
+      "findings": [
+        "07"
+      ],
+      "replaced_by": "hero-headline",
+      "notes": "Was the homepage headline, the primary ad, and the social and manifest tagline until 2026-09-19. Retired because GitHub's control-plane product carries the Mission Control name, so the line names someone else's product. The lead now names the job the operator is doing.",
+      "group": "retired",
+      "path": "messages/retired/retired-mission-control-agent-operators.yaml"
     },
     {
       "id": "retired-mission-control-autonomous-agents",
@@ -3675,8 +3740,11 @@
       "brand": "oxagen",
       "kind": "rule",
       "order": 1,
-      "title": "Mission Control is the product. The agent control plane is the category.",
-      "long": "Lead with Mission Control, the experience an operator uses. Name the technical category the agent control plane. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is allowed. Autonomous agents is allowed in body copy as a plain description of some of what Oxagen manages. It stays out of the headline, because Oxagen governs supervised agents too.",
+      "title": "Workforce management for autonomous agents is the product. The agent control plane is the category.",
+      "long": "Lead with workforce management for autonomous agents, the job the operator is doing. Name the technical category the agent control plane, for an architecture review, a platform owner's evaluation, or a docs overview. Mission Control is retired as of 2026-09-19, because GitHub's control-plane product carries that name, and it never appears in live copy. Where copy needs to name the place an operator works, say Oxagen or the operator console, lowercase and descriptive. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is the population of agents. Operator is the person. Autonomous agents is allowed in the category line and in body copy as a plain description of what Oxagen manages, and the headline names the workforce rather than narrowing the claim, because Oxagen governs supervised agents too.",
+      "phrases": [
+        "mission control"
+      ],
       "audience": [
         "operator",
         "platform"
@@ -3692,6 +3760,7 @@
       "findings": [
         "07"
       ],
+      "notes": "Retired entries and the before half of a voice pair are exempt from the phrase check, so the retired lines can still be quoted where they are named as retired.",
       "group": "rules",
       "path": "messages/rules/rule-naming.yaml"
     },
@@ -4022,6 +4091,40 @@
       "path": "messages/sections/section-authority.yaml"
     },
     {
+      "id": "section-coach-operators",
+      "brand": "oxagen",
+      "kind": "section",
+      "order": 6,
+      "title": "Manage the agents. Coach the operators.",
+      "long": "The mandate sets what an agent may do. The review shows how the person working with it spends the budget and how they ask. Read the spend by operator, agent, and workspace, then read the habits behind it: turns to completion, restarts on the same task, steering overridden by hand instead of written as a rule. Each habit carries its definition and one recommendation, worded as a rule the operator can adopt.",
+      "audience": [
+        "operator",
+        "finance",
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "operator-review"
+      ],
+      "qualifier": "Read from the recorded turns and governed actions, not estimated.",
+      "evidence": "Product owner: demonstrate the per-operator review before this line runs. Show one habit with its definition and the recommendation it produces.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "06",
+        "07"
+      ],
+      "notes": "Candidate headline for the operations section, alongside the approved line. It pairs the two halves of the job, the agent and the person.",
+      "group": "sections",
+      "path": "messages/sections/section-coach-operators.yaml"
+    },
+    {
       "id": "section-equipment",
       "brand": "oxagen",
       "kind": "section",
@@ -4053,8 +4156,8 @@
       "brand": "oxagen",
       "kind": "section",
       "order": 4,
-      "title": "Manage the workforce from Mission Control.",
-      "long": "See the agents enrolled in Oxagen, the mandates they work under, their open requests, and their recorded activity and spend. Answer an approval request, change an assignment, or adjust a budget from the operator's view. Agents run in their supported environments, and Oxagen is the control plane that governs their work.",
+      "title": "Manage the workforce from one console.",
+      "long": "See the agents enrolled in Oxagen, the mandates they work under, their open requests, and their recorded activity and spend. Answer an approval request, change an assignment, or adjust a budget from the operator console. Agents run in their supported environments, and Oxagen is the agent control plane that governs their work.",
       "audience": [
         "operator",
         "platform"
@@ -4138,7 +4241,7 @@
       "id": "stella-relationship",
       "brand": "oxagen",
       "kind": "headline",
-      "title": "Stella is an agent. Oxagen is Mission Control for the workforce.",
+      "title": "Stella is an agent. Oxagen manages the workforce.",
       "audience": [
         "engineering",
         "operator"
@@ -4548,7 +4651,7 @@
       "order": 109,
       "title": "Word swap",
       "before": "the category has two names",
-      "after": "Mission Control, the agent control plane",
+      "after": "workforce management for autonomous agents, the agent control plane",
       "audience": [
         "operator",
         "platform"

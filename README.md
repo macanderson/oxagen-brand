@@ -77,7 +77,7 @@ icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webma
 spinners/          the house motion, animated SVG, no script
 wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit | word | echo · dark | light
 social/            avatar · x · linkedin · youtube · open graph · dark | light
-ads/               from messages/ads/: mission-control · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
+ads/               from messages/ads/: workforce · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
 content/           changelog · essay · release · field note · fleet note cards, 1200×675
 skills/            the oxagen-branding Claude Code skill and its installer
 ```
@@ -237,9 +237,9 @@ the skill's tokens or logo drift from the build.
   `graph` and `orbit` wallpapers) -- or simply uses a bigger one. The
   wordmark is the one other thing a ground may carry: the `word` and `echo`
   wallpapers set it alone, with no icon beside it.
-- **Every ad explains one operator decision, and keeps its scope.** Mission
-  Control introduces the control plane; authority, equipment, spend, and the
-  keys each take one ad. The short forms keep the scope of the long ones:
+- **Every ad explains one operator decision, and keeps its scope.** The
+  workforce ad states the job; authority, equipment, spend, and the keys each
+  take one ad. The short forms keep the scope of the long ones:
   governed, recorded, mediated. Ad copy comes only from approved,
   launch-released entries in `messages/ads/`.
 - **Space Grotesk is for display only.** Nothing below 20 px, and never code.

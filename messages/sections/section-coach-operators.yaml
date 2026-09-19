@@ -1,0 +1,27 @@
+id: section-coach-operators
+brand: oxagen
+kind: section
+order: 6
+title: Manage the agents. Coach the operators.
+long: |-
+  The mandate sets what an agent may do. The review shows how the person working with it spends the budget and how they ask. Read the spend by operator, agent, and workspace, then read the habits behind it: turns to completion, restarts on the same task, steering overridden by hand instead of written as a rule. Each habit carries its definition and one recommendation, worded as a rule the operator can adopt.
+audience:
+- operator
+- finance
+- engineering
+clause: record
+surfaces:
+- product-page
+status: candidate
+release: held
+gate:
+- operator-review
+qualifier: Read from the recorded turns and governed actions, not estimated.
+evidence: 'Product owner: demonstrate the per-operator review before this line runs. Show one habit with its definition and the recommendation it produces.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '02'
+- '06'
+- '07'
+notes: Candidate headline for the operations section, alongside the approved line. It pairs the two halves of the job, the agent and the person.

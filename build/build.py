@@ -524,9 +524,9 @@ def build_social(raster: bool) -> None:
 #: Every campaign is an approved, launch-released `kind: ad` entry in
 #: `messages/ads/`. Held and retired entries are not rendered, and
 #: `build/messages.py --check` fails on any file in `ads/` that no entry
-#: produces. The Oxagen campaign follows the operator's job: Mission Control
-#: introduces the control plane, and each of the others explains one decision
-#: an operator makes, with its scope kept in the short form.
+#: produces. The Oxagen campaign follows the operator's job: the workforce ad
+#: states the job, and each of the others explains one decision an operator
+#: makes, with its scope kept in the short form.
 #:
 #: Each campaign carries `headline`, the tall stack for the square and the
 #: portrait; `wide`, the same words in long lines for the landscape, where a

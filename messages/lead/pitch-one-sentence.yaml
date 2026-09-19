@@ -1,7 +1,7 @@
 id: pitch-one-sentence
 brand: oxagen
 kind: pitch
-title: 'Oxagen is Mission Control for agent operators: assign identities, set authority, equip agents with tools and skills, and oversee their work through a shared control plane.'
+title: 'Oxagen is workforce management for autonomous agents: give each agent an identity, set its authority and budget, equip it with tools and skills, and review what it did and what its operators spent, through a shared agent control plane.'
 audience:
 - operator
 - platform
@@ -21,3 +21,4 @@ owner: product owner
 review_by: '2026-10-15'
 findings:
 - '07'
+notes: The definition, approved 2026-09-19. It names the job first and the agent control plane last, so a reader who wants the category finds it without the product being named after one.

@@ -1,7 +1,7 @@
 id: hero-eyebrow
 brand: oxagen
 kind: eyebrow
-title: The agent control plane
+title: Workforce management for autonomous agents
 audience:
 - operator
 - platform
@@ -15,4 +15,4 @@ owner: product owner
 review_by: '2026-10-15'
 findings:
 - '07'
-notes: The category, stated bare so it covers every agent Oxagen governs. Mission Control is the product name. The agent control plane is the technical category.
+notes: The category now leads, so the eyebrow states it plainly and the headline states the job. The agent control plane stays the technical category, for an architecture review or a platform owner's evaluation. No trailing period as an eyebrow; take one when the line runs as a sentence.
