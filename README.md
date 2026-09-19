@@ -75,7 +75,7 @@ tokens/            house-tokens.css · house-tokens.json · house-tailwind.css �
 logo/svg,png/      wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles
 icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webmanifest
 spinners/          the house motion, animated SVG, no script
-wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit · dark | light
+wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit | word | echo · dark | light
 social/            avatar · x · linkedin · youtube · open graph · dark | light
 ads/               from messages/ads/: mission-control · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
 content/           changelog · essay · release · field note · fleet note cards, 1200×675
@@ -234,7 +234,9 @@ the skill's tokens or logo drift from the build.
 - **The icon is the only picture we own.** No stock illustration, no gradient
   mesh, no 3D render. A surface that needs a picture builds one out of the
   icon -- its outline, its mosaic, a field around it (the `quiet`, `blocks`,
-  `graph` and `orbit` wallpapers) -- or simply uses a bigger one.
+  `graph` and `orbit` wallpapers) -- or simply uses a bigger one. The
+  wordmark is the one other thing a ground may carry: the `word` and `echo`
+  wallpapers set it alone, with no icon beside it.
 - **Every ad explains one operator decision, and keeps its scope.** Mission
   Control introduces the control plane; authority, equipment, spend, and the
   keys each take one ad. The short forms keep the scope of the long ones:

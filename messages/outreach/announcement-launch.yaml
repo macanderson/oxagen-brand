@@ -4,7 +4,7 @@ kind: announcement
 order: 1
 title: Launch announcement
 long: |-
-  An autonomous agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. Oxagen is Mission Control for that workforce.
+  An agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. Oxagen is Mission Control for that workforce.
 
   Give each agent an identity. Set its authority and budget, assign tools and skills, and review requests that need a person's decision. The record connects governed actions to the agent, the rule, and the person responsible.
 

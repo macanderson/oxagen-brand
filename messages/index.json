@@ -2,11 +2,11 @@
   "source": "messages/",
   "generated_by": "build/messages.py",
   "counts": {
-    "entries": 163,
+    "entries": 165,
     "status": {
       "approved": 134,
       "candidate": 4,
-      "retired": 25
+      "retired": 27
     },
     "release": {
       "held": 23,
@@ -26,7 +26,7 @@
       "ads": 8,
       "voice": 22,
       "rules": 21,
-      "retired": 25
+      "retired": 27
     }
   },
   "findings": [
@@ -456,21 +456,21 @@
       "brand": "oxagen",
       "kind": "ad",
       "order": 1,
-      "title": "Mission Control for your autonomous agents.",
+      "title": "Mission Control for agent operators.",
       "cta": "Explore Mission Control · oxagen.sh",
       "kicker": "Identity. Authority. Equipment.",
       "headline": [
         "Mission Control",
-        "for your",
-        "autonomous agents."
+        "for agent",
+        "operators."
       ],
       "wide": [
         "Mission Control for",
-        "your autonomous agents."
+        "agent operators."
       ],
       "short_lines": [
         "Mission Control",
-        "for your agents."
+        "for agent operators."
       ],
       "subline": "Set identity, authority, tools, and skills. Oversee the work.",
       "subshort": "Set authority. Oversee the work.",
@@ -578,7 +578,7 @@
       "kind": "announcement",
       "order": 1,
       "title": "Launch announcement",
-      "long": "An autonomous agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. Oxagen is Mission Control for that workforce.\n\nGive each agent an identity. Set its authority and budget, assign tools and skills, and review requests that need a person's decision. The record connects governed actions to the agent, the rule, and the person responsible.\n\nSome work has a finish line. Define its completion criteria before the agent starts and review the recorded results afterward. Other work continues. Keep its authority, activity, and spend in view as it runs.\n\nExplore Mission Control to follow an agent from its assigned mandate to a recorded action.",
+      "long": "An agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. Oxagen is Mission Control for that workforce.\n\nGive each agent an identity. Set its authority and budget, assign tools and skills, and review requests that need a person's decision. The record connects governed actions to the agent, the rule, and the person responsible.\n\nSome work has a finish line. Define its completion criteria before the agent starts and review the recorded results afterward. Other work continues. Keep its authority, activity, and spend in view as it runs.\n\nExplore Mission Control to follow an agent from its assigned mandate to a recorded action.",
       "cta": "Explore Mission Control",
       "audience": [
         "operator",
@@ -1093,7 +1093,7 @@
       "kind": "email",
       "order": 2,
       "title": "Who sets the authority for your agents?",
-      "long": "When your team adds an autonomous agent, where do you set its identity, authority, tools, skills, and budget? Where do you review the actions it takes?\n\nOxagen brings those decisions into Mission Control. A walkthrough follows one agent from its mandate through an approval request and the resulting record. It also shows how an operator defines completion for a bounded task and manages an ongoing responsibility.",
+      "long": "When your team adds an agent, where do you set its identity, authority, tools, skills, and budget? Where do you review the actions it takes?\n\nOxagen brings those decisions into Mission Control. A walkthrough follows one agent from its mandate through an approval request and the resulting record. It also shows how an operator defines completion for a bounded task and manages an ongoing responsibility.",
       "cta": "Explore Mission Control",
       "audience": [
         "operator",
@@ -1267,7 +1267,7 @@
       "id": "hero-eyebrow",
       "brand": "oxagen",
       "kind": "eyebrow",
-      "title": "The control plane for your agent workforce",
+      "title": "The agent control plane",
       "audience": [
         "operator",
         "platform"
@@ -1284,7 +1284,7 @@
       "findings": [
         "07"
       ],
-      "notes": "Mission Control is the product name. The agent control plane is the technical category.",
+      "notes": "The category, stated bare so it covers every agent Oxagen governs. Mission Control is the product name. The agent control plane is the technical category.",
       "group": "lead",
       "path": "messages/lead/hero-eyebrow.yaml"
     },
@@ -1292,7 +1292,7 @@
       "id": "hero-headline",
       "brand": "oxagen",
       "kind": "headline",
-      "title": "Mission Control for your autonomous agents.",
+      "title": "Mission Control for agent operators.",
       "short": "Give each agent an identity. Set its authority, budget, tools, and skills. Define completion when the work has an endpoint, and oversee ongoing work through its requests, activity, and spend. Oxagen keeps the record of the actions it governs.",
       "cta": "Explore Mission Control",
       "cta_destination": "A product walkthrough showing agent identity, mandate, tool and skill assignment, an allowed action, a request for approval, and the resulting record, with an ongoing agent and a bounded task with completion criteria.",
@@ -1317,7 +1317,7 @@
         "01",
         "07"
       ],
-      "notes": "Under the action: Follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.",
+      "notes": "Names the reader, the operator. It replaced a line that said autonomous, which left out the supervised agents Oxagen also governs, and your, which read oddly. Under the action: Follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.",
       "group": "lead",
       "path": "messages/lead/hero-headline.yaml"
     },
@@ -2226,7 +2226,7 @@
       "order": 1,
       "title": "Enthusiasm",
       "before": "We're excited to introduce a revolutionary new way to manage AI agents.",
-      "after": "Mission Control for your autonomous agents.",
+      "after": "Mission Control for agent operators.",
       "audience": [
         "operator",
         "platform"
@@ -2435,7 +2435,7 @@
       "id": "pitch-one-sentence",
       "brand": "oxagen",
       "kind": "pitch",
-      "title": "Oxagen is Mission Control for an autonomous agent workforce: assign identities, set authority, equip agents with tools and skills, and oversee their work through a shared control plane.",
+      "title": "Oxagen is Mission Control for agent operators: assign identities, set authority, equip agents with tools and skills, and oversee their work through a shared control plane.",
       "audience": [
         "operator",
         "platform",
@@ -2466,7 +2466,7 @@
       "brand": "oxagen",
       "kind": "pitch",
       "title": "Product page introduction",
-      "long": "Oxagen is Mission Control for the operators managing an autonomous agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence for governed work together in one control plane.",
+      "long": "Oxagen is Mission Control for the operators managing an agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence for governed work together in one control plane.",
       "cta": "Explore Mission Control",
       "audience": [
         "operator",
@@ -2877,6 +2877,27 @@
       "path": "messages/retired/retired-buyer-stopped-reading-prs.yaml"
     },
     {
+      "id": "retired-control-plane-agent-workforce",
+      "brand": "oxagen",
+      "kind": "eyebrow",
+      "title": "The control plane for your agent workforce",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "Mac Anderson",
+      "findings": [
+        "07"
+      ],
+      "replaced_by": "hero-eyebrow",
+      "notes": "Was the homepage eyebrow until 2026-09-18. The shorter form states the category without your.",
+      "group": "retired",
+      "path": "messages/retired/retired-control-plane-agent-workforce.yaml"
+    },
+    {
       "id": "retired-each-run-costs-less",
       "brand": "oxagen",
       "kind": "headline",
@@ -3024,6 +3045,27 @@
       "notes": "Was the fourth access rule. It carried a promise about leaks that credential custody cannot make.",
       "group": "retired",
       "path": "messages/retired/retired-key-never-moves.yaml"
+    },
+    {
+      "id": "retired-mission-control-autonomous-agents",
+      "brand": "oxagen",
+      "kind": "headline",
+      "title": "Mission Control for your autonomous agents.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "none",
+      "surfaces": [],
+      "status": "retired",
+      "owner": "Mac Anderson",
+      "findings": [
+        "07"
+      ],
+      "replaced_by": "hero-headline",
+      "notes": "Was the homepage headline, the primary ad, and the social and manifest tagline until 2026-09-18. Oxagen also governs agents that are not autonomous, so the word narrowed the claim. The new line names the operator instead of saying your.",
+      "group": "retired",
+      "path": "messages/retired/retired-mission-control-autonomous-agents.yaml"
     },
     {
       "id": "retired-never-re-explain",
@@ -3634,7 +3676,7 @@
       "kind": "rule",
       "order": 1,
       "title": "Mission Control is the product. The agent control plane is the category.",
-      "long": "Lead with Mission Control, the experience an operator uses. Name the technical category the agent control plane. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is allowed. Autonomous agents is allowed as a plain description of what Oxagen manages.",
+      "long": "Lead with Mission Control, the experience an operator uses. Name the technical category the agent control plane. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is allowed. Autonomous agents is allowed in body copy as a plain description of some of what Oxagen manages. It stays out of the headline, because Oxagen governs supervised agents too.",
       "audience": [
         "operator",
         "platform"

@@ -1,7 +1,7 @@
 id: hero-headline
 brand: oxagen
 kind: headline
-title: Mission Control for your autonomous agents.
+title: Mission Control for agent operators.
 short: Give each agent an identity. Set its authority, budget, tools, and skills. Define completion when the work has an endpoint, and oversee ongoing work through its requests, activity, and spend. Oxagen keeps the record of the actions it governs.
 cta: Explore Mission Control
 cta_destination: A product walkthrough showing agent identity, mandate, tool and skill assignment, an allowed action, a request for approval, and the resulting record, with an ongoing agent and a bounded task with completion criteria.
@@ -23,4 +23,4 @@ review_by: '2026-10-15'
 findings:
 - '01'
 - '07'
-notes: 'Under the action: Follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.'
+notes: 'Names the reader, the operator. It replaced a line that said autonomous, which left out the supervised agents Oxagen also governs, and your, which read oddly. Under the action: Follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.'

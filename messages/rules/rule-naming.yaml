@@ -3,7 +3,7 @@ brand: oxagen
 kind: rule
 order: 1
 title: Mission Control is the product. The agent control plane is the category.
-long: Lead with Mission Control, the experience an operator uses. Name the technical category the agent control plane. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is allowed. Autonomous agents is allowed as a plain description of what Oxagen manages.
+long: Lead with Mission Control, the experience an operator uses. Name the technical category the agent control plane. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is allowed. Autonomous agents is allowed in body copy as a plain description of some of what Oxagen manages. It stays out of the headline, because Oxagen governs supervised agents too.
 audience:
   - operator
   - platform

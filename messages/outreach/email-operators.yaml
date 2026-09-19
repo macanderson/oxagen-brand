@@ -4,7 +4,7 @@ kind: email
 order: 2
 title: Who sets the authority for your agents?
 long: |-
-  When your team adds an autonomous agent, where do you set its identity, authority, tools, skills, and budget? Where do you review the actions it takes?
+  When your team adds an agent, where do you set its identity, authority, tools, skills, and budget? Where do you review the actions it takes?
 
   Oxagen brings those decisions into Mission Control. A walkthrough follows one agent from its mandate through an approval request and the resulting record. It also shows how an operator defines completion for a bounded task and manages an ongoing responsibility.
 cta: Explore Mission Control

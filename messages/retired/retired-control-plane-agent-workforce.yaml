@@ -1,0 +1,15 @@
+id: retired-control-plane-agent-workforce
+brand: oxagen
+kind: eyebrow
+title: The control plane for your agent workforce
+audience:
+  - operator
+  - platform
+clause: none
+surfaces: []
+status: retired
+owner: Mac Anderson
+findings:
+  - '07'
+replaced_by: hero-eyebrow
+notes: Was the homepage eyebrow until 2026-09-18. The shorter form states the category without your.

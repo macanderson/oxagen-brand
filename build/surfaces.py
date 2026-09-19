@@ -209,18 +209,43 @@ class Surface:
         *,
         anchor: str = "middle",
         letters: str | None = None,
+        accent: str | None = None,
+        opacity: float = 1.0,
     ) -> "Surface":
-        """A logo placed by its own centre, `width` being the box's width."""
+        """A logo placed by its own centre, `width` being the box's width.
+
+        `accent` repaints the gold letter, and `opacity` lays the whole word
+        back: an echo of the wordmark is one colour and faint, so the gold
+        stays on the one word that is the mark.
+        """
         m = _mark(brand)
         plain, gold = glyph_paths(m, {str(BRANDS[brand]["accent"])})
         s = width / float(m["width"])  # type: ignore[arg-type]
         x = cx - width / 2 if anchor == "middle" else (cx if anchor == "start" else cx - width)
         y = cy - float(m["height"]) * s / 2  # type: ignore[arg-type]
+        op = f' opacity="{opacity:g}"' if opacity < 1 else ""
         self.body.append(
-            f'<g transform="translate({x:.2f},{y:.2f}) scale({s:.5f})">'
-            f'<path d="{plain}" fill="{letters or self.text}"/><path d="{gold}" fill="{GOLD}"/></g>'
+            f'<g transform="translate({x:.2f},{y:.2f}) scale({s:.5f})"{op}>'
+            f'<path d="{plain}" fill="{letters or self.text}"/><path d="{gold}" fill="{accent or GOLD}"/></g>'
         )
         return self
+
+    def echo(self, brand: str, cx: float, cy: float, width: float) -> "Surface":
+        """The wordmark, stacked: one word at full strength, its echoes fading above and below.
+
+        The echoes are the same word at the same size, one line apart, in the
+        surface's ink alone. Each is weaker than the one before it, and the
+        stack stops a word's height short of the canvas edge, so no echo is cut. Only the
+        centre word carries the gold letter.
+        """
+        box = width * mark_aspect(brand)
+        pitch = box * 1.4
+        self.glow(cx, cy, width * 0.9, 0.30)
+        for k, a in enumerate((0.26, 0.15, 0.085, 0.045, 0.022), start=1):
+            for y in (cy - k * pitch, cy + k * pitch):
+                if box * 0.75 <= y <= self.h - box * 0.75:
+                    self.wordmark(brand, cx, y, width, accent=self.text, opacity=a)
+        return self.wordmark(brand, cx, cy, width)
 
     def line(
         self,
@@ -499,9 +524,10 @@ def mark_aspect(brand: str) -> float:
 
 GHOST_ROT = {"stella": -15.0, "oxagen": 0.0}
 
-#: The wallpaper styles. `glow` and `quiet` are the mark alone; the other
-#: three build a picture from the mark's own parts.
-WALLPAPER_STYLES = ("glow", "quiet", "graph", "blocks", "orbit")
+#: The wallpaper styles. `glow` and `quiet` are the mark alone; `graph`,
+#: `blocks` and `orbit` build a picture from the mark's own parts; `word` and
+#: `echo` carry the wordmark and no icon.
+WALLPAPER_STYLES = ("glow", "quiet", "graph", "blocks", "orbit", "word", "echo")
 
 
 def wallpaper_desktop(w: int, h: int, brand: str, scheme: str, style: str = "glow") -> str:
@@ -519,6 +545,11 @@ def wallpaper_desktop(w: int, h: int, brand: str, scheme: str, style: str = "glo
         s.mosaic(brand, w * 0.66, h * 0.5, h * 0.66, cell=h / 44)
     elif style == "orbit":
         s.orbit(brand, w * 0.66, h * 0.5, h * 0.24)
+    elif style == "word":
+        s.glow(w * 0.5, h * 0.47, h * 0.62, 0.30)
+        s.wordmark(brand, w * 0.5, h * 0.47, h * 0.46)
+    elif style == "echo":
+        s.echo(brand, w * 0.66, h * 0.5, h * 0.44)
     else:
         raise ValueError(style)
     return s.svg()
@@ -539,6 +570,11 @@ def wallpaper_phone(w: int, h: int, brand: str, scheme: str, style: str = "glow"
         s.mosaic(brand, cx, cy, w * 0.78, cell=w / 24)
     elif style == "orbit":
         s.orbit(brand, cx, cy, w * 0.30)
+    elif style == "word":
+        s.glow(cx, cy, w * 0.72, 0.30)
+        s.wordmark(brand, cx, cy, w * 0.56)
+    elif style == "echo":
+        s.echo(brand, cx, cy, w * 0.64)
     else:
         raise ValueError(style)
     return s.svg()

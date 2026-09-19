@@ -2,19 +2,19 @@ id: ad-oxagen-mission-control
 brand: oxagen
 kind: ad
 order: 1
-title: Mission Control for your autonomous agents.
+title: Mission Control for agent operators.
 cta: Explore Mission Control · oxagen.sh
 kicker: Identity. Authority. Equipment.
 headline:
   - Mission Control
-  - for your
-  - autonomous agents.
+  - for agent
+  - operators.
 wide:
   - Mission Control for
-  - your autonomous agents.
+  - agent operators.
 short_lines:
   - Mission Control
-  - for your agents.
+  - for agent operators.
 subline: Set identity, authority, tools, and skills. Oversee the work.
 subshort: Set authority. Oversee the work.
 picture: orbit
