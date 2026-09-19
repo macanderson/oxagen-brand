@@ -3743,7 +3743,7 @@
       "title": "Workforce management for autonomous agents is the product. The agent control plane is the category.",
       "long": "Lead with workforce management for autonomous agents, the job the operator is doing. Name the technical category the agent control plane, for an architecture review, a platform owner's evaluation, or a docs overview. Mission Control is retired as of 2026-09-19, because GitHub's control-plane product carries that name, and it never appears in live copy. Where copy needs to name the place an operator works, say Oxagen or the operator console, lowercase and descriptive. Fleet is the name of the Fleet page and an operator's word for the agents they run, not a category. Workforce is the population of agents. Operator is the person. Autonomous agents is allowed in the category line and in body copy as a plain description of what Oxagen manages, and the headline names the workforce rather than narrowing the claim, because Oxagen governs supervised agents too.",
       "phrases": [
-        "Mission Control"
+        "mission control"
       ],
       "audience": [
         "operator",
