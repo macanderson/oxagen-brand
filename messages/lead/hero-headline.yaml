@@ -1,9 +1,9 @@
 id: hero-headline
 brand: oxagen
 kind: headline
-title: Mission Control for agent operators.
-short: Give each agent an identity. Set its authority, budget, tools, and skills. Define completion when the work has an endpoint, and oversee ongoing work through its requests, activity, and spend. Oxagen keeps the record of the actions it governs.
-cta: Explore Mission Control
+title: Your agents are a workforce now. Manage them like one.
+short: Give each agent an identity. Set its authority and budget, equip it with tools and skills, and review what it did and what its operators spent. Oxagen keeps the record of the actions it governs.
+cta: Explore Oxagen
 cta_destination: A product walkthrough showing agent identity, mandate, tool and skill assignment, an allowed action, a request for approval, and the resulting record, with an ongoing agent and a bounded task with completion criteria.
 audience:
 - operator
@@ -23,4 +23,4 @@ review_by: '2026-10-15'
 findings:
 - '01'
 - '07'
-notes: 'Names the reader, the operator. It replaced a line that said autonomous, which left out the supervised agents Oxagen also governs, and your, which read oddly. Under the action: Follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.'
+notes: 'The lead line, approved 2026-09-19. It names the job, workforce management, rather than a product name another company now uses for a control-plane product. The first sentence states what changed for the reader, the second states the job. Under the action: follow an agent from its assigned authority to a recorded action. Comprehension test (review, rollout): ask 5 to 8 new buyers per group what Oxagen does and what it controls before treating this as validated.'

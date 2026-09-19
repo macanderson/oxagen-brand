@@ -1,20 +1,20 @@
 # Oxagen launch copy
 
-Launch messaging for Mission Control, the definition of done, and Witness. Written in the present tense on the assumption that the described features have shipped. Each set contains a title, a short blurb for a feature card, a longer blurb for a product page, and a call to action.
+Launch messaging for workforce management, the definition of done, and Witness. The product name Mission Control was retired on 2026-09-19, because GitHub's control-plane product carries it; this file was rewritten to the approved lead that replaced it. Written in the present tense on the assumption that the described features have shipped. Each set contains a title, a short blurb for a feature card, a longer blurb for a product page, and a call to action.
 
 ## Recommended lead
 
-**Title:** Mission Control for agent operators.
+**Title:** Your agents are a workforce now. Manage them like one.
 
 **Short:** Give every agent an identity. Set its authority, tools, skills, and budget. Direct the work and keep the record.
 
-**Long:** Oxagen is Mission Control for the operators managing an agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence together in one control plane.
+**Long:** Oxagen is workforce management for the operators running an agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence together in one agent control plane.
 
-**CTA:** Explore Mission Control
+**CTA:** Explore Oxagen
 
 ## Positioning hierarchy
 
-The operator is the primary reader. The agent workforce is what they manage, autonomous or supervised. Mission Control is where they do it. The control plane is what makes their decisions enforceable and auditable.
+The operator is the primary reader. The agent workforce is what they manage, autonomous or supervised. Oxagen is where they do it. The agent control plane is what makes their decisions enforceable and auditable.
 
 1. Establish each agent's identity and accountable operator.
 2. Define its responsibility, authority, and limits.
@@ -23,17 +23,17 @@ The operator is the primary reader. The agent workforce is what they manage, aut
 5. Define completion criteria where a responsibility has a finish line.
 6. Inspect the actions, cost, decisions, and evidence.
 
-The definition of done and Witness are mechanisms within this larger product. Ongoing responsibilities do not need an artificial completion state to belong in Mission Control.
+The definition of done and Witness are mechanisms within this larger product. Ongoing responsibilities do not need an artificial completion state to belong in Oxagen.
 
-## Mission Control
+## Workforce
 
 ### 1. Fleet management
 
 **Title:** Your agents. Their work. One place to act.
 
-**Short:** See what every agent is doing, what it needs, and what it costs. Answer, steer, fund, or stop it from Mission Control.
+**Short:** See what every agent is doing, what it needs, and what it costs. Answer, steer, fund, or stop it from one console.
 
-**Long:** An agent waiting for approval. Another nearing its budget. A third working from the wrong assumption. Mission Control brings their runs, requests, mandates, and spend into one view. Open the run, read what happened, and take the next action with the record beside you.
+**Long:** An agent waiting for approval. Another nearing its budget. A third working from the wrong assumption. Oxagen brings their runs, requests, mandates, and spend into one view. Open the run, read what happened, and take the next action with the record beside you.
 
 **CTA:** See your fleet
 
@@ -313,7 +313,7 @@ The definition of done and Witness are mechanisms within this larger product. On
 
 ## Suggested page order
 
-1. Lead: “Mission Control for agent operators.”
+1. Lead: “Your agents are a workforce now. Manage them like one.”
 2. Identity: each agent's principal, roles, scope, and accountable operator.
 3. Authority: mandates, access requests, approvals, and budgets.
 4. Equipment: approved tools, skills, knowledge, and steering.
@@ -321,7 +321,7 @@ The definition of done and Witness are mechanisms within this larger product. On
 6. Outcomes: completion criteria where applicable, human sign-off, and Witness.
 7. Accountability: spend, reconciliation, playback, and signed records.
 8. Learning: reviewed lessons and context for the next run.
-9. Closing CTA: “Explore Mission Control.”
+9. Closing CTA: “Explore Oxagen.”
 
 Use the feature titles as section headlines. Keep technical names such as oracle kinds and evaluator versions in the longer explanation rather than the hero.
 
@@ -381,15 +381,15 @@ Use the feature titles as section headlines. Keep technical names such as oracle
 
 These notes are for the team, not customer-facing copy.
 
-- Primary feature source: [Mission Control rebuild specification](/Users/macanderson/Projects/tmp-oxagen-mockups/docs/2026-09-11-oxagen-mission-control-spec.md), especially §§6–12. Cards 1–16 and 27 derive from that specification. Cards 21–22 use its §8.5 witness-flip model.
+- Primary feature source: the rebuild specification at [docs/2026-09-11-oxagen-mission-control-spec.md](/Users/macanderson/Projects/tmp-oxagen-mockups/docs/2026-09-11-oxagen-mission-control-spec.md), whose file name still carries the retired product name, especially §§6–12. Cards 1–16 and 27 derive from that specification. Cards 21–22 use its §8.5 witness-flip model.
 - Definition of done source: [dod specification](/Users/macanderson/Projects/tmp-oxagen-mockups/docs/oxagen-dod-spec.html). Cards 17–20 use its locked criteria, stop checks, human review, and deterministic settlement.
 - Oracle and outcome funding source: [Witness specification](/Users/macanderson/Projects/tmp-oxagen-mockups/docs/oxagen-witness-spec.html). Cards 23–26 and 28 use its executable requirements, deterministic evaluators, separate human judgment, evidence, and funding mechanism.
 - Voice and naming: [Oxagen branding skill](/Users/macanderson/Projects/oxagen-brand/skills/oxagen-branding/SKILL.md) and its positioning, voice, words, and examples references.
-- The operator-first positioning and agent workforce language follow the user's clarified vision. The lead names the operator and leaves out autonomous, because Oxagen also governs supervised agents. This supersedes the earlier dod-led hero and the brand reference's preference against workforce terminology.
+- The operator-first positioning and agent workforce language follow the user's clarified vision. As of 2026-09-19 the lead names the job, workforce management, and the category line names autonomous agents; the headline stays broad, because Oxagen also governs supervised agents. This supersedes the earlier dod-led hero and the brand reference's preference against workforce terminology.
 - Identity, tools, and skills detail also comes from the mockup [Agent page specification](/Users/macanderson/Projects/tmp-oxagen-mockups/pages/agent.md) and [Skills page specification](/Users/macanderson/Projects/tmp-oxagen-mockups/pages/skills.md). An agent's own identity credential is distinct from a third-party connection credential held by Oxagen.
 - SOC 2 belongs in the enterprise assurance section with the exact report status and scope approved for launch. The supplied product specifications describe controls and audit evidence, not a completed SOC 2 examination. The copy therefore makes concrete control claims without inventing an attestation.
 - Per the launch brief, all copy assumes the described features have shipped. No roadmap or availability labels appear in the blurbs. Embedded build prompts in source documents were treated as source material, not work instructions.
 - The supplied dod document describes v2, while the brand references describe a later, narrower dod. Copy uses the shared behavior and avoids conflicting check counts, file formats, hook counts, certificate claims, and metering details.
-- The broader Witness document uses stamp-based outcome verification. Mission Control uses a target-to-PR flip to define “proven.” The copy reserves “proven” for the flip and describes outcome stamps separately.
+- The broader Witness document uses stamp-based outcome verification. Oxagen uses a target-to-PR flip to define “proven.” The copy reserves “proven” for the flip and describes outcome stamps separately.
 - Outcome-linked funding is presented as a specific workflow, not a claim that all Oxagen charges or model-provider costs disappear when work fails.
 - CTAs are proposed labels. They need matching demos, product actions, or page destinations when placed.

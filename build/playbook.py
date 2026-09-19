@@ -428,7 +428,7 @@ def build_html() -> str:
     )
     ads = []
     for b, slug, w, h, tag, s in (
-        ("oxagen", "mission-control", 1080, 1350, "portrait", "dark"),
+        ("oxagen", "workforce", 1080, 1350, "portrait", "dark"),
         ("oxagen", "authority", 1080, 1080, "square", "light"),
         ("oxagen", "equipment", 1200, 628, "landscape", "dark"),
         ("oxagen", "finance", 300, 250, "mpu", "light"),
@@ -461,7 +461,7 @@ def build_html() -> str:
         ("spinners/", "the house motion, animated SVG, no script"),
         ("wallpapers/", "desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit | word | echo · dark | light"),
         ("social/", "avatar · x · linkedin · youtube · open graph · dark | light"),
-        ("ads/", "mission-control · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
+        ("ads/", "workforce · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
         ("content/", "changelog · essay · release · field note · fleet note cards, 1200×675"),
     ]
     files_html = "".join(f'<div class="mono">{esc(k)}</div><span>{esc(v)}</span>' for k, v in files)
@@ -590,7 +590,7 @@ def build_html() -> str:
 <p class="eyebrow">Type</p>
 <h2>Three faces, each with one job</h2>
 <p><b>Space Grotesk</b> sets the wordmarks and h1 to h3, and nothing smaller than 20 px: its wide geometric letters lose their shape below that. <b>Geist</b> sets h4 to h6 and everything read: body, labels, buttons, tables, navigation. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
-<div class="type-row"><span class="mono">display · 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Mission Control for agent operators.</span></div>
+<div class="type-row"><span class="mono">display · 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
 <div class="type-row"><span class="mono">display · 600</span><span style="font-family:var(--ox-font-display);font-weight:600;font-size:26px;line-height:1.2">See which agent spent what.</span></div>
 <div class="type-row"><span class="mono">text · 600</span><span style="font-weight:600;font-size:16px">Runs waiting for approval</span></div>
 <div class="type-row"><span class="mono">text · 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
@@ -631,8 +631,8 @@ def build_html() -> str:
 <div class="grid g4">{social}</div>
 <div class="grid g2" style="margin-top:18px">{banners}</div>
 <h3>Ads</h3>
-<p>Every ad takes its copy from an approved, launch-released entry in <code>messages/ads/</code>, and <code>build/messages.py --check</code> fails on any file in <code>ads/</code> that no entry produces. The Oxagen campaign follows the operator's job. <b>Mission Control</b> introduces the control plane, and each of the others explains one decision an operator makes: which agent has the <b>authority</b> to do what, how each agent is <b>equipped</b>, which agent <b>spent</b> what, and why the agent does not hold the <b>keys</b>. A short form keeps the scope of its long form, so the banner still says governed, recorded, or mediated where the poster does. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form. A held campaign, such as completion checks for bounded tasks, is written and not rendered until its capability ships. Stella runs two lines: the proof rule, and the green check. Each ships in the four sizes, on ink and on paper.</p>
-<p>Four of the five Oxagen campaigns take the ghost in the top right. The <b>Mission Control</b> ad takes the orbit instead, laid back behind the type: rings of nodes wired inward to one mark is the only composition the kit already owns that reads as many agents under one control plane. It is not a new shape; it is the wallpaper's, at ad scale and at ad strength.</p>
+<p>Every ad takes its copy from an approved, launch-released entry in <code>messages/ads/</code>, and <code>build/messages.py --check</code> fails on any file in <code>ads/</code> that no entry produces. The Oxagen campaign follows the operator's job. The <b>workforce</b> ad states the job, and each of the others explains one decision an operator makes: which agent has the <b>authority</b> to do what, how each agent is <b>equipped</b>, which agent <b>spent</b> what, and why the agent does not hold the <b>keys</b>. A short form keeps the scope of its long form, so the banner still says governed, recorded, or mediated where the poster does. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form. A held campaign, such as completion checks for bounded tasks, is written and not rendered until its capability ships. Stella runs two lines: the proof rule, and the green check. Each ships in the four sizes, on ink and on paper.</p>
+<p>Four of the five Oxagen campaigns take the ghost in the top right. The <b>workforce</b> ad takes the orbit instead, laid back behind the type: rings of nodes wired inward to one mark is the only composition the kit already owns that reads as many agents under one control plane. It is not a new shape; it is the wallpaper's, at ad scale and at ad strength.</p>
 <div class="grid g2">{"".join(ads)}</div>
 <h3>Content cards</h3>
 <div class="grid g2">{"".join(cards)}</div>

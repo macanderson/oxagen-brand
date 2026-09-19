@@ -29,7 +29,7 @@ findings:
 - id: '07'
   priority: P2
   title: The operator's full job is missing from the lead
-  rule: Lead with Mission Control as the product and the agent control plane as the category, and show the operator's full job.
+  rule: Lead with workforce management for autonomous agents as the product and the agent control plane as the category, and show the operator's full job, including the review the operator gets.
 - id: 08
   priority: P2
   title: Sales copy presumes incompetence and hides proof status

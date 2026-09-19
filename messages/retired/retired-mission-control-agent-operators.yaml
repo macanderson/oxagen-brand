@@ -1,0 +1,15 @@
+id: retired-mission-control-agent-operators
+brand: oxagen
+kind: headline
+title: Mission Control for agent operators.
+audience:
+- operator
+- platform
+clause: none
+surfaces: []
+status: retired
+owner: Mac Anderson
+findings:
+- '07'
+replaced_by: hero-headline
+notes: Was the homepage headline, the primary ad, and the social and manifest tagline until 2026-09-19. Retired because GitHub's control-plane product carries the Mission Control name, so the line names someone else's product. The lead now names the job the operator is doing.

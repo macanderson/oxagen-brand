@@ -4,14 +4,14 @@ kind: announcement
 order: 1
 title: Launch announcement
 long: |-
-  An agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. Oxagen is Mission Control for that workforce.
+  An agent workforce needs operators who can decide what each agent may do, equip it for the work, and inspect what happens. That job is workforce management, and Oxagen is where it happens.
 
   Give each agent an identity. Set its authority and budget, assign tools and skills, and review requests that need a person's decision. The record connects governed actions to the agent, the rule, and the person responsible.
 
   Some work has a finish line. Define its completion criteria before the agent starts and review the recorded results afterward. Other work continues. Keep its authority, activity, and spend in view as it runs.
 
-  Explore Mission Control to follow an agent from its assigned mandate to a recorded action.
-cta: Explore Mission Control
+  Explore Oxagen to follow an agent from its assigned mandate to a recorded action.
+cta: Explore Oxagen
 audience:
 - operator
 - platform

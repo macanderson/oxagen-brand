@@ -1,0 +1,39 @@
+id: ad-oxagen-workforce
+brand: oxagen
+kind: ad
+order: 1
+title: Your agents are a workforce now. Manage them like one.
+cta: Explore Oxagen · oxagen.sh
+kicker: Identity. Authority. Equipment.
+headline:
+  - Your agents are
+  - a workforce now.
+  - Manage them
+  - like one.
+wide:
+  - Your agents are a workforce now.
+  - Manage them like one.
+short_lines:
+  - Your agents are a workforce now.
+  - Manage them like one.
+subline: Set identity, authority, tools, and skills. Review the governed work.
+subshort: Set authority. Review the governed work.
+scope_terms:
+  - governed
+picture: orbit
+audience:
+  - operator
+  - platform
+clause: operations
+surfaces:
+  - ads
+status: approved
+release: launch
+qualifier: Oxagen keeps the record of the actions it governs.
+evidence: 'Product owner: provide a launch walkthrough with identity, authority, tool and skill assignment, a recorded action, an ongoing agent, and a task with completion criteria. Document supported environments and control boundaries.'
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '01'
+  - '07'
+notes: The primary campaign states the job. It takes the orbit, the one composition that reads as many agents under one control plane.

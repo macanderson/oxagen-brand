@@ -2,8 +2,8 @@ id: pitch-product-page
 brand: oxagen
 kind: pitch
 title: Product page introduction
-long: Oxagen is Mission Control for the operators managing an agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence for governed work together in one control plane.
-cta: Explore Mission Control
+long: Oxagen is workforce management for the operators running an agent workforce. Register agents with their own identities, assign roles and authority, and choose the tools, skills, and knowledge they can use. Set budgets, direct live work, and review requests that need your judgment. For work with a finish line, define what done means and how it will be checked. For ongoing responsibilities, set the operating limits and review the record. Oxagen brings the authority, activity, cost, and evidence for governed work together in one agent control plane.
+cta: Explore Oxagen
 audience:
 - operator
 - platform
@@ -18,4 +18,4 @@ review_by: '2026-10-15'
 findings:
 - '01'
 - '07'
-notes: 'Adapted from the recommended lead in the Mission Control launch cards. Its title is not a second headline: the hero headline leads.'
+notes: 'Adapted from the recommended lead in the launch cards. Its title is not a second headline: the hero headline leads.'
