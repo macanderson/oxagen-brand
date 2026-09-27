@@ -1,0 +1,19 @@
+id: split-check-in
+brand: oxagen
+kind: pitch
+set: split
+order: 4
+title: See your fleet's progress from wherever you are, whenever you check in.
+audience:
+  - operator
+clause: record
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft set the second half off with an em dash. It reads without one.

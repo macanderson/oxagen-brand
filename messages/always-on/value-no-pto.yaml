@@ -1,0 +1,19 @@
+id: value-no-pto
+brand: oxagen
+kind: pitch
+set: value
+order: 6
+title: Agents don't call in sick, don't ask for PTO, and never get tired.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Never describes the agent here, not an outcome, so the words.md warning can stand.

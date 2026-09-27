@@ -1,0 +1,20 @@
+id: control-plane-category
+brand: oxagen
+kind: eyebrow
+set: primary
+order: 2
+title: The control plane for your agent workforce.
+audience:
+  - platform
+  - engineering
+clause: operations
+surfaces:
+  - site-hero
+  - docs
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Proposed as the technical category line. The same words were retired on 2026-09-18 as an eyebrow (retired-control-plane-agent-workforce, replaced by hero-eyebrow). Approving this entry means un-retiring that line, which is Mac's call. The skill already names agent control plane as the technical category.

@@ -1,0 +1,19 @@
+id: coach-live-your-life
+brand: oxagen
+kind: pitch
+set: coach
+order: 3
+title: 'The future: less management, more momentum. Let agents work while you live your life.'
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26.

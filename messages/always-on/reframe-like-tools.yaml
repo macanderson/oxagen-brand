@@ -1,0 +1,20 @@
+id: reframe-like-tools
+brand: oxagen
+kind: pitch
+set: reframe
+order: 3
+title: Onboard agents like tools, not employees. No HR, just ROI.
+audience:
+  - operator
+clause: budget
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '02'
+  - '07'
+notes: 'From Mac''s draft of 2026-09-26. Mac''s draft also lists this line under Driving the momentum. ROI is a savings claim: rule-cost-claims allows it only beside a measured workload and its conditions.'

@@ -1,0 +1,19 @@
+id: night-shift
+brand: oxagen
+kind: headline
+set: night
+order: 10
+title: 'The new standard: Let agents run the night shift, so you don''t have to.'
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.

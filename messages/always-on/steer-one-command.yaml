@@ -1,0 +1,20 @@
+id: steer-one-command
+brand: oxagen
+kind: headline
+set: steer
+order: 8
+title: One command, every agent aligned. Oxagen adapts so you stay ahead.
+audience:
+  - operator
+  - platform
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. One command for every agent is intended, not shipped.

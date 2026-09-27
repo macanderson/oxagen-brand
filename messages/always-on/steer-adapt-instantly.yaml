@@ -1,0 +1,20 @@
+id: steer-adapt-instantly
+brand: oxagen
+kind: headline
+set: steer
+order: 6
+title: 'Adapt instantly: Oxagen orchestrates agents everywhere, so you''re ready for any curveball.'
+audience:
+  - operator
+  - platform
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Oxagen governs agents. It does not run them. Orchestrates and everywhere both need a scope before approval.

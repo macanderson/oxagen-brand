@@ -1,0 +1,20 @@
+id: steer-marching-orders
+brand: oxagen
+kind: pitch
+set: steer
+order: 2
+title: Each agent receives its marching orders and returns results.
+audience:
+  - operator
+  - platform
+clause: operations
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.

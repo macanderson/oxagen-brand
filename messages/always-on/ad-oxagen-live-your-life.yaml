@@ -1,0 +1,33 @@
+id: ad-oxagen-live-your-life
+brand: oxagen
+kind: ad
+set: combos
+order: 7
+title: Let agents work while you live your life.
+cta: Explore Oxagen · oxagen.sh
+kicker: Coaching operators
+headline:
+  - Let agents work
+  - while you live
+  - your life.
+wide:
+  - Let agents work
+  - while you live your life.
+short_lines:
+  - Let agents work
+  - while you live
+  - your life.
+subline: Welcome to acceleration. Let agents drive your progress.
+picture: ghost
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: Mac's example combination of coach-live-your-life and coach-acceleration. From Mac's draft of 2026-09-26. Mac's combination had an adjective from the words.md list of words that mean nothing before acceleration. It is cut.

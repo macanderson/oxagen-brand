@@ -1,0 +1,33 @@
+id: ad-oxagen-vision-momentum
+brand: oxagen
+kind: ad
+set: combos
+order: 6
+title: Oxagen turns your vision into momentum.
+cta: Explore Oxagen · oxagen.sh
+kicker: Steering
+headline:
+  - Oxagen turns
+  - your vision
+  - into momentum.
+wide:
+  - Oxagen turns your vision
+  - into momentum.
+short_lines:
+  - Oxagen turns
+  - your vision
+  - into momentum.
+subline: Agents moving your goals forward 24/7. Wherever you steer, your vision stays in sync.
+picture: orbit
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: Mac's example combination of signoff-vision-momentum and steer-new-direction. From Mac's draft of 2026-09-26. The subline is two sentences. The renderer sets it smaller to fit one line. Consider one of them.

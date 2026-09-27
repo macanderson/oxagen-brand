@@ -1,0 +1,35 @@
+id: ad-oxagen-driver-seat
+brand: oxagen
+kind: ad
+set: combos
+order: 5
+title: Stay in the driver's seat. Agents deliver the momentum.
+cta: Explore Oxagen · oxagen.sh
+kicker: Operators and agents
+headline:
+  - Stay in the
+  - driver's seat.
+  - Agents deliver
+  - the momentum.
+wide:
+  - Stay in the driver's seat.
+  - Agents deliver the momentum.
+short_lines:
+  - Stay in the
+  - driver's seat.
+  - Agents deliver
+  - the momentum.
+subline: Operators set the course, agents execute and report.
+picture: orbit
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: Mac's example combination of split-prioritize-steer and split-driver-seat. From Mac's draft of 2026-09-26. Mac's combination rewords the division of labor line as Operators set the course.

@@ -1,0 +1,19 @@
+id: value-progress-report
+brand: oxagen
+kind: pitch
+set: value
+order: 4
+title: Wake up to a progress report, not a backlog.
+audience:
+  - operator
+clause: record
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. The report is the record of governed work.

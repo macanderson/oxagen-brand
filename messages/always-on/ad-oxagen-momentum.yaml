@@ -1,0 +1,35 @@
+id: ad-oxagen-momentum
+brand: oxagen
+kind: ad
+set: combos
+order: 4
+title: Don't manage the grind. Drive the momentum.
+cta: Explore Oxagen · oxagen.sh
+kicker: Workforce management
+headline:
+  - Don't manage
+  - the grind.
+  - Drive the
+  - momentum.
+wide:
+  - Don't manage the grind.
+  - Drive the momentum.
+short_lines:
+  - Don't manage
+  - the grind.
+  - Drive the
+  - momentum.
+subline: No more policies or burnout.
+picture: ghost
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: Mac's example combination of reframe-no-rotas and momentum-drive. From Mac's draft of 2026-09-26. Mac's combination shortens the reframing line to No more policies or burnout.

@@ -1,0 +1,20 @@
+id: steer-redirect-fleet
+brand: oxagen
+kind: headline
+set: steer
+order: 7
+title: Life changes fast. Oxagen redirects your entire agent fleet in real time.
+audience:
+  - operator
+  - platform
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. Redirecting a whole fleet in one step is intended, not shipped. Hold the line until it ships.

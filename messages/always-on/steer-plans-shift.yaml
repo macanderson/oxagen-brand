@@ -1,0 +1,20 @@
+id: steer-plans-shift
+brand: oxagen
+kind: headline
+set: steer
+order: 5
+title: When plans shift, Oxagen steers all your agents across environments, without a hitch.
+audience:
+  - operator
+  - platform
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft had an adverb from the words.md list of words that mean nothing, and an em dash. Both are cut.

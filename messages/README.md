@@ -2,7 +2,7 @@
 
 This folder is the registry of every line Oxagen and Stella publish: headlines, pitches, product page sections, feature cards, entry points, proof points, outreach, ads, voice pairs, and the rules writers follow. One YAML file holds one entry.
 
-The registry is the source of truth. `message-bank.html`, `messages/index.json`, and the ad copy in `build/build.py` are generated from it. A copy change starts here, never in the generated files.
+The registry is the source of truth. `message-bank.html`, `always-on.html`, `messages/index.json`, and the ad copy in `build/build.py` are generated from it. A copy change starts here, never in the generated files.
 
 The entries follow the adversarial messaging review of 2026-09-15. `findings.yaml` lists its ten findings, each with the rule it imposes, and every entry names the findings that shaped it.
 
@@ -25,6 +25,7 @@ messages/
   identity-equipment/ feature cards 29 to 33
   outreach/           the launch announcement and sales emails
   ads/                ad campaigns, rendered by build/build.py
+  always-on/          Mac's always-on draft of 2026-09-26, one line per entry, grouped by set
   voice/              before and after pairs, and word swaps
   rules/              internal rules, including the phrase blocklists
   retired/            lines that are no longer used, with their replacements
@@ -40,6 +41,7 @@ The folder an entry sits in is its group. The page renders each group in its own
 | `brand` | yes | `oxagen` or `stella`. |
 | `kind` | yes | `headline`, `eyebrow`, `pitch`, `section`, `card`, `entry-point`, `rule`, `proof`, `pair`, `email`, `announcement`, `ad`, or `glossary`. |
 | `order` | no | Position within the group on the page. |
+| `set` | in `always-on/` | The set the line belongs to: `primary`, `value`, `night`, `reframe`, `split`, `steer`, `coach`, `vision`, `signoff`, or `combos`. `SETS` in `build/messages.py` lists them in page order. |
 | `title` | yes | The line itself. For a pitch, rule, pair, or glossary entry, its label. For an email, the subject. |
 | `short`, `long` | no | The short form and the long form. |
 | `cta`, `cta_destination` | no | The action, and what it must lead to. |
@@ -58,6 +60,8 @@ The folder an entry sits in is its group. The page renders each group in its own
 | `notes` | no | Internal context. |
 
 Ads also carry `kicker`, `headline` (the tall stack), `wide` (the landscape lines), `short_lines` (the 300x250), `subline`, `subshort`, `picture` (`ghost` or `orbit`), and `scope_terms`. The ad id is `ad-<brand>-<slug>`, and the slug names the files in `ads/`. `headline` and `wide` must join to the title. Every `subline` and `subshort` must contain one of the `scope_terms`, so a short form cannot drop its scope.
+
+The always-on ads in `always-on/` use the same ad fields. They are candidates, so `build/build.py` renders none of them into `ads/`. `build/campaign.py` sets every always-on entry on `always-on.html` as ads, banners, website sections, and calls to action, and the page's builder pairs any intro with any tagline.
 
 Pairs carry `before` and `after`. Sections that are tables carry `rows`, each with a `label` and `text`. Rules may carry `phrases`, which the check rejects in live copy.
 
@@ -85,7 +89,7 @@ The comprehension testing the review recommends is recorded in `notes` or `evide
 
 ```sh
 python3 build/messages.py --check     # validate the registry and confirm the generated files are current
-python3 build/messages.py             # write messages/index.json and message-bank.html
+python3 build/messages.py             # write messages/index.json, message-bank.html, and always-on.html
 python3 build/messages.py --verbose   # also list words that need reading in context
 .venv/bin/python build/build.py --only ads social   # render the ads and taglines from the registry
 ```
@@ -99,6 +103,7 @@ The check fails on:
 - phrases listed in any rule entry's `phrases` in live copy, and prospect or deal markers anywhere
 - retired text inside an approved entry
 - an ad file in `ads/` that no approved, launch-released ad entry produces, or an approved ad whose files are missing
-- `message-bank.html` or `index.json` out of date with the registry
+- an always-on entry missing from `always-on.html`, and the same page checks on that page
+- `message-bank.html`, `always-on.html`, or `index.json` out of date with the registry
 
 A past `review_by` date is a warning. Rule entries, `before` text, and the page's quoted examples are exempt from the word and phrase checks, because they name what not to write.

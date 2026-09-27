@@ -1,0 +1,19 @@
+id: coach-where-agents-excelled
+brand: oxagen
+kind: pitch
+set: coach
+order: 2
+title: Progress reports show where agents excelled and where you can tune the approach.
+audience:
+  - operator
+clause: record
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft set the second half off with an em dash. A report states what the record shows and does not grade the operator.

@@ -1,0 +1,21 @@
+id: value-doing-it-wrong
+brand: oxagen
+kind: pitch
+set: value
+order: 7
+title: If your agents stop working at the same time you do, you're doing it wrong.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+  - '08'
+notes: From Mac's draft of 2026-09-26. Read it against finding 08 before approval. Telling the reader they are
+  doing it wrong presumes incompetence.

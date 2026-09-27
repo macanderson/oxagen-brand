@@ -1,0 +1,20 @@
+id: signoff-on-course
+brand: oxagen
+kind: headline
+set: signoff
+order: 3
+title: Oxagen, keep your agents on course.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - email
+  - site-cta
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26.

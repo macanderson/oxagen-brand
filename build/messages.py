@@ -65,11 +65,27 @@ GROUPS = (
     ("identity-equipment", "Identity and equipment"),
     ("outreach", "Outreach"),
     ("ads", "Ads"),
+    ("always-on", "Always-on"),
     ("voice", "Voice"),
     ("rules", "Rules"),
     ("retired", "Retired"),
 )
 CARD_GROUPS = ("workforce", "definition-of-done", "witness", "identity-equipment")
+
+#: The sets inside messages/always-on/: (set, heading, how its lines pair). The order is the order of the page.
+SETS = (
+    ("primary", "Primary messaging", "The eyebrow, the technical category, the product experience line, and the lead, in hero order."),
+    ("value", "Value propositions", "Ad intro copy. Pair one with a tagline from any set below."),
+    ("night", "Always-on workforce", "Taglines for work that continues after hours. Pair one with a value proposition."),
+    ("reframe", "Workforce management", "Reframing lines, then taglines. Pair a reframing line with a tagline from this set."),
+    ("split", "Operators and agents", "The division of labor, then two oversight taglines. Pair one of each."),
+    ("steer", "Steering", "Steering lines, then taglines about a change of direction. Pair one of each."),
+    ("coach", "Coaching operators", "Strategy lines for operators, then momentum taglines. Pair one of each."),
+    ("vision", "Vision", "Standalone headlines about direction. Each works alone or above a sign-off."),
+    ("signoff", "Sign-offs", "Closing lines for an ad, a page, or an email."),
+    ("combos", "Ad combinations", "Mac's example pairings, written as candidate ads at the four house sizes."),
+)
+ROLES = {"eyebrow": "Eyebrow", "headline": "Headline", "pitch": "Intro", "ad": "Ad"}
 
 #: Every ad ships at these sizes, on both grounds. build.py renders exactly this set.
 AD_SIZES = [(1080, 1080, "square"), (1080, 1350, "portrait"), (1200, 628, "landscape"), (300, 250, "mpu")]
@@ -80,7 +96,7 @@ TAGLINE_IDS = {"oxagen": "hero-headline", "stella": "stella-tagline"}
 
 STR_FIELDS = ("id", "brand", "kind", "title", "short", "long", "cta", "cta_destination", "kicker", "subline",
               "subshort", "picture", "before", "after", "clause", "status", "release", "qualifier", "evidence",
-              "owner", "notes")
+              "owner", "notes", "set")
 LIST_FIELDS = ("audience", "surfaces", "gate", "findings", "headline", "wide", "short_lines", "scope_terms", "phrases")
 ALL_FIELDS = set(STR_FIELDS) | set(LIST_FIELDS) | {"order", "rows", "review_by", "replaced_by"}
 REQUIRED = ("id", "brand", "kind", "title", "audience", "clause", "surfaces", "status", "owner", "findings")
@@ -471,6 +487,10 @@ def validate(entries: list[dict], findings: list[dict], *, today: dt.date | None
             err("a pair needs before and after")
         if "phrases" in e and kind != "rule":
             err("phrases belong only on a rule")
+        if "set" in e and e["set"] not in {k for k, _, _ in SETS}:
+            err(f"set {e['set']!r} is not one of {', '.join(k for k, _, _ in SETS)}")
+        if e["_group"] == "always-on" and not e.get("set"):
+            err("an always-on entry names its set")
 
         # prose
         for f, text in all_texts(e):
@@ -621,7 +641,7 @@ class Page:
         lead_rule = self.ids.get("rule-lead-with-clause")
         return f"""<section id="claim"><p class="eyebrow q">The claim</p><h2 {self.anchor(claim)}>{T(claim["title"])}</h2>
 {paras(claim["long"])}{self.meta(claim)}
-<div class="ex" {self.anchor(mandate)}><div class="lbl">{T(mandate["title"])}, defined once</div><p>{T(mandate["long"])}</p><p>{T(mandate["short"])}</p>{self.meta(mandate)}</div>
+<div class="ex" {self.anchor(mandate)}><div class="lbl">{T(mandate["title"])} definition</div><p>{T(mandate["long"])}</p><p>{T(mandate["short"])}</p>{self.meta(mandate)}</div>
 <div class="tw"><table><thead><tr><th>Clause</th><th>Read first by</th><th>What it covers</th></tr></thead><tbody>{rows}</tbody></table></div>
 <p class="note">{T(lead_rule["long"]) if lead_rule else ""} See <a href="#avoid">the rules</a>.</p></section>"""
 
@@ -637,7 +657,7 @@ class Page:
         for e in refs:
             rows.append(f'<tr><td><b><a href="#m-{A(e["id"])}">{T(e["title"])}</a></b></td><td>{T(", ".join(s.replace("-", " ") for s in e["surfaces"]))}</td>'
                         f'<td>{T(e.get("qualifier", ""))}</td><td>{self.badges(e)}</td></tr>')
-        return f"""<section id="lines"><p class="eyebrow q">Lines</p><h2>Approved messages, with release status and scope</h2>
+        return f"""<section id="lines"><p class="eyebrow q">Lines</p><h2>Approved lines</h2>
 <p>The lead lines, then the headlines that open a page or a section. A held line waits for the capability named on its badge. Open any entry for its launch evidence and owner.</p>
 <div class="tw"><table><thead><tr><th>Line</th><th>Use it for</th><th>Scope</th><th>Status</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>
 <p class="note">Workforce management for autonomous agents is the product and the lead. The agent control plane is the technical category. <a href="#m-rule-naming">The naming rule</a> has the rest.</p></section>"""
@@ -651,7 +671,7 @@ class Page:
             body = f"<p>{T(e['title'])}</p>" if e["id"] == "pitch-one-sentence" else paras(e.get("long", ""))
             act = f'<span class="action">{T(e["cta"])}</span>' if e.get("cta") else ""
             blocks.append(f'<div class="ex" {self.anchor(e)}><div class="lbl">{T(label)}</div>{body}{act}{self.meta(e)}</div>')
-        return f'<section id="pitch"><p class="eyebrow q">The pitch</p><h2>One sentence, then the paragraph</h2>{"".join(blocks)}</section>'
+        return f'<section id="pitch"><p class="eyebrow q">The pitch</p><h2>Pitch</h2>{"".join(blocks)}</section>'
 
     def sections(self) -> str:
         blocks = []
@@ -660,7 +680,7 @@ class Page:
                 continue
             q = f'<p class="note">{T(e["qualifier"])}</p>' if e.get("qualifier") else ""
             blocks.append(f'<div class="ex" {self.anchor(e)}><div class="lbl">Product page section</div><h4>{T(e["title"])}</h4>{paras(e["long"])}{q}{self.meta(e)}</div>')
-        return (f'<section id="sections"><p class="eyebrow q">Sections</p><h2>The product page, in the operator\'s order</h2>'
+        return (f'<section id="sections"><p class="eyebrow q">Sections</p><h2>Product page sections</h2>'
                 f'<p>Authority, equipment, work, operations, and the audit record. Completion is a control for work with an endpoint.</p>{"".join(blocks)}</section>')
 
     def entry_points(self) -> str:
@@ -669,7 +689,7 @@ class Page:
             q = f'<p class="note">{T(e["qualifier"])}</p>' if e.get("qualifier") else ""
             act = f'<span class="action">{T(e["cta"])}</span>' if e.get("cta") else ""
             blocks.append(f'<div class="ex" {self.anchor(e)}><div class="lbl">{T(", ".join(e["audience"]))}</div><h4>{T(e["title"])}</h4>{paras(e["long"])}{act}{q}{self.meta(e)}</div>')
-        return (f'<section id="entry-points"><p class="eyebrow q">Entry points</p><h2>Security, finance, and knowledge each get a door</h2>'
+        return (f'<section id="entry-points"><p class="eyebrow q">Entry points</p><h2>Entry points</h2>'
                 f'<p>Each opens onto the same control plane. The finance door shows recorded cost. The knowledge door keeps context inside the agent\'s permitted scope.</p>{"".join(blocks)}</section>')
 
     def keys(self) -> str:
@@ -700,7 +720,7 @@ class Page:
             return f'<div class="pp" {self.anchor(e)}><p><b>{T(e["title"])}</b> {T(e["long"])}{q}</p>{self.meta(e)}</div>'
 
         rule = self.ids.get("rule-no-competitors")
-        return f"""<section id="proof"><p class="eyebrow q">Proof points</p><h2>Stated so they survive a rebuttal</h2>
+        return f"""<section id="proof"><p class="eyebrow q">Proof points</p><h2>Proof points</h2>
 <div class="grid g2"><div class="panel"><h3>Released at launch</h3>{"".join(item(e) for e in launch)}</div>
 <div class="panel held"><h3>Held for their gate</h3>{"".join(item(e) for e in held)}</div></div>
 <p class="note" style="margin-top:20px">{T(rule["long"]) if rule else ""}</p></section>"""
@@ -710,7 +730,7 @@ class Page:
             f'<div class="panel" {self.anchor(e)}><p class="card-n">Hypothetical, not a testimonial</p><h3>{T(e["title"].split(", ", 1)[-1].capitalize())}</h3><p>{T(e["short"])}</p>{self.meta(e)}</div>'
             for e in self.of("proof", "proof", "buyer-"))
         demo = self.ids["demo-walkthrough"]
-        return f"""<section id="buyers"><p class="eyebrow q">Buyers</p><h2>What each reader should be able to say</h2>
+        return f"""<section id="buyers"><p class="eyebrow q">Buyers</p><h2>Buyer statements</h2>
 <p>These statements are hypothetical. They describe the outcome a reader should reach, and no person or company said them.</p>
 <div class="grid g2">{panels}</div>
 <div class="ex" {self.anchor(demo)}><div class="lbl">{T(demo["title"])}</div>{paras(demo["long"])}{self.meta(demo)}</div></section>"""
@@ -732,7 +752,7 @@ class Page:
             parts.append(f'<h3 class="group" id="cards-{A(g)}">{T(labels[g])}</h3><div class="grid g2">{"".join(panels)}</div>')
         links = [f'<a href="#cards-{A(g)}">{T(labels[g])}</a>' for g in CARD_GROUPS]
         nav = ", ".join(links[:-1]) + ", or " + links[-1]
-        return (f'<section id="cards"><p class="eyebrow q">Feature cards</p><h2>Title, short, long, and action for each feature</h2>'
+        return (f'<section id="cards"><p class="eyebrow q">Feature cards</p><h2>Feature cards</h2>'
                 f'<p>Cards marked held stay off the site until their gate ships. The definition of done cards belong to the bounded-task group only, never a lead. Jump to {nav}.</p>{"".join(parts)}</section>')
 
     def held(self) -> str:
@@ -741,7 +761,7 @@ class Page:
             f'<td class="mono">{T(", ".join(e.get("gate") or []))}</td><td>{T(e["status"])}</td></tr>'
             for e in sorted((e for e in self.entries if e["status"] != "retired" and e.get("release") == "held"),
                             key=lambda e: (",".join(e.get("gate") or []), e["id"])))
-        return f"""<section id="held"><p class="eyebrow q">Held</p><h2>Written, and waiting for a capability</h2>
+        return f"""<section id="held"><p class="eyebrow q">Held</p><h2>Held lines</h2>
 <p>An entry here stays out of the site, ads, and outreach until every capability in its gate ships. Then its release changes to launch and nothing else moves.</p>
 <div class="tw"><table><thead><tr><th>Entry</th><th>Group</th><th>Gate</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table></div></section>"""
 
@@ -756,9 +776,32 @@ class Page:
             small = " / ".join(x for x in (" ".join(e["short_lines"]), e.get("subshort", "")) if x)
             panels.append(f'<div class="panel{"" if live(e) else " held"}" {self.anchor(e)}>{img}<p class="card-n">{T(e["kicker"])}</p>'
                           f'<h3>{T(e["title"])}</h3>{sub}<p class="dim">300x250: {T(small)}</p><p><span class="action">{T(e["cta"])}</span></p>{self.meta(e)}</div>')
-        return (f'<section id="ads"><p class="eyebrow q">Ads</p><h2>Each campaign explains one operator decision</h2>'
+        return (f'<section id="ads"><p class="eyebrow q">Ads</p><h2>Ad campaigns</h2>'
                 f'<p>The art in <span class="mono">ads/</span> is rendered by <span class="mono">build/build.py</span> from the approved, launch-released entries below, in four sizes on ink and on paper. A short form keeps the scope of its long form. A held campaign is listed and not rendered.</p>'
                 f'<div class="grid g2">{"".join(panels)}</div></section>')
+
+    def always_on(self) -> str:
+        blocks = []
+        for key, heading, how in SETS:
+            members = [e for e in self.of("always-on") if e.get("set") == key]
+            if not members:
+                continue
+            if key == "combos":
+                panels = "".join(
+                    f'<div class="panel held" {self.anchor(e)}><p class="card-n">{T(e["kicker"])}</p><h3>{T(e["title"])}</h3>'
+                    f'<p>{T(e.get("subline", ""))}</p><p><span class="action">{T(e["cta"])}</span></p>{self.meta(e)}</div>'
+                    for e in members)
+                body = f'<div class="grid g2">{panels}</div>'
+            else:
+                rows = "".join(
+                    f'<tr {self.anchor(e)}><td><b>{T(e["title"])}</b></td><td>{T(ROLES.get(e["kind"], e["kind"]))}</td><td>{self.meta(e)}</td></tr>'
+                    for e in members)
+                body = f'<div class="tw"><table><thead><tr><th>Line</th><th>Role</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table></div>'
+            blocks.append(f'<h3 class="group" id="set-{A(key)}">{T(heading)}</h3><p>{T(how)}</p>{body}')
+        return (f'<section id="always-on"><p class="eyebrow q">Always-on</p><h2>Always-on campaign</h2>'
+                f'<p>Mac\'s draft of 2026-09-26, one entry per line. Every entry is a candidate. No ad renders from one until Mac approves it. '
+                f'<a href="always-on.html">The campaign page</a> sets these lines as ads, banners, website sections, and calls to action.</p>'
+                f'{"".join(blocks)}</section>')
 
     def outreach(self) -> str:
         blocks = []
@@ -770,7 +813,7 @@ class Page:
                 head, label = "", e["title"]
             act = f'<p><span class="action">{T(e["cta"])}</span></p>' if e.get("cta") else ""
             blocks.append(f'<div class="ex" {self.anchor(e)}><div class="lbl">{T(label)}</div>{head}{paras(e["long"])}{act}{self.meta(e)}</div>')
-        return (f'<section id="outreach"><p class="eyebrow q">Outreach</p><h2>Ask a question the reader can answer</h2>'
+        return (f'<section id="outreach"><p class="eyebrow q">Outreach</p><h2>Outreach</h2>'
                 f'<p>Outreach opens with a diagnostic question and offers one walkthrough. It never describes the reader\'s setup, and it carries no names.</p>{"".join(blocks)}</section>')
 
     def voice(self) -> str:
@@ -778,7 +821,7 @@ class Page:
             f'<div class="pairwrap" {self.anchor(e)}><p class="lbl">{T(e["title"])}</p><div class="pair"><div class="quoted"><b>Before</b>{T(e["before"])}</div>'
             f'<div class="after"><b>After</b>{T(e["after"])}</div></div>{self.meta(e)}</div>'
             for e in self.of("voice", "pair", "pair-"))
-        return f"""<section id="voice"><p class="eyebrow q">Voice</p><h2>A senior engineer who has read the logs</h2>
+        return f"""<section id="voice"><p class="eyebrow q">Voice</p><h2>Voice</h2>
 <p>Plain, specific, unhurried, dry, and honest to the record. It states what the record supports and stops. No exclamation points, no em dashes, no semicolons in customer copy, sentence case headings, and the Oxford comma.</p>
 {pairs}</section>"""
 
@@ -786,7 +829,7 @@ class Page:
         groups = "".join(f'<p><b>{T(g)}.</b> {T(", ".join(ts))}.</p>' for g, ts in avoid_groups())
         swaps = "".join(f'<tr {self.anchor(e)}><td class="quoted">{T(e["before"])}</td><td>{T(e["after"])}</td></tr>'
                         for e in self.of("voice", "pair", "word-"))
-        return f"""<section id="words"><p class="eyebrow q">Words</p><h2>Use these. Avoid those.</h2>
+        return f"""<section id="words"><p class="eyebrow q">Words</p><h2>Word lists</h2>
 <div class="grid g2">
 <div class="panel"><h3>Use</h3><p><b>First contact.</b> run, request, rule, check, cost, agent, operator, workspace.</p><p><b>Detail pages.</b> mandate, clause, frame, seal, export, witness, verdict, dod, each defined where it first appears.</p><p><b>Verbs.</b> ask, request, allow, deny, route, answer, record, read, show.</p><p class="dim">See <a href="#m-rule-first-contact-vocabulary">the first contact rule</a>.</p></div>
 <div class="panel quoted"><h3>Avoid</h3>{groups}</div>
@@ -797,7 +840,7 @@ class Page:
     def examples(self) -> str:
         docs, ui = self.ids["docs-writing-a-rule"], self.ids["ui-strings-access"]
         rows = "".join(f'<tr><td>{T(r["label"])}</td><td class="mono">{T(r["text"])}</td></tr>' for r in ui["rows"])
-        return f"""<section id="examples"><p class="eyebrow q">Example prose</p><h2>Finished copy per surface</h2>
+        return f"""<section id="examples"><p class="eyebrow q">Example prose</p><h2>Examples by surface</h2>
 <div class="ex" {self.anchor(docs)}><div class="lbl">Docs, writing a rule</div><h4>{T(docs["title"])}</h4>{paras(docs["long"])}{self.meta(docs)}</div>
 <div class="ex" {self.anchor(ui)}><div class="lbl">{T(ui["title"])}</div><div class="tw" style="margin:0"><table><tbody>{rows}</tbody></table></div>{self.meta(ui)}</div>
 <p class="note" style="margin-top:20px">The pages above are examples, not a script. Product names in them are placeholders.</p></section>"""
@@ -814,7 +857,7 @@ class Page:
             items.append(f'<li class="quoted" {self.anchor(e)}><b>{T(e["title"])}</b> {T(e["long"])}{ph}{self.meta(e)}</li>')
         frows = "".join(f'<tr id="finding-{A(f["id"])}"><td class="mono">{T(f["id"])}</td><td>{T(f["priority"])}</td><td>{T(f["title"])}</td><td>{T(f["rule"])}</td></tr>'
                         for f in self.findings)
-        return f"""<section id="avoid"><p class="eyebrow q">Rules</p><h2>What not to say, and why</h2>
+        return f"""<section id="avoid"><p class="eyebrow q">Rules</p><h2>Writing rules</h2>
 <ol class="method">{"".join(items)}</ol>
 <h3 style="margin:30px 0 6px">The review behind the rules</h3>
 <p>The adversarial messaging review of 2026-09-15 found ten problems. Each entry above and in the registry names the findings that shaped it.</p>
@@ -825,14 +868,14 @@ class Page:
             f'<tr class="quoted" {self.anchor(e)}><td>{T(e["title"])}</td><td>{T(e["kind"])}</td><td>{self.link(e.get("replaced_by"))}</td>'
             f'<td>{", ".join(f"<a href=\"#finding-{A(f)}\">{T(f)}</a>" for f in e["findings"])}</td><td class="dim">{T(e.get("notes", ""))}</td></tr>'
             for e in self.of("retired"))
-        return f"""<section id="retired"><p class="eyebrow q">Retired</p><h2>No longer used, and what replaced each line</h2>
+        return f"""<section id="retired"><p class="eyebrow q">Retired</p><h2>Retired lines</h2>
 <p>The check fails if a retired line reappears in an approved entry. Each row quotes the line as it was, so the table is exempt from the word checks.</p>
 <div class="tw"><table><thead><tr><th>Retired line</th><th>Kind</th><th>Replaced by</th><th>Findings</th><th>Notes</th></tr></thead><tbody>{rows}</tbody></table></div></section>"""
 
     def render(self) -> str:
         body = "\n".join([
             self.hero(), self.claim(), self.lines(), self.pitch(), self.sections(), self.entry_points(), self.keys(),
-            self.proof(), self.buyers(), self.cards(), self.held(), self.ads(), self.outreach(), self.voice(),
+            self.proof(), self.buyers(), self.cards(), self.held(), self.ads(), self.always_on(), self.outreach(), self.voice(),
             self.words(), self.examples(), self.rules(), self.retired(),
         ])
         nav = "".join(f'<a href="#{a}">{T(label)}</a>' for a, label in NAV)
@@ -849,7 +892,7 @@ class Page:
 </head>
 <body>
 <!-- GENERATED by build/messages.py from messages/. Do not edit. -->
-<header class="top"><div class="wrap"><div class="bar">{WORDMARK}<span class="tag">message bank &middot; generated from messages/</span></div>
+<header class="top"><div class="wrap"><div class="bar">{WORDMARK}<span class="tag">message bank</span></div>
 <nav class="sub">{nav}</nav></div></header>
 <main class="wrap">
 {body}
@@ -862,7 +905,7 @@ class Page:
 
 NAV = (("claim", "Claim"), ("lines", "Lines"), ("pitch", "Pitch"), ("sections", "Sections"), ("entry-points", "Entry points"),
        ("keys", "Access"), ("proof", "Proof points"), ("buyers", "Buyers"), ("cards", "Cards"), ("held", "Held"),
-       ("ads", "Ads"), ("outreach", "Outreach"), ("voice", "Voice"), ("words", "Words"), ("examples", "Examples"),
+       ("ads", "Ads"), ("always-on", "Always-on"), ("outreach", "Outreach"), ("voice", "Voice"), ("words", "Words"), ("examples", "Examples"),
        ("avoid", "Rules"), ("retired", "Retired"))
 
 EXTRA_CSS = """
@@ -1053,23 +1096,25 @@ class _PageReader(HTMLParser):
             self.plain.append(data)
 
 
-def check_page(page: str, entries: list[dict], rendered: set[str]) -> tuple[list[str], dict]:
+def check_page(page: str, entries: list[dict], rendered: set[str], *, name: str = "message-bank.html",
+               required: list[dict] | None = None) -> tuple[list[str], dict]:
+    """Parse a generated page and list what is wrong with it. `required` is the entries it must anchor (default all)."""
     r = _PageReader()
     r.feed(page)
     r.close()
-    problems = [f"message-bank.html: {p}" for p in r.problems]
+    problems = [f"{name}: {p}" for p in r.problems]
     if r.stack:
-        problems.append(f"message-bank.html: unclosed tags {[t for t, _ in r.stack]}")
+        problems.append(f"{name}: unclosed tags {[t for t, _ in r.stack]}")
     dupes = [i for i, n in Counter(r.ids).items() if n > 1]
     if dupes:
-        problems.append(f"message-bank.html: duplicate ids {dupes}")
+        problems.append(f"{name}: duplicate ids {dupes}")
     ids = set(r.ids)
     missing = sorted({h for h in r.hrefs if h not in ids})
     if missing:
-        problems.append(f"message-bank.html: anchors that resolve to nothing: {missing}")
+        problems.append(f"{name}: anchors that resolve to nothing: {missing}")
     text, plain = " ".join(r.text), " ".join(r.plain)
     for p in prose_problems(text):
-        problems.append(f"message-bank.html: page text has {p}")
+        problems.append(f"{name}: page text has {p}")
     terms, _ = avoid_terms()
     flat = plain.replace("’", "'")
     context = Counter()
@@ -1078,16 +1123,16 @@ def check_page(page: str, entries: list[dict], rendered: set[str]) -> tuple[list
         if n and qualified:
             context[term] += n
         elif n:
-            problems.append(f"message-bank.html: page prose uses the avoided word {term!r}")
+            problems.append(f"{name}: page prose uses the avoided word {term!r}")
     claims, prospects = blocklists(entries)
     for ph, rid in claims:
         if phrase_hits(plain, [ph]):
-            problems.append(f"message-bank.html: page prose uses {ph!r}, blocked by {rid}")
+            problems.append(f"{name}: page prose uses {ph!r}, blocked by {rid}")
     for ph in phrase_hits(text, prospects):
-        problems.append(f"message-bank.html: page carries a prospect or deal marker ({ph!r})")
-    unrendered = sorted(e["id"] for e in entries if e["id"] not in rendered)
+        problems.append(f"{name}: page carries a prospect or deal marker ({ph!r})")
+    unrendered = sorted(e["id"] for e in (entries if required is None else required) if e["id"] not in rendered)
     if unrendered:
-        problems.append(f"message-bank.html: entries not on the page: {unrendered}")
+        problems.append(f"{name}: entries not on the page: {unrendered}")
     stats = {"elements_with_id": len(ids), "anchors": len(r.hrefs), "anchors_unresolved": len(missing),
              "em_en_dashes": len(DASHES.findall(text)), "exclamation_points": text.count("!"),
              "context_words": dict(sorted(context.items()))}
@@ -1134,7 +1179,13 @@ def main() -> None:
     page = page_obj.render()
     index = render_index(entries, findings)
     page_problems, stats = check_page(page, entries, page_obj.rendered)
-    problems = list(page_problems)
+    sys.modules.setdefault("messages", sys.modules[__name__])  # campaign imports this module by name
+    import campaign
+
+    camp, camp_rendered = campaign.render(entries)
+    camp_problems, camp_stats = check_page(camp, entries, camp_rendered, name=campaign.PAGE.name,
+                                           required=campaign.members(entries))
+    problems = page_problems + camp_problems
     if args.stats:
         args.stats.write_text(json.dumps(stats, indent=2) + "\n")
 
@@ -1143,10 +1194,14 @@ def main() -> None:
             problems.append("message-bank.html is out of date with messages/; run python3 build/messages.py")
         if not INDEX.exists() or INDEX.read_text() != index:
             problems.append("messages/index.json is out of date with messages/; run python3 build/messages.py")
-    elif not page_problems:
+        if not campaign.PAGE.exists() or campaign.PAGE.read_text() != camp:
+            problems.append(f"{campaign.PAGE.name} is out of date with messages/; run python3 build/messages.py")
+    elif not page_problems and not camp_problems:
         BANK.write_text(page)
         INDEX.write_text(index)
-        print(f"wrote {BANK.relative_to(ROOT)} ({len(page) // 1024} KB) and {INDEX.relative_to(ROOT)}")
+        campaign.PAGE.write_text(camp)
+        print(f"wrote {BANK.relative_to(ROOT)} ({len(page) // 1024} KB), {campaign.PAGE.relative_to(ROOT)} "
+              f"({len(camp) // 1024} KB), and {INDEX.relative_to(ROOT)}")
     problems += check_ads_on_disk(entries)
 
     context_note = [w for w in warnings if "allows only in context" in w]
@@ -1161,6 +1216,8 @@ def main() -> None:
                 print("  ", w)
     print(f"page: {stats['elements_with_id']} anchors defined, {stats['anchors']} links, {stats['anchors_unresolved']} unresolved, "
           f"{stats['em_en_dashes']} em or en dashes, {stats['exclamation_points']} exclamation points")
+    print(f"campaign: {camp_stats['elements_with_id']} anchors defined, {camp_stats['anchors']} links, "
+          f"{camp_stats['anchors_unresolved']} unresolved, {len(camp_rendered)} lines")
     for p in problems:
         print("problem:", p)
     if problems:

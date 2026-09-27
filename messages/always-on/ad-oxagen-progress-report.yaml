@@ -1,0 +1,33 @@
+id: ad-oxagen-progress-report
+brand: oxagen
+kind: ad
+set: combos
+order: 2
+title: Wake up to a progress report, not a backlog.
+cta: Explore Oxagen · oxagen.sh
+kicker: Always-on workforce
+headline:
+  - Wake up to a
+  - progress report,
+  - not a backlog.
+wide:
+  - Wake up to a progress report,
+  - not a backlog.
+short_lines:
+  - Wake up to a
+  - progress report,
+  - not a backlog.
+subline: Operators sign off. Agents clock in. Progress, 24/7.
+picture: ghost
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: Mac's example combination of value-progress-report and night-clock-in. From Mac's draft of 2026-09-26.

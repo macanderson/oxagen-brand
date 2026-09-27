@@ -1,0 +1,19 @@
+id: value-overnight
+brand: oxagen
+kind: pitch
+set: value
+order: 3
+title: 'While you turn in for the night, your fleet of agents keeps working: executing tasks, pushing projects forward, and delivering tangible results.'
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft introduced the list with an em dash. A colon does the same job.

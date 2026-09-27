@@ -1,0 +1,20 @@
+id: split-lead-not-labor
+brand: oxagen
+kind: pitch
+set: split
+order: 3
+title: Built for those who lead, not those who labor.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+  - 08
+notes: 'From Mac''s draft of 2026-09-26. Read it against finding 08 before approval: copy that talks down to a reader''s staff fails there.'

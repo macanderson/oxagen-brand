@@ -1,0 +1,19 @@
+id: reframe-hand-off
+brand: oxagen
+kind: pitch
+set: reframe
+order: 2
+title: Set the direction, hand off the task, and rest easy. Your agents are on it.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. Mac's draft also lists this line under Driving the momentum.

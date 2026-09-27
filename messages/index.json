@@ -2,15 +2,15 @@
   "source": "messages/",
   "generated_by": "build/messages.py",
   "counts": {
-    "entries": 168,
+    "entries": 253,
     "status": {
       "approved": 135,
-      "candidate": 5,
+      "candidate": 90,
       "retired": 28
     },
     "release": {
       "held": 25,
-      "launch": 115
+      "launch": 200
     },
     "group": {
       "lead": 13,
@@ -24,6 +24,7 @@
       "identity-equipment": 5,
       "outreach": 4,
       "ads": 8,
+      "always-on": 85,
       "voice": 22,
       "rules": 21,
       "retired": 28
@@ -266,6 +267,49 @@
       "path": "messages/ads/ad-oxagen-authority.yaml"
     },
     {
+      "id": "ad-oxagen-capacity",
+      "brand": "oxagen",
+      "kind": "ad",
+      "set": "combos",
+      "order": 3,
+      "title": "Agents aren't headcount. They're capacity.",
+      "cta": "Explore Oxagen · oxagen.sh",
+      "kicker": "Workforce management",
+      "headline": [
+        "Agents aren't",
+        "headcount.",
+        "They're capacity."
+      ],
+      "wide": [
+        "Agents aren't headcount.",
+        "They're capacity."
+      ],
+      "short_lines": [
+        "Agents aren't",
+        "headcount.",
+        "They're capacity."
+      ],
+      "subline": "Focus on traction, not tracking.",
+      "picture": "ghost",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Mac's example combination of reframe-capacity and momentum-traction. From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/ad-oxagen-capacity.yaml"
+    },
+    {
       "id": "ad-oxagen-completion",
       "brand": "oxagen",
       "kind": "ad",
@@ -314,6 +358,51 @@
       "notes": "Not rendered until the dod ships.",
       "group": "ads",
       "path": "messages/ads/ad-oxagen-completion.yaml"
+    },
+    {
+      "id": "ad-oxagen-driver-seat",
+      "brand": "oxagen",
+      "kind": "ad",
+      "set": "combos",
+      "order": 5,
+      "title": "Stay in the driver's seat. Agents deliver the momentum.",
+      "cta": "Explore Oxagen · oxagen.sh",
+      "kicker": "Operators and agents",
+      "headline": [
+        "Stay in the",
+        "driver's seat.",
+        "Agents deliver",
+        "the momentum."
+      ],
+      "wide": [
+        "Stay in the driver's seat.",
+        "Agents deliver the momentum."
+      ],
+      "short_lines": [
+        "Stay in the",
+        "driver's seat.",
+        "Agents deliver",
+        "the momentum."
+      ],
+      "subline": "Operators set the course, agents execute and report.",
+      "picture": "orbit",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Mac's example combination of split-prioritize-steer and split-driver-seat. From Mac's draft of 2026-09-26. Mac's combination rewords the division of labor line as Operators set the course.",
+      "group": "always-on",
+      "path": "messages/always-on/ad-oxagen-driver-seat.yaml"
     },
     {
       "id": "ad-oxagen-equipment",
@@ -452,6 +541,223 @@
       "path": "messages/ads/ad-oxagen-keys.yaml"
     },
     {
+      "id": "ad-oxagen-live-your-life",
+      "brand": "oxagen",
+      "kind": "ad",
+      "set": "combos",
+      "order": 7,
+      "title": "Let agents work while you live your life.",
+      "cta": "Explore Oxagen · oxagen.sh",
+      "kicker": "Coaching operators",
+      "headline": [
+        "Let agents work",
+        "while you live",
+        "your life."
+      ],
+      "wide": [
+        "Let agents work",
+        "while you live your life."
+      ],
+      "short_lines": [
+        "Let agents work",
+        "while you live",
+        "your life."
+      ],
+      "subline": "Welcome to acceleration. Let agents drive your progress.",
+      "picture": "ghost",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Mac's example combination of coach-live-your-life and coach-acceleration. From Mac's draft of 2026-09-26. Mac's combination had an adjective from the words.md list of words that mean nothing before acceleration. It is cut.",
+      "group": "always-on",
+      "path": "messages/always-on/ad-oxagen-live-your-life.yaml"
+    },
+    {
+      "id": "ad-oxagen-momentum",
+      "brand": "oxagen",
+      "kind": "ad",
+      "set": "combos",
+      "order": 4,
+      "title": "Don't manage the grind. Drive the momentum.",
+      "cta": "Explore Oxagen · oxagen.sh",
+      "kicker": "Workforce management",
+      "headline": [
+        "Don't manage",
+        "the grind.",
+        "Drive the",
+        "momentum."
+      ],
+      "wide": [
+        "Don't manage the grind.",
+        "Drive the momentum."
+      ],
+      "short_lines": [
+        "Don't manage",
+        "the grind.",
+        "Drive the",
+        "momentum."
+      ],
+      "subline": "No more policies or burnout.",
+      "picture": "ghost",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Mac's example combination of reframe-no-rotas and momentum-drive. From Mac's draft of 2026-09-26. Mac's combination shortens the reframing line to No more policies or burnout.",
+      "group": "always-on",
+      "path": "messages/always-on/ad-oxagen-momentum.yaml"
+    },
+    {
+      "id": "ad-oxagen-night-shift",
+      "brand": "oxagen",
+      "kind": "ad",
+      "set": "combos",
+      "order": 1,
+      "title": "Sleep tight. Your agents are on the job.",
+      "cta": "Explore Oxagen · oxagen.sh",
+      "kicker": "Always-on workforce",
+      "headline": [
+        "Sleep tight.",
+        "Your agents are",
+        "on the job."
+      ],
+      "wide": [
+        "Sleep tight.",
+        "Your agents are on the job."
+      ],
+      "short_lines": [
+        "Sleep tight.",
+        "Your agents are",
+        "on the job."
+      ],
+      "subline": "While you turn in for the night, your fleet of agents keeps working.",
+      "picture": "orbit",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/ad-oxagen-night-shift.yaml"
+    },
+    {
+      "id": "ad-oxagen-progress-report",
+      "brand": "oxagen",
+      "kind": "ad",
+      "set": "combos",
+      "order": 2,
+      "title": "Wake up to a progress report, not a backlog.",
+      "cta": "Explore Oxagen · oxagen.sh",
+      "kicker": "Always-on workforce",
+      "headline": [
+        "Wake up to a",
+        "progress report,",
+        "not a backlog."
+      ],
+      "wide": [
+        "Wake up to a progress report,",
+        "not a backlog."
+      ],
+      "short_lines": [
+        "Wake up to a",
+        "progress report,",
+        "not a backlog."
+      ],
+      "subline": "Operators sign off. Agents clock in. Progress, 24/7.",
+      "picture": "ghost",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Mac's example combination of value-progress-report and night-clock-in. From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/ad-oxagen-progress-report.yaml"
+    },
+    {
+      "id": "ad-oxagen-vision-momentum",
+      "brand": "oxagen",
+      "kind": "ad",
+      "set": "combos",
+      "order": 6,
+      "title": "Oxagen turns your vision into momentum.",
+      "cta": "Explore Oxagen · oxagen.sh",
+      "kicker": "Steering",
+      "headline": [
+        "Oxagen turns",
+        "your vision",
+        "into momentum."
+      ],
+      "wide": [
+        "Oxagen turns your vision",
+        "into momentum."
+      ],
+      "short_lines": [
+        "Oxagen turns",
+        "your vision",
+        "into momentum."
+      ],
+      "subline": "Agents moving your goals forward 24/7. Wherever you steer, your vision stays in sync.",
+      "picture": "orbit",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "Mac's example combination of signoff-vision-momentum and steer-new-direction. From Mac's draft of 2026-09-26. The subline is two sentences. The renderer sets it smaller to fit one line. Consider one of them.",
+      "group": "always-on",
+      "path": "messages/always-on/ad-oxagen-vision-momentum.yaml"
+    },
+    {
       "id": "ad-oxagen-workforce",
       "brand": "oxagen",
       "kind": "ad",
@@ -576,6 +882,33 @@
       "notes": "Unchanged from the September 2026 campaign.",
       "group": "ads",
       "path": "messages/ads/ad-stella-proof.yaml"
+    },
+    {
+      "id": "always-on-eyebrow",
+      "brand": "oxagen",
+      "kind": "eyebrow",
+      "set": "primary",
+      "order": 1,
+      "title": "Autonomous agent management for an always-on organization.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "site-hero",
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Proposed as the eyebrow and category line. The approved hero-eyebrow is Workforce management for autonomous agents. This line would replace it only if Mac approves it. Always-on describes the schedule, so the always entry in words.md now reads as a warning about outcomes rather than an error.",
+      "group": "always-on",
+      "path": "messages/always-on/always-on-eyebrow.yaml"
     },
     {
       "id": "announcement-launch",
@@ -876,6 +1209,189 @@
       "path": "messages/lead/clause-record.yaml"
     },
     {
+      "id": "coach-acceleration",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "coach",
+      "order": 4,
+      "title": "Welcome to acceleration. Let agents drive your progress.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft had an adjective from the words.md list of words that mean nothing before acceleration, and an em dash. Both are cut.",
+      "group": "always-on",
+      "path": "messages/always-on/coach-acceleration.yaml"
+    },
+    {
+      "id": "coach-always-moving",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "coach",
+      "order": 6,
+      "title": "Your projects: always moving forward, never idling.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Always and never here are promises about outcomes, which words.md warns against. Read it before approval.",
+      "group": "always-on",
+      "path": "messages/always-on/coach-always-moving.yaml"
+    },
+    {
+      "id": "coach-guide-strategy",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "coach",
+      "order": 1,
+      "title": "Operators guide strategy, not day-to-day. Review, refine, and step back.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Sits beside the candidate section-coach-operators, Manage the agents. Coach the operators.",
+      "group": "always-on",
+      "path": "messages/always-on/coach-guide-strategy.yaml"
+    },
+    {
+      "id": "coach-keep-rolling",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "coach",
+      "order": 5,
+      "title": "Keep the momentum rolling, even when you're not.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/coach-keep-rolling.yaml"
+    },
+    {
+      "id": "coach-live-your-life",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "coach",
+      "order": 3,
+      "title": "The future: less management, more momentum. Let agents work while you live your life.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/coach-live-your-life.yaml"
+    },
+    {
+      "id": "coach-where-agents-excelled",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "coach",
+      "order": 2,
+      "title": "Progress reports show where agents excelled and where you can tune the approach.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft set the second half off with an em dash. A report states what the record shows and does not grade the operator.",
+      "group": "always-on",
+      "path": "messages/always-on/coach-where-agents-excelled.yaml"
+    },
+    {
+      "id": "control-plane-category",
+      "brand": "oxagen",
+      "kind": "eyebrow",
+      "set": "primary",
+      "order": 2,
+      "title": "The control plane for your agent workforce.",
+      "audience": [
+        "platform",
+        "engineering"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "site-hero",
+        "docs"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Proposed as the technical category line. The same words were retired on 2026-09-18 as an eyebrow (retired-control-plane-agent-workforce, replaced by hero-eyebrow). Approving this entry means un-retiring that line, which is Mac's call. The skill already names agent control plane as the technical category.",
+      "group": "always-on",
+      "path": "messages/always-on/control-plane-category.yaml"
+    },
+    {
       "id": "demo-walkthrough",
       "brand": "oxagen",
       "kind": "proof",
@@ -904,6 +1420,34 @@
       "notes": "Run it on a prepared workspace. Do not promise it on a prospect's repositories without agreed setup.",
       "group": "proof",
       "path": "messages/proof/demo-walkthrough.yaml"
+    },
+    {
+      "id": "dispatch-experience",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "primary",
+      "order": 3,
+      "title": "Dispatch. Operators set objectives. Agents execute. Progress logs and completion records are automatic.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "site-hero",
+        "product-page"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "03",
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Proposed as the product experience line. Dispatch is not yet a named surface in the product. Two rules apply before approval: completion is optional and never leads (finding 01), and the record covers actions routed through Oxagen (finding 03). A scoped form: Progress logs and records of governed actions are automatic.",
+      "group": "always-on",
+      "path": "messages/always-on/dispatch-experience.yaml"
     },
     {
       "id": "docs-writing-a-rule",
@@ -2120,6 +2664,370 @@
       "path": "messages/workforce/mc-spend-attribution.yaml"
     },
     {
+      "id": "momentum-drive",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "reframe",
+      "order": 8,
+      "title": "Don't manage the grind. Drive the momentum.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft also lists this line under Driving the momentum.",
+      "group": "always-on",
+      "path": "messages/always-on/momentum-drive.yaml"
+    },
+    {
+      "id": "momentum-oxagen-drive",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "reframe",
+      "order": 11,
+      "title": "Less managing, more momentum. That's Oxagen drive.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Oxagen drive reads as a product name. No surface carries that name yet.",
+      "group": "always-on",
+      "path": "messages/always-on/momentum-oxagen-drive.yaml"
+    },
+    {
+      "id": "momentum-results",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "reframe",
+      "order": 10,
+      "title": "Drive results, not routines. Oxagen keeps the wheels turning.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft also lists this line under Driving the momentum.",
+      "group": "always-on",
+      "path": "messages/always-on/momentum-results.yaml"
+    },
+    {
+      "id": "momentum-traction",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "reframe",
+      "order": 9,
+      "title": "Focus on traction, not tracking. Let agents handle the rest.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft also lists this line under Driving the momentum.",
+      "group": "always-on",
+      "path": "messages/always-on/momentum-traction.yaml"
+    },
+    {
+      "id": "night-around-the-clock",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 7,
+      "title": "Your workforce runs around the clock, even when you're off the clock.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/night-around-the-clock.yaml"
+    },
+    {
+      "id": "night-clock-in",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 5,
+      "title": "Operators sign off. Agents clock in. Progress, 24/7.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft used a semicolon. One idea per sentence splits it. Signing off ends the operator's day, not the operator's ownership of the run.",
+      "group": "always-on",
+      "path": "messages/always-on/night-clock-in.yaml"
+    },
+    {
+      "id": "night-competitive-edge",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 8,
+      "title": "Let weekends and nights become your competitive edge.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/night-competitive-edge.yaml"
+    },
+    {
+      "id": "night-leave-work",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 1,
+      "title": "Leave work at work. Let agents handle the rest.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/night-leave-work.yaml"
+    },
+    {
+      "id": "night-never-sleep",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 6,
+      "title": "Agents never sleep, so you can.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/night-never-sleep.yaml"
+    },
+    {
+      "id": "night-progress-not-problems",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 4,
+      "title": "Come back to progress, not problems.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/night-progress-not-problems.yaml"
+    },
+    {
+      "id": "night-recharge",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 3,
+      "title": "With Oxagen, agents keep projects moving while you recharge.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Oxagen governs the agents. It does not run them.",
+      "group": "always-on",
+      "path": "messages/always-on/night-recharge.yaml"
+    },
+    {
+      "id": "night-shift",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 10,
+      "title": "The new standard: Let agents run the night shift, so you don't have to.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/night-shift.yaml"
+    },
+    {
+      "id": "night-sleep-tight",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 2,
+      "title": "Sleep tight. Your agents are on the job.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/night-sleep-tight.yaml"
+    },
+    {
+      "id": "night-step-away",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "night",
+      "order": 9,
+      "title": "Step away, knowing your agents are moving work forward.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/night-step-away.yaml"
+    },
+    {
       "id": "operator-review-headline",
       "brand": "oxagen",
       "kind": "entry-point",
@@ -2853,6 +3761,190 @@
       "findings": [],
       "group": "proof",
       "path": "messages/proof/proof-your-keys.yaml"
+    },
+    {
+      "id": "reframe-capacity",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "reframe",
+      "order": 4,
+      "title": "Agents aren't headcount. They're capacity.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. Mac's draft also lists this line under Driving the momentum.",
+      "group": "always-on",
+      "path": "messages/always-on/reframe-capacity.yaml"
+    },
+    {
+      "id": "reframe-hand-off",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "reframe",
+      "order": 2,
+      "title": "Set the direction, hand off the task, and rest easy. Your agents are on it.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. Mac's draft also lists this line under Driving the momentum.",
+      "group": "always-on",
+      "path": "messages/always-on/reframe-hand-off.yaml"
+    },
+    {
+      "id": "reframe-job-scope-rules",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "reframe",
+      "order": 5,
+      "title": "Every agent gets a job, a scope, and rules, not a breakroom.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. Mac's draft also lists this line under Driving the momentum.",
+      "group": "always-on",
+      "path": "messages/always-on/reframe-job-scope-rules.yaml"
+    },
+    {
+      "id": "reframe-like-tools",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "reframe",
+      "order": 3,
+      "title": "Onboard agents like tools, not employees. No HR, just ROI.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft also lists this line under Driving the momentum. ROI is a savings claim: rule-cost-claims allows it only beside a measured workload and its conditions.",
+      "group": "always-on",
+      "path": "messages/always-on/reframe-like-tools.yaml"
+    },
+    {
+      "id": "reframe-no-breakroom",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "reframe",
+      "order": 7,
+      "title": "Agents don't need a breakroom.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. A standalone line in Mac's draft.",
+      "group": "always-on",
+      "path": "messages/always-on/reframe-no-breakroom.yaml"
+    },
+    {
+      "id": "reframe-no-rotas",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "reframe",
+      "order": 1,
+      "title": "No more policies, shift rotas, or burnout. Agents work tirelessly, so humans don't have to.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/reframe-no-rotas.yaml"
+    },
+    {
+      "id": "reframe-report-not-timesheet",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "reframe",
+      "order": 6,
+      "title": "Review the report, not the timesheet. Every action recorded automatically.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03",
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft also lists this line under Driving the momentum. The record covers actions routed through Oxagen (finding 03). A scoped form: Every governed action recorded automatically.",
+      "group": "always-on",
+      "path": "messages/always-on/reframe-report-not-timesheet.yaml"
     },
     {
       "id": "retired-agents-prove-their-work",
@@ -4238,6 +5330,757 @@
       "path": "messages/entry-points/security-headline.yaml"
     },
     {
+      "id": "signoff-aligned",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "signoff",
+      "order": 7,
+      "title": "Oxagen, keep your agents aligned.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "email",
+        "site-cta"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/signoff-aligned.yaml"
+    },
+    {
+      "id": "signoff-breathe-life",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "signoff",
+      "order": 1,
+      "title": "Oxagen, breathe life into your agents.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "email",
+        "site-cta"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft lists eleven sign-offs. Three repeat, so eight entries carry them.",
+      "group": "always-on",
+      "path": "messages/always-on/signoff-breathe-life.yaml"
+    },
+    {
+      "id": "signoff-direction-success",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "signoff",
+      "order": 6,
+      "title": "Oxagen, turn your direction into success.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "email",
+        "site-cta"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/signoff-direction-success.yaml"
+    },
+    {
+      "id": "signoff-moving",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "signoff",
+      "order": 5,
+      "title": "Oxagen, keep your agents moving.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "email",
+        "site-cta"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/signoff-moving.yaml"
+    },
+    {
+      "id": "signoff-on-course",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "signoff",
+      "order": 3,
+      "title": "Oxagen, keep your agents on course.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "email",
+        "site-cta"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/signoff-on-course.yaml"
+    },
+    {
+      "id": "signoff-strategy-action",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "signoff",
+      "order": 4,
+      "title": "Oxagen, turn your strategy into action.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "email",
+        "site-cta"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/signoff-strategy-action.yaml"
+    },
+    {
+      "id": "signoff-vision-momentum",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "signoff",
+      "order": 2,
+      "title": "Oxagen, turn your vision into momentum.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "email",
+        "site-cta"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/signoff-vision-momentum.yaml"
+    },
+    {
+      "id": "signoff-vision-reality",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "signoff",
+      "order": 8,
+      "title": "Oxagen, turn your vision into reality.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "email",
+        "site-cta"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/signoff-vision-reality.yaml"
+    },
+    {
+      "id": "split-check-in",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "split",
+      "order": 4,
+      "title": "See your fleet's progress from wherever you are, whenever you check in.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft set the second half off with an em dash. It reads without one.",
+      "group": "always-on",
+      "path": "messages/always-on/split-check-in.yaml"
+    },
+    {
+      "id": "split-control-panel",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "split",
+      "order": 2,
+      "title": "One control panel unites oversight and automation.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac wrote control panel. The category term is agent control plane. Approve one of the two.",
+      "group": "always-on",
+      "path": "messages/always-on/split-control-panel.yaml"
+    },
+    {
+      "id": "split-disengaged",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "split",
+      "order": 5,
+      "title": "Operators disengaged, agents engaged, by design.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. Mac decided on 2026-09-25 that every runtime has an owning operator and no run goes unattended. Disengaged reads as unattended, so this line needs Mac's reading before approval.",
+      "group": "always-on",
+      "path": "messages/always-on/split-disengaged.yaml"
+    },
+    {
+      "id": "split-driver-seat",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "split",
+      "order": 8,
+      "title": "Stay in the driver's seat. Agents deliver the momentum.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/split-driver-seat.yaml"
+    },
+    {
+      "id": "split-give-them-a-job",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "split",
+      "order": 7,
+      "title": "Don't hand your agents the keys. Give them a job.",
+      "audience": [
+        "security",
+        "operator"
+      ],
+      "clause": "access",
+      "surfaces": [
+        "ads",
+        "entry-security"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "04"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Extends the approved access-keys line. Mac's draft labelled it Access. The access page carries the scope: the agent asks, a rule answers, and Oxagen uses the connection credential for mediated connections.",
+      "group": "always-on",
+      "path": "messages/always-on/split-give-them-a-job.yaml"
+    },
+    {
+      "id": "split-lead-not-labor",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "split",
+      "order": 3,
+      "title": "Built for those who lead, not those who labor.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07",
+        "08"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Read it against finding 08 before approval: copy that talks down to a reader's staff fails there.",
+      "group": "always-on",
+      "path": "messages/always-on/split-lead-not-labor.yaml"
+    },
+    {
+      "id": "split-prioritize-steer",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "split",
+      "order": 1,
+      "title": "Operators prioritize and steer. Agents execute and report.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft used a semicolon. One idea per sentence splits it.",
+      "group": "always-on",
+      "path": "messages/always-on/split-prioritize-steer.yaml"
+    },
+    {
+      "id": "split-step-back",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "split",
+      "order": 6,
+      "title": "Operators: Step back. Agents handle the busywork. You steer the priorities.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft used a semicolon. One idea per sentence splits it.",
+      "group": "always-on",
+      "path": "messages/always-on/split-step-back.yaml"
+    },
+    {
+      "id": "split-you-set-direction",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "split",
+      "order": 9,
+      "title": "You set the direction. Oxagen builds the momentum.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft used a semicolon. One idea per sentence splits it.",
+      "group": "always-on",
+      "path": "messages/always-on/split-you-set-direction.yaml"
+    },
+    {
+      "id": "steer-adapt-instantly",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "steer",
+      "order": 6,
+      "title": "Adapt instantly: Oxagen orchestrates agents everywhere, so you're ready for any curveball.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Oxagen governs agents. It does not run them. Orchestrates and everywhere both need a scope before approval.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-adapt-instantly.yaml"
+    },
+    {
+      "id": "steer-context-per-job",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "steer",
+      "order": 3,
+      "title": "Context and instructions, loaded per job, executed relentlessly.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "equipment",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "05",
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Context stays inside the agent's permitted scope (finding 05).",
+      "group": "always-on",
+      "path": "messages/always-on/steer-context-per-job.yaml"
+    },
+    {
+      "id": "steer-marching-orders",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "steer",
+      "order": 2,
+      "title": "Each agent receives its marching orders and returns results.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-marching-orders.yaml"
+    },
+    {
+      "id": "steer-move-with-you",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "steer",
+      "order": 11,
+      "title": "Change happens. Oxagen ensures all agents move with you, adapting in the moment.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. The skill prefers a concrete verb over ensure.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-move-with-you.yaml"
+    },
+    {
+      "id": "steer-new-direction",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "steer",
+      "order": 10,
+      "title": "Wherever work happens, Oxagen steers your agents to match your new direction.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-new-direction.yaml"
+    },
+    {
+      "id": "steer-on-course",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "steer",
+      "order": 4,
+      "title": "Oxagen keeps every agent on course, no matter where or when you need to pivot.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-on-course.yaml"
+    },
+    {
+      "id": "steer-one-command",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "steer",
+      "order": 8,
+      "title": "One command, every agent aligned. Oxagen adapts so you stay ahead.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. One command for every agent is intended, not shipped.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-one-command.yaml"
+    },
+    {
+      "id": "steer-plans-shift",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "steer",
+      "order": 5,
+      "title": "When plans shift, Oxagen steers all your agents across environments, without a hitch.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft had an adverb from the words.md list of words that mean nothing, and an em dash. Both are cut.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-plans-shift.yaml"
+    },
+    {
+      "id": "steer-redirect-fleet",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "steer",
+      "order": 7,
+      "title": "Life changes fast. Oxagen redirects your entire agent fleet in real time.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead. Redirecting a whole fleet in one step is intended, not shipped. Hold the line until it ships.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-redirect-fleet.yaml"
+    },
+    {
+      "id": "steer-rules-once",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "steer",
+      "order": 1,
+      "title": "Set the rules once. Agents enforce them, all night and all weekend.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "ads",
+        "site-section"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "03"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. The rule decides and Oxagen applies it to actions routed through Oxagen. The agent does not enforce its own rules (finding 03). A scoped form: Set the rules once. Oxagen applies them to governed calls, all night and all weekend.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-rules-once.yaml"
+    },
+    {
+      "id": "steer-synchronizes",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "steer",
+      "order": 9,
+      "title": "Oxagen synchronizes agents across platforms, so your strategy shifts are smooth, not stressful.",
+      "audience": [
+        "operator",
+        "platform"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/steer-synchronizes.yaml"
+    },
+    {
       "id": "stella-relationship",
       "brand": "oxagen",
       "kind": "headline",
@@ -4353,6 +6196,501 @@
       "notes": "Priya, Dana, and stella are placeholder names in product examples.",
       "group": "sections",
       "path": "messages/sections/ui-strings-access.yaml"
+    },
+    {
+      "id": "value-doing-it-wrong",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "value",
+      "order": 7,
+      "title": "If your agents stop working at the same time you do, you're doing it wrong.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07",
+        "08"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Read it against finding 08 before approval. Telling the reader they are doing it wrong presumes incompetence.",
+      "group": "always-on",
+      "path": "messages/always-on/value-doing-it-wrong.yaml"
+    },
+    {
+      "id": "value-no-clock",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "value",
+      "order": 2,
+      "title": "Agents don't need to clock in, take holidays, or sleep.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/value-no-clock.yaml"
+    },
+    {
+      "id": "value-no-downtime",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "value",
+      "order": 5,
+      "title": "Weekends, holidays, and off-hours are no longer downtime. Your agents keep moving.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/value-no-downtime.yaml"
+    },
+    {
+      "id": "value-no-pto",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "value",
+      "order": 6,
+      "title": "Agents don't call in sick, don't ask for PTO, and never get tired.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Never describes the agent here, not an outcome, so the words.md warning can stand.",
+      "group": "always-on",
+      "path": "messages/always-on/value-no-pto.yaml"
+    },
+    {
+      "id": "value-not-human",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "value",
+      "order": 1,
+      "title": "Stop managing agents like you manage your employees. They're not human.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/value-not-human.yaml"
+    },
+    {
+      "id": "value-overnight",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "value",
+      "order": 3,
+      "title": "While you turn in for the night, your fleet of agents keeps working: executing tasks, pushing projects forward, and delivering tangible results.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft introduced the list with an em dash. A colon does the same job.",
+      "group": "always-on",
+      "path": "messages/always-on/value-overnight.yaml"
+    },
+    {
+      "id": "value-progress-report",
+      "brand": "oxagen",
+      "kind": "pitch",
+      "set": "value",
+      "order": 4,
+      "title": "Wake up to a progress report, not a backlog.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. The report is the record of governed work.",
+      "group": "always-on",
+      "path": "messages/always-on/value-progress-report.yaml"
+    },
+    {
+      "id": "vision-clarity",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 5,
+      "title": "Agents follow clarity, not bureaucracy.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-clarity.yaml"
+    },
+    {
+      "id": "vision-clear-mission",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 8,
+      "title": "A clear mission beats a flowchart, every time.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-clear-mission.yaml"
+    },
+    {
+      "id": "vision-direction",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 3,
+      "title": "Agents crave direction, not checklists.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-direction.yaml"
+    },
+    {
+      "id": "vision-intent",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 9,
+      "title": "Agents fly on intent, not instruction sheets.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-intent.yaml"
+    },
+    {
+      "id": "vision-marching-orders",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 7,
+      "title": "Agents want marching orders, not manuals.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-marching-orders.yaml"
+    },
+    {
+      "id": "vision-not-workflows",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 2,
+      "title": "Agents need vision, not workflows.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-not-workflows.yaml"
+    },
+    {
+      "id": "vision-outcomes",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 10,
+      "title": "Inspire agents with outcomes, not outlines.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-outcomes.yaml"
+    },
+    {
+      "id": "vision-paperwork",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 11,
+      "title": "Agents perform with purpose, not paperwork.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-paperwork.yaml"
+    },
+    {
+      "id": "vision-purpose",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 4,
+      "title": "Fuel your agents with a purpose, not a process.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-purpose.yaml"
+    },
+    {
+      "id": "vision-share-vision",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 12,
+      "title": "Agents excel when you share vision, not just procedures.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-share-vision.yaml"
+    },
+    {
+      "id": "vision-stop-building-workflows",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 1,
+      "title": "Stop building workflows. Start driving momentum.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. A standalone line in Mac's draft.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-stop-building-workflows.yaml"
+    },
+    {
+      "id": "vision-strategy",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "vision",
+      "order": 6,
+      "title": "Don't feed them steps. Give them strategy.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "ads",
+        "social"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.",
+      "group": "always-on",
+      "path": "messages/always-on/vision-strategy.yaml"
     },
     {
       "id": "witness-checkable-evidence",
@@ -4865,6 +7203,32 @@
       "findings": [],
       "group": "voice",
       "path": "messages/voice/word-routed.yaml"
+    },
+    {
+      "id": "workday-lead",
+      "brand": "oxagen",
+      "kind": "headline",
+      "set": "primary",
+      "order": 4,
+      "title": "When the workday ends, your agents keep working. Go home. Let them deliver.",
+      "audience": [
+        "operator"
+      ],
+      "clause": "operations",
+      "surfaces": [
+        "site-hero",
+        "ads"
+      ],
+      "status": "candidate",
+      "release": "launch",
+      "owner": "Mac Anderson",
+      "review_by": "2026-10-15",
+      "findings": [
+        "07"
+      ],
+      "notes": "From Mac's draft of 2026-09-26. Proposed as the lead. The approved hero-headline is Your agents are a workforce now. Manage them like one. Every runtime keeps an owning operator, so going home hands off the hours, not the ownership.",
+      "group": "always-on",
+      "path": "messages/always-on/workday-lead.yaml"
     }
   ]
 }
