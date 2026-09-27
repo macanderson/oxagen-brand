@@ -23,7 +23,7 @@ The source of truth is `skills/oxagen-branding/` in the house brand kit, `oxagen
 
 Copy changes start in the message registry at `messages/` in `oxagenai/oxagen-brand`. Each entry carries the line, its audience, its release status, its evidence, and its owner. The registry generates `message-bank.html`, `always-on.html`, and the ad copy. Change the registry entry first, then bring this skill's inline lists into line with it.
 
-## What Oxagen is, in one sentence
+## Definition
 
 Oxagen is workforce management for autonomous agents: give each agent an identity, set its authority and budget, equip it with tools and skills, and review what it did and what its operators spent, through a shared agent control plane.
 
@@ -42,7 +42,7 @@ Completion is optional. A definition of done is a control for bounded tasks that
 5. **The workforce vocabulary is the product's vocabulary.** Run, turn, step, frame, operator, agent, workspace, governed action, mandate, request, rule. Use the exact terms for UI labels and on detail pages. Familiar explanatory language around them is fine. Never session, trace, attempt, execution, or invocation in customer-facing prose. See `references/words.md`.
 6. **The agent asks, the rule decides, the record keeps the answer, for actions routed through Oxagen.** Each agent has its own identity. For mediated connections, Oxagen uses the connection credential on the agent's behalf and the agent does not receive it. A rule the owning team wrote answers each request: allowed, denied, or routed to a person. State that scope beside the claim. Never write "connect your agent to X" or "give the agent access to X", and never promise that an agent has nothing to leak. See *The keys stay with you* in `references/positioning.md`.
 
-## Positioning, the short version
+## Positioning
 
 The operator's job is to give each agent an identity, set its authority and budget, equip it with tools and skills, and oversee what it does. Oxagen is where that job happens. The agent control plane is what makes those decisions apply to the actions routed through Oxagen and keeps the record of them.
 
@@ -52,13 +52,13 @@ Some work has an endpoint. For those bounded tasks, define completion before the
 
 The homepage eyebrow is **Workforce management for autonomous agents** and the headline is **Your agents are a workforce now. Manage them like one.** For the security reader, the access line is **Don't hand your agents the keys.** For the finance reader, it is **See which agent spent what, and on whose behalf.** For knowledge, it is **Give agents the business context their work requires.** The dod lines are held until the dod ships and then apply to bounded tasks only. The full list, the retired lines, and the reasons are in `references/positioning.md`.
 
-## Always-on, the short version
+## Always-on
 
 Mac's draft of 2026-09-26 adds an always-on pillar. The agents keep working after the operator's day ends, and the operator comes back to a report. Its 85 lines sit in `messages/always-on/` as candidates, and none ships until Mac approves it. `always-on.html` sets them as ads, banners, website sections, and calls to action.
 
 Three rules hold for every always-on line. Oxagen governs the agents and does not run them. Every run keeps an owning operator, so going home hands off the hours and keeps the ownership. The record covers governed actions, so a line about automatic records says so. The sets, the pairings, and the lines that need Mac's decision are in `references/always-on.md`.
 
-## Voice, the short version
+## Voice
 
 Oxagen sounds like a senior engineer who has read the logs and is telling you what happened. Plain, specific, unhurried, a little dry. It states facts, names numbers, and stops. It never sells fear, never says "AI-powered", and never claims more than the record shows.
 
