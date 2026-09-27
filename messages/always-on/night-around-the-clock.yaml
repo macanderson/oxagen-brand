@@ -1,0 +1,19 @@
+id: night-around-the-clock
+brand: oxagen
+kind: headline
+set: night
+order: 7
+title: Your workforce runs around the clock, even when you're off the clock.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26.

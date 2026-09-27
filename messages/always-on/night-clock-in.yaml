@@ -1,0 +1,19 @@
+id: night-clock-in
+brand: oxagen
+kind: headline
+set: night
+order: 5
+title: Operators sign off. Agents clock in. Progress, 24/7.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft used a semicolon. One idea per sentence splits it. Signing off ends the operator's day, not the operator's ownership of the run.

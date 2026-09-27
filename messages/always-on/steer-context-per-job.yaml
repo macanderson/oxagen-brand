@@ -1,0 +1,21 @@
+id: steer-context-per-job
+brand: oxagen
+kind: pitch
+set: steer
+order: 3
+title: Context and instructions, loaded per job, executed relentlessly.
+audience:
+  - operator
+  - platform
+clause: equipment
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '05'
+  - '07'
+notes: From Mac's draft of 2026-09-26. Context stays inside the agent's permitted scope (finding 05).

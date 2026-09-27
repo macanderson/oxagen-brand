@@ -1,0 +1,20 @@
+id: steer-rules-once
+brand: oxagen
+kind: pitch
+set: steer
+order: 1
+title: Set the rules once. Agents enforce them, all night and all weekend.
+audience:
+  - operator
+  - platform
+clause: budget
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '03'
+notes: 'From Mac''s draft of 2026-09-26. The rule decides and Oxagen applies it to actions routed through Oxagen. The agent does not enforce its own rules (finding 03). A scoped form: Set the rules once. Oxagen applies them to governed calls, all night and all weekend.'

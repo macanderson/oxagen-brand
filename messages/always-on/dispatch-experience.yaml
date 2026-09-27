@@ -1,0 +1,21 @@
+id: dispatch-experience
+brand: oxagen
+kind: pitch
+set: primary
+order: 3
+title: Dispatch. Operators set objectives. Agents execute. Progress logs and completion records are automatic.
+audience:
+  - operator
+clause: record
+surfaces:
+  - site-hero
+  - product-page
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '01'
+  - '03'
+  - '07'
+notes: 'From Mac''s draft of 2026-09-26. Proposed as the product experience line. Dispatch is not yet a named surface in the product. Two rules apply before approval: completion is optional and never leads (finding 01), and the record covers actions routed through Oxagen (finding 03). A scoped form: Progress logs and records of governed actions are automatic.'

@@ -1,0 +1,19 @@
+id: workday-lead
+brand: oxagen
+kind: headline
+set: primary
+order: 4
+title: When the workday ends, your agents keep working. Go home. Let them deliver.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - site-hero
+  - ads
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Proposed as the lead. The approved hero-headline is Your agents are a workforce now. Manage them like one. Every runtime keeps an owning operator, so going home hands off the hours, not the ownership.

@@ -1,0 +1,33 @@
+id: ad-oxagen-night-shift
+brand: oxagen
+kind: ad
+set: combos
+order: 1
+title: Sleep tight. Your agents are on the job.
+cta: Explore Oxagen · oxagen.sh
+kicker: Always-on workforce
+headline:
+  - Sleep tight.
+  - Your agents are
+  - on the job.
+wide:
+  - Sleep tight.
+  - Your agents are on the job.
+short_lines:
+  - Sleep tight.
+  - Your agents are
+  - on the job.
+subline: While you turn in for the night, your fleet of agents keeps working.
+picture: orbit
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26.

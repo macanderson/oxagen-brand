@@ -1,0 +1,20 @@
+id: split-give-them-a-job
+brand: oxagen
+kind: headline
+set: split
+order: 7
+title: Don't hand your agents the keys. Give them a job.
+audience:
+  - security
+  - operator
+clause: access
+surfaces:
+  - ads
+  - entry-security
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '04'
+notes: 'From Mac''s draft of 2026-09-26. Extends the approved access-keys line. Mac''s draft labelled it Access. The access page carries the scope: the agent asks, a rule answers, and Oxagen uses the connection credential for mediated connections.'

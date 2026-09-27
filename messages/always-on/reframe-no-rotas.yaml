@@ -1,0 +1,19 @@
+id: reframe-no-rotas
+brand: oxagen
+kind: pitch
+set: reframe
+order: 1
+title: No more policies, shift rotas, or burnout. Agents work tirelessly, so humans don't have to.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26.

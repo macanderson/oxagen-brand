@@ -1,0 +1,19 @@
+id: coach-always-moving
+brand: oxagen
+kind: headline
+set: coach
+order: 6
+title: 'Your projects: always moving forward, never idling.'
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Always and never here are promises about outcomes, which words.md warns against. Read it before approval.

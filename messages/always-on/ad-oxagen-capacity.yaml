@@ -1,0 +1,33 @@
+id: ad-oxagen-capacity
+brand: oxagen
+kind: ad
+set: combos
+order: 3
+title: Agents aren't headcount. They're capacity.
+cta: Explore Oxagen · oxagen.sh
+kicker: Workforce management
+headline:
+  - Agents aren't
+  - headcount.
+  - They're capacity.
+wide:
+  - Agents aren't headcount.
+  - They're capacity.
+short_lines:
+  - Agents aren't
+  - headcount.
+  - They're capacity.
+subline: Focus on traction, not tracking.
+picture: ghost
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: Mac's example combination of reframe-capacity and momentum-traction. From Mac's draft of 2026-09-26.

@@ -1,0 +1,20 @@
+id: signoff-breathe-life
+brand: oxagen
+kind: headline
+set: signoff
+order: 1
+title: Oxagen, breathe life into your agents.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - email
+  - site-cta
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft lists eleven sign-offs. Three repeat, so eight entries carry them.

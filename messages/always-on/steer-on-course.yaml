@@ -1,0 +1,20 @@
+id: steer-on-course
+brand: oxagen
+kind: headline
+set: steer
+order: 4
+title: Oxagen keeps every agent on course, no matter where or when you need to pivot.
+audience:
+  - operator
+  - platform
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26.

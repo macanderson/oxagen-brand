@@ -1,0 +1,19 @@
+id: reframe-no-breakroom
+brand: oxagen
+kind: headline
+set: reframe
+order: 7
+title: Agents don't need a breakroom.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. A standalone line in Mac's draft.

@@ -1,0 +1,19 @@
+id: split-step-back
+brand: oxagen
+kind: pitch
+set: split
+order: 6
+title: 'Operators: Step back. Agents handle the busywork. You steer the priorities.'
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft used a semicolon. One idea per sentence splits it.

@@ -1,0 +1,19 @@
+id: coach-guide-strategy
+brand: oxagen
+kind: pitch
+set: coach
+order: 1
+title: Operators guide strategy, not day-to-day. Review, refine, and step back.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - site-section
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Sits beside the candidate section-coach-operators, Manage the agents. Coach the operators.

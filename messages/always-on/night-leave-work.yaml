@@ -1,0 +1,19 @@
+id: night-leave-work
+brand: oxagen
+kind: headline
+set: night
+order: 1
+title: Leave work at work. Let agents handle the rest.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.

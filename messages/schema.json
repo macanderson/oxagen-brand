@@ -11,6 +11,7 @@
     "brand": {"enum": ["oxagen", "stella"]},
     "kind": {"enum": ["headline", "eyebrow", "pitch", "section", "card", "entry-point", "rule", "proof", "pair", "email", "announcement", "ad", "glossary"]},
     "order": {"type": "integer", "description": "Position within its group on the generated page."},
+    "set": {"enum": ["primary", "value", "night", "reframe", "split", "steer", "coach", "vision", "signoff", "combos"], "description": "Always-on group: the set the line belongs to. Required there, listed in SETS in build/messages.py."},
     "title": {"type": "string", "minLength": 1, "description": "The line itself, or for a pitch, rule, pair, or glossary entry, its label. For an email, the subject."},
     "short": {"type": "string"},
     "long": {"type": "string"},

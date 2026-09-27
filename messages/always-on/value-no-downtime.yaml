@@ -1,0 +1,19 @@
+id: value-no-downtime
+brand: oxagen
+kind: pitch
+set: value
+order: 5
+title: Weekends, holidays, and off-hours are no longer downtime. Your agents keep moving.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26. Mac's draft joined the two halves with an em dash. The brand uses a period or a comma instead.

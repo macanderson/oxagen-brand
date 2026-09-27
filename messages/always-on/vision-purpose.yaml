@@ -1,0 +1,19 @@
+id: vision-purpose
+brand: oxagen
+kind: headline
+set: vision
+order: 4
+title: Fuel your agents with a purpose, not a process.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26.

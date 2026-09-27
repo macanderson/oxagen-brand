@@ -15,12 +15,13 @@ Read this whole file first. Then read the reference for what you are making:
 | Outreach, a sales brief, or anything that names who Oxagen sells to | `references/positioning.md`, the section *The buyer we are built for* |
 | A page, ad, deck, or UI | `references/system.md` and `assets/tokens.css` |
 | Copy for a specific surface (site, ad, email, docs, UI, launch) | `references/examples.md` |
+| Always-on copy: agents that keep working after the operator's day ends | `references/always-on.md` |
 
 ## Where this skill lives
 
 The source of truth is `skills/oxagen-branding/` in the house brand kit, `oxagenai/oxagen-brand`, beside the marks, tokens, ads, and content cards it describes. The oxagen repo vendors a copy at `.claude/skills/oxagen-branding/` through `tools/scripts/sync-brand-assets.mjs`, and `pnpm check:brand` fails on drift. Edit the kit, run the sync, commit both. Never edit the vendored copy alone.
 
-Copy changes start in the message registry at `messages/` in `oxagenai/oxagen-brand`. Each entry carries the line, its audience, its release status, its evidence, and its owner. The registry generates `message-bank.html` and the ad copy. Change the registry entry first, then bring this skill's inline lists into line with it.
+Copy changes start in the message registry at `messages/` in `oxagenai/oxagen-brand`. Each entry carries the line, its audience, its release status, its evidence, and its owner. The registry generates `message-bank.html`, `always-on.html`, and the ad copy. Change the registry entry first, then bring this skill's inline lists into line with it.
 
 ## What Oxagen is, in one sentence
 
@@ -50,6 +51,12 @@ Other layers each cover one part of that job. Identity systems say who the agent
 Some work has an endpoint. For those bounded tasks, define completion before the work starts. A passing verdict means the specified checks held, and the team decides whether those checks are enough. Other work continues. Keep its authority, activity, and spend in view as it runs.
 
 The homepage eyebrow is **Workforce management for autonomous agents** and the headline is **Your agents are a workforce now. Manage them like one.** For the security reader, the access line is **Don't hand your agents the keys.** For the finance reader, it is **See which agent spent what, and on whose behalf.** For knowledge, it is **Give agents the business context their work requires.** The dod lines are held until the dod ships and then apply to bounded tasks only. The full list, the retired lines, and the reasons are in `references/positioning.md`.
+
+## Always-on, the short version
+
+Mac's draft of 2026-09-26 adds an always-on pillar. The agents keep working after the operator's day ends, and the operator comes back to a report. Its 85 lines sit in `messages/always-on/` as candidates, and none ships until Mac approves it. `always-on.html` sets them as ads, banners, website sections, and calls to action.
+
+Three rules hold for every always-on line. Oxagen governs the agents and does not run them. Every run keeps an owning operator, so going home hands off the hours and keeps the ownership. The record covers governed actions, so a line about automatic records says so. The sets, the pairings, and the lines that need Mac's decision are in `references/always-on.md`.
 
 ## Voice, the short version
 

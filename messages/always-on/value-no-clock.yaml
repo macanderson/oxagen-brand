@@ -1,0 +1,19 @@
+id: value-no-clock
+brand: oxagen
+kind: pitch
+set: value
+order: 2
+title: Agents don't need to clock in, take holidays, or sleep.
+audience:
+  - operator
+clause: operations
+surfaces:
+  - ads
+  - social
+status: candidate
+release: launch
+owner: Mac Anderson
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: From Mac's draft of 2026-09-26.
