@@ -4,7 +4,19 @@ Your operators go home at six. Your agents do not have to. This pillar is about 
 
 ## Status
 
-Mac drafted these lines on 2026-09-26. The registry holds all 85 of them in `messages/always-on/`, one line per entry, and every entry is a candidate. Nothing here ships until Mac approves the entry. Until then the approved `hero-eyebrow` (**Workforce management for autonomous agents**) and `hero-headline` (**Your agents are a workforce now. Manage them like one.**) stand.
+Mac drafted these lines on 2026-09-26. The registry holds all 85 of them in `messages/always-on/`, one line per entry. `always-on-lines.md` lists every line by set, with its status.
+
+Three of Mac's seven worked ads are approved, and `build/build.py` renders them into `ads/` at the four house sizes, on ink and on paper:
+
+| Ad | Headline | Subline |
+|---|---|---|
+| `ad-oxagen-night-shift` | Sleep tight. Your agents are on the job. | While you turn in for the night, your fleet of agents keeps working. |
+| `ad-oxagen-capacity` | Agents aren't headcount. They're capacity. | Focus on traction, not tracking. |
+| `ad-oxagen-driver-seat` | Stay in the driver's seat. Agents deliver the momentum. | Operators set the course, agents execute and report. |
+
+The other four worked ads and the 78 single lines are candidates, and none ships until Mac approves it. The approved `hero-eyebrow` (**Workforce management for autonomous agents**) and `hero-headline` (**Your agents are a workforce now. Manage them like one.**) stand.
+
+The content card `content/oxagen-always-on-*` sets the night-shift headline.
 
 `always-on.html` in the brand kit sets every line as ads, banners, website sections, and calls to action. `build/messages.py` generates it, and its builder pairs any intro with any tagline.
 
@@ -66,6 +78,10 @@ Each item below is Mac's call. The proposals are not approved lines, and the reg
 | `steer-adapt-instantly` | "Orchestrates" and "everywhere" overstate what Oxagen does. | Scope to governed calls, or cut. |
 | `steer-move-with-you` | "Ensures" is a promise the record cannot back. | "Oxagen steers your agents to match your new direction." |
 | `coach-always-moving` | "Always moving forward, never idling" promises an outcome. | "Your projects keep moving after you log off." |
+| `ad-oxagen-progress-report` | "Progress, 24/7" promises an outcome around the clock (rule 5). | Drop that sentence. Keep "Operators sign off. Agents clock in." |
+| `ad-oxagen-momentum` | `words.md` makes rule the house word and policy the word to avoid, so "No more policies" can read as no more governance. | "No more shift rotas or burnout." |
+| `ad-oxagen-vision-momentum` | "Oxagen turns your vision into momentum" says Oxagen does the work (rule 1). "Moving your goals forward 24/7" promises an outcome (rule 5). | "Your agents turn your vision into momentum.", with the subline "Wherever you steer, your agents follow." |
+| `ad-oxagen-live-your-life` | "Welcome to acceleration" claims a speed-up, and no measured workload backs one. | Drop that sentence. Keep "Let agents drive your progress." |
 
 ## Edits already made
 

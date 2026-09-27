@@ -26,8 +26,10 @@ surfaces:
   - ads
 status: candidate
 release: launch
+qualifier: Every run keeps its owning operator while the operator is away.
+evidence: 'Product owner: show an agent working under its mandate while the owning operator is away, and the record the operator reviews on return. Claim no speed-up without a measured workload.'
 owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
   - '07'
-notes: Mac's example combination of coach-live-your-life and coach-acceleration. From Mac's draft of 2026-09-26. Mac's combination had an adjective from the words.md list of words that mean nothing before acceleration. It is cut.
+notes: Mac's example combination of coach-live-your-life and coach-acceleration. From Mac's draft of 2026-09-26. Mac's combination had an adjective from the words.md list of words that mean nothing before acceleration. It is cut. It stays a candidate. Welcome to acceleration claims a speed-up, and no measured workload backs one. The proposal drops that sentence and keeps Let agents drive your progress.

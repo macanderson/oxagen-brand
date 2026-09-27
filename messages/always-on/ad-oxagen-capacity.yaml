@@ -24,10 +24,11 @@ audience:
 clause: operations
 surfaces:
   - ads
-status: candidate
+status: approved
 release: launch
+evidence: 'Product owner: show one operator assigning work to several agents without a seat or headcount model. State no capacity number without a measured workload.'
 owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
   - '07'
-notes: Mac's example combination of reframe-capacity and momentum-traction. From Mac's draft of 2026-09-26.
+notes: Mac's example combination of reframe-capacity and momentum-traction. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.
