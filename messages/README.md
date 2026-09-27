@@ -61,7 +61,7 @@ The folder an entry sits in is its group. The page renders each group in its own
 
 Ads also carry `kicker`, `headline` (the tall stack), `wide` (the landscape lines), `short_lines` (the 300x250), `subline`, `subshort`, `picture` (`ghost` or `orbit`), and `scope_terms`. The ad id is `ad-<brand>-<slug>`, and the slug names the files in `ads/`. `headline` and `wide` must join to the title. Every `subline` and `subshort` must contain one of the `scope_terms`, so a short form cannot drop its scope.
 
-The always-on ads in `always-on/` use the same ad fields. They are candidates, so `build/build.py` renders none of them into `ads/`. `build/campaign.py` sets every always-on entry on `always-on.html` as ads, banners, website sections, and calls to action, and the page's builder pairs any intro with any tagline.
+The always-on ads in `always-on/` use the same ad fields. `build/build.py` renders the approved ones into `ads/` and skips the candidates. `build/campaign.py` sets every always-on entry on `always-on.html` as ads, banners, website sections, and calls to action, and the page's builder pairs any intro with any tagline.
 
 Pairs carry `before` and `after`. Sections that are tables carry `rows`, each with a `label` and `text`. Rules may carry `phrases`, which the check rejects in live copy.
 

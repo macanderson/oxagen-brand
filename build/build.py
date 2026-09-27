@@ -522,7 +522,7 @@ def build_social(raster: bool) -> None:
 
 
 #: Every campaign is an approved, launch-released `kind: ad` entry in
-#: `messages/ads/`. Held and retired entries are not rendered, and
+#: `messages/ads/` or `messages/always-on/`. Held and retired entries are not rendered, and
 #: `build/messages.py --check` fails on any file in `ads/` that no entry
 #: produces. The Oxagen campaign follows the operator's job: the workforce ad
 #: states the job, and each of the others explains one decision an operator
@@ -587,6 +587,15 @@ CONTENT = {
         ("Fleet note", ["What the fleet", "asked for this week"], "The weekly fleet report",
          ["9 agents ran under mandate",
           "4 requests routed to a person",
+          "1 agent held at its budget"]),
+        # The always-on campaign, from Mac's draft of 2026-09-26. The title is
+        # the approved night-shift ad, and the morning report is the card the
+        # operator's overnight summary goes out on, scoped like the fleet note
+        # to what the agents asked for.
+        ("Always-on", ["Sleep tight.", "Your agents are", "on the job."], "The always-on campaign", None),
+        ("Morning report", ["What your agents", "asked for overnight"], "The overnight report",
+         ["6 agents worked under mandate",
+          "2 requests waited for their operator",
           "1 agent held at its budget"]),
     ],
     "stella": [

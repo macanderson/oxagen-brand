@@ -24,10 +24,12 @@ audience:
 clause: operations
 surfaces:
   - ads
-status: candidate
+status: approved
 release: launch
+qualifier: Every run keeps its owning operator, day and night.
+evidence: 'Product owner: show an agent working under its mandate outside the operator''s hours, with the owning operator named on the run and its governed actions in the record the next morning.'
 owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
   - '07'
-notes: Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26.
+notes: Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.
