@@ -1,0 +1,59 @@
+{
+  "name": "@oxagen/ui",
+  "version": "2.1.1",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles/globals.css": "./src/styles/globals.css",
+    "./styles/house-tokens.css": "./src/styles/house-tokens.css",
+    "./styles/house-fonts.css": "./src/styles/house-fonts.css",
+    "./styles/fonts/space-grotesk.css": "./src/styles/fonts/space-grotesk.css",
+    "./lib/motion": "./src/lib/motion.ts",
+    "./components/*": "./src/components/*.tsx"
+  },
+  "scripts": {
+    "lint": "eslint src --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "dev": "storybook dev -p 6008 --no-open",
+    "storybook": "storybook dev -p 6008 --no-open",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@base-ui/react": "1.8.0",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "lucide-react": "1.47.0",
+    "motion": "13.4.1",
+    "tailwind-merge": "3.7.0"
+  },
+  "peerDependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "^10.6.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.7",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/coverage-v8": "2.1.9",
+    "jsdom": "30.1.1",
+    "postcss": "8.5.28",
+    "storybook": "^10.6.0",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vite": "^8.3.0",
+    "vitest": "2.1.9"
+  }
+}
