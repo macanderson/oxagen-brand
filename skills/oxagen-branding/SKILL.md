@@ -54,7 +54,7 @@ The homepage eyebrow is **Workforce management for autonomous agents** and the h
 
 ## Always-on
 
-Mac's draft of 2026-09-26 adds an always-on pillar. The agents keep working after the operator's day ends, and the operator comes back to a report. Its 85 lines sit in `messages/always-on/`. Four of Mac's worked ads are approved and render into `ads/`: night shift, capacity, driver seat, and live your life. The other 81 lines are candidates, and none ships until Mac approves it. `references/always-on-lines.md` lists every line with its status. `always-on.html` sets them as ads, banners, website sections, and calls to action.
+Mac's draft of 2026-09-26 adds an always-on pillar. The agents keep working after the operator's day ends, and the operator comes back to a report. Its 85 lines sit in `messages/always-on/`. Three of Mac's worked ads are approved and render into `ads/`: night shift, capacity, and driver seat. The other 82 lines are candidates, and none ships until Mac approves it. `references/always-on-lines.md` lists every line with its status. `always-on.html` sets them as ads, banners, website sections, and calls to action.
 
 Three rules hold for every always-on line. Oxagen governs the agents and does not run them. Every run keeps an owning operator, so going home hands off the hours and keeps the ownership. The record covers governed actions, so a line about automatic records says so. The sets, the pairings, and the lines that need Mac's decision are in `references/always-on.md`.
 

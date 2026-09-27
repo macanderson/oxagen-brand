@@ -589,14 +589,8 @@ CONTENT = {
           "4 requests routed to a person",
           "1 agent held at its budget"]),
         # The always-on campaign, from Mac's draft of 2026-09-26. The title is
-        # the approved night-shift ad, and the morning report is the card the
-        # operator's overnight summary goes out on, scoped like the fleet note
-        # to what the agents asked for.
+        # the approved night-shift ad.
         ("Always-on", ["Sleep tight.", "Your agents are", "on the job."], "The always-on campaign", None),
-        ("Morning report", ["What your agents", "asked for overnight"], "The overnight report",
-         ["6 agents worked under mandate",
-          "2 requests waited for their operator",
-          "1 agent held at its budget"]),
     ],
     "stella": [
         ("Changelog", ["Parallel tool calls,", "now measured"], "30 Aug 2026 · Engineering",

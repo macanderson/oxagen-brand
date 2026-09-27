@@ -157,4 +157,4 @@ Mac's example pairings, written as ads at the four house sizes. The approved one
 | Don't manage the grind. Drive the momentum. | No more policies or burnout. | candidate | `ad-oxagen-momentum` |
 | Stay in the driver's seat. Agents deliver the momentum. | Operators set the course, agents execute and report. | approved | `ad-oxagen-driver-seat` |
 | Oxagen turns your vision into momentum. | Agents moving your goals forward 24/7. Wherever you steer, your vision stays in sync. | candidate | `ad-oxagen-vision-momentum` |
-| Let agents work while you live your life. | Welcome to acceleration. Let agents drive your progress. | approved | `ad-oxagen-live-your-life` |
+| Let agents work while you live your life. | Welcome to acceleration. Let agents drive your progress. | candidate | `ad-oxagen-live-your-life` |
