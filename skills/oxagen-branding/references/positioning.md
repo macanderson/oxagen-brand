@@ -90,7 +90,15 @@ One page per operator, read from the record and not estimated. It shows spend by
 
 **Unproductive spend** is spend on steps that bought no progress: a repeated status poll, a cache that expired while a parent run waited, a model class larger than the job. It replaces "wasted spend". It is a recorded figure, so a line about it names the requests behind it and makes no savings claim without the measured workload.
 
-The lines are held until the operator review ships. Their gate is `operator-review`. The ranking and the spend lines also wait for `unproductive-spend`, and the work order lines for `work-orders`.
+The lines are held until their gates ship:
+
+| Line | Gates |
+|---|---|
+| `mc-unproductive-spend` | `unproductive-spend` |
+| `mc-operator-ranking` | `operator-review`, `unproductive-spend` |
+| `mc-operator-productivity` | `operator-review`, `dod` |
+| `mc-work-order-metrics` | `work-orders`, `dod` |
+| `mc-unassigned-spend` | `work-orders` |
 
 ## The lead lines
 
