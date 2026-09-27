@@ -436,6 +436,7 @@ def build_html() -> str:
         ("oxagen", "keys", 1200, 628, "landscape", "light"),
         ("stella", "proof", 1080, 1080, "square", "dark"),
         ("stella", "check", 1200, 628, "landscape", "light"),
+        ("oxagen", "night-shift", 1080, 1080, "square", "dark"),
     ):
         cp = next(c for c in AD_COPY[b] if c["slug"] == slug)
         ads.append(plate(ad_svg(b, cp, w, h, tag, s), f"{b} · {slug} · {w}×{h} · {s}", cls="tight"))
@@ -461,8 +462,8 @@ def build_html() -> str:
         ("spinners/", "the house motion, animated SVG, no script"),
         ("wallpapers/", "desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit | word | echo · dark | light"),
         ("social/", "avatar · x · linkedin · youtube · open graph · dark | light"),
-        ("ads/", "workforce · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
-        ("content/", "changelog · essay · release · field note · fleet note cards, 1200×675"),
+        ("ads/", "workforce · authority · equipment · finance · keys · night shift · capacity · driver seat · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250"),
+        ("content/", "changelog · essay · release · field note · fleet note · always-on cards, 1200×675"),
     ]
     files_html = "".join(f'<div class="mono">{esc(k)}</div><span>{esc(v)}</span>' for k, v in files)
 
@@ -631,7 +632,7 @@ def build_html() -> str:
 <div class="grid g4">{social}</div>
 <div class="grid g2" style="margin-top:18px">{banners}</div>
 <h3>Ads</h3>
-<p>Every ad takes its copy from an approved, launch-released entry in <code>messages/ads/</code>, and <code>build/messages.py --check</code> fails on any file in <code>ads/</code> that no entry produces. The Oxagen campaign follows the operator's job. The <b>workforce</b> ad states the job, and each of the others explains one decision an operator makes: which agent has the <b>authority</b> to do what, how each agent is <b>equipped</b>, which agent <b>spent</b> what, and why the agent does not hold the <b>keys</b>. A short form keeps the scope of its long form, so the banner still says governed, recorded, or mediated where the poster does. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form. A held campaign, such as completion checks for bounded tasks, is written and not rendered until its capability ships. Stella runs two lines: the proof rule, and the green check. Each ships in the four sizes, on ink and on paper.</p>
+<p>Every ad takes its copy from an approved, launch-released entry in <code>messages/ads/</code> or <code>messages/always-on/</code>, and <code>build/messages.py --check</code> fails on any file in <code>ads/</code> that no entry produces. The Oxagen campaign follows the operator's job. The <b>workforce</b> ad states the job, and each of the others explains one decision an operator makes: which agent has the <b>authority</b> to do what, how each agent is <b>equipped</b>, which agent <b>spent</b> what, and why the agent does not hold the <b>keys</b>. A short form keeps the scope of its long form, so the banner still says governed, recorded, or mediated where the poster does. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form. A held campaign, such as completion checks for bounded tasks, is written and not rendered until its capability ships. Stella runs two lines: the proof rule, and the green check. The always-on campaign adds three ads from <code>messages/always-on/</code>: <b>night shift</b>, <b>capacity</b>, and <b>driver seat</b>. Each ships in the four sizes, on ink and on paper.</p>
 <p>Four of the five Oxagen campaigns take the ghost in the top right. The <b>workforce</b> ad takes the orbit instead, laid back behind the type: rings of nodes wired inward to one mark is the only composition the kit already owns that reads as many agents under one control plane. It is not a new shape; it is the wallpaper's, at ad scale and at ad strength.</p>
 <div class="grid g2">{"".join(ads)}</div>
 <h3>Content cards</h3>

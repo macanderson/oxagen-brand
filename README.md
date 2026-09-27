@@ -77,8 +77,8 @@ icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webma
 spinners/          the house motion, animated SVG, no script
 wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit | word | echo · dark | light
 social/            avatar · x · linkedin · youtube · open graph · dark | light
-ads/               from messages/ads/: workforce · authority · equipment · finance · keys · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
-content/           changelog · essay · release · field note · fleet note cards, 1200×675
+ads/               from messages/ads/ and messages/always-on/: workforce · authority · equipment · finance · keys · night shift · capacity · driver seat · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
+content/           changelog · essay · release · field note · fleet note · always-on cards, 1200×675
 skills/            the oxagen-branding Claude Code skill and its installer
 ```
 

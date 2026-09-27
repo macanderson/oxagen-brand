@@ -2,8 +2,9 @@
 
 `build/messages.py` renders this page beside the message bank, runs the same
 page check over it, and writes it to `always-on.html`. Every line on the page
-comes from `messages/always-on/`. Every entry there is a candidate, so nothing
-here renders into `ads/`.
+comes from `messages/always-on/`. `build/build.py` renders the approved
+combinations into `ads/`. Every other entry is a candidate, and nothing here
+renders it.
 
 The art is plain SVG drawn in this file with the house ad geometry of
 `build/surfaces.py`: the ghost or the orbit behind, then the kicker, the
@@ -468,7 +469,7 @@ class Campaign:
         return (f'<div class="hero"><p class="eyebrow q">Always-on</p><h1>Always-on campaign</h1>'
                 f'<p class="lead">Mac\'s draft of 2026-09-26, set as ads, banners, website sections, and calls to action.</p>'
                 f'<p>Every line here comes from <span class="mono">messages/always-on/</span>, one entry per line. '
-                f'Every entry is a candidate. None renders into <span class="mono">ads/</span> until Mac approves it. '
+                f'An approved combination renders into <span class="mono">ads/</span>. Every other entry is a candidate until Mac approves it. '
                 f'{bank} lists each entry with its readers, its owner, and its review date.</p></div>')
 
     def ads(self) -> str:

@@ -4,8 +4,8 @@
   "counts": {
     "entries": 253,
     "status": {
-      "approved": 135,
-      "candidate": 90,
+      "approved": 138,
+      "candidate": 87,
       "retired": 28
     },
     "release": {
@@ -298,14 +298,15 @@
       "surfaces": [
         "ads"
       ],
-      "status": "candidate",
+      "status": "approved",
       "release": "launch",
+      "evidence": "Product owner: show one operator assigning work to several agents without a seat or headcount model. State no capacity number without a measured workload.",
       "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of reframe-capacity and momentum-traction. From Mac's draft of 2026-09-26.",
+      "notes": "Mac's example combination of reframe-capacity and momentum-traction. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-capacity.yaml"
     },
@@ -393,14 +394,16 @@
       "surfaces": [
         "ads"
       ],
-      "status": "candidate",
+      "status": "approved",
       "release": "launch",
+      "qualifier": "The operator sets the assignment and the rules. Oxagen keeps the record of the actions it governs.",
+      "evidence": "Product owner: show an operator setting an agent's assignment and rules, the agent running, and the record the operator reviews afterward.",
       "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of split-prioritize-steer and split-driver-seat. From Mac's draft of 2026-09-26. Mac's combination rewords the division of labor line as Operators set the course.",
+      "notes": "Mac's example combination of split-prioritize-steer and split-driver-seat. From Mac's draft of 2026-09-26. Mac's combination rewords the division of labor line as Operators set the course. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-driver-seat.yaml"
     },
@@ -574,12 +577,14 @@
       ],
       "status": "candidate",
       "release": "launch",
+      "qualifier": "Every run keeps its owning operator while the operator is away.",
+      "evidence": "Product owner: show an agent working under its mandate while the owning operator is away, and the record the operator reviews on return. Claim no speed-up without a measured workload.",
       "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of coach-live-your-life and coach-acceleration. From Mac's draft of 2026-09-26. Mac's combination had an adjective from the words.md list of words that mean nothing before acceleration. It is cut.",
+      "notes": "Mac's example combination of coach-live-your-life and coach-acceleration. From Mac's draft of 2026-09-26. Mac's combination had an adjective from the words.md list of words that mean nothing before acceleration. It is cut. It stays a candidate. Welcome to acceleration claims a speed-up, and no measured workload backs one. The proposal drops that sentence and keeps Let agents drive your progress.",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-live-your-life.yaml"
     },
@@ -624,7 +629,7 @@
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of reframe-no-rotas and momentum-drive. From Mac's draft of 2026-09-26. Mac's combination shortens the reframing line to No more policies or burnout.",
+      "notes": "Mac's example combination of reframe-no-rotas and momentum-drive. From Mac's draft of 2026-09-26. Mac's combination shortens the reframing line to No more policies or burnout. It stays a candidate. words.md names rule as the house word and policy as the word to avoid, so No more policies can read as no more governance. The proposal is No more shift rotas or burnout.",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-momentum.yaml"
     },
@@ -660,14 +665,16 @@
       "surfaces": [
         "ads"
       ],
-      "status": "candidate",
+      "status": "approved",
       "release": "launch",
+      "qualifier": "Every run keeps its owning operator, day and night.",
+      "evidence": "Product owner: show an agent working under its mandate outside the operator's hours, with the owning operator named on the run and its governed actions in the record the next morning.",
       "owner": "Mac Anderson",
       "review_by": "2026-10-15",
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26.",
+      "notes": "Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-night-shift.yaml"
     },
@@ -710,7 +717,7 @@
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of value-progress-report and night-clock-in. From Mac's draft of 2026-09-26.",
+      "notes": "Mac's example combination of value-progress-report and night-clock-in. From Mac's draft of 2026-09-26. It stays a candidate. Progress, 24/7 promises an outcome around the clock, which rule 5 of the always-on reference warns against. The proposal drops that sentence and keeps Operators sign off. Agents clock in.",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-progress-report.yaml"
     },
@@ -753,7 +760,7 @@
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of signoff-vision-momentum and steer-new-direction. From Mac's draft of 2026-09-26. The subline is two sentences. The renderer sets it smaller to fit one line. Consider one of them.",
+      "notes": "Mac's example combination of signoff-vision-momentum and steer-new-direction. From Mac's draft of 2026-09-26. The subline is two sentences. The renderer sets it smaller to fit one line. Consider one of them. It stays a candidate. Oxagen turns your vision into momentum says Oxagen does the work, against rule 1, and moving your goals forward 24/7 promises an outcome, against rule 5. The proposal is Your agents turn your vision into momentum, with the subline Wherever you steer, your agents follow.",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-vision-momentum.yaml"
     },
