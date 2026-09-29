@@ -51,8 +51,10 @@ export interface CommandMenuCommandGroup {
  * as a key cap, after `.kbtn` in the mockup's `v3.css`. It takes the maia
  * field's pill so it reads as a search field in the top bar.
  */
+// Dialog.Trigger is generic over its payload, so ComponentRef widens to
+// HTMLElement while its ref still wants the button.
 const CommandMenuTrigger = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Trigger>,
+  HTMLButtonElement,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> & {
     /** The key cap's text. */
     shortcutLabel?: string;
