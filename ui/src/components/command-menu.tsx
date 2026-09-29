@@ -3,6 +3,7 @@ import * as React from "react";
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
+import { composeRefs } from "../lib/compose-refs";
 import { cn } from "../lib/utils";
 import { menuItem, menuLabel, menuPopup } from "./control-styles";
 
@@ -115,14 +116,7 @@ const CommandMenuPopup = React.forwardRef<HTMLDivElement, CommandMenuPopupProps>
     // A callback ref, because the portal mounts the popup after this
     // component commits, and useImperativeHandle would read null then.
     const popupRef = React.useRef<HTMLDivElement | null>(null);
-    const setRefs = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        popupRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref],
-    );
+    const setRefs = React.useMemo(() => composeRefs(popupRef, ref), [ref]);
     // Focus the search field rather than the phone bar's close button, which
     // comes first in the tab order.
     const focusSearch = React.useCallback(
