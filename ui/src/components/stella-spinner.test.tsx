@@ -2,6 +2,7 @@
 // Moved from oxagen apps/app/src/ui/stella-mark.test.tsx at ddb85803. The
 // wordmark and icon tests stayed behind with those marks.
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { expectNoAxe } from "../test/expect-no-axe";
@@ -16,9 +17,12 @@ afterEach(cleanup);
 
 const MARK = STELLA.icon.parts[0]?.d ?? "";
 
-/** The house spinner this component redraws inline. */
+/**
+ * The house spinner this component redraws inline. Vitest runs from ui/, and
+ * under jsdom `import.meta.url` is not a file URL, so the path starts at cwd.
+ */
 const kitSpinner = readFileSync(
-  new URL("../../../spinners/stella-spinner.svg", import.meta.url),
+  resolve(process.cwd(), "../spinners/stella-spinner.svg"),
   "utf8",
 );
 

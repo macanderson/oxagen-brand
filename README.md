@@ -142,6 +142,31 @@ The oxagen monorepo vendors these files with
 `tools/scripts/sync-brand-assets.mjs`, and CI runs it with `--check`, so a
 product that has fallen behind the kit fails its build.
 
+## Components and Storybook
+
+`ui/` is `@oxagen/ui`, the React component kit for Oxagen's frontends. It is
+built on Base UI and Tailwind v4, and it reads `tokens/` and `fonts/` in place,
+so a token change here reaches every component on the next build.
+
+Storybook shows every component, one story per state. Its toolbar switches each
+story between the light and dark themes. A push to main deploys it to
+[brand.oxagen.cloud/storybook](https://brand.oxagen.cloud/storybook/).
+
+```sh
+cd ui && pnpm install
+pnpm storybook              # Storybook on port 6008
+pnpm build-storybook        # static Storybook in storybook-static/
+pnpm build:design-system    # design-system/: components/bundle.js, bundle.css, index.d.ts
+```
+
+CI (`.github/workflows/ui.yml`) typechecks and tests the kit on every pull
+request that touches `ui/`, `tokens/`, or `fonts/`. It uploads the static
+Storybook as the artifact `storybook-static` and the bundle as
+`design-system-bundle`. The bundle sets `window.OxagenUI` and feeds the Claude
+Design project named in `ui/.design-sync/config.json`.
+[`ui/README.md`](ui/README.md) lists the components and the rules for adding
+one.
+
 ## Keep agents current
 
 Agents steer from the `oxagen-branding` skill in `skills/`. Its
