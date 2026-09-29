@@ -109,9 +109,9 @@ Import from `@oxagen/ui`.
 
 | Component | File | Parts and API |
 |---|---|---|
-| Button | `button.tsx` | `Button` with `render`. Variants `primary`, `default`, `secondary`, `outline`, `ghost`, `destructive`, `destructive-outline`, `link`, and `gradient`. |
-| Badge | `badge.tsx` | `Badge` with `render`. Semantic variants `info`, `success`, `warning`, and `error`. |
-| ToneBadge | `tone-badge.tsx` | `ToneBadge` for a record's state, drawn by shape as well as colour. |
+| Button | `button.tsx` | `Button` with `render`. Variants `primary`, `default`, `secondary`, `outline`, `ghost`, `destructive`, `destructive-outline`, `link`, and `gradient`. Sizes run from `xs` at 28px to `xl` at 44px, and `default` is 36px. |
+| Badge | `badge.tsx` | `Badge` with `render`. Semantic variants `info`, `success`, `warning`, and `error`, each with a `-soft` form, plus `proven-soft` and `critical-soft`. `quiet`, `chip`, and `label` are for counts, filters, and field names. |
+| ToneBadge | `tone-badge.tsx` | `ToneBadge` for a record's state, drawn by shape as well as colour. `TONE_BADGE_TONES` lists the tones. |
 | Alert | `alert.tsx` | `Alert`, `AlertTitle`, and `AlertDescription`. |
 | Separator | `separator.tsx` | `Separator` with `orientation`. |
 | Skeleton | `skeleton.tsx` | `Skeleton`. |
@@ -132,10 +132,10 @@ Import from `@oxagen/ui`.
 | RadioGroup | `radio-group.tsx` | `RadioGroup` and `Radio`. |
 | ChoiceGroup | `choice-group.tsx` | `ChoiceGroup`: one choice drawn as a row of option cards. A taken option stays focusable and says why. |
 | SegmentedControl | `segmented-control.tsx` | `SegmentedControl` and `SegmentedControlItem`, single select, string value. |
-| ToggleGroup | `toggle-group.tsx` | The outline toggle group for filters that show or hide rows by state. |
+| ToggleGroup | `toggle-group.tsx` | `ToggleGroup` and `ToggleGroupItem`: the outline toggle group for filters that show or hide rows by state. An item can carry a count. |
 | Slider | `slider.tsx` | `Slider` and its parts. |
 | Select | `select.tsx` | `Select`, `SelectTrigger`, `SelectValue`, `SelectPopup`, `SelectGroup`, `SelectLabel`, and `SelectItem`. Use it for 20 options or fewer. |
-| Combobox | `combobox.tsx` | `Combobox` and its parts, for more than 20 options. |
+| Combobox | `combobox.tsx` | `Combobox` and its parts, for more than 20 options. The empty message shows only when nothing matches. |
 | SearchInput | `search-input.tsx` | `SearchInput`: an input with a leading glyph and a clear button. |
 | FormAlert, SubmitButton, OutcomePanel | `form-feedback.tsx` | A form's error, its pending submit, and the result it lands on. |
 | Control styles | `control-styles.ts` | The shared class strings for buttons, fields, and menu surfaces. |
@@ -147,9 +147,9 @@ Import from `@oxagen/ui`.
 | Card | `card.tsx` | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardPanel`, and `CardFooter`. |
 | Panel | `panel.tsx` | `Panel` with `eyebrow`, `title`, `actions`, `footer`, and `inset`. |
 | PageHeader | `page-header.tsx` | `PageHeader`: the page's one h1, with an eyebrow, a description, metadata, and actions. |
-| Table | `table.tsx` | `Table` and its parts, with `density`. It scrolls inside its own container. |
+| Table | `table.tsx` | `Table` and its parts, with `density`, plus `TableGroupRow` and `TableEmpty`. `TableHead` and `TableCell` take `numeric`. From 768px up the table is at least 560px wide and scrolls inside its own container. `narrow` drops that floor. |
 | DataTable | `data-table.tsx` | `DataTable` with the `cell`, `numericCell`, and `headCell` class strings. |
-| TruncatedCell | `truncated-cell.tsx` | A cell that clips its text and opens a hover card with the full value, only when the text is clipped. |
+| TruncatedCell | `truncated-cell.tsx` | `TruncatedCell`: a cell that clips its text and opens a hover card with the full value, only when the text is clipped. The card opens after 500 ms. |
 | Stat | `stat.tsx` | `Stat` and `StatGroup`: a figure tile and its row. |
 | EmptyState | `empty-state.tsx` | `EmptyState` with `variant`. |
 | StateWrap | `state-wrap.tsx` | A full-width failed, denied, or neutral state with its facts. |
@@ -162,7 +162,7 @@ Import from `@oxagen/ui`.
 
 | Component | File | Parts and API |
 |---|---|---|
-| Tabs | `tabs.tsx` | `Tabs`, `TabsList`, `TabsTab`, and `TabsPanel`. The default list is a muted track with count badges. `variant="underline"` is for tabs inside a dialog. |
+| Tabs | `tabs.tsx` | `Tabs`, `TabsList`, `TabsTab`, `TabsCount`, `TabsPanel`, and `TabsIndicator`. The default list is a muted track, and `TabsTab` takes a `count` for its badge. `variant="underline"` is for tabs inside a dialog. |
 | Pagination | `pagination.tsx` | `RowsPager` and `RowsField`: rows per page on the left, Previous and Next on the right. |
 | List controls | `list-controls.tsx` | `useList`, `ListBar`, and `ListPager` for a sorted, filtered, paged list. |
 | pageList | `page-list.tsx` | The page-number sequence with gaps. |
@@ -171,25 +171,28 @@ Import from `@oxagen/ui`.
 
 | Component | File | Parts and API |
 |---|---|---|
-| Dialog | `dialog.tsx` | `Dialog`, `DialogTrigger`, `DialogPopup`, `DialogHeader`, `DialogPanel`, `DialogFooter`, `DialogTitle`, `DialogDescription`, and `DialogClose`. |
-| Sheet | `sheet.tsx` | `Sheet` and its parts, with `side` on `SheetPopup`. |
+| Dialog | `dialog.tsx` | `Dialog`, `DialogTrigger`, `DialogPopup`, `DialogHeader`, `DialogPanel`, `DialogFooter`, `DialogTitle`, `DialogDescription`, and `DialogClose`. The box sits 70px from the top. `size="wide"` makes it 820px in place of 600px. The box has no padding, so content goes in the header, the panel, and the footer. |
+| Sheet | `sheet.tsx` | `Sheet` and its parts, with `side` on `SheetPopup`. Like the dialog, its box has no padding. |
 | Menu | `menu.tsx` | `Menu` and its parts. Items take `onClick`. |
 | Popover | `popover.tsx` | `Popover` and its parts. |
-| HoverCard | `hover-card.tsx` | `HoverCard` for text a surface cuts off. |
+| HoverCard | `hover-card.tsx` | `HoverCard` and `HoverCardContent`, for text a surface cuts off. `TruncatedCell` uses it. |
 | Tooltip | `tooltip.tsx` | `Tooltip` and its parts, under `TooltipProvider`. |
-| CommandMenu | `command-menu.tsx` | The command menu: a search field over grouped commands. |
+| CommandMenu | `command-menu.tsx` | `CommandMenu` takes `groups` of commands and opens on Cmd+K or Ctrl+K: a search field over the grouped commands, with an empty line when nothing matches. `CommandMenuRoot`, `CommandMenuPopup`, `CommandMenuInput`, `CommandMenuList`, `CommandMenuItem`, and the other parts build a custom one. |
 
-Menus, selects, popovers, hover cards, and the command menu share one
-translucent surface: a blurred popover ground, a faint ring, a 16px radius,
-and 12px items.
+Menus, selects, comboboxes, popovers, hover cards, the command menu, and
+toasts share one translucent surface. It has the popover ground at 70% over a
+blur, a faint ring in place of a border, a deep shadow, and a 16px corner.
+Its rows are 8px by 12px with 14px text. The ring and the shadow are the
+`--pop-ring` and `--ui-shadow-pop` tokens in `globals.css`. The tooltip stays
+opaque.
 
 ### Feedback
 
 | Component | File | Parts and API |
 |---|---|---|
-| Toast | `toast.tsx` | `ToastProvider`, `ToastViewport`, and `useToast`. Four tones: success, warning, info, and error. A toast lasts 4200 ms. |
-| Attachment | `attachment.tsx` | `Attachment` and its parts: a media tile, a name, a kind and size, and a remove action. It shimmers while it uploads. |
-| Composer | `composer.tsx` | The assistant composer with an attach button and its attachment cards. |
+| Toast | `toast.tsx` | `ToastProvider`, `ToastViewport`, and `useToast`. Four tones: `success`, `info`, `warn`, and `error`, with `warning` as another name for `warn`. A toast lasts 4200 ms and pauses while the pointer is over it. |
+| Attachment | `attachment.tsx` | `Attachment` and its parts: a media tile, a name, a kind and size, and a remove action. It shimmers while it uploads. `AttachmentCard` draws one `AttachmentFile` in the composer, and `ATTACHMENT_ACCEPT` lists the file types the attach button takes. |
+| Composer | `composer.tsx` | `Composer`, the assistant composer with an attach button and its attachment cards, and `ComposerSentTurn`, the turn it leaves in the thread. The root is a `<form>`, so do not nest it in another form. |
 
 ### Brand
 

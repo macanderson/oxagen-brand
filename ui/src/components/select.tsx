@@ -4,23 +4,29 @@ import { Select as SelectPrimitive } from "@base-ui/react/select";
 import { CaretDownIcon, CaretUpIcon, CheckIcon } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../lib/utils";
+import {
+  menuItem,
+  menuLabel,
+  menuSurface as sharedMenuSurface,
+} from "./control-styles";
 
 /*
  * Select in shadcn's base-maia look, merged from oxagen apps/app/src/ui/select.tsx
- * at ddb85803. The trigger wears the input tokens in a pill. The popup fills
- * with the menu colour at 70% over a blur, as every floating surface does, and
- * a highlighted option tints with the foreground, as a menu item does. The kit
- * keeps its own API: refs, the `lg` size, `SelectGroup`, `SelectLabel`, and
- * `portalProps`. `SelectContent` is the shadcn name for `SelectPopup`.
+ * at ddb85803. The trigger wears the input tokens in a pill. The popup is the
+ * kit's one floating surface (oxagen-roadmap #244), and its rows, group names
+ * and checked mark match a menu's, so a listbox and a menu read as one thing.
+ * The kit keeps its own API: refs, the `lg` size, `SelectGroup`,
+ * `SelectLabel`, and `portalProps`. `SelectContent` is the shadcn name for
+ * `SelectPopup`.
  *
  * The app's popup animated with tw-animate classes (`animate-in`, `fade-in-0`,
  * `zoom-in-95`) that nothing defines, so it never animated. This popup uses
  * the Base UI starting and ending styles every other kit overlay uses.
  */
-// `control-styles.ts` exports a `menuSurface` that clips its overflow. This
-// popup scrolls, so it keeps its own copy without the clip.
-const menuSurface =
-  "relative isolate rounded-2xl bg-menu-popup-bg/70 text-menu-popup-fg shadow-2xl ring-1 ring-foreground/5 outline-none dark:ring-foreground/10 before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150";
+// The popup's surface is the shared recipe, bound to a module name that the
+// file does not re-export. The earlier copy carried its own `::before` blur
+// because the shared one clipped its overflow; the shared one no longer clips.
+const menuSurface = sharedMenuSurface;
 
 const Select = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
@@ -155,10 +161,7 @@ const SelectLabel = React.forwardRef<
   <SelectPrimitive.GroupLabel
     ref={ref}
     data-slot="select-label"
-    className={cn(
-      "px-3 py-1.5 text-xs font-medium text-menu-group-label-fg",
-      className,
-    )}
+    className={cn(menuLabel, className)}
     {...props}
   />
 ));
@@ -171,10 +174,7 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     data-slot="select-item"
-    className={cn(
-      "relative flex w-full cursor-pointer items-center gap-2.5 rounded-xl py-2 pr-8 pl-3 text-sm text-menu-item-fg outline-hidden select-none data-[highlighted]:bg-foreground/10 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-      className,
-    )}
+    className={cn(menuItem, "relative pr-9", className)}
     {...props}
   >
     <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
@@ -182,7 +182,7 @@ const SelectItem = React.forwardRef<
     </SelectPrimitive.ItemText>
     <SelectPrimitive.ItemIndicator
       render={
-        <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
+        <span className="pointer-events-none absolute right-3 flex size-4 items-center justify-center text-accent-text" />
       }
     >
       <CheckIcon className="pointer-events-none" />

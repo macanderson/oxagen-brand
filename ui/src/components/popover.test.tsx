@@ -1,16 +1,16 @@
 // @vitest-environment jsdom
 /**
- * popover.test.tsx — render tests for Popover and its sub-parts.
- *
- * Covers: PopoverPopup renders inside an open Popover, PopoverTitle,
- * PopoverDescription, PopoverTrigger, PopoverClose sub-parts.
- * Uses coss-ui / Base UI naming (PopoverPopup not PopoverContent).
+ * Render tests for Popover and its parts: the popup inside an open popover,
+ * the title, description, trigger and close, and the shared floating
+ * surface. The kit uses the coss and Base UI name `PopoverPopup`, not
+ * `PopoverContent`.
  */
 
 import { render, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { describe, expect, it, afterEach } from "vitest";
+import { expectNoAxe } from "../test/expect-no-axe";
 import {
   Popover,
   PopoverTrigger,
@@ -38,7 +38,7 @@ function OpenPopover({ children }: { children?: ReactNode }) {
   );
 }
 
-describe("Popover — open state render", () => {
+describe("Popover open state", () => {
   it("renders PopoverPopup content when open", () => {
     const { getByText } = render(<OpenPopover />);
     expect(getByText("Popover title")).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe("Popover — open state render", () => {
   });
 });
 
-describe("Popover — trigger interaction", () => {
+describe("Popover trigger", () => {
   it("opens when trigger is clicked", async () => {
     const { getByRole, getByText, queryByText } = render(
       <Popover>
@@ -95,7 +95,7 @@ describe("Popover — trigger interaction", () => {
   });
 });
 
-describe("Popover — close button", () => {
+describe("PopoverClose", () => {
   it("renders a PopoverClose button in the open popover", () => {
     const { getByRole } = render(
       <Popover open>
@@ -109,7 +109,7 @@ describe("Popover — close button", () => {
   });
 });
 
-describe("PopoverPopup — className forwarding", () => {
+describe("PopoverPopup className", () => {
   it("merges custom className onto the popup element", () => {
     const { getByText } = render(
       <Popover open>
@@ -122,5 +122,44 @@ describe("PopoverPopup — className forwarding", () => {
     // The popup element is an ancestor; check it carries the custom class.
     const popup = title.closest("[class*='custom-class']");
     expect(popup).toBeInTheDocument();
+  });
+});
+
+describe("PopoverPopup surface", () => {
+  it("draws the shared translucent surface with prose padding", () => {
+    const { getByRole } = render(
+      <Popover open>
+        <PopoverPopup>
+          <PopoverTitle>Daily spend cap</PopoverTitle>
+          <PopoverDescription>Runs pause at the cap.</PopoverDescription>
+        </PopoverPopup>
+      </Popover>,
+    );
+    const popup = getByRole("dialog");
+    for (const cls of [
+      "rounded-3xl",
+      "bg-menu-popup-bg/70",
+      "backdrop-blur-2xl",
+      "backdrop-saturate-150",
+      "ring-1",
+      "px-4",
+      "py-3",
+    ]) {
+      expect(popup.className).toContain(cls);
+    }
+    expect(popup.className).not.toContain("border-border");
+  });
+
+  it("names the dialog from its title and passes axe", async () => {
+    const { getByRole } = render(
+      <Popover open>
+        <PopoverPopup>
+          <PopoverTitle>Daily spend cap</PopoverTitle>
+          <PopoverDescription>Runs pause at the cap.</PopoverDescription>
+        </PopoverPopup>
+      </Popover>,
+    );
+    const popup = getByRole("dialog", { name: "Daily spend cap" });
+    await expectNoAxe(popup);
   });
 });

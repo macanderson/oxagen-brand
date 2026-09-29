@@ -2,9 +2,12 @@
 import * as React from "react";
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
 import { cn } from "../lib/utils";
+import { popoverSurface } from "./control-styles";
 
 /**
- * coss ui Popover — Base UI Popover, token-driven.
+ * coss ui Popover on Base UI Popover, drawn with the kit's one floating
+ * surface (oxagen-roadmap #244): the popover fill at 70% over a blur, a faint
+ * ring, the deep shadow and a 16px corner.
  *
  *   <Popover>
  *     <PopoverTrigger render={<Button variant="ghost" size="icon" />}>
@@ -12,18 +15,42 @@ import { cn } from "../lib/utils";
  *     </PopoverTrigger>
  *     <PopoverPopup>
  *       <PopoverTitle>What is a registry?</PopoverTitle>
- *       <PopoverDescription>…</PopoverDescription>
+ *       <PopoverDescription>A registry holds the agents a workspace can run.</PopoverDescription>
  *     </PopoverPopup>
  *   </Popover>
  *
- * Uses Base UI's `render` prop (not `asChild`). The popup is portalled and
- * positioned. `side`/`align`/`sideOffset` tune placement.
+ * Uses Base UI's `render` prop, not `asChild`. The popup is portalled and
+ * positioned, and `side`, `align` and `sideOffset` tune placement. Prose sits
+ * 12px by 16px in from the edge: the menu surface's 4px inset plus the 8px by
+ * 12px a menu row keeps, so a popover's text lines up with a menu's.
  */
 const Popover = PopoverPrimitive.Root;
 const PopoverTrigger = PopoverPrimitive.Trigger;
 const PopoverClose = PopoverPrimitive.Close;
-const PopoverTitle = PopoverPrimitive.Title;
-const PopoverDescription = PopoverPrimitive.Description;
+
+const PopoverTitle = React.forwardRef<
+  React.ComponentRef<typeof PopoverPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <PopoverPrimitive.Title
+    ref={ref}
+    className={cn("text-sm font-semibold text-foreground", className)}
+    {...props}
+  />
+));
+PopoverTitle.displayName = "PopoverTitle";
+
+const PopoverDescription = React.forwardRef<
+  React.ComponentRef<typeof PopoverPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <PopoverPrimitive.Description
+    ref={ref}
+    className={cn("mt-1 text-sm text-muted-foreground", className)}
+    {...props}
+  />
+));
+PopoverDescription.displayName = "PopoverDescription";
 
 interface PopoverPopupProps
   extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Popup> {
@@ -59,8 +86,9 @@ const PopoverPopup = React.forwardRef<
         <PopoverPrimitive.Popup
           ref={ref}
           className={cn(
-            "z-50 max-w-sm rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground shadow-md",
-            "origin-[var(--transform-origin)] transition-[opacity,transform,translate,scale] duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[starting-style]:scale-[0.97] data-[ending-style]:opacity-0 data-[ending-style]:scale-[0.97]",
+            popoverSurface,
+            "z-50 max-w-sm px-4 py-3 text-sm outline-none",
+            "origin-(--transform-origin) transition-[opacity,transform,translate,scale] duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[starting-style]:scale-[0.97] data-[ending-style]:opacity-0 data-[ending-style]:scale-[0.97]",
             className,
           )}
           {...props}

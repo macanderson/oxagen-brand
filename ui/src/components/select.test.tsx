@@ -1,14 +1,15 @@
 // @vitest-environment jsdom
 /**
- * select.test.tsx — render tests for Select and sub-parts.
+ * Render tests for Select and its parts.
  *
- * Covers: SelectPopup and its SelectContent alias, SelectTrigger size variants,
- * SelectItem renders inside popup, SelectGroup/SelectLabel.
+ * Covers the trigger sizes and aria, and, with the popup open through
+ * `defaultOpen`, the shared floating surface, the row recipe, the group
+ * label and the trailing checked mark.
  */
 
-import { render, cleanup, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, cleanup } from "@testing-library/react";
 import { describe, expect, it, afterEach } from "vitest";
+import { expectNoAxe } from "../test/expect-no-axe";
 import {
   Select,
   SelectTrigger,
@@ -21,24 +22,30 @@ import {
 
 afterEach(cleanup);
 
-function TestSelect({ size }: { size?: "sm" | "default" | "lg" }) {
+function TestSelect({
+  size,
+  defaultOpen,
+}: {
+  size?: "sm" | "default" | "lg";
+  defaultOpen?: boolean;
+}) {
   return (
-    <Select>
-      <SelectTrigger size={size}>
-        <SelectValue placeholder="Select option" />
+    <Select defaultOpen={defaultOpen} defaultValue={defaultOpen ? "opus" : undefined}>
+      <SelectTrigger size={size} aria-label="Model">
+        <SelectValue placeholder="Pick a model" />
       </SelectTrigger>
       <SelectPopup>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
+          <SelectLabel>Anthropic</SelectLabel>
+          <SelectItem value="opus">Claude Opus</SelectItem>
+          <SelectItem value="sonnet">Claude Sonnet</SelectItem>
         </SelectGroup>
       </SelectPopup>
     </Select>
   );
 }
 
-describe("Select — trigger render", () => {
+describe("Select trigger", () => {
   it("renders a combobox trigger", () => {
     const { getByRole } = render(<TestSelect />);
     expect(getByRole("combobox")).toBeInTheDocument();
@@ -46,7 +53,7 @@ describe("Select — trigger render", () => {
 
   it("shows placeholder text", () => {
     const { getByRole } = render(<TestSelect />);
-    expect(getByRole("combobox")).toHaveTextContent("Select option");
+    expect(getByRole("combobox")).toHaveTextContent("Pick a model");
   });
 
   it("sm size trigger includes h-8 class", () => {
@@ -63,12 +70,7 @@ describe("Select — trigger render", () => {
     const { getByRole } = render(<TestSelect size="lg" />);
     expect(getByRole("combobox").className).toContain("h-10");
   });
-});
 
-// Note: Base UI Select popup requires pointer events + floating-UI layout to
-// open (same constraint as Menu). JSDOM doesn't support layout, so the popup
-// cannot be opened in unit tests. Interactive selection is covered by e2e.
-describe("Select — trigger aria attributes", () => {
   it("trigger has aria-haspopup=listbox", () => {
     const { getByRole } = render(<TestSelect />);
     expect(getByRole("combobox")).toHaveAttribute("aria-haspopup", "listbox");
@@ -78,10 +80,45 @@ describe("Select — trigger aria attributes", () => {
     const { getByRole } = render(<TestSelect />);
     expect(getByRole("combobox")).toHaveAttribute("aria-expanded", "false");
   });
+});
 
-  it("SelectItem and SelectLabel are importable (export sanity check)", () => {
-    // Verify the named exports resolve as React component objects
-    expect(typeof SelectItem).toBe("object");
-    expect(typeof SelectLabel).toBe("object");
+describe("Select popup", () => {
+  it("draws the shared translucent surface", async () => {
+    const { findByRole } = render(<TestSelect defaultOpen />);
+    const listbox = await findByRole("listbox");
+    const popup = listbox.closest("[data-slot=select-content]") ?? listbox;
+    for (const cls of [
+      "rounded-3xl",
+      "bg-menu-popup-bg/70",
+      "backdrop-blur-2xl",
+      "backdrop-saturate-150",
+      "p-1",
+    ]) {
+      expect(popup.className).toContain(cls);
+    }
+    expect(popup.className).not.toContain("before:backdrop-blur-2xl");
+  });
+
+  it("gives options the menu row recipe and a trailing gold check", async () => {
+    const { findByRole } = render(<TestSelect defaultOpen />);
+    const option = await findByRole("option", { name: "Claude Opus" });
+    for (const cls of ["rounded-2xl", "px-3", "py-2", "pr-9", "gap-2.5"]) {
+      expect(option.className).toContain(cls);
+    }
+    const mark = option.querySelector("span.absolute");
+    expect(mark?.className).toContain("right-3");
+    expect(mark?.className).toContain("text-accent-text");
+  });
+
+  it("names a group in the menu label style", async () => {
+    const { findByText } = render(<TestSelect defaultOpen />);
+    const label = await findByText("Anthropic");
+    expect(label.className).toContain("uppercase");
+    expect(label.className).toContain("text-menu-group-label-fg");
+  });
+
+  it("passes axe while open", async () => {
+    const { findByRole } = render(<TestSelect defaultOpen />);
+    await expectNoAxe(await findByRole("listbox"));
   });
 });

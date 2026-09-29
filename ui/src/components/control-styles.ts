@@ -82,47 +82,62 @@ export const inputBase = `${fieldSkin} min-h-9 rounded-4xl py-1.5`;
 export const textareaBase = `${fieldSkin} rounded-xl py-3`;
 
 /**
- * A menu, listbox or picker surface, as the preset draws one: 70% of the menu
- * fill over a blurred, saturated copy of what lies beneath, a 2xl corner, a
- * faint ring in place of the border, and a deep shadow. `isolate` keeps the
- * blur layer (`before:-z-1`) under the items and over the page, and
- * `relative` anchors it. Its callers sit in the flow or inside a positioner,
- * so none adds a position of its own. `menuPopup` adds the 4px inset a menu's
+ * `.menu { background:var(--pop-bg); backdrop-filter:blur(40px)
+ * saturate(1.5); border-radius:16px; box-shadow:0 0 0 1px var(--pop-ring),
+ * var(--shadow-pop) }` in `shared.css` (oxagen-roadmap #244): the one floating
+ * surface a menu, a listbox, a popover, a hover card and the command menu
+ * share. The popover fill at 70%, a blurred and saturated copy of the page
+ * behind it, a 3xl corner (16px at the preset's radius), a faint ring in
+ * place of a border, and the mockup's deep shadow.
+ *
+ * The blur sits on the element itself. A `::before` layer inside a scrolling
+ * menu scrolls away with the rows, so the surface does not clip or layer.
+ * The ring and the shadow read `--pop-ring` and `--ui-shadow-pop`, which
+ * every theme block in `globals.css` sets. It sets no position, since its
+ * callers sit inside a positioner or add `absolute` themselves.
+ */
+const floatingSurface =
+  "rounded-3xl bg-menu-popup-bg/70 text-menu-popup-fg ring-1 ring-pop-ring shadow-pop backdrop-blur-2xl backdrop-saturate-150";
+
+/**
+ * A menu, listbox or picker surface. `menuPopup` adds the 4px inset a menu's
  * rows sit in.
  */
-export const menuSurface =
-  "relative isolate overflow-hidden rounded-2xl bg-menu-popup-bg/70 text-menu-popup-fg shadow-2xl ring-1 ring-foreground/5 outline-none dark:ring-foreground/10 " +
-  "before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150";
+export const menuSurface = `${floatingSurface} outline-none`;
 export const menuPopup = `${menuSurface} p-1`;
 
 /**
- * One row of a menu: a 14px line in an xl-cornered pill, 12px across, a 16px
- * glyph, and the preset's subtle highlight (`menuItemActive`, the foreground
- * at 10%) under the pointer or the keyboard. A listbox that tracks its own
- * active row adds `menuItemActive` to that row.
+ * `.menu-i { gap:10px; padding:8px 12px; border-radius:12px; font-size:14px;
+ * min-height:36px }`: one row of a menu, a 2xl corner (13px at the preset's
+ * radius), a 16px glyph, 44px tall on a phone, and the preset's subtle
+ * highlight (`menuItemActive`, the foreground at 10%) under the pointer or
+ * the keyboard. A listbox that tracks its own active row adds
+ * `menuItemActive` to that row.
  */
 export const menuItemActive = "bg-foreground/10";
 export const menuItem =
-  "flex w-full cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm text-menu-item-fg outline-none " +
-  "data-[highlighted]:bg-foreground/10 " +
+  "flex min-h-9 w-full cursor-pointer select-none items-center gap-2.5 rounded-2xl px-3 py-2 text-left text-sm text-menu-item-fg outline-none max-md:min-h-11 " +
+  "data-[highlighted]:bg-foreground/10 data-[disabled]:pointer-events-none data-[disabled]:text-menu-item-disabled-fg " +
   "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
-/** A rule between menu groups: the foreground at 5%, edge to edge. */
-export const menuSeparator = "-mx-1 my-1 h-px bg-foreground/5";
-
-/** A group's name over its rows. */
-export const menuLabel = "px-3 py-2.5 text-xs text-muted-foreground";
+/** `.menu-sep { height:1px; background:var(--border); margin:4px -4px }`: edge to edge. */
+export const menuSeparator = "-mx-1 my-1 h-px bg-menu-separator";
 
 /**
- * A popover or hint that floats over the page: the menu's translucent fill
- * on the raised surface the shell's drawers use, a 2xl corner and the ring.
- * It sets no position. The caller adds `absolute` or `fixed`, which also
- * anchors the blur layer. Tailwind emits `relative` after both, so a
- * `relative` here would pull the popover back into the flow.
+ * `.menu-h { font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+ * font-weight:600; padding:8px 12px 4px }`: a group's name over its rows. It
+ * reads in the muted ink, since the dim ink fails contrast on the ground.
  */
-export const popoverSurface =
-  "isolate rounded-2xl bg-app-raised-bg/70 text-app-raised-fg shadow-2xl ring-1 ring-foreground/5 dark:ring-foreground/10 " +
-  "before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150";
+export const menuLabel =
+  "px-3 pt-2 pb-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-menu-group-label-fg";
+
+/**
+ * A popover or hint that floats over the page, on the same surface as a menu.
+ * It sets no position. The caller adds `absolute` or `fixed`; Tailwind emits
+ * `relative` after both, so a `relative` here would pull the popover back
+ * into the flow.
+ */
+export const popoverSurface = floatingSurface;
 
 /**
  * `.panel { background:var(--panel); border:1px solid var(--border);

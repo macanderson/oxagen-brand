@@ -1416,6 +1416,11 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* The floating surface's edge and shadow (#244). Each theme block sets
+     both, so a dark theme from the system setting gets them too, where a
+     `dark:` class would not. */
+  --color-pop-ring: var(--pop-ring);
+  --shadow-pop: var(--ui-shadow-pop);
 }
 
 @layer base {
@@ -1469,6 +1474,11 @@
        --tab-on, and the rest read in --tab-fg (#242). */
     --tab-fg: var(--body);
     --tab-on: var(--card);
+    /* Menus, popovers, the command menu, dialogs, and toasts float on a faint
+       ring and a deep shadow in place of a border (#244). */
+    --pop-ring: color-mix(in srgb, var(--foreground) 5%, transparent);
+    --ui-shadow-pop: 0 25px 50px -12px
+      color-mix(in srgb, var(--ox-ink) 25%, transparent);
   }
 
   .dark {
@@ -1490,6 +1500,8 @@
     --app-panel-bg: var(--ink);
     --tab-fg: var(--muted);
     --tab-on: color-mix(in srgb, var(--hl), var(--rule));
+    --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
+    --ui-shadow-pop: 0 25px 50px -12px rgb(0 0 0 / 0.6);
   }
 
   /* Match explicit dark mode before a theme script runs. */
@@ -1509,6 +1521,8 @@
       --app-panel-bg: var(--ink);
       --tab-fg: var(--muted);
       --tab-on: color-mix(in srgb, var(--hl), var(--rule));
+      --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
+      --ui-shadow-pop: 0 25px 50px -12px rgb(0 0 0 / 0.6);
     }
   }
 }

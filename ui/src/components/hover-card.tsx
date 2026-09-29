@@ -2,15 +2,17 @@
 // Moved from oxagen apps/app/src/ui/hover-card.tsx at ddb85803.
 // shadcn's base-maia hover card (ADR-221), written from
 // https://ui.shadcn.com/r/styles/base-maia/hover-card.json. Two changes from
-// the registry: the popup fills with the app's raised colour at 70% over a
-// blur, as every popup does, and the content can take an `anchor`, so one
-// card can show beside any element without a trigger of its own
-// (features/shell/cell-overflow.tsx).
+// the registry: the popup is the kit's one floating surface (oxagen-roadmap
+// #244), the popover fill at 70% over a blur that a menu and a popover share,
+// and the content can take an `anchor`, so one card can show beside any
+// element without a trigger of its own (features/shell/cell-overflow.tsx).
+//
+// The registry animated with tw-animate classes that nothing in the kit
+// defines. The card now fades and lifts through the Base UI starting and
+// ending styles, as every other kit overlay does.
 import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card";
 import { cn } from "../lib/utils";
-
-const popoverSurface =
-  "relative isolate rounded-2xl bg-app-raised-bg/70 text-app-raised-fg shadow-2xl ring-1 ring-foreground/5 dark:ring-foreground/10 before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150";
+import { popoverSurface } from "./control-styles";
 
 function HoverCard({ ...props }: PreviewCardPrimitive.Root.Props) {
   return <PreviewCardPrimitive.Root data-slot="hover-card" {...props} />;
@@ -50,7 +52,10 @@ function HoverCardContent({
           data-slot="hover-card-content"
           className={cn(
             popoverSurface,
-            "z-50 w-72 origin-(--transform-origin) p-4 text-sm outline-hidden duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+            // Prose sits 12px by 16px in: the surface's 4px inset plus the
+            // 8px by 12px a menu row keeps.
+            "z-50 w-72 px-4 py-3 text-sm outline-hidden",
+            "origin-(--transform-origin) transition-[opacity,transform,translate,scale] duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[starting-style]:scale-[0.97] data-[ending-style]:opacity-0 data-[ending-style]:scale-[0.97]",
             className,
           )}
           {...props}

@@ -130,8 +130,9 @@ const ROOT_CLASS = cn(
   "h-[var(--height)] data-[expanded]:h-[var(--toast-height)]",
   "[transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))]",
   "data-[expanded]:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))]",
-  // The translucent popover surface, the same recipe the select popup uses.
-  "isolate rounded-2xl bg-menu-popup-bg/70 text-menu-popup-fg shadow-2xl ring-1 ring-foreground/5 outline-none dark:ring-foreground/10",
+  // The translucent popover surface, the same recipe the select popup uses:
+  // a 16px corner, the faint ring, and the deep shadow.
+  "isolate rounded-3xl bg-menu-popup-bg/70 text-menu-popup-fg shadow-pop ring-1 ring-pop-ring outline-none",
   "before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150",
   // A bridge under each toast keeps the stack open while the pointer crosses the gap.
   "after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",

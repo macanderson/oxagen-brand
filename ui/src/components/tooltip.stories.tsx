@@ -18,8 +18,8 @@ export const Default: Story = {
   render: () => (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger render={<Button variant="outline">Hover me</Button>} />
-        <TooltipPopup>Add to library</TooltipPopup>
+        <TooltipTrigger render={<Button variant="outline">Pause</Button>} />
+        <TooltipPopup>Pause the run after this step</TooltipPopup>
       </Tooltip>
     </TooltipProvider>
   ),
@@ -32,11 +32,13 @@ export const Default: Story = {
  */
 export const Open: Story = {
   render: () => (
-    <TooltipProvider>
-      <Tooltip defaultOpen>
-        <TooltipTrigger render={<Button variant="outline">Hover me</Button>} />
-        <TooltipPopup>Add to library</TooltipPopup>
-      </Tooltip>
-    </TooltipProvider>
+    <div className="pt-12">
+      <TooltipProvider>
+        <Tooltip defaultOpen>
+          <TooltipTrigger render={<Button variant="outline">Pause</Button>} />
+          <TooltipPopup>Pause the run after this step</TooltipPopup>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
   ),
 };

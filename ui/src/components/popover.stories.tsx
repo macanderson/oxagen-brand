@@ -13,54 +13,44 @@ import { Label } from "./label";
 const meta = {
   title: "Overlays/Popover",
   component: Popover,
+  parameters: { layout: "centered" },
 } satisfies Meta<typeof Popover>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => (
-    <Popover>
-      <PopoverTrigger
-        render={<Button variant="outline">Open popover</Button>}
-      />
+function SpendCap({ defaultOpen }: { defaultOpen?: boolean }) {
+  return (
+    <Popover defaultOpen={defaultOpen}>
+      <PopoverTrigger render={<Button variant="outline">Spend cap</Button>} />
       <PopoverPopup className="w-72">
-        <PopoverTitle>Dimensions</PopoverTitle>
-        <PopoverDescription>Set the layout dimensions.</PopoverDescription>
-        <div className="mt-3 flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <Label htmlFor="width" className="w-16">
-              Width
-            </Label>
-            <Input id="width" defaultValue="100%" size="sm" />
-          </div>
+        <PopoverTitle>Daily spend cap</PopoverTitle>
+        <PopoverDescription>
+          Runs pause when the workspace spends this much in a day.
+        </PopoverDescription>
+        <div className="mt-3 flex items-center gap-2">
+          <Label htmlFor={defaultOpen ? "cap-open" : "cap"} className="w-16">
+            USD
+          </Label>
+          <Input
+            id={defaultOpen ? "cap-open" : "cap"}
+            defaultValue="40.00"
+            size="sm"
+          />
         </div>
       </PopoverPopup>
     </Popover>
-  ),
+  );
+}
+
+export const Default: Story = {
+  render: () => <SpendCap />,
 };
 
-/**
- * Open by default, so the popup, title, description and field row are visible
- * in the catalog and verifiable by design-sync's oracle.
- */
+/** Open by default, so the surface, title, description and field show. */
 export const Open: Story = {
   render: () => (
-    <Popover defaultOpen>
-      <PopoverTrigger
-        render={<Button variant="outline">Open popover</Button>}
-      />
-      <PopoverPopup className="w-72">
-        <PopoverTitle>Dimensions</PopoverTitle>
-        <PopoverDescription>Set the layout dimensions.</PopoverDescription>
-        <div className="mt-3 flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <Label htmlFor="width-open" className="w-16">
-              Width
-            </Label>
-            <Input id="width-open" defaultValue="100%" size="sm" />
-          </div>
-        </div>
-      </PopoverPopup>
-    </Popover>
+    <div className="min-h-56">
+      <SpendCap defaultOpen />
+    </div>
   ),
 };

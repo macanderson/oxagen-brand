@@ -18,7 +18,7 @@ import { cn } from "../lib/utils";
 
 /** The track: a bordered row whose 1px gaps draw the dividers. */
 const toggleGroupClass =
-  "inline-flex max-w-full flex-wrap gap-px overflow-hidden rounded-lg border border-border bg-border shadow-[0_1px_2px_rgb(0_0_0/0.05)]";
+  "inline-flex max-w-full flex-wrap gap-px overflow-hidden rounded-lg border border-border bg-border shadow-xs";
 
 /** One button in the track. Pressed reads as the highlight ground and a heavier weight. */
 const toggleGroupItemClass = cn(
