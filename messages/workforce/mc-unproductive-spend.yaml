@@ -1,0 +1,28 @@
+id: mc-unproductive-spend
+brand: oxagen
+kind: card
+order: 17
+title: See the spend that bought no progress.
+short: Find the repeated calls, idle waits, and oversized models that added cost without moving the work.
+long: Oxagen reads the recorded requests for steps that cost money and moved nothing. A status poll returns the same answer call after call. A cache expires while a parent run waits on its child. A model class larger than the job answers a lookup. Each finding names the requests behind it and the rate that priced them. Unproductive spend shows as its own line beside the total, and it counts whole recorded requests only.
+cta: Open an unproductive spend finding
+audience:
+- finance
+- engineering
+- operator
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: candidate
+release: held
+gate:
+- unproductive-spend
+qualifier: Counts whole recorded requests for runs routed through Oxagen. Savings are stated only for measured workloads under stated conditions.
+evidence: 'Product owner: show one finding of each kind with the requests behind it, the rate source, and the rule that flagged it. Finance owner: reconcile the unproductive total to the recorded spend and name the exclusions. Make no savings claim without the measured workload.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '02'
+- '06'
+notes: 'Source: finding-wasted-spend.html in this kit. The spend review of 2026-09-27 decided four things behind this line. A repeated step is priced at the request that carried it. A no-progress limit runs in observe mode by default. Each tool provider and steering record shows a weekly price. The headline total counts only whole requests. Unproductive spend replaces wasted spend as the term.'

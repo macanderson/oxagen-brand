@@ -1,0 +1,29 @@
+id: mc-operator-ranking
+brand: oxagen
+kind: card
+order: 18
+title: Rank operators by unproductive spend.
+short: Show a manager which operators spend the most on steps that bought no progress.
+long: A manager needs to know which operators spend the most on steps that bought no progress. Spend ranks operators by that one measured figure. Beside each name sit the unproductive share of their spend, the work orders they finished, and the share of their spend filed under no work item. Each figure opens to the requests it came from. The ranking reports a measurement. It does not grade the person.
+cta: Open the operator ranking
+audience:
+- finance
+- operator
+- engineering
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: candidate
+release: held
+gate:
+- operator-review
+- unproductive-spend
+qualifier: Ranked on recorded requests for runs routed through Oxagen. Each figure opens to its rows.
+evidence: 'Product owner: show the ranking with one operator''s figure opened to the requests behind it, and each figure''s definition beside its column. Finance owner: reconcile the ranked totals to the recorded spend and name the exclusions.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '02'
+- '07'
+notes: 'Mac decided on 2026-09-27 that Spend ranks operators by unproductive spend for managers. His words: managers need to know who is wasting the most money. The ranking is decided. The figures beside each name and a setting that shows pseudonyms in place of names are proposals.'

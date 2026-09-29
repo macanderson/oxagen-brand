@@ -1,0 +1,30 @@
+id: mc-operator-productivity
+brand: oxagen
+kind: card
+order: 19
+title: Measure what each operator's agents finished.
+short: Read the work orders each operator's agents finished, what each cost, and the share of spend that bought no progress.
+long: More agents per operator is better when finished work grows and unproductive spend does not. The operator metrics show both sides. Read the work orders done, the cost per done work order, the agents in flight, and how many times the operator stepped in per done work order. The unproductive share sits beside them as the check on growth. A work order counts as done when the checks in each item's definition of done held.
+cta: Read an operator's metrics
+audience:
+- operator
+- finance
+- engineering
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: candidate
+release: held
+gate:
+- operator-review
+- dod
+qualifier: Counts work orders whose definitions of done held, on runs routed through Oxagen. A held check means the specified checks held, and the team decides whether those checks are enough.
+evidence: 'Product owner: show one operator''s metrics with each figure''s definition and the work orders behind it, and one work order counted as done with the checks that held.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '02'
+- '07'
+notes: 'Proposal from finding-wasted-spend.html. Mac asked on 2026-09-27 for a measure of operator productivity: more agents should mean more output, so long as unproductive spend does not rise. Applies to bounded work with a definition of done, per finding 01. It is not a lead line.'

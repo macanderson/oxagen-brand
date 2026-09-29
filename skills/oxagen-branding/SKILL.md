@@ -91,7 +91,7 @@ Full guidance, with before and after pairs, is in `references/voice.md`.
 - [ ] No savings claim without the measured workload and conditions
 - [ ] No SOC 2 attestation claim unless the actual report supports it
 - [ ] Completion is presented as optional, for bounded tasks, and never as the lead
-- [ ] An operator review line reports what the record shows, with each habit's definition beside it, and does not grade the person
+- [ ] An operator review line reports what the record shows, with each habit's definition beside it, and does not grade the person. The one ranking of people is the manager's ranking of operators by unproductive spend (decided 2026-09-27)
 - [ ] Short forms keep the qualifiers of their longer versions
 - [ ] Buyer quotes are labelled hypothetical unless an attributed customer approved them
 - [ ] No traction numbers, partner counts, or setup durations without dated evidence

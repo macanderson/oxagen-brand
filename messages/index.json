@@ -2,14 +2,14 @@
   "source": "messages/",
   "generated_by": "build/messages.py",
   "counts": {
-    "entries": 253,
+    "entries": 258,
     "status": {
       "approved": 138,
-      "candidate": 87,
+      "candidate": 92,
       "retired": 28
     },
     "release": {
-      "held": 25,
+      "held": 30,
       "launch": 200
     },
     "group": {
@@ -18,7 +18,7 @@
       "entry-points": 4,
       "access": 9,
       "proof": 16,
-      "workforce": 16,
+      "workforce": 21,
       "definition-of-done": 5,
       "witness": 9,
       "identity-equipment": 5,
@@ -2460,6 +2460,81 @@
       "path": "messages/workforce/mc-mandates.yaml"
     },
     {
+      "id": "mc-operator-productivity",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 19,
+      "title": "Measure what each operator's agents finished.",
+      "short": "Read the work orders each operator's agents finished, what each cost, and the share of spend that bought no progress.",
+      "long": "More agents per operator is better when finished work grows and unproductive spend does not. The operator metrics show both sides. Read the work orders done, the cost per done work order, the agents in flight, and how many times the operator stepped in per done work order. The unproductive share sits beside them as the check on growth. A work order counts as done when the checks in each item's definition of done held.",
+      "cta": "Read an operator's metrics",
+      "audience": [
+        "operator",
+        "finance",
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "operator-review",
+        "dod"
+      ],
+      "qualifier": "Counts work orders whose definitions of done held, on runs routed through Oxagen. A held check means the specified checks held, and the team decides whether those checks are enough.",
+      "evidence": "Product owner: show one operator's metrics with each figure's definition and the work orders behind it, and one work order counted as done with the checks that held.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "02",
+        "07"
+      ],
+      "notes": "Proposal from finding-wasted-spend.html. Mac asked on 2026-09-27 for a measure of operator productivity: more agents should mean more output, so long as unproductive spend does not rise. Applies to bounded work with a definition of done, per finding 01. It is not a lead line.",
+      "group": "workforce",
+      "path": "messages/workforce/mc-operator-productivity.yaml"
+    },
+    {
+      "id": "mc-operator-ranking",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 18,
+      "title": "Rank operators by unproductive spend.",
+      "short": "Show a manager which operators spend the most on steps that bought no progress.",
+      "long": "A manager needs to know which operators spend the most on steps that bought no progress. Spend ranks operators by that one measured figure. Beside each name sit the unproductive share of their spend, the work orders they finished, and the share of their spend filed under no work item. Each figure opens to the requests it came from. The ranking reports a measurement. It does not grade the person.",
+      "cta": "Open the operator ranking",
+      "audience": [
+        "finance",
+        "operator",
+        "engineering"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "operator-review",
+        "unproductive-spend"
+      ],
+      "qualifier": "Ranked on recorded requests for runs routed through Oxagen. Each figure opens to its rows.",
+      "evidence": "Product owner: show the ranking with one operator's figure opened to the requests behind it, and each figure's definition beside its column. Finance owner: reconcile the ranked totals to the recorded spend and name the exclusions.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "07"
+      ],
+      "notes": "Mac decided on 2026-09-27 that Spend ranks operators by unproductive spend for managers. His words: managers need to know who is wasting the most money. The ranking is decided. The figures beside each name and a setting that shows pseudonyms in place of names are proposals.",
+      "group": "workforce",
+      "path": "messages/workforce/mc-operator-ranking.yaml"
+    },
+    {
       "id": "mc-pause-revoke",
       "brand": "oxagen",
       "kind": "card",
@@ -2669,6 +2744,115 @@
       "notes": "Launch card 7.",
       "group": "workforce",
       "path": "messages/workforce/mc-spend-attribution.yaml"
+    },
+    {
+      "id": "mc-unassigned-spend",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 21,
+      "title": "See the spend no one filed under the work.",
+      "short": "Find the tokens spent on runs with no work item behind them.",
+      "long": "Each recorded run belongs to a work order. A run started outside Oxagen gets a direct work order of its own. When that work order has no work item, its spend counts as unassigned. Oxagen shows unassigned spend as its own line, apart from unproductive spend, by operator, agent, and workspace, so a manager can ask what the work was.",
+      "cta": "Open unassigned spend",
+      "audience": [
+        "finance",
+        "operator",
+        "engineering"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "work-orders"
+      ],
+      "qualifier": "Counts recorded runs routed through Oxagen.",
+      "evidence": "Product owner: show one direct work order with no work item and the runs and requests behind its spend. Finance owner: reconcile unassigned spend to the recorded total and name the exclusions.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "06"
+      ],
+      "notes": "Mac asked on 2026-09-27 for metrics on tokens spent without a work assignment. Decision D2 of the spend review gives every run a parent work order, so spend with no work item shows as its own figure. The figure is a proposal.",
+      "group": "workforce",
+      "path": "messages/workforce/mc-unassigned-spend.yaml"
+    },
+    {
+      "id": "mc-unproductive-spend",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 17,
+      "title": "See the spend that bought no progress.",
+      "short": "Find the repeated calls, idle waits, and oversized models that added cost without moving the work.",
+      "long": "Oxagen reads the recorded requests for steps that cost money and moved nothing. A status poll returns the same answer call after call. A cache expires while a parent run waits on its child. A model class larger than the job answers a lookup. Each finding names the requests behind it and the rate that priced them. Unproductive spend shows as its own line beside the total, and it counts whole recorded requests only.",
+      "cta": "Open an unproductive spend finding",
+      "audience": [
+        "finance",
+        "engineering",
+        "operator"
+      ],
+      "clause": "budget",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "unproductive-spend"
+      ],
+      "qualifier": "Counts whole recorded requests for runs routed through Oxagen. Savings are stated only for measured workloads under stated conditions.",
+      "evidence": "Product owner: show one finding of each kind with the requests behind it, the rate source, and the rule that flagged it. Finance owner: reconcile the unproductive total to the recorded spend and name the exclusions. Make no savings claim without the measured workload.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "02",
+        "06"
+      ],
+      "notes": "Source: finding-wasted-spend.html in this kit. The spend review of 2026-09-27 decided four things behind this line. A repeated step is priced at the request that carried it. A no-progress limit runs in observe mode by default. Each tool provider and steering record shows a weekly price. The headline total counts only whole requests. Unproductive spend replaces wasted spend as the term.",
+      "group": "workforce",
+      "path": "messages/workforce/mc-unproductive-spend.yaml"
+    },
+    {
+      "id": "mc-work-order-metrics",
+      "brand": "oxagen",
+      "kind": "card",
+      "order": 20,
+      "title": "Read what each work order cost to finish.",
+      "short": "See the done rate, first-pass rate, cost and time to done, rework spend, and abandoned spend.",
+      "long": "A work order carries a definition of done, so Oxagen can count what finished and what it cost. Read the done rate, the share done on the first pass, and the cost and time to done. See the spend on rework after a failed check, the spend on work orders closed without finishing, and how often done work orders reopen. Each figure opens to the runs and requests behind it.",
+      "cta": "Read a work order's metrics",
+      "audience": [
+        "operator",
+        "finance",
+        "engineering"
+      ],
+      "clause": "record",
+      "surfaces": [
+        "product-page",
+        "feature-cards"
+      ],
+      "status": "candidate",
+      "release": "held",
+      "gate": [
+        "work-orders",
+        "dod"
+      ],
+      "qualifier": "For work orders with a definition of done, on runs routed through Oxagen. A held check means the specified checks held.",
+      "evidence": "Product owner: show one work order with each figure computed from its runs and requests, and each figure's definition beside it.",
+      "owner": "product owner",
+      "review_by": "2026-10-15",
+      "findings": [
+        "01",
+        "02"
+      ],
+      "notes": "Proposal from finding-wasted-spend.html. Mac asked on 2026-09-27 for the metrics Oxagen tracks once work orders carry a deterministic definition of done. Applies to bounded work only, per finding 01.",
+      "group": "workforce",
+      "path": "messages/workforce/mc-work-order-metrics.yaml"
     },
     {
       "id": "momentum-drive",
@@ -3068,7 +3252,7 @@
         "06",
         "07"
       ],
-      "notes": "The entry point for the rate job, and the human half of the AI bill. Held until the operator review ships. The habits are facts from the record with their definitions beside them, never a score.",
+      "notes": "The entry point for the rate job, and the human half of the AI bill. Held until the operator review ships. The habits are facts from the record with their definitions beside them, not a score. Mac decided on 2026-09-27 that managers also see operators ranked by unproductive spend, in mc-operator-ranking. That ranking is the one place a line ranks people.",
       "group": "entry-points",
       "path": "messages/entry-points/operator-review-headline.yaml"
     },
@@ -5219,7 +5403,7 @@
         "06",
         "07"
       ],
-      "notes": "Candidate headline for the operations section, alongside the approved line. It pairs the two halves of the job, the agent and the person.",
+      "notes": "Candidate headline for the operations section, alongside the approved line. It pairs the two halves of the job, the agent and the person. The habits stay measurements with their definitions. The manager's ranking of operators by unproductive spend, decided 2026-09-27, has its own line in mc-operator-ranking.",
       "group": "sections",
       "path": "messages/sections/section-coach-operators.yaml"
     },

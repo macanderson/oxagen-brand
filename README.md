@@ -67,6 +67,7 @@ lockup; its asterisk is already in the word.
 ```
 playbook.html      the document. Read this first.
 message-bank.html  generated from messages/: every line, pitch, card, ad, and rule, with its status.
+finding-wasted-spend.html  the unproductive spend detectors and the 2026-09-27 spend decisions, copied from oxagen-roadmap. Written by hand.
 messages/          the message registry: one YAML file per line, schema.json, findings.yaml, index.json (generated)
 build/             color.py · typeset.py · fonts.py · pagecss.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against

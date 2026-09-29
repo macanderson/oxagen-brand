@@ -1,0 +1,28 @@
+id: mc-unassigned-spend
+brand: oxagen
+kind: card
+order: 21
+title: See the spend no one filed under the work.
+short: Find the tokens spent on runs with no work item behind them.
+long: Each recorded run belongs to a work order. A run started outside Oxagen gets a direct work order of its own. When that work order has no work item, its spend counts as unassigned. Oxagen shows unassigned spend as its own line, apart from unproductive spend, by operator, agent, and workspace, so a manager can ask what the work was.
+cta: Open unassigned spend
+audience:
+- finance
+- operator
+- engineering
+clause: budget
+surfaces:
+- product-page
+- feature-cards
+status: candidate
+release: held
+gate:
+- work-orders
+qualifier: Counts recorded runs routed through Oxagen.
+evidence: 'Product owner: show one direct work order with no work item and the runs and requests behind its spend. Finance owner: reconcile unassigned spend to the recorded total and name the exclusions.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '02'
+- '06'
+notes: 'Mac asked on 2026-09-27 for metrics on tokens spent without a work assignment. Decision D2 of the spend review gives every run a parent work order, so spend with no work item shows as its own figure. The figure is a proposal.'

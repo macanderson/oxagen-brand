@@ -32,4 +32,4 @@ findings:
 - '02'
 - '06'
 - '07'
-notes: The entry point for the rate job, and the human half of the AI bill. Held until the operator review ships. The habits are facts from the record with their definitions beside them, never a score.
+notes: The entry point for the rate job, and the human half of the AI bill. Held until the operator review ships. The habits are facts from the record with their definitions beside them, not a score. Mac decided on 2026-09-27 that managers also see operators ranked by unproductive spend, in mc-operator-ranking. That ranking is the one place a line ranks people.
