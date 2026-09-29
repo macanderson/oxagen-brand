@@ -2,7 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "redirects": [{ "source": "/storybook", "destination": "/storybook/", "permanent": false }],
-  "rewrites": [{ "source": "/", "destination": "/playbook" }],
+  "rewrites": [
+    { "source": "/", "destination": "/playbook" },
+    { "source": "/favicon.ico", "destination": "/icons/oxagen-favicon.ico" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

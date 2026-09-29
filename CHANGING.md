@@ -51,14 +51,16 @@ Edit `ui/src/components/`, and give each state it draws a story. Reskin through 
 
 **brand.oxagen.cloud** deploys from every push to `main`, after the checks pass.
 
-**Frontends** copy the files they use from this repo through their own sync scripts, and each one's CI fails when its copy has drifted from `main`. After a merge here, run the frontend's sync, commit what it writes, and open a PR there:
+**Frontends** each copy the files they use through their own sync script. `consumers.json` lists every repo, its sync command, and its live surfaces. After a push to `main` passes every check, the `fan-out` workflow runs each repo's sync against that commit, installs the current skill stub, and opens a PR in the repo when anything changed. The PR carries the `agent-monitored-pr` label and merges on its own once the repo's required checks pass, where the repo allows auto-merge. Each repo's `brand-drift.yml` also fails its CI whenever its copy has fallen behind `main`, so a missed sync cannot pass unnoticed.
 
-| Surface | Repo | Sync | Deploy |
-|---|---|---|---|
-| oxagen.sh, oxagen.app, docs.oxagen.app | `oxagen` | `node tools/scripts/sync-brand-assets.mjs` | `pipeline.yml` on merge |
-| stella website | `stella` | `node scripts/sync-brand-assets.mjs` | see the stella repo |
-| roadmap.oxagen.cloud | `oxagen-roadmap` | see its README | `deploy-production.yml` on merge |
-| gtm.oxagen.cloud | `oxagen-gtm` | `node scripts/build-data.mjs` | by hand, `vercel deploy --prod` |
-| survey.oxagen.app | `oxagen-survey` | see its README | by hand, `vercel deploy --prod` |
+| Surface | Repo | Deploy after the sync PR merges |
+|---|---|---|
+| oxagen.sh, oxagen.app, docs.oxagen.app | `oxagen` | `pipeline.yml` |
+| stella website | `stella` | see the stella repo |
+| roadmap.oxagen.cloud | `oxagen-roadmap` | `deploy-production.yml` |
+| gtm.oxagen.cloud | `oxagen-gtm` | by hand: `vercel deploy --prod` |
+| survey.oxagen.app | `oxagen-survey` | by hand: `vercel deploy --prod` |
 
-Issue #28 replaces the manual step: the files publish to npm as `@oxagen/brand`, and a merge here opens an update PR in every frontend, which merges when its CI passes.
+To add a frontend, give its repo a sync script with `--brand <path>` and `--check`, commit the stub with `skills/install.sh --project`, add `brand-drift.yml`, and add the repo to `consumers.json`.
+
+**Conformance.** The `conformance` workflow runs `build/conformance.py` every day and on demand. It checks each repo's stub and drift workflow, and each live surface's icons, golds, faces, retired lines, dashes, and exclamation points. When anything differs, it keeps one open issue labelled `brand-conformance` with the report, and it closes that issue when everything conforms again. Run it by hand with `python3 build/conformance.py`.
