@@ -9,6 +9,7 @@
 // The element carries `data-hover-card`, so the app's page-wide CellOverflow
 // skips it and one value never shows two cards.
 import * as React from "react";
+import { composeRefs } from "../lib/compose-refs";
 import { HoverCard, HoverCardContent } from "./hover-card";
 import { cn } from "../lib/utils";
 
@@ -91,12 +92,8 @@ const TruncatedCell = React.forwardRef<HTMLElement, TruncatedCellProps>(
     const [stop, setStop] = React.useState(false);
     const [clipped, setClipped] = React.useState(false);
 
-    const setRefs = React.useCallback(
-      (node: HTMLElement | null) => {
-        nodeRef.current = node;
-        if (typeof forwardedRef === "function") forwardedRef(node);
-        else if (forwardedRef) forwardedRef.current = node;
-      },
+    const setRefs = React.useMemo(
+      () => composeRefs(nodeRef, forwardedRef),
       [forwardedRef],
     );
 
