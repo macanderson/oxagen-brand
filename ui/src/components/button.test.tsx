@@ -22,7 +22,24 @@ describe("buttonVariants", () => {
     const cls = buttonVariants({});
     expect(cls).toContain("inline-flex");
     expect(cls).toContain("items-center");
-    expect(cls).toContain("rounded-md");
+    expect(cls).toContain("rounded-4xl");
+  });
+
+  it("keeps the pill radius at every size", () => {
+    for (const size of [
+      "xs",
+      "sm",
+      "default",
+      "lg",
+      "xl",
+      "icon",
+      "icon-sm",
+      "icon-lg",
+    ] as const) {
+      const cls = buttonVariants({ size });
+      expect(cls).toContain("rounded-4xl");
+      expect(cls).not.toMatch(/\brounded-(md|lg|sm|xl)\b/);
+    }
   });
 
   it("applies the default (primary) variant token classes when no variant is specified", () => {
@@ -93,47 +110,48 @@ describe("buttonVariants", () => {
   it("composes the gradient variant with sizes", () => {
     const cls = buttonVariants({ variant: "gradient", size: "lg" });
     expect(cls).toContain("bg-button-primary-bg");
-    expect(cls).toContain("h-9");
-    expect(cls).toContain("px-6");
+    expect(cls).toContain("h-10");
+    expect(cls).toContain("px-5");
   });
 
-  it("applies the compact coss default size (32px / h-8)", () => {
+  it("applies the maia default size (36px, h-9)", () => {
     const cls = buttonVariants({ size: "default" });
-    expect(cls).toContain("h-8");
+    expect(cls).toContain("h-9");
+    expect(cls).toContain("px-4");
   });
 
   it("applies xs size classes", () => {
     const cls = buttonVariants({ size: "xs" });
-    expect(cls).toContain("h-6");
+    expect(cls).toContain("h-7");
     expect(cls).toContain("text-xs");
   });
 
   it("applies sm size classes", () => {
     const cls = buttonVariants({ size: "sm" });
-    expect(cls).toContain("h-7");
+    expect(cls).toContain("h-8");
     expect(cls).toContain("text-xs");
   });
 
   it("applies lg size classes", () => {
     const cls = buttonVariants({ size: "lg" });
-    expect(cls).toContain("h-9");
-    expect(cls).toContain("px-6");
+    expect(cls).toContain("h-10");
+    expect(cls).toContain("px-5");
   });
 
   it("applies xl size classes", () => {
     const cls = buttonVariants({ size: "xl" });
-    expect(cls).toContain("h-10");
-    expect(cls).toContain("px-8");
+    expect(cls).toContain("h-11");
+    expect(cls).toContain("px-6");
   });
 
   it("applies icon size classes", () => {
     const cls = buttonVariants({ size: "icon" });
-    expect(cls).toContain("size-8");
+    expect(cls).toContain("size-9");
   });
 
   it("applies icon-sm and icon-lg size classes", () => {
-    expect(buttonVariants({ size: "icon-sm" })).toContain("size-7");
-    expect(buttonVariants({ size: "icon-lg" })).toContain("size-9");
+    expect(buttonVariants({ size: "icon-sm" })).toContain("size-8");
+    expect(buttonVariants({ size: "icon-lg" })).toContain("size-10");
   });
 
   it("merges a custom className without losing variant classes", () => {
@@ -229,7 +247,7 @@ describe("Button — render", () => {
 
   it("applies size class to the rendered button", () => {
     const { getByRole } = render(<Button size="lg">Large</Button>);
-    expect(getByRole("button", { name: "Large" }).className).toContain("h-9");
+    expect(getByRole("button", { name: "Large" }).className).toContain("h-10");
   });
 
   it("merges extra className", () => {

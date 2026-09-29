@@ -7,7 +7,7 @@
 
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { Database } from "lucide-react";
+import { DatabaseIcon } from "@phosphor-icons/react";
 import { EmptyState } from "./empty-state";
 
 afterEach(cleanup);
@@ -30,7 +30,7 @@ describe("EmptyState — render", () => {
 
   it("renders the icon inside a muted tile", () => {
     const { container } = render(
-      <EmptyState icon={<Database />} title="Empty" />,
+      <EmptyState icon={<DatabaseIcon aria-hidden="true" />} title="Empty" />,
     );
     const tile = container.querySelector(".bg-muted");
     expect(tile).not.toBeNull();

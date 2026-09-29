@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { Search, X } from "lucide-react";
+import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 import { Input, type InputProps } from "./input";
 
@@ -23,7 +23,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     const showClear = Boolean(onClear) && value != null && value !== "";
     return (
       <div className={cn("relative", containerClassName)}>
-        <Search
+        <MagnifyingGlassIcon
           aria-hidden="true"
           className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
         />
@@ -45,7 +45,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
             onClick={onClear}
             className="absolute right-1.5 top-1/2 flex size-5 -translate-y-1/2 items-center justify-center rounded-sm text-muted-foreground transition-colors duration-[var(--motion-micro)] hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <X aria-hidden="true" className="size-3.5" />
+            <XIcon aria-hidden="true" className="size-3.5" />
           </button>
         )}
       </div>

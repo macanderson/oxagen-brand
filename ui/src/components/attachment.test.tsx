@@ -7,14 +7,18 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  ATTACHMENT_ACCEPT,
   Attachment,
   AttachmentAction,
   AttachmentActions,
+  AttachmentCard,
   AttachmentContent,
   AttachmentDescription,
   AttachmentGroup,
   AttachmentMedia,
   AttachmentTitle,
+  attachmentKind,
+  formatAttachmentSize,
 } from "./attachment";
 
 afterEach(cleanup);
@@ -105,5 +109,110 @@ describe("Attachment", () => {
     expect(remove).toHaveAttribute("type", "button");
     fireEvent.click(remove);
     expect(onSubmit).not.toHaveBeenCalled();
+  });
+});
+
+describe("attachmentKind", () => {
+  it.each([
+    ["q3-incident-review.pdf", "PDF"],
+    ["latency-dashboard.png", "PNG"],
+    ["refund-runbook.md", "Markdown"],
+    ["notes.markdown", "Markdown"],
+    ["photo.jpg", "JPEG"],
+    ["deploy.yml", "YAML"],
+    ["Makefile", "File"],
+  ])("reads %s as %s", (name, kind) => {
+    expect(attachmentKind(name)).toBe(kind);
+  });
+});
+
+describe("formatAttachmentSize", () => {
+  it("shows one decimal place in megabytes from 1 MB up", () => {
+    expect(formatAttachmentSize(2516582)).toBe("2.4 MB");
+    expect(formatAttachmentSize(1048576)).toBe("1.0 MB");
+  });
+
+  it("shows whole kilobytes below 1 MB and never less than 1 KB", () => {
+    expect(formatAttachmentSize(348160)).toBe("340 KB");
+    expect(formatAttachmentSize(12)).toBe("1 KB");
+  });
+});
+
+describe("ATTACHMENT_ACCEPT", () => {
+  it("lists every kind the card has a glyph for", () => {
+    expect(ATTACHMENT_ACCEPT.split(",")).toEqual(
+      expect.arrayContaining([".pdf", ".png", ".md", ".yaml", ".sh"]),
+    );
+  });
+});
+
+describe("AttachmentCard", () => {
+  it("shows the name, then the kind and the size as two elements", () => {
+    const { container } = render(
+      <AttachmentCard
+        file={{ id: "1", name: "q3-incident-review.pdf", size: 2516582 }}
+      />,
+    );
+    expect(screen.getByText("q3-incident-review.pdf")).toHaveAttribute(
+      "data-slot",
+      "attachment-title",
+    );
+    const description = container.querySelector(
+      '[data-slot="attachment-description"]',
+    );
+    expect(Array.from(description?.children ?? [], (c) => c.textContent)).toEqual(
+      ["PDF", "2.4 MB"],
+    );
+    expect(
+      container.querySelector('[data-slot="attachment-media"] svg'),
+    ).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("reads Uploading, is busy, and shimmers its name while it uploads", () => {
+    const { container } = render(
+      <AttachmentCard
+        file={{ id: "1", name: "refund-runbook.md", size: 9216, state: "uploading" }}
+      />,
+    );
+    const card = container.querySelector('[data-slot="attachment"]');
+    expect(card).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByText("Uploading")).toBeInTheDocument();
+    expect(screen.queryByText("Markdown")).toBeNull();
+    expect(screen.getByText("refund-runbook.md").className).toContain(
+      "group-data-[state=uploading]/attachment:text-shimmer",
+    );
+  });
+
+  it("shows the preview image in the tile when the file has one", () => {
+    const { container } = render(
+      <AttachmentCard
+        file={{
+          id: "1",
+          name: "latency-dashboard.png",
+          size: 348160,
+          previewUrl: "data:image/png;base64,iVBORw0KGgo=",
+        }}
+      />,
+    );
+    const media = container.querySelector('[data-slot="attachment-media"]');
+    expect(media).toHaveAttribute("data-variant", "image");
+    expect(media?.querySelector("img")).toHaveAttribute("alt", "");
+  });
+
+  it("names its remove button after the file and passes the file back", () => {
+    const onRemove = vi.fn();
+    const file = { id: "7", name: "latency-dashboard.png", size: 348160 };
+    render(<AttachmentCard file={file} onRemove={onRemove} />);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Remove latency-dashboard.png" }),
+    );
+    expect(onRemove).toHaveBeenCalledWith(file);
+  });
+
+  it("has no remove button without onRemove (negative)", () => {
+    render(
+      <AttachmentCard file={{ id: "1", name: "refund-runbook.md", size: 9216 }} />,
+    );
+    expect(screen.queryByRole("button")).toBeNull();
   });
 });
