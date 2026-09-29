@@ -19,3 +19,18 @@ fonts/Aeonik*
 # Oxagen: this machine's link to a workspace; never committed.
 .oxagen/workspace.json
 .stella/private/
+
+# The component kit in ui/. Installs, builds, and the design-sync scratch space
+# stay local. CI builds Storybook into ui/storybook-static/ and the deploy job
+# copies it to /storybook/ at the root for Vercel.
+node_modules/
+ui/dist/
+ui/storybook-static/
+ui/design-system/
+/storybook/
+ui/.design-sync/sb-reference/
+ui/.design-sync/learnings/
+ui/.design-sync/.cache/
+ui/.design-sync/previews/
+ui/.design-sync/node_modules/
+ui/.design-sync/*.log

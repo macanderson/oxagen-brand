@@ -1,0 +1,157 @@
+name: ui
+
+# The component kit in ui/. A pull request that touches the kit, the tokens, or
+# the fonts gets a typecheck, the unit tests, a static Storybook, and the
+# design-system bundle, and the last two upload as artifacts. A push to main
+# runs the same jobs and then deploys the whole site, Storybook included, to
+# brand.oxagen.cloud. The deploy runs on every main push, because the Vercel
+# project deploys by CLI only and a playbook change needs a deploy too.
+
+on:
+  pull_request:
+    paths:
+      - "ui/**"
+      - "tokens/**"
+      - "fonts/**"
+      - "vercel.json"
+      - ".vercelignore"
+      - ".github/workflows/ui.yml"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ui-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: ui
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          package_json_file: ui/package.json
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: ui/.node-version
+          cache: pnpm
+          cache-dependency-path: ui/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          package_json_file: ui/package.json
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: ui/.node-version
+          cache: pnpm
+          cache-dependency-path: ui/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:unit
+
+  storybook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          package_json_file: ui/package.json
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: ui/.node-version
+          cache: pnpm
+          cache-dependency-path: ui/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build-storybook
+      - uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: ui/storybook-static/
+          if-no-files-found: error
+          retention-days: 14
+
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          package_json_file: ui/package.json
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: ui/.node-version
+          cache: pnpm
+          cache-dependency-path: ui/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build:design-system
+      # The Claude Design project loads these three paths. A build that drops
+      # one would upload a bundle the project cannot read.
+      - name: Check the bundle
+        run: |
+          for f in components/bundle.js bundle.css index.d.ts; do
+            test -s "design-system/$f" || { echo "::error::design-system/$f is missing or empty."; exit 1; }
+          done
+          grep -q "OxagenUI" design-system/components/bundle.js || { echo "::error::bundle.js does not set window.OxagenUI."; exit 1; }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: design-system-bundle
+          path: ui/design-system/
+          if-no-files-found: error
+          retention-days: 14
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [typecheck, test, storybook, bundle]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://brand.oxagen.cloud
+    defaults:
+      run:
+        working-directory: .
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      # A deploy with no credentials would fail deep inside the Vercel CLI. This
+      # step names the missing secrets instead, and it fails the job so a main
+      # push with no deploy never reads green.
+      - name: Check the Vercel secrets
+        run: |
+          missing=""
+          for name in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Add these repository secrets to deploy brand.oxagen.cloud:$missing"
+            exit 1
+          fi
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: ui/.node-version
+      - name: Deploy to Vercel
+        run: npx --yes vercel@61.0.0 deploy --prod --yes --token "$VERCEL_TOKEN"
