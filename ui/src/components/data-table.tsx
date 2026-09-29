@@ -8,7 +8,11 @@
 // behind it, and the wash on a hovered row. globals.css carries the same rule
 // for every table under the shell, so a caller that draws its own <table>
 // cannot fall off it.
-import type { ReactNode } from "react";
+//
+// A value too wide for its column ends in an ellipsis. Render that cell as
+// `<TruncatedCell as="td">` so a hover or focus shows the whole value.
+import { Children, type ReactNode } from "react";
+import { cn } from "../lib/utils";
 
 type TableColumn = {
   label: string;
@@ -37,13 +41,20 @@ export const headCell =
 export function DataTable({
   label,
   columns,
+  empty,
   children,
 }: {
   /** The table's accessible name, already translated. */
   label: string;
   columns: readonly TableColumn[];
-  children: ReactNode;
+  /**
+   * What the body reads when it has no rows, already translated. It fills one
+   * row across every column. Without it an empty table shows its header only.
+   */
+  empty?: ReactNode;
+  children?: ReactNode;
 }) {
+  const blank = empty !== undefined && Children.toArray(children).length === 0;
   return (
     <div className="min-w-0 overflow-x-auto">
       <table
@@ -65,8 +76,25 @@ export function DataTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border [&>tr]:transition-colors [&>tr:hover]:bg-hl">
-          {children}
+        <tbody
+          className={cn(
+            "divide-y divide-border",
+            !blank &&
+              "[&>tr]:transition-colors [&>tr]:duration-[120ms] [&>tr:hover]:bg-hl",
+          )}
+        >
+          {blank ? (
+            <tr data-slot="table-empty">
+              <td
+                colSpan={columns.length}
+                className="px-3 py-8 text-center text-[13px] text-muted-foreground"
+              >
+                {empty}
+              </td>
+            </tr>
+          ) : (
+            children
+          )}
         </tbody>
       </table>
     </div>

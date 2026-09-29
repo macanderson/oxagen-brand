@@ -1465,6 +1465,10 @@
     --button-default-active-bg: var(--hl);
     /* A tab in a dialog keeps a gold underline. */
     --tab-border-active: var(--gold);
+    /* Page-level tabs sit on a muted track. The selected tab is raised on
+       --tab-on, and the rest read in --tab-fg (#242). */
+    --tab-fg: var(--body);
+    --tab-on: var(--card);
   }
 
   .dark {
@@ -1484,6 +1488,8 @@
     /* The page body is ink in the dark theme. Panels and tiles stay on the
        panel. */
     --app-panel-bg: var(--ink);
+    --tab-fg: var(--muted);
+    --tab-on: color-mix(in srgb, var(--hl), var(--rule));
   }
 
   /* Match explicit dark mode before a theme script runs. */
@@ -1501,6 +1507,8 @@
       --button-disabled-bg: var(--hl);
       --input-disabled-bg: var(--hl);
       --app-panel-bg: var(--ink);
+      --tab-fg: var(--muted);
+      --tab-on: color-mix(in srgb, var(--hl), var(--rule));
     }
   }
 }

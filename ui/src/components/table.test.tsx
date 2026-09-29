@@ -1,13 +1,15 @@
 // @vitest-environment jsdom
 /**
- * table.test.tsx — render tests for the shared Table primitive set.
+ * table.test.tsx: render tests for the shared Table primitive set.
  *
- * Covers: scroll container, density vars, header bar tokens, sticky header,
- * interactive rows, empty row colSpan.
+ * Covers the scroll container, the 560px floor and `narrow`, density vars, the
+ * mockup's header caps, numeric columns, the row wash, the sticky header, the
+ * totals rule, the group row, the empty row colSpan, and axe.
  */
 
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
+import { expectNoAxe } from "../test/expect-no-axe";
 import {
   Table,
   TableBody,
@@ -15,6 +17,7 @@ import {
   TableCell,
   TableEmpty,
   TableFooter,
+  TableGroupRow,
   TableHead,
   TableHeader,
   TableRow,
@@ -29,19 +32,20 @@ function renderTable(tableProps: React.ComponentProps<typeof Table> = {}) {
       <TableHeader data-testid="thead">
         <TableRow>
           <TableHead>Name</TableHead>
-          <TableHead className="text-right">Cost</TableHead>
+          <TableHead numeric>Cost</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
+        <TableGroupRow colSpan={2}>Today</TableGroupRow>
         <TableRow data-testid="row">
           <TableCell>ontology.query</TableCell>
-          <TableCell className="text-right">$1.20</TableCell>
+          <TableCell numeric>$1.20</TableCell>
         </TableRow>
       </TableBody>
       <TableFooter data-testid="tfoot">
         <TableRow>
           <TableCell>Total</TableCell>
-          <TableCell className="text-right">$1.20</TableCell>
+          <TableCell numeric>$1.20</TableCell>
         </TableRow>
       </TableFooter>
     </Table>,
@@ -55,11 +59,27 @@ describe("Table", () => {
     expect(table.parentElement?.className).toContain("overflow-x-auto");
   });
 
+  it("marks the table for the kit's cell rules and sets 13px rows", () => {
+    renderTable();
+    const table = screen.getByRole("table");
+    expect(table).toHaveAttribute("data-slot", "table");
+    expect(table.className).toContain("text-[13px]");
+    expect(table.className).toContain("border-collapse");
+  });
+
+  it("holds a 560px floor from md up, and narrow drops it", () => {
+    renderTable();
+    expect(screen.getByRole("table").className).toContain("md:min-w-[560px]");
+    cleanup();
+    renderTable({ narrow: true });
+    expect(screen.getByRole("table").className).not.toContain("min-w-");
+  });
+
   it("applies the default density padding vars", () => {
     renderTable();
-    expect(screen.getByRole("table").className).toContain(
-      "[--table-pad-y:0.625rem]",
-    );
+    const table = screen.getByRole("table");
+    expect(table.className).toContain("[--table-pad-x:0.75rem]");
+    expect(table.className).toContain("[--table-pad-y:9px]");
   });
 
   it("compact density tightens the vertical padding var", () => {
@@ -75,18 +95,28 @@ describe("Table", () => {
     expect(table.parentElement?.className).toContain("rounded-xl");
   });
 
-  it("header uses the card-header token bar", () => {
-    renderTable();
-    expect(screen.getByTestId("thead").className).toContain(
-      "bg-card-header-bg",
-    );
-  });
-
-  it("head cells are uppercase header ink", () => {
+  it("head cells read in the dim caps on the card surface", () => {
     renderTable();
     const th = screen.getByText("Name");
     expect(th.tagName).toBe("TH");
-    expect(th.className).toContain("uppercase");
+    for (const token of [
+      "uppercase",
+      "text-[10.5px]",
+      "tracking-[0.09em]",
+      "font-semibold",
+      "text-dim",
+      "bg-card",
+      "whitespace-nowrap",
+    ]) {
+      expect(th.className).toContain(token);
+    }
+  });
+
+  it("header rows draw the border rule", () => {
+    renderTable();
+    expect(screen.getByTestId("thead").className).toContain(
+      "[&_tr]:border-border",
+    );
   });
 
   it("cells read the density padding vars", () => {
@@ -96,19 +126,37 @@ describe("Table", () => {
     expect(td.className).toContain("py-[var(--table-pad-y)]");
   });
 
-  it("rows get a hover treatment and can opt into pointer affordance", () => {
+  it("numeric head and cells align right in tabular numerals", () => {
+    renderTable();
+    const head = screen.getByText("Cost");
+    expect(head.className).toContain("text-right");
+    expect(head.className).not.toContain("text-left");
+    const [figure] = screen.getAllByText("$1.20");
+    expect(figure?.className).toContain("text-right");
+    expect(figure?.className).toContain("tabular-nums");
+  });
+
+  it("rows wash to the highlight on hover and can opt into pointer affordance", () => {
     render(
       <Table>
         <TableBody>
           <TableRow data-testid="interactive-row" interactive>
             <TableCell>Row</TableCell>
           </TableRow>
+          <TableRow data-testid="plain-row">
+            <TableCell>Row</TableCell>
+          </TableRow>
         </TableBody>
       </Table>,
     );
     const row = screen.getByTestId("interactive-row");
-    expect(row.className).toContain("hover:bg-muted/50");
+    expect(row.className).toContain("hover:bg-hl");
+    expect(row.className).toContain("duration-[120ms]");
+    expect(row.className).toContain("border-border");
     expect(row.className).toContain("cursor-pointer");
+    expect(screen.getByTestId("plain-row").className).not.toContain(
+      "cursor-pointer",
+    );
   });
 
   it("sticky header opts into sticky positioning", () => {
@@ -124,9 +172,24 @@ describe("Table", () => {
     expect(screen.getByTestId("sticky-head").className).toContain("sticky");
   });
 
-  it("footer renders inside tfoot", () => {
+  it("footer renders inside tfoot under the rule line", () => {
     renderTable();
-    expect(screen.getByTestId("tfoot").tagName).toBe("TFOOT");
+    const tfoot = screen.getByTestId("tfoot");
+    expect(tfoot.tagName).toBe("TFOOT");
+    expect(tfoot.className).toContain("border-rule");
+  });
+
+  it("TableGroupRow spans the columns in the header's caps", () => {
+    renderTable();
+    const cell = screen.getByText("Today");
+    expect(cell.tagName).toBe("TD");
+    expect(cell.getAttribute("colspan")).toBe("2");
+    expect(cell.className).toContain("bg-hl");
+    expect(cell.className).toContain("uppercase");
+    expect(cell.closest("tr")).toHaveAttribute(
+      "data-slot",
+      "table-group-row",
+    );
   });
 
   it("TableEmpty spans the given columns with a default message", () => {
@@ -155,5 +218,25 @@ describe("Table", () => {
   it("caption renders as muted helper text", () => {
     renderTable();
     expect(screen.getByText("Monthly usage").tagName).toBe("CAPTION");
+  });
+
+  it("has no axe violations with a group row, a footer and an empty table", async () => {
+    const { container } = renderTable();
+    await expectNoAxe(container);
+    cleanup();
+    const empty = render(
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Run</TableHead>
+            <TableHead>Agent</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableEmpty colSpan={2}>No runs yet</TableEmpty>
+        </TableBody>
+      </Table>,
+    );
+    await expectNoAxe(empty.container);
   });
 });

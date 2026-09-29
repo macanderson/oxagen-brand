@@ -2,16 +2,24 @@
 // Moved from oxagen apps/app/src/ui/pagination.tsx at ddb85803.
 // shadcn's base-maia pagination (ADR-221), written from
 // https://ui.shadcn.com/r/styles/base-maia/pagination.json, and the pager
-// every list draws under its rows, laid out as shadcn's "icons only" example:
-// a Rows per page select on the left, Previous and Next on the right.
+// every list draws under its rows, laid out as shadcn's data-table pagination
+// with the page numbers dropped (the mockup's `.pager`): a Rows per page
+// select on the left, and Previous and Next on the right.
 //
-// Two changes from the registry: Previous and Next are buttons, because a
-// list here pages in the browser and a link cannot be disabled, and every
-// label arrives translated from the caller (INV-12). The fleet's pager pages
-// by address and keeps its own links, and draws `RowsField` on its left.
+// Three changes from the registry. Previous and Next are buttons, because a
+// list here pages in the browser and a link cannot be disabled. They are
+// 32px outline icon buttons, 36px below md, named only by their `aria-label`.
+// And every label arrives translated from the caller (INV-12). The fleet's
+// pager pages by address and keeps its own links, and draws `RowsField` on
+// its left.
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
-import { type ComponentProps, type ReactNode, useId } from "react";
-import { Button } from "./button";
+import {
+  type ComponentProps,
+  type ReactNode,
+  useEffect,
+  useId,
+  useRef,
+} from "react";
 import { cn } from "../lib/utils";
 import {
   Select,
@@ -35,7 +43,7 @@ function PaginationContent({ className, ...props }: ComponentProps<"ul">) {
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-1", className)}
+      className={cn("flex items-center gap-2", className)}
       {...props}
     />
   );
@@ -45,49 +53,54 @@ function PaginationItem(props: ComponentProps<"li">) {
   return <li data-slot="pagination-item" {...props} />;
 }
 
-type StepProps = Omit<ComponentProps<typeof Button>, "children"> & {
-  /** The word beside the caret, and the name when the word is hidden. */
+/** The mockup's `.iconbtn`: a square outline button that holds one glyph. */
+const stepClass = cn(
+  "inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-[var(--muted)] max-md:size-9",
+  "transition-[border-color,color] duration-150",
+  "hover:border-rule hover:text-foreground",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+  "disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-border disabled:hover:text-[var(--muted)]",
+);
+
+type StepProps = Omit<ComponentProps<"button">, "children"> & {
+  /** The button's name. It shows no text, so this is all a reader hears. */
   text: string;
 };
 
 function PaginationPrevious({ className, text, ...props }: StepProps) {
   return (
-    <Button
-      variant="ghost"
+    <button
+      type="button"
+      data-slot="pagination-previous"
       aria-label={text}
-      className={cn("pl-2!", className)}
+      className={cn(stepClass, className)}
       {...props}
     >
-      <CaretLeftIcon data-icon="inline-start" className="rtl:-scale-x-100" />
-      <span className="hidden sm:block">{text}</span>
-    </Button>
+      <CaretLeftIcon aria-hidden className="size-4 rtl:-scale-x-100" />
+    </button>
   );
 }
 
 function PaginationNext({ className, text, ...props }: StepProps) {
   return (
-    <Button
-      variant="ghost"
+    <button
+      type="button"
+      data-slot="pagination-next"
       aria-label={text}
-      className={cn("pr-2!", className)}
+      className={cn(stepClass, className)}
       {...props}
     >
-      <span className="hidden sm:block">{text}</span>
-      <CaretRightIcon data-icon="inline-end" className="rtl:-scale-x-100" />
-    </Button>
+      <CaretRightIcon aria-hidden className="size-4 rtl:-scale-x-100" />
+    </button>
   );
 }
 
 /** A press that turns the page, or null when there is no page that way. */
 type PagerStep = (() => void) | null;
 
-function stepProps(step: PagerStep) {
-  return step === null ? { disabled: true } : { onClick: step };
-}
-
 /**
  * Rows per page, the field on the left of every pager, as a horizontal
- * field: the label, then a select of the sizes.
+ * field: the label, then an 80px select of the sizes.
  */
 export function RowsField({
   label,
@@ -112,12 +125,12 @@ export function RowsField({
       aria-labelledby={id}
       data-slot="field"
       data-orientation="horizontal"
-      className="flex w-fit flex-row items-center gap-3"
+      className="flex w-fit flex-row items-center gap-2"
     >
       <span
         id={id}
         data-slot="field-label"
-        className="flex w-fit gap-2 text-sm leading-snug whitespace-nowrap text-muted-foreground max-sm:sr-only"
+        className="flex w-fit text-[13px] leading-snug font-medium whitespace-nowrap text-foreground max-sm:sr-only"
       >
         {label}
       </span>
@@ -131,7 +144,7 @@ export function RowsField({
         <SelectTrigger
           aria-labelledby={id}
           data-testid={testId}
-          className="w-20 max-md:min-h-11"
+          className="w-20 max-md:min-h-9"
         >
           <SelectValue />
         </SelectTrigger>
@@ -149,7 +162,9 @@ export function RowsField({
 
 /**
  * The pager under a list: Rows per page on the left, beside the range the
- * page shows ("1–10 of 75"), and Previous and Next on the right.
+ * page shows ("1–10 of 75"), and Previous and Next on the right. A step that
+ * the press itself disables hands focus to the other step, so the keyboard
+ * never lands on the page body at the first or last page.
  */
 export function RowsPager({
   label,
@@ -178,11 +193,29 @@ export function RowsPager({
   next: PagerStep;
   className?: string;
 }) {
+  const previousRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+  // The step pressed last, read once by the render the press causes.
+  const pressedRef = useRef<"previous" | "next" | null>(null);
+
+  useEffect(() => {
+    const pressed = pressedRef.current;
+    pressedRef.current = null;
+    if (pressed === null) return;
+    const from = pressed === "previous" ? previousRef.current : nextRef.current;
+    const to = pressed === "previous" ? nextRef.current : previousRef.current;
+    if (from?.disabled !== true || to === null || to.disabled) return;
+    // A disabled button drops focus to the page body, or keeps it and stops
+    // taking keys; either way the reader has lost their place.
+    const active = document.activeElement;
+    if (active === from || active === document.body) to.focus();
+  });
+
   return (
     <div
       data-rows-pager=""
       className={cn(
-        "flex items-center justify-between gap-4 px-3 py-2.5",
+        "flex items-center justify-between gap-3 border-t border-border px-3 py-2.5",
         className,
       )}
     >
@@ -205,10 +238,34 @@ export function RowsPager({
       <Pagination aria-label={label} className="mx-0 w-auto">
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious text={previousLabel} {...stepProps(previous)} />
+            <PaginationPrevious
+              ref={previousRef}
+              text={previousLabel}
+              disabled={previous === null}
+              onClick={
+                previous === null
+                  ? undefined
+                  : () => {
+                      pressedRef.current = "previous";
+                      previous();
+                    }
+              }
+            />
           </PaginationItem>
           <PaginationItem>
-            <PaginationNext text={nextLabel} {...stepProps(next)} />
+            <PaginationNext
+              ref={nextRef}
+              text={nextLabel}
+              disabled={next === null}
+              onClick={
+                next === null
+                  ? undefined
+                  : () => {
+                      pressedRef.current = "next";
+                      next();
+                    }
+              }
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>

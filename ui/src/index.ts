@@ -60,4 +60,6 @@ export * from "./components/stella-spinner";
 export * from "./components/tone-badge";
 // New with the v3 recipes (oxagen-roadmap #241 to #246).
 export * from "./components/composer";
+export * from "./components/toggle-group";
+export * from "./components/truncated-cell";
 export { cn } from "./lib/utils";

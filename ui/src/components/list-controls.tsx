@@ -111,9 +111,11 @@ export function useList<T>(
       setPage(1);
     },
     perPage,
+    // A new page size keeps the first row on screen in view: the page becomes
+    // the one that holds it.
     setPerPage: (next) => {
       setPerPage(next);
-      setPage(1);
+      setPage(Math.floor(start / next) + 1);
     },
     setPage,
   };
@@ -199,7 +201,8 @@ export function ListBar<T>({
 
 /**
  * `.lt-pager`: Rows per page and the range on the left, previous and next on
- * the right. Changing the rows goes back to page 1 (`useList`).
+ * the right. Changing the rows keeps the first row on screen (`useList`), and
+ * a search, a filter or a sort goes back to page 1.
  */
 export function ListPager<T>({
   list,

@@ -157,6 +157,20 @@ describe("the list controls", () => {
     expect(screen.getByText("1–10 of 30")).toBeDefined();
   });
 
+  it("keeps the first row on screen when the page size changes", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await user.click(screen.getByRole("button", { name: "Next page" }));
+    expect(screen.getByText("26–30 of 30")).toBeDefined();
+    await user.click(screen.getByRole("combobox", { name: "Rows per page" }));
+    await user.click(await screen.findByRole("option", { name: "10" }));
+    // repo-26 was first on screen, so the page that holds it shows.
+    await waitFor(() => {
+      expect(screen.getByText("21–30 of 30")).toBeDefined();
+    });
+    expect(shown()[0]).toBe("repo-21");
+  });
+
   it("reads 0–0 of 0 when nothing matches", async () => {
     const user = userEvent.setup();
     render(<Harness />);

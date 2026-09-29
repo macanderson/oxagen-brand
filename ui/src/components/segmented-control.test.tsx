@@ -7,6 +7,7 @@ import { render, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, afterEach, vi } from "vitest";
 import { SegmentedControl, SegmentedControlItem } from "./segmented-control";
+import { expectNoAxe } from "../test/expect-no-axe";
 
 afterEach(cleanup);
 
@@ -70,5 +71,15 @@ describe("SegmentedControl — render", () => {
     );
     await userEvent.click(getByRole("button", { name: "B" }));
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("has no axe violations with a selected item", async () => {
+    const { container } = render(
+      <SegmentedControl aria-label="Font size" value="medium">
+        <SegmentedControlItem value="small">Small</SegmentedControlItem>
+        <SegmentedControlItem value="medium">Medium</SegmentedControlItem>
+      </SegmentedControl>,
+    );
+    await expectNoAxe(container);
   });
 });
