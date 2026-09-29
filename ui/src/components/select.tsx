@@ -1,29 +1,51 @@
 "use client";
 import * as React from "react";
 import { Select as SelectPrimitive } from "@base-ui/react/select";
+import { CaretDownIcon, CaretUpIcon, CheckIcon } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Check, ChevronDown } from "lucide-react";
 import { cn } from "../lib/utils";
+
+/*
+ * Select in shadcn's base-maia look, merged from oxagen apps/app/src/ui/select.tsx
+ * at ddb85803. The trigger wears the input tokens in a pill. The popup fills
+ * with the menu colour at 70% over a blur, as every floating surface does, and
+ * a highlighted option tints with the foreground, as a menu item does. The kit
+ * keeps its own API: refs, the `lg` size, `SelectGroup`, `SelectLabel`, and
+ * `portalProps`. `SelectContent` is the shadcn name for `SelectPopup`.
+ *
+ * The app's popup animated with tw-animate classes (`animate-in`, `fade-in-0`,
+ * `zoom-in-95`) that nothing defines, so it never animated. This popup uses
+ * the Base UI starting and ending styles every other kit overlay uses.
+ */
+// `control-styles.ts` exports a `menuSurface` that clips its overflow. This
+// popup scrolls, so it keeps its own copy without the clip.
+const menuSurface =
+  "relative isolate rounded-2xl bg-menu-popup-bg/70 text-menu-popup-fg shadow-2xl ring-1 ring-foreground/5 outline-none dark:ring-foreground/10 before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150";
 
 const Select = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
-const SelectValue = SelectPrimitive.Value;
 
-/*
- * Select — token-driven. The trigger mirrors the input tokens; the popup uses
- * the --menu-* tokens; items wire highlighted/selected/disabled through Base
- * UI data-attributes. Flat (no shadow), but the popup keeps the shared
- * enter/exit transition every other overlay uses.
- */
+const SelectValue = React.forwardRef<
+  React.ComponentRef<typeof SelectPrimitive.Value>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.Value
+    ref={ref}
+    data-slot="select-value"
+    className={cn("flex flex-1 text-left", className)}
+    {...props}
+  />
+));
+SelectValue.displayName = "SelectValue";
+
 const selectTriggerVariants = cva(
-  "flex w-full items-center justify-between whitespace-nowrap rounded-md border border-input-border bg-input-bg px-3 py-2 text-sm text-input-fg placeholder:text-input-placeholder hover:border-input-border-hover focus:outline-none focus:border-input-border-focus focus:ring-1 focus:ring-input-ring data-[popup-open]:border-input-border-focus disabled:cursor-not-allowed disabled:bg-input-disabled-bg disabled:text-input-disabled-fg [&>span]:line-clamp-1",
+  "flex w-fit cursor-pointer items-center justify-between gap-1.5 rounded-4xl border border-input-border bg-input-bg px-3 py-2 text-sm whitespace-nowrap text-input-fg transition-colors outline-none hover:border-input-border-hover focus-visible:border-input-border-focus focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-input-ring data-[popup-open]:border-input-border-focus disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-input-invalid-border data-placeholder:text-input-placeholder *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
-    // coss ui density scale. `lg` matches the shadcn/ui trigger height (36px).
     variants: {
       size: {
-        sm: "h-7",
-        default: "h-8",
-        lg: "h-9",
+        sm: "h-8",
+        default: "h-9",
+        lg: "h-10",
       },
     },
     defaultVariants: { size: "default" },
@@ -43,25 +65,27 @@ const SelectTrigger = React.forwardRef<
 >(({ className, size, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
+    data-slot="select-trigger"
+    data-size={size ?? "default"}
     className={cn(selectTriggerVariants({ size }), className)}
     {...props}
   >
     {children}
-    <SelectPrimitive.Icon>
-      <ChevronDown className="h-4 w-4 opacity-50" />
-    </SelectPrimitive.Icon>
+    <SelectPrimitive.Icon
+      render={
+        <CaretDownIcon className="pointer-events-none size-4 text-muted-foreground" />
+      }
+    />
   </SelectPrimitive.Trigger>
 ));
 SelectTrigger.displayName = "SelectTrigger";
 
 interface SelectPopupProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Popup> {
-  sideOffset?: number;
-  /**
-   * When `true`, the popup aligns the selected item with the trigger text
-   * (Base UI default). Defaults to `false` for a conventional dropdown.
-   */
-  alignItemWithTrigger?: boolean;
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Popup>,
+    Pick<
+      React.ComponentPropsWithoutRef<typeof SelectPrimitive.Positioner>,
+      "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"
+    > {
   /** Forwarded to Base UI `Select.Portal` (e.g. `keepMounted`, custom `container`). */
   portalProps?: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Portal>;
 }
@@ -74,8 +98,11 @@ const SelectPopup = React.forwardRef<
     {
       className,
       children,
+      side = "bottom",
       sideOffset = 4,
-      alignItemWithTrigger = false,
+      align = "center",
+      alignOffset = 0,
+      alignItemWithTrigger = true,
       portalProps,
       ...props
     },
@@ -83,20 +110,34 @@ const SelectPopup = React.forwardRef<
   ) => (
     <SelectPrimitive.Portal {...portalProps}>
       <SelectPrimitive.Positioner
+        side={side}
         sideOffset={sideOffset}
+        align={align}
+        alignOffset={alignOffset}
         alignItemWithTrigger={alignItemWithTrigger}
-        className="z-50"
+        className="isolate z-50"
       >
         <SelectPrimitive.Popup
           ref={ref}
+          data-slot="select-content"
+          data-align-trigger={alignItemWithTrigger}
           className={cn(
-            "relative z-50 max-h-[min(var(--available-height),320px)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md border border-menu-popup-border bg-menu-popup-bg text-menu-popup-fg",
-            "origin-[var(--transform-origin)] transition-[opacity,transform,translate,scale] duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[starting-style]:scale-[0.98] data-[starting-style]:-translate-y-1 data-[ending-style]:opacity-0 data-[ending-style]:scale-[0.98] data-[ending-style]:-translate-y-1",
+            menuSurface,
+            "z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto p-1",
+            // Fade in place when the popup sits over the trigger, and grow
+            // from the trigger when it drops below it.
+            "transition-[opacity,scale,translate] duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[align-trigger=false]:data-[starting-style]:scale-[0.98] data-[align-trigger=false]:data-[starting-style]:-translate-y-1 data-[align-trigger=false]:data-[ending-style]:scale-[0.98]",
             className,
           )}
           {...props}
         >
-          <div className="p-1">{children}</div>
+          <SelectPrimitive.ScrollUpArrow className="top-0 z-10 flex w-full cursor-default items-center justify-center py-1">
+            <CaretUpIcon className="size-4" />
+          </SelectPrimitive.ScrollUpArrow>
+          <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          <SelectPrimitive.ScrollDownArrow className="bottom-0 z-10 flex w-full cursor-default items-center justify-center py-1">
+            <CaretDownIcon className="size-4" />
+          </SelectPrimitive.ScrollDownArrow>
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
     </SelectPrimitive.Portal>
@@ -104,14 +145,18 @@ const SelectPopup = React.forwardRef<
 );
 SelectPopup.displayName = "SelectPopup";
 
+/** The shadcn name for `SelectPopup`. */
+const SelectContent = SelectPopup;
+
 const SelectLabel = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.GroupLabel>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.GroupLabel>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.GroupLabel
     ref={ref}
+    data-slot="select-label"
     className={cn(
-      "px-2 py-1.5 text-sm font-semibold text-menu-group-label-fg",
+      "px-3 py-1.5 text-xs font-medium text-menu-group-label-fg",
       className,
     )}
     {...props}
@@ -125,28 +170,34 @@ const SelectItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
+    data-slot="select-item"
     className={cn(
-      "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm text-menu-item-fg outline-none data-[highlighted]:bg-menu-item-highlighted-bg data-[highlighted]:text-menu-item-highlighted-fg data-[selected]:bg-menu-item-selected-bg data-[selected]:text-menu-item-selected-fg data-[disabled]:pointer-events-none data-[disabled]:text-menu-item-disabled-fg",
+      "relative flex w-full cursor-pointer items-center gap-2.5 rounded-xl py-2 pr-8 pl-3 text-sm text-menu-item-fg outline-hidden select-none data-[highlighted]:bg-foreground/10 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
       className,
     )}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      <SelectPrimitive.ItemIndicator>
-        <Check className="h-4 w-4" />
-      </SelectPrimitive.ItemIndicator>
-    </span>
-    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
+      {children}
+    </SelectPrimitive.ItemText>
+    <SelectPrimitive.ItemIndicator
+      render={
+        <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
+      }
+    >
+      <CheckIcon className="pointer-events-none" />
+    </SelectPrimitive.ItemIndicator>
   </SelectPrimitive.Item>
 ));
 SelectItem.displayName = "SelectItem";
 
 export {
   Select,
+  SelectContent,
   SelectGroup,
-  SelectValue,
-  SelectTrigger,
-  SelectPopup,
-  SelectLabel,
   SelectItem,
+  SelectLabel,
+  SelectPopup,
+  SelectTrigger,
+  SelectValue,
 };

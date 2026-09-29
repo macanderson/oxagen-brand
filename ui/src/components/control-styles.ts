@@ -1,0 +1,215 @@
+// Moved from oxagen apps/app/src/ui/control-styles.ts at ddb85803.
+// The Run page's `runStat*` recipes stayed in the app.
+// Class recipes for plain controls (buttons, links, inputs, panels, tiles,
+// eyebrows) that are not their own component. Each recipe is one rule of the
+// design of record, `mockups/src/engine.css` in the roadmap repository, named
+// in the comment above it (ADR-132); the values are house tokens, so a reskin
+// in the kit reaches every screen and the shape stays the mockup's.
+//
+// `design-record.test.ts` holds these recipes to the rules they cite. Change a
+// recipe with the rule, never around it.
+//
+// Shape, type size and spacing follow the shadcn preset Mac chose on
+// 2026-09-28 (`--preset b6FlQHSba`, style base-maia): pill buttons and
+// inputs, 14px control text, rounder cards, and translucent menus and
+// popovers. Colour stays the house's. Where a comment below quotes an
+// engine.css rule and a recipe now differs from it, the recipe names the maia
+// value it took, and engine.css follows.
+
+/**
+ * `.btn { border:1px solid var(--border); background:var(--panel);
+ * font-weight:500 }`, in the maia button's shape: a pill 36px tall, 12px
+ * across, 14px text, a 16px glyph. A phone keeps the 44px touch target the
+ * mockup's sheet buttons have.
+ */
+const buttonBase =
+  "inline-flex min-h-9 max-md:min-h-11 items-center justify-center gap-1.5 rounded-4xl px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 " +
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring " +
+  "disabled:cursor-not-allowed disabled:opacity-45 aria-disabled:cursor-not-allowed";
+
+/**
+ * `.btn.primary { background:var(--gold); border-color:var(--gold);
+ * color:var(--on-gold); font-weight:600 }` — the one gold action a screen
+ * carries (creation-spec §6: gold is identity, never state). The tokens
+ * resolve to the gold in both themes (globals.css). Ink on gold is 9.5:1.
+ */
+export const buttonPrimary = `${buttonBase} border border-button-primary-border bg-button-primary-bg font-semibold text-button-primary-fg hover:bg-button-primary-hover-bg hover:border-button-primary-hover-bg active:bg-button-primary-active-bg`;
+
+/**
+ * `.btn` at rest: panel fill, hairline border, the wash on hover. The tokens
+ * are the kit's default-button set, which globals.css points at the panel and
+ * the wash so the recipe and the kit's own buttons agree.
+ */
+export const buttonSecondary = `${buttonBase} border border-button-default-border bg-button-default-bg text-button-default-fg hover:border-rule hover:bg-button-default-hover-bg active:bg-button-default-active-bg`;
+
+/**
+ * `.btn.danger { color:var(--st-failed); border-color:<st-failed 40%> }` and
+ * `.btn.danger:hover { background:<st-failed 12%> }`: an action that ends
+ * something, such as Deregister. It carries the failed hue as ink, never a fill.
+ */
+export const buttonDanger = `${buttonBase} border border-error/40 bg-button-default-bg text-error-ink hover:bg-error/10 active:bg-error/15`;
+
+/** `a { color:var(--accent-text) }` — gold as ink, underlined on hover. */
+export const linkText =
+  "font-medium text-link underline-offset-4 hover:text-link-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm";
+
+/**
+ * The Account and Avatar dialogs' field label and the hint under a field
+ * (`.field label`, `.field .hint`), and the small button beside a field.
+ * The label and hint take the maia field's type: a 14px medium label in the
+ * foreground, 8px above its control, and a 14px muted hint.
+ */
+export const fieldLabel = "mb-2 block text-sm font-medium text-foreground";
+export const fieldHint = "mt-2 text-sm leading-normal text-muted-foreground";
+export const buttonSmall =
+  "inline-flex min-h-8 flex-none items-center justify-center gap-1 rounded-4xl border border-button-default-border bg-button-default-bg px-3 text-sm font-medium whitespace-nowrap text-button-default-fg hover:bg-button-default-hover-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-button-disabled-bg disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+
+/** The one skin every field wears; `inputBase` and `textareaBase` add the shape. */
+const fieldSkin =
+  // 16px below md as well as by phone.css, so the class list alone says an
+  // input never makes iOS zoom the page on focus.
+  "block w-full min-w-0 border border-input-border bg-input-bg px-3 text-sm max-md:text-base text-input-fg placeholder:text-input-placeholder " +
+  "hover:border-input-border-hover focus-visible:border-input-border-focus focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-input-ring " +
+  "disabled:bg-input-disabled-bg disabled:text-input-disabled-fg aria-invalid:border-input-invalid-border aria-invalid:outline-input-invalid-ring";
+
+/** A one-line input or select: the maia input's 36px pill. */
+export const inputBase = `${fieldSkin} min-h-9 rounded-4xl py-1.5`;
+
+/**
+ * A textarea: the maia textarea keeps the field's skin with a card corner
+ * and 12px of air above and below, since a pill cannot hold several lines.
+ */
+export const textareaBase = `${fieldSkin} rounded-xl py-3`;
+
+/**
+ * A menu, listbox or picker surface, as the preset draws one: 70% of the menu
+ * fill over a blurred, saturated copy of what lies beneath, a 2xl corner, a
+ * faint ring in place of the border, and a deep shadow. `isolate` keeps the
+ * blur layer (`before:-z-1`) under the items and over the page, and
+ * `relative` anchors it. Its callers sit in the flow or inside a positioner,
+ * so none adds a position of its own. `menuPopup` adds the 4px inset a menu's
+ * rows sit in.
+ */
+export const menuSurface =
+  "relative isolate overflow-hidden rounded-2xl bg-menu-popup-bg/70 text-menu-popup-fg shadow-2xl ring-1 ring-foreground/5 outline-none dark:ring-foreground/10 " +
+  "before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150";
+export const menuPopup = `${menuSurface} p-1`;
+
+/**
+ * One row of a menu: a 14px line in an xl-cornered pill, 12px across, a 16px
+ * glyph, and the preset's subtle highlight (`menuItemActive`, the foreground
+ * at 10%) under the pointer or the keyboard. A listbox that tracks its own
+ * active row adds `menuItemActive` to that row.
+ */
+export const menuItemActive = "bg-foreground/10";
+export const menuItem =
+  "flex w-full cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm text-menu-item-fg outline-none " +
+  "data-[highlighted]:bg-foreground/10 " +
+  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+
+/** A rule between menu groups: the foreground at 5%, edge to edge. */
+export const menuSeparator = "-mx-1 my-1 h-px bg-foreground/5";
+
+/** A group's name over its rows. */
+export const menuLabel = "px-3 py-2.5 text-xs text-muted-foreground";
+
+/**
+ * A popover or hint that floats over the page: the menu's translucent fill
+ * on the raised surface the shell's drawers use, a 2xl corner and the ring.
+ * It sets no position. The caller adds `absolute` or `fixed`, which also
+ * anchors the blur layer. Tailwind emits `relative` after both, so a
+ * `relative` here would pull the popover back into the flow.
+ */
+export const popoverSurface =
+  "isolate rounded-2xl bg-app-raised-bg/70 text-app-raised-fg shadow-2xl ring-1 ring-foreground/5 dark:ring-foreground/10 " +
+  "before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150";
+
+/**
+ * `.panel { background:var(--panel); border:1px solid var(--border);
+ * overflow:hidden }`, with the maia card's 2xl corner (13px at the preset's
+ * radius, where the mockup drew 12px).
+ */
+export const panel =
+  "app-panel min-w-0 overflow-hidden rounded-2xl border border-border bg-card text-card-foreground";
+
+/**
+ * `.eyebrow { font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+ * color:var(--accent-text); font-weight:600 }` — the scope line over an h1,
+ * in gold-as-ink.
+ */
+export const eyebrow =
+  "text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-text";
+
+/**
+ * `.eyebrow.q { color:var(--muted) }`: the same caps line inside a panel,
+ * where it names a section rather than the page's scope, so it is muted
+ * rather than gold.
+ */
+export const eyebrowQuiet =
+  "text-[12px] font-semibold uppercase tracking-[0.14em] text-muted-foreground";
+
+export const mono = "font-mono text-[0.92em]";
+
+/**
+ * `.note { border-left:2px solid var(--gold); padding:2px 0 2px 12px;
+ * font-size:12.5px; color:var(--muted) }`: the one sentence under a table or
+ * a chart that says how to read it. The gold rule is identity, not state.
+ */
+export const note =
+  "border-l-2 border-gold py-0.5 pl-3 text-[12.5px] text-muted-foreground";
+
+/**
+ * `.kv { display:grid; grid-template-columns:auto 1fr; gap:7px 16px;
+ * font-size:12.5px }`, `.kv dt { color:var(--dim) }` and `.kv dd
+ * { color:var(--body); overflow-wrap:anywhere }`: a record's fields, label
+ * left in the dim ink and value right.
+ */
+export const kvList =
+  "grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-[7px] text-[12.5px]";
+export const kvTerm = "whitespace-nowrap text-dim";
+export const kvValue = "m-0 min-w-0 text-foreground [overflow-wrap:anywhere]";
+
+/**
+ * `.b.b-q.lk` (the Run header's checkout strip): a quiet pill that is a link
+ * or a copy button, so it carries the gold border and the wash on hover that
+ * the badges around it do not.
+ */
+export const linkChip =
+  "inline-flex min-w-0 max-w-full items-center gap-[5px] whitespace-nowrap rounded-md border border-border bg-hl px-[7px] py-0.5 text-[11px] font-semibold leading-normal tracking-[0.02em] text-muted-foreground transition-colors hover:border-gold hover:bg-hl hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+
+/**
+ * `.panel-h { padding:12px 16px; border-bottom:1px solid var(--border) }` and
+ * the maia card title's 14px, on the `--panel-head` band: light grey
+ * on paper, a step lighter than the panel on ink (ADR-170). The footer keeps
+ * the hairline and stays flat on the panel.
+ */
+export const panelHeader =
+  "flex flex-wrap items-center justify-between gap-3 border-b border-border bg-panel-head px-4 py-3";
+export const panelTitle = "text-sm font-semibold text-foreground";
+export const panelFooter =
+  "flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-xs text-muted-foreground";
+/** `.panel-b { padding:14px 16px }` */
+export const panelBody = "px-4 py-3.5";
+
+/**
+ * `.stat { background:var(--panel); border:1px solid var(--border);
+ * padding:13px 15px }` with the panel's 2xl corner, `.stat .k` (10.5px caps, dim),
+ * `.stat .v` (23px, 700, tabular) and `.stat .s` (11.5px, muted). One tile of
+ * a figure strip; every strip on every page draws these four. On a phone the
+ * tile tightens to `#viewport.phone .stat { padding:11px 12px }` and its
+ * figure to `.stat .v { font-size:17px }`, so two tiles fit a row.
+ */
+export const statTile =
+  "flex min-w-0 flex-col rounded-2xl border border-border bg-card px-[15px] py-[13px] text-card-foreground max-md:px-3 max-md:py-[11px]";
+export const statTerm =
+  "mb-[5px] text-[10.5px] font-semibold uppercase tracking-[0.1em] text-dim";
+export const statValue =
+  "text-[23px] font-bold leading-[1.15] tracking-[-0.02em] tabular-nums max-md:text-[17px]";
+export const statNote = "mt-[3px] text-[11.5px] text-muted-foreground";
+/**
+ * `.grid.g4 { grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:14px }`,
+ * and `#viewport.phone .g4 { grid-template-columns:1fr 1fr }`: a phone draws
+ * the strip two by two rather than one tile to a row.
+ */
+export const statStrip =
+  "grid grid-cols-2 gap-3.5 md:[grid-template-columns:repeat(auto-fit,minmax(175px,1fr))]";

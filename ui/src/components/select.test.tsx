@@ -2,7 +2,7 @@
 /**
  * select.test.tsx — render tests for Select and sub-parts.
  *
- * Covers: coss naming (SelectPopup not SelectContent), SelectTrigger size variants,
+ * Covers: SelectPopup and its SelectContent alias, SelectTrigger size variants,
  * SelectItem renders inside popup, SelectGroup/SelectLabel.
  */
 
@@ -49,19 +49,19 @@ describe("Select — trigger render", () => {
     expect(getByRole("combobox")).toHaveTextContent("Select option");
   });
 
-  it("sm size trigger includes h-7 class", () => {
+  it("sm size trigger includes h-8 class", () => {
     const { getByRole } = render(<TestSelect size="sm" />);
-    expect(getByRole("combobox").className).toContain("h-7");
-  });
-
-  it("default size trigger includes h-8 class", () => {
-    const { getByRole } = render(<TestSelect size="default" />);
     expect(getByRole("combobox").className).toContain("h-8");
   });
 
-  it("lg size trigger includes h-9 class", () => {
-    const { getByRole } = render(<TestSelect size="lg" />);
+  it("default size trigger includes h-9 class", () => {
+    const { getByRole } = render(<TestSelect size="default" />);
     expect(getByRole("combobox").className).toContain("h-9");
+  });
+
+  it("lg size trigger includes h-10 class", () => {
+    const { getByRole } = render(<TestSelect size="lg" />);
+    expect(getByRole("combobox").className).toContain("h-10");
   });
 });
 
