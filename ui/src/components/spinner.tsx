@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Loader2 } from "lucide-react";
+import { CircleNotchIcon } from "@phosphor-icons/react/ssr";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../lib/utils";
 
@@ -44,7 +44,7 @@ function Spinner({
       className={cn("inline-flex shrink-0", className)}
       {...props}
     >
-      <Loader2 aria-hidden="true" className={spinnerVariants({ size })} />
+      <CircleNotchIcon aria-hidden="true" className={spinnerVariants({ size })} />
       <span className="sr-only">{label}</span>
     </span>
   );

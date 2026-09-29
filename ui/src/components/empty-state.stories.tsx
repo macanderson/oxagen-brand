@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Database, Sparkles } from "lucide-react";
+import { DatabaseIcon, SparkleIcon } from "@phosphor-icons/react";
 import { Button } from "./button";
 import { EmptyState } from "./empty-state";
 
@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    icon: <Database />,
+    icon: <DatabaseIcon aria-hidden="true" />,
     title: "No connections yet",
     description:
       "Connect a data source to start grounding agent answers in your knowledge graph.",
@@ -23,7 +23,7 @@ export const Default: Story = {
 
 export const SmallMuted: Story = {
   args: {
-    icon: <Sparkles />,
+    icon: <SparkleIcon aria-hidden="true" />,
     title: "No suggestions",
     description: "Inferred edges will appear here.",
     size: "sm",

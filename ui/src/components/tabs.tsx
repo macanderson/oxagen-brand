@@ -10,6 +10,11 @@ import { fadeInUp } from "../lib/motion";
  * Tabs — token-driven via the --tab-* tokens. Motion is retained: the sliding
  * active-indicator (TabsIndicator) and the per-panel fade-in both animate.
  *
+ * The default variant is shadcn's Tabs, after the mockup's `.tabs`: a muted
+ * `--hl` track as wide as its tabs, muted tabs, and one raised tab for the
+ * selected view. The raised ground reads `--tab-on` and falls back to the card
+ * surface. The underline variant is the dialog row and is unchanged.
+ *
  * State is wired through Base UI's data-attributes (data-[active]); the rest
  * border stays a constant width so the active underline never shifts layout.
  */
@@ -25,7 +30,9 @@ const tabsListVariants = cva(
   {
     variants: {
       variant: {
-        default: "h-9 justify-center rounded-lg bg-muted p-1",
+        // Fits its tabs and scrolls sideways when they overflow the row.
+        default:
+          "w-max max-w-full gap-0.5 overflow-x-auto rounded-[10px] bg-hl p-[3px] [scrollbar-width:thin]",
         underline: "justify-start gap-4 border-b border-border",
       },
     },
@@ -50,23 +57,65 @@ const TabsList = React.forwardRef<
 ));
 TabsList.displayName = "TabsList";
 
+/**
+ * The round count after a tab's label, such as the rows the view holds.
+ *
+ * Counts come two ways. The `count` prop on TabsTab covers the common case
+ * and places the badge after the label. TabsCount is the same badge as a part,
+ * for a tab that lays out its own children, such as an icon, a label and a
+ * count in a set order. Both render the same span, so they look the same.
+ */
+const TabsCount = React.forwardRef<
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<"span">
+>(({ className, ...props }, ref) => (
+  <span
+    ref={ref}
+    data-slot="tabs-count"
+    className={cn(
+      // The ground is the foreground at 10%, so the badge reads on the track
+      // and on the raised tab in both themes.
+      "inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-foreground/10 px-1.5 text-[11.5px] font-medium leading-none tabular-nums text-[var(--body)]",
+      className,
+    )}
+    {...props}
+  />
+));
+TabsCount.displayName = "TabsCount";
+
+interface TabsTabProps
+  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Tab> {
+  /**
+   * A count shown in a round badge after the label. Zero renders; leave the
+   * prop out to show no badge.
+   */
+  count?: React.ReactNode;
+}
+
 /** coss ui tab control (replaces the shadcn `TabsTrigger` name). */
 const TabsTab = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Tab>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Tab>
->(({ className, ...props }, ref) => (
+  TabsTabProps
+>(({ className, count, children, ...props }, ref) => (
   <TabsPrimitive.Tab
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-tab-fg transition-all hover:text-tab-fg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
-      // Default (pill) list treatment — active pill is a flat card surface.
-      "group-data-[variant=default]/list:rounded-md group-data-[variant=default]/list:px-3 group-data-[variant=default]/list:py-1 group-data-[variant=default]/list:data-[active]:bg-card group-data-[variant=default]/list:data-[active]:text-tab-fg-active",
+      "inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium text-tab-fg transition-all hover:text-tab-fg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+      // Default list treatment: muted tabs on the track, and the active tab
+      // raised on its own ground with a border and a small shadow.
+      "group-data-[variant=default]/list:min-h-[30px] group-data-[variant=default]/list:flex-none group-data-[variant=default]/list:rounded-[7px] group-data-[variant=default]/list:border group-data-[variant=default]/list:border-transparent group-data-[variant=default]/list:px-[11px] group-data-[variant=default]/list:py-1 group-data-[variant=default]/list:text-[13px]",
+      "group-data-[variant=default]/list:data-[active]:border-border group-data-[variant=default]/list:data-[active]:bg-[var(--tab-on,var(--card))] group-data-[variant=default]/list:data-[active]:text-tab-fg-active group-data-[variant=default]/list:data-[active]:shadow-sm",
       // Underline list treatment — constant-width border at rest, color flips on state.
       "group-data-[variant=underline]/list:-mb-px group-data-[variant=underline]/list:border-b-[length:var(--tab-border-width)] group-data-[variant=underline]/list:border-tab-border group-data-[variant=underline]/list:hover:border-tab-border-hover group-data-[variant=underline]/list:px-1 group-data-[variant=underline]/list:py-2 group-data-[variant=underline]/list:data-[active]:border-tab-border-active group-data-[variant=underline]/list:data-[active]:text-tab-fg-active",
       className,
     )}
     {...props}
-  />
+  >
+    {children}
+    {count !== undefined && count !== null ? (
+      <TabsCount>{count}</TabsCount>
+    ) : null}
+  </TabsPrimitive.Tab>
 ));
 TabsTab.displayName = "TabsTab";
 
@@ -127,4 +176,5 @@ const TabsIndicator = React.forwardRef<
 ));
 TabsIndicator.displayName = "TabsIndicator";
 
-export { Tabs, TabsList, TabsTab, TabsPanel, TabsIndicator };
+export { Tabs, TabsList, TabsTab, TabsCount, TabsPanel, TabsIndicator };
+export type { TabsListProps, TabsTabProps };

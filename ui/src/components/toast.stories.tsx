@@ -1,6 +1,11 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ToastProvider, ToastViewport, useToast } from "./toast";
+import {
+  ToastProvider,
+  ToastViewport,
+  useToast,
+  type ToastAddOptions,
+} from "./toast";
 import { Button } from "./button";
 
 const meta = {
@@ -10,38 +15,43 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function Demo() {
+const SAMPLES = {
+  success: {
+    title: "Policy saved",
+    description: "The spend cap applies to the next run.",
+    tone: "success",
+  },
+  info: {
+    title: "Run queued",
+    description: "Stella starts the review when a worker is free.",
+    tone: "info",
+  },
+  warn: {
+    title: "Approval needed",
+    description: "The deploy step waits for an owner to approve it.",
+    tone: "warn",
+  },
+  error: {
+    title: "Run failed",
+    description: "The workspace could not reach the model gateway.",
+    tone: "error",
+  },
+} satisfies Record<string, ToastAddOptions>;
+
+function Triggers() {
   const toast = useToast();
   return (
     <div className="flex flex-wrap gap-2">
-      <Button
-        onClick={() =>
-          toast.add({ title: "Saved", description: "Your changes are live." })
-        }
-      >
-        Default
+      <Button onClick={() => toast.add(SAMPLES.success)}>Success</Button>
+      <Button variant="outline" onClick={() => toast.add(SAMPLES.info)}>
+        Info
+      </Button>
+      <Button variant="outline" onClick={() => toast.add(SAMPLES.warn)}>
+        Warn
       </Button>
       <Button
-        variant="outline"
-        onClick={() =>
-          toast.add({
-            title: "Synced",
-            description: "Workspace up to date.",
-            type: "success",
-          })
-        }
-      >
-        Success
-      </Button>
-      <Button
-        variant="destructive"
-        onClick={() =>
-          toast.add({
-            title: "Failed",
-            description: "Could not reach the API.",
-            type: "error",
-          })
-        }
+        variant="destructive-outline"
+        onClick={() => toast.add(SAMPLES.error)}
       >
         Error
       </Button>
@@ -49,56 +59,83 @@ function Demo() {
   );
 }
 
-export const Default: Story = {
-  render: () => (
-    <ToastProvider>
-      <Demo />
-      <ToastViewport />
-    </ToastProvider>
-  ),
-};
-
 /**
- * Enqueues one toast of each type on mount, so the toast surfaces and the
- * ToastViewport's stacking are visible in the catalog and verifiable by
- * design-sync's screenshot oracle. `Default` is interaction-driven and only
- * ever proves the three trigger buttons render.
- *
- * `timeout: 0` disables auto-dismiss so the story is deterministic — a
- * screenshot taken at any moment shows the same three toasts.
+ * Adds toasts once on mount with `timeout: 0`, so the story holds still and
+ * a screenshot taken at any moment shows the same stack.
  */
-function OpenDemo() {
+function Preset({ toasts }: { toasts: ToastAddOptions[] }) {
   const toast = useToast();
   const fired = React.useRef(false);
   React.useEffect(() => {
     if (fired.current) return;
     fired.current = true;
-    toast.add({
-      title: "Saved",
-      description: "Your changes are live.",
-      timeout: 0,
-    });
-    toast.add({
-      title: "Synced",
-      description: "Workspace up to date.",
-      type: "success",
-      timeout: 0,
-    });
-    toast.add({
-      title: "Failed",
-      description: "Could not reach the API.",
-      type: "error",
-      timeout: 0,
-    });
-  }, [toast]);
-  return <Demo />;
+    for (const options of toasts) toast.add({ ...options, timeout: 0 });
+  }, [toast, toasts]);
+  return <Triggers />;
 }
 
-export const Open: Story = {
-  render: () => (
+function Frame({ toasts }: { toasts?: ToastAddOptions[] }) {
+  return (
     <ToastProvider>
-      <OpenDemo />
+      {toasts ? <Preset toasts={toasts} /> : <Triggers />}
       <ToastViewport />
     </ToastProvider>
+  );
+}
+
+/** Press a button to add a toast. Each one lives 4200 ms. */
+export const Playground: Story = {
+  render: () => <Frame />,
+};
+
+export const Success: Story = {
+  render: () => <Frame toasts={[SAMPLES.success]} />,
+};
+
+export const Info: Story = {
+  render: () => <Frame toasts={[SAMPLES.info]} />,
+};
+
+export const Warn: Story = {
+  render: () => <Frame toasts={[SAMPLES.warn]} />,
+};
+
+export const ErrorTone: Story = {
+  name: "Error",
+  render: () => <Frame toasts={[SAMPLES.error]} />,
+};
+
+/** A message with no description renders in the regular weight. */
+export const TitleOnly: Story = {
+  render: () => <Frame toasts={[{ title: "Link copied", tone: "success" }]} />,
+};
+
+export const WithAction: Story = {
+  render: () => (
+    <Frame
+      toasts={[
+        {
+          title: "Key revoked",
+          description: "Agents that used it stop at their next call.",
+          tone: "warn",
+          actionProps: { children: "Undo" },
+        },
+      ]}
+    />
+  ),
+};
+
+/** Three toasts. The newest sits in front. Hover the stack to open it. */
+export const Stack: Story = {
+  render: () => (
+    <Frame toasts={[SAMPLES.info, SAMPLES.warn, SAMPLES.success]} />
+  ),
+};
+
+/** Below 48rem the stack moves to the bottom centre. */
+export const Phone: Story = {
+  globals: { viewport: { value: "mobile1", isRotated: false } },
+  render: () => (
+    <Frame toasts={[SAMPLES.info, SAMPLES.warn, SAMPLES.success]} />
   ),
 };

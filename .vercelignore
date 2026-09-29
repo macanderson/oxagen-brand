@@ -1,0 +1,6 @@
+build/
+skills/
+*.md
+/ui/
+/.github/
+node_modules/

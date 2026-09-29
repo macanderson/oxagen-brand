@@ -1,11 +1,12 @@
 // @vitest-environment jsdom
 /**
- * tooltip.test.tsx — Tooltip renders the Base UI tooltip and styles the popup
- * through the --tooltip-* token utilities. Forced open (controlled) so the
- * portalled popup is asserted deterministically without timing on hover delays.
+ * Tooltip renders the Base UI tooltip and styles the popup through the
+ * --tooltip-* token utilities. The tooltip is forced open, so the portalled
+ * popup is asserted without waiting on hover delays.
  */
 import { render, cleanup } from "@testing-library/react";
 import { describe, expect, it, afterEach } from "vitest";
+import { expectNoAxe } from "../test/expect-no-axe";
 import {
   Tooltip,
   TooltipTrigger,
@@ -55,5 +56,43 @@ describe("Tooltip", () => {
     );
     expect(getByText("Body").className).toContain("max-w-sm");
     expect(getByText("Body").className).toContain("bg-tooltip-bg");
+  });
+
+  it("stays an opaque, small bubble with the overlay radius step and motion", () => {
+    const { getByText } = render(
+      <TooltipProvider>
+        <Tooltip open>
+          <TooltipTrigger>Pause</TooltipTrigger>
+          <TooltipPopup>Pause the run</TooltipPopup>
+        </Tooltip>
+      </TooltipProvider>,
+    );
+    const cls = getByText("Pause the run").className;
+    for (const want of [
+      "rounded-lg",
+      "text-xs",
+      "px-2",
+      "py-1",
+      "origin-(--transform-origin)",
+      "data-[starting-style]:opacity-0",
+      "data-[instant]:transition-none",
+    ]) {
+      expect(cls).toContain(want);
+    }
+    for (const unwanted of ["rounded-md", "backdrop-blur", "bg-tooltip-bg/", "origin-[var"]) {
+      expect(cls).not.toContain(unwanted);
+    }
+  });
+
+  it("passes axe while open", async () => {
+    const { getByText } = render(
+      <TooltipProvider>
+        <Tooltip open>
+          <TooltipTrigger>Pause</TooltipTrigger>
+          <TooltipPopup>Pause the run</TooltipPopup>
+        </Tooltip>
+      </TooltipProvider>,
+    );
+    await expectNoAxe(getByText("Pause the run"));
   });
 });

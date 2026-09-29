@@ -1,198 +1,233 @@
 # @oxagen/ui
 
-**coss ui** is the shared component system and house token set for Oxagen's
-frontends. It is built on **[Base UI](https://base-ui.com/)** (not Radix) and
-**Tailwind v4** with a fully token-driven theme.
+The component kit for Oxagen's frontends. It is built on
+[Base UI](https://base-ui.com/) and Tailwind v4, and every colour, radius, and
+face comes from the house tokens one directory up.
 
-The package ships **raw TypeScript source** with no build step. The Next apps
-consume it through `transpilePackages`, and `apps/desktop` imports its styles
-through Vite. `apps/docs` and `apps/app_deprecated` import components through
-their local re-export layer (`@/components/ui/<name>`) or the barrel.
-`apps/app` has its own components in `apps/app/src/ui/` and takes only the
-barrel's brand marks and the styles from here. App code must **never** import
-`@oxagen/ui/components/*` directly (see the root `AGENTS.md`, UI Component
-Import Convention).
+The kit moved here from oxagen `packages/ui` at `ddb85803`, with the generic
+half of oxagen `apps/app/src/ui`. The oxagen monorepo still carries its own
+`packages/ui` until it consumes this one.
+
+The package ships TypeScript source with no build step. A consumer compiles it
+with its own bundler. The design-system bundle below is the one compiled form.
 
 ## Boundary
 
-- **Owns:** the shared components, the house design tokens and fonts
-  (`src/styles/`), the theme provider and cookie, the motion helpers, `cn`,
-  and the Storybook for all of them.
-- **Does not own:** `apps/app`'s own components (`apps/app/src/ui/`, see
-  [`apps/app/README.md`](../../apps/app/README.md)); the public website's
-  stylesheet (`apps/web/assets/oxagen.css`, see
-  [`apps/web/README.md`](../../apps/web/README.md)), which mirrors these
-  tokens without importing the package; the house brand kit itself
-  (`oxagenai/oxagen-brand`, checked by `pnpm check:brand`), from which
-  `src/styles/house-tokens.css` is vendored.
-- **Depends on:** No `@oxagen/*` runtime dependencies. `react`, `react-dom`,
-  and `tailwindcss` are peer dependencies.
-- **Used by:** `apps/app`, `apps/docs`, `apps/app_deprecated`, and
-  `apps/desktop`.
-
-## Seams
-
-| Seam | Kind | Source | Wired by |
-|---|---|---|---|
-| Barrel (`@oxagen/ui`) | export | `packages/ui/src/index.ts` | `apps/app/src/ui/auth-shell.tsx`, `apps/app/src/features/shell/sidebar.tsx`, `apps/docs`, `apps/app_deprecated` |
-| Deep component import (`@oxagen/ui/components/*`) | export | `packages/ui/src/components/*.tsx` | Only the re-export files in `apps/docs/src/components/ui/` and `apps/app_deprecated/src/components/ui/` |
-| Direct component import ban | boundary | `eslint.next.mjs` (`no-restricted-imports`) | `apps/docs`, `apps/app_deprecated`. `apps/app` has no such rule |
-| Design tokens (`globals.css`, `house-tokens.css`, fonts) | export | `packages/ui/src/styles/` | `apps/app/src/app/globals.css`, `apps/desktop/src/styles.css` |
-| `THEME_COOKIE_NAME` | export | `packages/ui/src/components/theme-config.ts` | `apps/app/src/features/shell/theme.ts` reads the same cookie name |
+- **Owns:** the components, `src/styles/globals.css`, the theme provider and
+  cookie, the motion helpers, `cn`, the Storybook, the design-system bundle
+  script, and `.design-sync/`.
+- **Reads in place:** `../tokens/` for every value and `../fonts/` for every
+  face. The kit keeps no copy of either.
+- **Depends on:** no `@oxagen/*` package. `react`, `react-dom`, and
+  `tailwindcss` are peer dependencies.
 
 ## Entry points
 
-- `.` → `src/index.ts`: the tree-shakeable component barrel, providers, and
-  `cn`.
-- `./components/*` → `src/components/*.tsx`: one component file, for the
-  re-export layers only.
-- `./styles/globals.css`, `./styles/house-tokens.css`,
-  `./styles/house-fonts.css`, `./styles/fonts/space-grotesk.css` → the token
-  and font stylesheets. `house-fonts.css` declares all three house faces. An
-  app that does not import `globals.css` imports it beside `house-tokens.css`.
-- `./lib/motion` → `src/lib/motion.ts`: motion helpers.
+- `.` is `src/index.ts`: the component barrel, the providers, and `cn`.
+- `./components/*` is one component file.
+- `./styles/globals.css` is the stylesheet. It imports the house tokens and
+  fonts from `../tokens/`.
+- `./lib/motion` is the motion helpers.
 
 ## Rules
 
-- Composition uses the `render` prop, never Radix `asChild`.
-- Overlay parts are named `*Popup` or `*Panel`, never `*Content`.
-- Reskin by editing tokens, not component class strings.
-- Add or update a story whenever you add or change a component.
-
-## Tests
-
-```bash
-pnpm --filter @oxagen/ui test:unit src/components/button.test.tsx
-```
-
-Never put `--` before the filename. Each component's test sits beside it as
-`src/components/<name>.test.tsx`. Tests for `apps/app`'s own components live
-in `apps/app/src/ui/`, not here.
-
-## Composition
-
-Two rules that catch everyone:
-
-1. **Composition uses the `render` prop, not Radix `asChild`.**
-2. **Overlay/content parts are named `*Popup` / `*Panel`, not `*Content`.**
+1. Composition uses the `render` prop. Radix `asChild` does not exist here.
+2. Overlay parts are named `*Popup` or `*Panel`.
+3. Reskin by editing tokens. A component class string never names a hex, a
+   Tailwind palette colour, or a house token.
+4. Icons come from `@phosphor-icons/react`, regular weight, with the `Icon`
+   suffix: `import { XIcon } from "@phosphor-icons/react"`.
+5. Overlays animate on Base UI's `data-[starting-style]` and
+   `data-[ending-style]`.
+6. Every component has a story for each state it draws.
 
 ```tsx
-// ✅ coss                                  // ❌ shadcn/Radix
-<Button render={<Link href="/login" />}>Login</Button>
-<DialogPopup>…</DialogPopup>               // not <DialogContent>
+<Button render={<Link href="/login" />}>Log in</Button>
+<DialogPopup>…</DialogPopup>
 ```
 
 ## Storybook
 
-Storybook runs the components straight from `src` (no build) with Tailwind v4 +
-the design tokens processed through `postcss.config.mjs`. A **theme toolbar**
-(top bar) flips every story between the light and dark token sets.
+Storybook runs the components from `src` with Tailwind v4 and the tokens
+processed through `postcss.config.mjs`. The toolbar flips every story between
+light and dark. It sets the theme class on `<html>` as well as the story
+wrapper, so portalled menus and dialogs follow it.
 
 ```bash
-# from the repo root
-pnpm --filter @oxagen/ui storybook        # dev server → http://localhost:6008
-pnpm --filter @oxagen/ui build-storybook  # static build → storybook-static/
-
-# or from packages/ui
-pnpm storybook
+pnpm install
+pnpm storybook         # http://localhost:6008
+pnpm build-storybook   # static build in storybook-static/
 ```
 
-Stories live next to their component as `src/components/<name>.stories.tsx` and
-are grouped in the sidebar by `title`: **Primitives**, **Forms**, **Surfaces**,
-**Navigation**, **Overlays**, **Brand**. Add a story whenever you add or change
-a component.
+Stories sit beside their component as `src/components/<name>.stories.tsx`. The
+sidebar groups them by `title`: Foundations, Primitives, Forms, Surfaces,
+Navigation, Overlays, Feedback, and Brand.
+
+A push to `main` deploys the static build to
+[brand.oxagen.cloud/storybook](https://brand.oxagen.cloud/storybook/).
+
+## Design-system bundle
+
+```bash
+pnpm build:design-system
+```
+
+It writes `components/bundle.js`, which sets `window.OxagenUI`, with
+`components/bundle.css` and `components/index.d.ts`. The bundle feeds the
+Claude Design project named in `.design-sync/config.json`.
+`.design-sync/conventions.md` and `NOTES.md` tell a generator how to compose
+the kit.
+
+## CI
+
+`.github/workflows/ui.yml` runs on a pull request that touches `ui/`,
+`tokens/`, `fonts/`, or the Vercel config, and on every push to `main`. Each
+job installs with `--frozen-lockfile`. The four jobs are `typecheck`, `test`,
+`storybook`, and `bundle`, and the last two upload `storybook-static` and
+`design-system-bundle` as artifacts. On `main`, a fifth job deploys the whole
+site to Vercel.
+
+## Tests
+
+Each component's test sits beside it as `src/components/<name>.test.tsx`.
+Vitest runs in node by default. A file that renders starts with
+`// @vitest-environment jsdom`. `src/test/expect-no-axe.ts` runs axe on a
+render. CI runs the suite. Do not run it on a laptop.
 
 ## Component inventory
 
-Import from `@oxagen/ui` (barrel) or `@/components/ui/<file>` (app proxy).
+Import from `@oxagen/ui`.
+
+### Foundations
+
+| Story | Shows |
+|---|---|
+| Typography | the app type scale, the three house faces, and their roles |
+| Icons | the Phosphor icons the kit uses, by the name it uses them under |
 
 ### Primitives
 
-| Component | File | Parts / API | Notes |
-|-----------|------|-------------|-------|
-| Button | `button.tsx` | `Button` (`render`) | variants `primary`/`default`/`secondary`/`outline`/`ghost`/`destructive`/`destructive-outline`/`link`/`gradient`; sizes `xs`/`sm`/`default`/`lg`/`xl`/`icon`/`icon-sm`/`icon-lg`. Compact scale — use `lg` for shadcn `default` (36px). |
-| Badge | `badge.tsx` | `Badge` (`render`) | variants incl. semantic `info`/`success`/`warning`/`error`; sizes `sm`/`default`/`lg`. |
-| Alert | `alert.tsx` | `Alert`, `AlertTitle`, `AlertDescription` | variants `default`/`info`/`success`/`warning`/`error`. |
-| Separator | `separator.tsx` | `Separator` | `orientation` `horizontal`/`vertical`. |
-| Skeleton | `skeleton.tsx` | `Skeleton` | loading placeholder. |
-| Spinner | `spinner.tsx` | `Spinner` | `size` `xs`…`xl`; `role="status"` with an `sr-only` `label`. |
-| StatusDot | `status-dot.tsx` | `StatusDot` | `status` `success`/`warning`/`error`/`info`/`neutral`/`primary`; optional `pulse`, `label`, `srLabel`. |
-| Label | `label.tsx` | `Label` | pairs with form controls via `htmlFor`. |
+| Component | File | Parts and API |
+|---|---|---|
+| Button | `button.tsx` | `Button` with `render`. Variants `primary`, `default`, `secondary`, `outline`, `ghost`, `destructive`, `destructive-outline`, `link`, and `gradient`. Sizes run from `xs` at 28px to `xl` at 44px, and `default` is 36px. |
+| Badge | `badge.tsx` | `Badge` with `render`. Semantic variants `info`, `success`, `warning`, and `error`, each with a `-soft` form, plus `proven-soft` and `critical-soft`. `quiet`, `chip`, and `label` are for counts, filters, and field names. |
+| ToneBadge | `tone-badge.tsx` | `ToneBadge` for a record's state, drawn by shape as well as colour. `TONE_BADGE_TONES` lists the tones. |
+| Alert | `alert.tsx` | `Alert`, `AlertTitle`, and `AlertDescription`. |
+| Separator | `separator.tsx` | `Separator` with `orientation`. |
+| Skeleton | `skeleton.tsx` | `Skeleton`. |
+| Spinner | `spinner.tsx` | `Spinner` with `size` and an `sr-only` label. |
+| StellaSpinner | `stella-spinner.tsx` | The Stella asterisk turning under the house shimmer. |
+| StatusDot | `status-dot.tsx` | `StatusDot` with `status`, `pulse`, and `label`. |
+| Label | `label.tsx` | `Label`. |
 
 ### Forms
 
-| Component | File | Parts / API | Notes |
-|-----------|------|-------------|-------|
-| Input | `input.tsx` | `Input` | `size` `sm`/`default`/`lg`. |
-| Textarea | `textarea.tsx` | `Textarea` | `size` `sm`/`default`/`lg`. |
-| Checkbox | `checkbox.tsx` | `Checkbox` | `checked` / `onCheckedChange`; supports indeterminate. |
-| Switch | `switch.tsx` | `Switch` | `checked` / `onCheckedChange`. |
-| RadioGroup | `radio-group.tsx` | `RadioGroup`, `Radio` | `defaultValue` / `value` on the group. |
-| SegmentedControl | `segmented-control.tsx` | `SegmentedControl`, `SegmentedControlItem` | single-select pill; `value` is a **string** (not array). |
-| Slider | `slider.tsx` | `Slider` (+ `SliderControl`/`Track`/`Indicator`/`Thumb`/`Value`) | `defaultValue`/`min`/`max`/`step`. |
-| Select | `select.tsx` | `Select`, `SelectTrigger`, `SelectValue`, `SelectPopup`, `SelectGroup`, `SelectLabel`, `SelectItem` | SSR: pass `items` to `Select`. ≤20 options. |
-| Combobox | `combobox.tsx` | `Combobox`, `ComboboxTrigger`, `ComboboxValue`, `ComboboxPopup`, `ComboboxItem` | searchable typeahead — use for >20 options. Item labels must be plain strings, or search will not match them. |
-| SearchInput | `search-input.tsx` | `SearchInput` | `Input` plus a leading glyph and an optional `onClear` button. |
+| Component | File | Parts and API |
+|---|---|---|
+| Input | `input.tsx` | `Input` with `size`. |
+| Textarea | `textarea.tsx` | `Textarea` with `size`. |
+| Field | `field.tsx` | `Field` and `PasswordField`: a label, a control, a hint, and an error. |
+| Checkbox | `checkbox.tsx` | `Checkbox`, with indeterminate. |
+| Switch | `switch.tsx` | `Switch`. |
+| RadioGroup | `radio-group.tsx` | `RadioGroup` and `Radio`. |
+| ChoiceGroup | `choice-group.tsx` | `ChoiceGroup`: one choice drawn as a row of option cards. A taken option stays focusable and says why. |
+| SegmentedControl | `segmented-control.tsx` | `SegmentedControl` and `SegmentedControlItem`, single select, string value. |
+| ToggleGroup | `toggle-group.tsx` | `ToggleGroup` and `ToggleGroupItem`: the outline toggle group for filters that show or hide rows by state. An item can carry a count. |
+| Slider | `slider.tsx` | `Slider` and its parts. |
+| Select | `select.tsx` | `Select`, `SelectTrigger`, `SelectValue`, `SelectPopup`, `SelectGroup`, `SelectLabel`, and `SelectItem`. Use it for 20 options or fewer. |
+| Combobox | `combobox.tsx` | `Combobox` and its parts, for more than 20 options. The empty message shows only when nothing matches. |
+| SearchInput | `search-input.tsx` | `SearchInput`: an input with a leading glyph and a clear button. |
+| FormAlert, SubmitButton, OutcomePanel | `form-feedback.tsx` | A form's error, its pending submit, and the result it lands on. |
+| Control styles | `control-styles.ts` | The shared class strings for buttons, fields, and menu surfaces. |
 
 ### Surfaces
 
-| Component | File | Parts / API | Notes |
-|-----------|------|-------------|-------|
-| Card | `card.tsx` | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardPanel`, `CardFooter` | body wrapper is `CardPanel`. |
-| Panel | `panel.tsx` | `Panel` | titled surface block (`eyebrow`/`title`/`actions`/`footer`/`inset`). |
-| Table | `table.tsx` | `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`, `TableCaption`, `TableEmpty` | `density` `default`/`compact`; always scrolls inside its own container. Pair with `<Panel inset>`. |
-| Stat | `stat.tsx` | `Stat`, `StatGroup` | KPI tile (`label`/`value`/`delta`/`trend`/`intent`/`tone`) and its hairline-divided row frame. |
-| EmptyState | `empty-state.tsx` | `EmptyState` | zero-data block (`icon`/`title`/`description`/`action`); `variant` `plain`/`dashed`/`muted`. |
-| KeyValueList | `key-value-list.tsx` | `KeyValueList` | `<dl>` for dense metadata; `dense` and `stacked` layouts. |
-| CopyButton | `copy-button.tsx` | `CopyButton`, `useCopyToClipboard` | copy-to-clipboard affordance with a transient "copied" state. |
+| Component | File | Parts and API |
+|---|---|---|
+| Card | `card.tsx` | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardPanel`, and `CardFooter`. |
+| Panel | `panel.tsx` | `Panel` with `eyebrow`, `title`, `actions`, `footer`, and `inset`. |
+| PageHeader | `page-header.tsx` | `PageHeader`: the page's one h1, with an eyebrow, a description, metadata, and actions. |
+| Table | `table.tsx` | `Table` and its parts, with `density`, plus `TableGroupRow` and `TableEmpty`. `TableHead` and `TableCell` take `numeric`. From 768px up the table is at least 560px wide and scrolls inside its own container. `narrow` drops that floor. |
+| DataTable | `data-table.tsx` | `DataTable` with the `cell`, `numericCell`, and `headCell` class strings. |
+| TruncatedCell | `truncated-cell.tsx` | `TruncatedCell`: a cell that clips its text and opens a hover card with the full value, only when the text is clipped. The card opens after 500 ms. |
+| Stat | `stat.tsx` | `Stat` and `StatGroup`: a figure tile and its row. |
+| EmptyState | `empty-state.tsx` | `EmptyState` with `variant`. |
+| StateWrap | `state-wrap.tsx` | A full-width failed, denied, or neutral state with its facts. |
+| KeyValueList | `key-value-list.tsx` | `KeyValueList` for dense metadata. |
+| CopyButton | `copy-button.tsx` | `CopyButton` and `useCopyToClipboard`. |
+| ProseMarkdown | `prose-markdown.tsx` | Markdown in the house type, through streamdown. |
+| MessageScroller | `message-scroller.tsx` | shadcn's maia message scroller, with a button back to the newest message. |
 
 ### Navigation
 
-| Component | File | Parts / API | Notes |
-|-----------|------|-------------|-------|
-| Tabs | `tabs.tsx` | `Tabs`, `TabsList`, `TabsTab`, `TabsPanel`, `TabsIndicator` | `TabsList` `variant` `default`/`underline`; values are strings. |
+| Component | File | Parts and API |
+|---|---|---|
+| Tabs | `tabs.tsx` | `Tabs`, `TabsList`, `TabsTab`, `TabsCount`, `TabsPanel`, and `TabsIndicator`. The default list is a muted track, and `TabsTab` takes a `count` for its badge. `variant="underline"` is for tabs inside a dialog. |
+| Pagination | `pagination.tsx` | `RowsPager` and `RowsField`: rows per page on the left, Previous and Next on the right. |
+| List controls | `list-controls.tsx` | `useList`, `ListBar`, and `ListPager` for a sorted, filtered, paged list. |
+| pageList | `page-list.tsx` | The page-number sequence with gaps. |
 
 ### Overlays
 
-| Component | File | Parts / API | Notes |
-|-----------|------|-------------|-------|
-| Dialog | `dialog.tsx` | `Dialog`, `DialogTrigger`, `DialogPopup`, `DialogHeader`, `DialogPanel`, `DialogFooter`, `DialogTitle`, `DialogDescription`, `DialogClose` | trigger/close use `render`. `portalProps` on `DialogPopup`. |
-| Sheet | `sheet.tsx` | `Sheet`, `SheetTrigger`, `SheetPopup`, `SheetHeader`, `SheetPanel`, `SheetFooter`, `SheetTitle`, `SheetDescription`, `SheetClose` | `side` `top`/`bottom`/`left`/`right` on `SheetPopup`. |
-| Menu | `menu.tsx` | `Menu`, `MenuTrigger`, `MenuPopup`, `MenuItem`, `MenuCheckboxItem`, `MenuRadioGroup`, `MenuRadioItem`, `MenuGroupLabel`, `MenuSeparator`, `MenuShortcut`, `MenuGroup`, `MenuSub`, `MenuSubTrigger`, `MenuSubPopup` | items use `onClick` (not `onSelect`). |
-| Tooltip | `tooltip.tsx` | `Tooltip`, `TooltipTrigger`, `TooltipPopup`, `TooltipProvider` | wrap a subtree in `TooltipProvider`. |
-| Popover | `popover.tsx` | `Popover`, `PopoverTrigger`, `PopoverClose`, `PopoverPopup`, `PopoverTitle`, `PopoverDescription` | `side`/`align`/`sideOffset` on `PopoverPopup`. |
-| Toast | `toast.tsx` | `ToastProvider`, `ToastViewport`, `useToast` | mount provider + viewport once; `useToast().add({ title, description, type })`. |
+| Component | File | Parts and API |
+|---|---|---|
+| Dialog | `dialog.tsx` | `Dialog`, `DialogTrigger`, `DialogPopup`, `DialogHeader`, `DialogPanel`, `DialogFooter`, `DialogTitle`, `DialogDescription`, and `DialogClose`. The box sits 70px from the top. `size="wide"` makes it 820px in place of 600px. The box has no padding, so content goes in the header, the panel, and the footer. |
+| Sheet | `sheet.tsx` | `Sheet` and its parts, with `side` on `SheetPopup`. Like the dialog, its box has no padding. |
+| Menu | `menu.tsx` | `Menu` and its parts. Items take `onClick`. |
+| Popover | `popover.tsx` | `Popover` and its parts. |
+| HoverCard | `hover-card.tsx` | `HoverCard` and `HoverCardContent`, for text a surface cuts off. `TruncatedCell` uses it. |
+| Tooltip | `tooltip.tsx` | `Tooltip` and its parts, under `TooltipProvider`. |
+| CommandMenu | `command-menu.tsx` | `CommandMenu` takes `groups` of commands and opens on Cmd+K or Ctrl+K: a search field over the grouped commands, with an empty line when nothing matches. `CommandMenuRoot`, `CommandMenuPopup`, `CommandMenuInput`, `CommandMenuList`, `CommandMenuItem`, and the other parts build a custom one. |
+
+Menus, selects, comboboxes, popovers, hover cards, the command menu, and
+toasts share one translucent surface. It has the popover ground at 70% over a
+blur, a faint ring in place of a border, a deep shadow, and a 16px corner.
+Its rows are 8px by 12px with 14px text. The ring and the shadow are the
+`--pop-ring` and `--ui-shadow-pop` tokens in `globals.css`. The tooltip stays
+opaque.
+
+### Feedback
+
+| Component | File | Parts and API |
+|---|---|---|
+| Toast | `toast.tsx` | `ToastProvider`, `ToastViewport`, and `useToast`. Four tones: `success`, `info`, `warn`, and `error`, with `warning` as another name for `warn`. A toast lasts 4200 ms and pauses while the pointer is over it. |
+| Attachment | `attachment.tsx` | `Attachment` and its parts: a media tile, a name, a kind and size, and a remove action. It shimmers while it uploads. `AttachmentCard` draws one `AttachmentFile` in the composer, and `ATTACHMENT_ACCEPT` lists the file types the attach button takes. |
+| Composer | `composer.tsx` | `Composer`, the assistant composer with an attach button and its attachment cards, and `ComposerSentTurn`, the turn it leaves in the thread. The root is a `<form>`, so do not nest it in another form. |
 
 ### Brand
 
-| Component | File | Parts / API | Notes |
-|-----------|------|-------------|-------|
-| Logo | `brand.tsx` | `OxagenLogo`, `OxagenLogomark`, `OxagenWordmark`, `OxagenLockup`, `BrandMark`, `NodeChip`, `ConfidenceBar` | `OxagenLogo` `variant` `mark`/`wordmark`/`horizontal`/`vertical`, `size` in px. |
-| HexField | `hex-field.tsx` | `HexField` | Ambient hexagon backdrop. **Not in the barrel** — deep-import `@oxagen/ui/components/hex-field` through the app's re-export layer. |
+| Component | File | Parts and API |
+|---|---|---|
+| Logo | `brand.tsx` | `OxagenLogo`, `OxagenLogomark`, `OxagenWordmark`, `OxagenLockup`, and `BrandMark`. |
+| Brand marks | `brand-marks.generated.ts` | The mark paths and gold, generated from the house marks. |
+| HexField | `hex-field.tsx` | The hexagon backdrop. It is not in the barrel. |
 
-### Providers / utilities
+### Providers and hooks
 
 | Export | File | Notes |
-|--------|------|-------|
-| `ThemeProvider`, `useTheme`, `THEME_COOKIE_NAME`, `parseTheme`, `themeClass` | `theme-provider.tsx`, `theme-config.ts` | self-hosted, cookie-based, no-flash theming. |
-| `MotionProvider` | `motion-provider.tsx` | motion config provider. |
-| `GlobalErrorPage`, `NotFoundPage` | `global-error.tsx`, `not-found.tsx` | full-page templates. |
-| `cn` | `lib/utils.ts` | `clsx` + `tailwind-merge`. |
+|---|---|---|
+| `ThemeProvider`, `useTheme`, `THEME_COOKIE_NAME` | `theme-provider.tsx`, `theme-config.ts` | Cookie-based theming with no flash. |
+| `MotionProvider` | `motion-provider.tsx` | The motion config. |
+| `useExitGuard` | `exit-guard.ts` | Holds the window while a value exists only on this screen. |
+| `useExpiryClock` | `expiry-clock.ts` | The clock a row judges its own expiry against, so a stale row stops saying active. |
+| `FocusedHeading` | `focused-heading.tsx` | The heading of a result that replaced a form. It takes focus once, on mount. |
+| `GlobalErrorPage`, `NotFoundPage` | `global-error.tsx`, `not-found.tsx` | Full-page templates. |
+| `cn` | `lib/utils.ts` | `clsx` with `tailwind-merge`. |
 
 ## Styling
 
-Colors, radius, and state come from CSS variables in
-`src/styles/globals.css` (the value layer) mapped to Tailwind utilities via the
-`@theme inline` block. **Reskin by editing tokens, not component class strings.**
-Token values live in `src/styles/house-tokens.css`, vendored from the house kit; [`THEME.md`](./THEME.md) says which file answers which question and carries the rules a value cannot state.
+`src/styles/globals.css` maps the house tokens onto semantic roles and exposes
+them to Tailwind through `@theme inline`. [`THEME.md`](./THEME.md) says which
+file answers which question and states the rules a value cannot.
 
 ## Scripts
 
 ```bash
-pnpm typecheck          # tsc --noEmit
-pnpm lint               # eslint, zero warnings
-pnpm test:unit src/components/<name>.test.tsx   # one file; CI runs the suite
-pnpm test:coverage      # vitest + coverage thresholds (CI)
-pnpm storybook          # Storybook dev (:6008)
-pnpm build-storybook    # static Storybook build
+pnpm typecheck             # tsc --noEmit
+pnpm test:unit             # vitest, in CI
+pnpm test:coverage         # vitest with coverage thresholds
+pnpm storybook             # Storybook on :6008
+pnpm build-storybook       # static Storybook
+pnpm build:types           # index.d.ts for the bundle
+pnpm build:design-system   # bundle.js, bundle.css, and index.d.ts
 ```

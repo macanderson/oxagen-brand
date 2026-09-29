@@ -105,6 +105,7 @@ In today's world, As AI agents become, With the rise of, It's no secret that, We
 | there is nothing for the agent to leak | Oxagen uses the connection credential on the agent's behalf |
 | the next run costs less | see what each recorded run costs |
 | stop wasting money on AI | see which agent spent what, and on whose behalf |
+| wasted spend | unproductive spend: spend on steps that bought no progress, with the requests behind it |
 | can you explain your AI bill | see which agent spent what, and on whose behalf |
 | every agent you run has it | give agents the business context their work requires |
 | SOC 2 compliant | the exact report status, type, and scope, or the readiness status |

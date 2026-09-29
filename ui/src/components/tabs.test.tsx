@@ -9,7 +9,8 @@
 import { render, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, afterEach } from "vitest";
-import { Tabs, TabsList, TabsTab, TabsPanel } from "./tabs";
+import { Tabs, TabsList, TabsTab, TabsCount, TabsPanel } from "./tabs";
+import { expectNoAxe } from "../test/expect-no-axe";
 
 afterEach(cleanup);
 
@@ -121,5 +122,86 @@ describe("Tabs — render", () => {
       </Tabs>,
     );
     expect(getByRole("tablist").className).toContain("custom-list");
+  });
+});
+
+describe("Tabs counts", () => {
+  function CountedTabs() {
+    return (
+      <Tabs defaultValue="runs">
+        <TabsList>
+          <TabsTab value="runs" count={24}>
+            Runs
+          </TabsTab>
+          <TabsTab value="waiting" count={0}>
+            Waiting
+          </TabsTab>
+          <TabsTab value="agents">Agents</TabsTab>
+        </TabsList>
+        <TabsPanel value="runs">Runs panel</TabsPanel>
+        <TabsPanel value="waiting">Waiting panel</TabsPanel>
+        <TabsPanel value="agents">Agents panel</TabsPanel>
+      </Tabs>
+    );
+  }
+
+  it("renders the count prop after the label", () => {
+    const { getByRole } = render(<CountedTabs />);
+    const tab = getByRole("tab", { name: /Runs/ });
+    const count = tab.querySelector('[data-slot="tabs-count"]');
+    expect(count).toHaveTextContent("24");
+    expect(tab.lastElementChild).toBe(count);
+  });
+
+  it("renders a zero count", () => {
+    const { getByRole } = render(<CountedTabs />);
+    const tab = getByRole("tab", { name: /Waiting/ });
+    expect(tab.querySelector('[data-slot="tabs-count"]')).toHaveTextContent(
+      "0",
+    );
+  });
+
+  it("renders no badge without a count", () => {
+    const { getByRole } = render(<CountedTabs />);
+    const tab = getByRole("tab", { name: "Agents" });
+    expect(tab.querySelector('[data-slot="tabs-count"]')).toBeNull();
+  });
+
+  it("renders TabsCount as a part inside a tab", () => {
+    const { getByRole } = render(
+      <Tabs defaultValue="agents">
+        <TabsList>
+          <TabsTab value="agents">
+            Agents
+            <TabsCount className="custom-count">6</TabsCount>
+          </TabsTab>
+        </TabsList>
+        <TabsPanel value="agents">Agents panel</TabsPanel>
+      </Tabs>,
+    );
+    const count = getByRole("tab", { name: /Agents/ }).querySelector(
+      '[data-slot="tabs-count"]',
+    );
+    expect(count).toHaveTextContent("6");
+    expect(count?.className).toContain("custom-count");
+  });
+
+  it("selects a counted tab by click", async () => {
+    const { getByRole, getByText } = render(<CountedTabs />);
+    await userEvent.click(getByRole("tab", { name: /Waiting/ }));
+    expect(getByRole("tab", { name: /Waiting/ })).toHaveAttribute(
+      "data-active",
+    );
+    expect(getByText("Waiting panel")).toBeInTheDocument();
+  });
+
+  it("has no axe violations with counts", async () => {
+    const { container } = render(<CountedTabs />);
+    await expectNoAxe(container);
+  });
+
+  it("has no axe violations in the underline variant", async () => {
+    const { container } = render(<SimpleTabs variant="underline" />);
+    await expectNoAxe(container);
   });
 });

@@ -1,0 +1,29 @@
+id: mc-work-order-metrics
+brand: oxagen
+kind: card
+order: 20
+title: Read what each work order cost to finish.
+short: See the done rate, first-pass rate, cost and time to done, rework spend, and abandoned spend.
+long: A work order carries a definition of done, so Oxagen can count what finished and what it cost. Read the done rate, the share done on the first pass, and the cost and time to done. See the spend on rework after a failed check, the spend on work orders closed without finishing, and how often done work orders reopen. Each figure opens to the runs and requests behind it.
+cta: Read a work order's metrics
+audience:
+- operator
+- finance
+- engineering
+clause: record
+surfaces:
+- product-page
+- feature-cards
+status: candidate
+release: held
+gate:
+- work-orders
+- dod
+qualifier: For work orders with a definition of done, on runs routed through Oxagen. A held check means the specified checks held.
+evidence: 'Product owner: show one work order with each figure computed from its runs and requests, and each figure''s definition beside it.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+- '01'
+- '02'
+notes: 'Proposal from finding-wasted-spend.html. Mac asked on 2026-09-27 for the metrics Oxagen tracks once work orders carry a deterministic definition of done. Applies to bounded work only, per finding 01.'

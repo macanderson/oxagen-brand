@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { Check, Copy } from "lucide-react";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 import { Button, type ButtonProps } from "./button";
 import { Tooltip, TooltipTrigger, TooltipPopup } from "./tooltip";
@@ -109,14 +109,14 @@ const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
         >
           <span className="relative inline-flex size-4 items-center justify-center">
             {/* Crossfade + pop between the two icons; transform-only, token-timed. */}
-            <Copy
+            <CopyIcon
               aria-hidden="true"
               className={cn(
                 "absolute size-3.5 transition-[opacity,transform,translate,scale] duration-[var(--motion-micro)] ease-[var(--ease-hover)]",
                 copied ? "scale-50 opacity-0" : "scale-100 opacity-100",
               )}
             />
-            <Check
+            <CheckIcon
               aria-hidden="true"
               className={cn(
                 "absolute size-3.5 text-success transition-[opacity,transform,translate,scale] duration-[var(--motion-micro)] ease-[var(--ease-hover)]",

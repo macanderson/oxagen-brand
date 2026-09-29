@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
-import { Check, Minus } from "lucide-react";
+import { CheckIcon, MinusIcon } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 /**
@@ -47,8 +47,8 @@ const Checkbox = React.forwardRef<
         "[&>.coss-minus]:hidden data-[indeterminate]:[&>.coss-check]:hidden data-[indeterminate]:[&>.coss-minus]:block",
       )}
     >
-      <Check className="coss-check size-3.5" aria-hidden="true" />
-      <Minus className="coss-minus size-3.5" aria-hidden="true" />
+      <CheckIcon className="coss-check size-3.5" aria-hidden="true" />
+      <MinusIcon className="coss-minus size-3.5" aria-hidden="true" />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ));

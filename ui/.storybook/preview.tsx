@@ -15,15 +15,20 @@ const withTheme: Decorator = (Story, context) => {
   // class never reaches them. Mirror the class onto <html> so portalled content
   // inherits the same token theme it does in the real app, where the
   // ThemeProvider sets `.dark` on <html>.
+  //
+  // Light mode sets `.light` too. The tokens follow the OS preference on a root
+  // that carries neither class, so without it a viewer on a dark OS saw dark
+  // tokens under the Light toolbar item.
   React.useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
-    return () => root.classList.remove("dark");
+    root.classList.toggle("light", theme !== "dark");
+    return () => root.classList.remove("dark", "light");
   }, [theme]);
   return (
     <div
       className={[
-        theme === "dark" ? "dark" : "",
+        theme === "dark" ? "dark" : "light",
         "min-h-screen bg-background p-6 text-foreground",
       ]
         .filter(Boolean)

@@ -93,14 +93,14 @@ Full guidance, with before and after pairs, is in `references/voice.md`.
 - [ ] No savings claim without the measured workload and conditions
 - [ ] No SOC 2 attestation claim unless the actual report supports it
 - [ ] Completion is presented as optional, for bounded tasks, and never as the lead
-- [ ] An operator review line reports what the record shows, with each habit's definition beside it, and does not grade the person
+- [ ] An operator review line reports what the record shows, with each habit's definition beside it, and does not grade the person. The one ranking of people is the manager's ranking of operators by unproductive spend (decided 2026-09-27)
 - [ ] Short forms keep the qualifiers of their longer versions
 - [ ] Buyer quotes are labelled hypothetical unless an attributed customer approved them
 - [ ] No traction numbers, partner counts, or setup durations without dated evidence
 - [ ] Every claim is one the record can back
 - [ ] Space Grotesk for wordmarks and h1 to h3 only, Geist for h4 to h6, body, and UI, Monaspace Neon for code, data, digests, and commands
 - [ ] One type scale per surface: marketing (`text-m-*`) or app (`text-a-*`)
-- [ ] 12px card radius, 1120px wrap, dark first on obsidian with the white light theme intact
+- [ ] Card radius 12px on the website and 13px in the app, 1120px wrap, dark first on obsidian with the white light theme intact
 - [ ] Gold as text on white is gold-deep `#8A7223`
 - [ ] Every text role that carries meaning clears 4.5:1 on its ground
 

@@ -1,11 +1,13 @@
 // @vitest-environment jsdom
 /**
- * sheet.test.tsx — render tests for Sheet and sub-parts.
+ * Render tests for Sheet and its parts, including the mockup's drawer recipe
+ * and axe in the open state.
  */
 
 import { render, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, afterEach } from "vitest";
+import { expectNoAxe } from "../test/expect-no-axe";
 import {
   Sheet,
   SheetTrigger,
@@ -39,7 +41,7 @@ function OpenSheet({ side }: { side?: "top" | "bottom" | "left" | "right" }) {
   );
 }
 
-describe("Sheet — open state render", () => {
+describe("Sheet open state", () => {
   it("renders with dialog role when open", () => {
     const { getByRole } = render(<OpenSheet />);
     expect(getByRole("dialog")).toBeInTheDocument();
@@ -64,9 +66,60 @@ describe("Sheet — open state render", () => {
     const { getByRole } = render(<OpenSheet />);
     expect(getByRole("button", { name: "Close Sheet" })).toBeInTheDocument();
   });
+
+  it("has an accessible close icon button", () => {
+    const { getByRole } = render(<OpenSheet />);
+    const close = getByRole("button", { name: "Close" });
+    expect(close.querySelector("svg")).not.toBeNull();
+  });
+
+  it("passes axe while open", async () => {
+    const { getByRole } = render(<OpenSheet />);
+    await expectNoAxe(getByRole("dialog"));
+  });
 });
 
-describe("Sheet — trigger open", () => {
+describe("Sheet drawer recipe", () => {
+  it("opens from the right, up to 580px wide, with a rule on its inner edge", () => {
+    const { getByRole } = render(<OpenSheet />);
+    const cls = getByRole("dialog").className;
+    for (const want of [
+      "right-0",
+      "w-[min(580px,100%)]",
+      "border-l",
+      "border-dialog-border",
+      "bg-dialog-bg",
+      "flex-col",
+    ]) {
+      expect(cls).toContain(want);
+    }
+    expect(cls).not.toContain("p-6");
+    expect(cls).not.toContain("sm:max-w-sm");
+  });
+
+  it("puts the rule on the right edge of a left drawer", () => {
+    const { getByRole } = render(<OpenSheet side="left" />);
+    const cls = getByRole("dialog").className;
+    expect(cls).toContain("left-0");
+    expect(cls).toContain("border-r");
+  });
+
+  it("rules the header, sets the title at 17px and pads the body", () => {
+    const { getByText } = render(<OpenSheet />);
+    const title = getByText("Sheet Title");
+    expect(title.className).toContain("text-[17px]");
+    const header = title.parentElement;
+    expect(header?.className).toContain("border-b");
+    expect(header?.className).toContain("py-[14px]");
+    expect(header?.className).toContain("pl-[18px]");
+    const body = getByText("Sheet body content").parentElement;
+    for (const want of ["px-[18px]", "pt-4", "pb-12", "gap-3", "overflow-y-auto"]) {
+      expect(body?.className).toContain(want);
+    }
+  });
+});
+
+describe("Sheet trigger", () => {
   it("opens sheet when trigger is clicked", async () => {
     const { queryByRole, getByRole } = render(
       <Sheet>
@@ -84,7 +137,7 @@ describe("Sheet — trigger open", () => {
   });
 });
 
-describe("SheetHeader / SheetPanel / SheetFooter — standalone", () => {
+describe("SheetHeader, SheetPanel and SheetFooter standalone", () => {
   it("SheetHeader renders children", () => {
     const { getByText } = render(<SheetHeader>Header</SheetHeader>);
     expect(getByText("Header")).toBeInTheDocument();

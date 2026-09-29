@@ -1,11 +1,28 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    // No build step: this package is consumed as raw TS source via the apps'
-    // `transpilePackages`. `typecheck` runs `tsc --noEmit`, so there is no emit
-    // and no `dist/` — do not reintroduce `outDir` or `rootDir`.
+    // No build step: consumers read the raw TS source. `typecheck` runs
+    // `tsc --noEmit`. The design-system bundle emits declarations through
+    // `.design-sync/tsconfig.types.json`, so do not add `outDir` or `rootDir`
+    // here.
+    "target": "ES2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "jsx": "react-jsx"
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
   },
   "include": [
     "src",
@@ -13,5 +30,6 @@
     "vitest.config.ts",
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx"
-  ]
+  ],
+  "exclude": ["node_modules", "dist", "storybook-static", "design-system"]
 }
