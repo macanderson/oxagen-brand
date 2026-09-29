@@ -72,6 +72,7 @@ build/             color.py · typeset.py · fonts.py · pagecss.py · glyphs.py
 build/reference/   the kit wordmark and logomark this system is checked against
 fonts/             Space Grotesk, Geist and Monaspace Neon webfonts, each with its licence
 tokens/            house-tokens.css · house-tokens.json · house-tailwind.css · house-fonts.css · next-fonts.ts
+ui/                @oxagen/ui: the component kit, its Storybook, and the design-system bundle. Reads tokens/ and fonts/.
 logo/svg,png/      wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles
 icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webmanifest
 spinners/          the house motion, animated SVG, no script

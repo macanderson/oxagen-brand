@@ -1,0 +1,7 @@
+# ui/ is a single package, not a workspace. pnpm 11 and later read their
+# settings from this file only, so it exists to carry them.
+
+# esbuild builds the design-system bundle. Its install script links the native
+# binary for the platform.
+allowBuilds:
+  esbuild: true
