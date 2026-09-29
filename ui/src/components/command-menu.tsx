@@ -112,8 +112,17 @@ const CommandMenuPopup = React.forwardRef<HTMLDivElement, CommandMenuPopupProps>
     { className, children, title = "Search", portalProps, initialFocus, ...props },
     ref,
   ) => {
-    const popupRef = React.useRef<HTMLDivElement>(null);
-    React.useImperativeHandle(ref, () => popupRef.current as HTMLDivElement);
+    // A callback ref, because the portal mounts the popup after this
+    // component commits, and useImperativeHandle would read null then.
+    const popupRef = React.useRef<HTMLDivElement | null>(null);
+    const setRefs = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        popupRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
+      },
+      [ref],
+    );
     // Focus the search field rather than the phone bar's close button, which
     // comes first in the tab order.
     const focusSearch = React.useCallback(
@@ -130,7 +139,7 @@ const CommandMenuPopup = React.forwardRef<HTMLDivElement, CommandMenuPopupProps>
           )}
         />
         <DialogPrimitive.Popup
-          ref={popupRef}
+          ref={setRefs}
           aria-label={title}
           initialFocus={initialFocus ?? focusSearch}
           className={cn(
