@@ -54,6 +54,7 @@ STEPS: dict[str, tuple[str, ...]] = {
     "icons": ("icons",),
     "spinners": ("spinners",),
     "wallpapers": ("wallpapers",),
+    "splash": ("splash",),
     "social": ("social",),
     "ads": ("ads",),
     "content": ("content",),
@@ -496,6 +497,79 @@ def build_wallpapers(raster: bool) -> None:
                         png(p, width=w)
 
 
+#: Every launch screen iOS and iPadOS ask a home-screen web app for, as the
+#: device's CSS size and pixel ratio. Safari shows an `apple-touch-startup-image`
+#: only when its media query matches the screen exactly, so a size missing here
+#: launches on a flat colour. Phones launch upright; an iPad launches in the
+#: orientation it is held, so each iPad size also has its landscape screen.
+SPLASH_PHONES = [
+    (440, 956, 3),   # iPhone 16 Pro Max
+    (402, 874, 3),   # iPhone 16 Pro
+    (430, 932, 3),   # iPhone 16 Plus, 15 Plus, 15 Pro Max, 14 Pro Max
+    (393, 852, 3),   # iPhone 16, 15, 15 Pro, 14 Pro
+    (428, 926, 3),   # iPhone 14 Plus, 13 Pro Max, 12 Pro Max
+    (390, 844, 3),   # iPhone 14, 13, 13 Pro, 12, 12 Pro
+    (375, 812, 3),   # iPhone 13 mini, 12 mini, 11 Pro, XS, X
+    (414, 896, 3),   # iPhone 11 Pro Max, XS Max
+    (414, 896, 2),   # iPhone 11, XR
+    (414, 736, 3),   # iPhone 8 Plus
+    (375, 667, 2),   # iPhone SE 2nd and 3rd generation, 8
+    (320, 568, 2),   # iPhone SE 1st generation
+]
+SPLASH_TABLETS = [
+    (1032, 1376, 2),  # iPad Pro 13-inch (M4)
+    (1024, 1366, 2),  # iPad Pro 12.9-inch
+    (834, 1210, 2),   # iPad Pro 11-inch (M4)
+    (834, 1194, 2),   # iPad Pro 11-inch
+    (820, 1180, 2),   # iPad Air 10.9-inch, iPad 10th generation
+    (834, 1112, 2),   # iPad Air 10.5-inch
+    (810, 1080, 2),   # iPad 10.2-inch
+    (744, 1133, 2),   # iPad mini 6th generation
+    (768, 1024, 2),   # iPad mini 5th generation, iPad 9.7-inch
+]
+
+
+def splash_screens() -> list[dict[str, object]]:
+    """One row per launch screen: its CSS size, pixel ratio, orientation and pixels."""
+    rows: list[dict[str, object]] = []
+    for devices, turns in ((SPLASH_PHONES, ("portrait",)), (SPLASH_TABLETS, ("portrait", "landscape"))):
+        for cw, ch, ratio in devices:
+            for turn in turns:
+                w, h = (cw * ratio, ch * ratio) if turn == "portrait" else (ch * ratio, cw * ratio)
+                rows.append({"deviceWidth": cw, "deviceHeight": ch, "pixelRatio": ratio,
+                             "orientation": turn, "width": w, "height": h})
+    return rows
+
+
+def build_splash(raster: bool) -> None:
+    """The launch screens of an installed app, and the table that places them.
+
+    `splash/splash-screens.json` lists every screen with the media query Safari
+    matches it on, so a product writes its `apple-touch-startup-image` links from
+    the table rather than from a hand-kept list of device sizes.
+    """
+    rows = splash_screens()
+    for b in BRAND_WORDS:
+        for scheme in ("dark", "light"):
+            for r in rows:
+                w, h = int(r["width"]), int(r["height"])
+                p = write(f"splash/{b}-splash-{w}x{h}-{scheme}.svg", SF.splash(w, h, b, scheme))
+                if raster:
+                    png(p, width=w)
+    table = [
+        {
+            **r,
+            "file": "{brand}-splash-%dx%d-{scheme}.png" % (r["width"], r["height"]),
+            "media": (
+                f"(device-width: {r['deviceWidth']}px) and (device-height: {r['deviceHeight']}px)"
+                f" and (-webkit-device-pixel-ratio: {r['pixelRatio']}) and (orientation: {r['orientation']})"
+            ),
+        }
+        for r in rows
+    ]
+    write("splash/splash-screens.json", json.dumps({"screens": table}, indent=2) + "\n")
+
+
 def build_social(raster: bool) -> None:
     for b in BRAND_WORDS:
         tag = TAGLINES[b]
@@ -781,6 +855,7 @@ def main() -> None:
         "icons": lambda: build_favicons(raster),
         "spinners": build_spinners,
         "wallpapers": lambda: build_wallpapers(raster),
+        "splash": lambda: build_splash(raster),
         "social": lambda: build_social(raster),
         "ads": lambda: build_ads(raster),
         "content": lambda: build_content(raster),

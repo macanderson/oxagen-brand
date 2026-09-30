@@ -26,6 +26,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 import pagecss as PG
+import pwa
 import typeset as TS
 import color as C
 
@@ -917,6 +918,7 @@ class Page:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark light">
 <title>Oxagen message bank</title>
+{pwa.head()}
 <style>{FONT_FACES}</style>
 <style>
 {BANK_CSS}{EXTRA_CSS}</style>

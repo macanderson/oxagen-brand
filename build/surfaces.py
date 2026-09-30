@@ -580,6 +580,20 @@ def wallpaper_phone(w: int, h: int, brand: str, scheme: str, style: str = "glow"
     return s.svg()
 
 
+def splash(w: int, h: int, brand: str, scheme: str) -> str:
+    """The launch screen of the installed app: the `word` phone wallpaper.
+
+    Same composition as `wallpaper_phone(..., "word")`, centred on the screen,
+    and sized off the short side so a landscape iPad carries the wordmark at
+    the size its portrait screen does.
+    """
+    s = Surface(w, h, scheme)
+    cx, cy, side = w * 0.5, h * 0.5, min(w, h)
+    s.glow(cx, cy, side * 0.72, 0.30)
+    s.wordmark(brand, cx, cy, side * 0.56)
+    return s.svg()
+
+
 def avatar(brand: str, size: int, scheme: str) -> str:
     s = Surface(size, size, scheme)
     s.glow(size * 0.5, size * 0.5, size * 0.6, 0.14 if scheme == "dark" else 0.08)
@@ -859,6 +873,7 @@ __all__ = [
     "content_card",
     "mark_aspect",
     "og_card",
+    "splash",
     "thumbnail",
     "wallpaper_desktop",
     "wallpaper_phone",

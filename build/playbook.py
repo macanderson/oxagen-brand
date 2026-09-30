@@ -12,6 +12,7 @@ import html
 from pathlib import Path
 
 import color as C
+import pwa
 import typeset as T
 import glyphs as G
 import surfaces as SF
@@ -474,6 +475,7 @@ def build_html() -> str:
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Oxagen house system</title>
 <meta name="color-scheme" content="dark light">
+{pwa.head()}
 <style>{css()}</style>
 </head>
 <body>
