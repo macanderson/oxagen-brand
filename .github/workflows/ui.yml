@@ -1,21 +1,15 @@
 name: ui
 
-# The component kit in ui/. A pull request that touches the kit, the tokens, or
-# the fonts gets a typecheck, the unit tests, a static Storybook, and the
-# design-system bundle, and the last two upload as artifacts. A push to main
-# runs the same jobs and then deploys the whole site, Storybook included, to
-# brand.oxagen.cloud. The deploy runs on every main push, because the Vercel
-# project deploys by CLI only and a playbook change needs a deploy too.
+# The site and the component kit. Every pull request, and every push to main,
+# runs the brand checks (the build, the message registry, the webfonts, and the
+# branding skill), the kit's typecheck and unit tests, a static Storybook, and
+# the design-system bundle. The last two upload as artifacts. A push to main
+# then deploys the whole site, Storybook included, to brand.oxagen.cloud, once
+# every job has passed. Agents read the brand from main, so a push to main
+# that fails a check never deploys.
 
 on:
   pull_request:
-    paths:
-      - "ui/**"
-      - "tokens/**"
-      - "fonts/**"
-      - "vercel.json"
-      - ".vercelignore"
-      - ".github/workflows/ui.yml"
   push:
     branches: [main]
   workflow_dispatch:
@@ -32,6 +26,33 @@ defaults:
     working-directory: ui
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      # hb-shape reproduces the wordmark, and rsvg-convert renders the marks.
+      - name: Install the build tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libharfbuzz-bin librsvg2-bin
+          python -m pip install --quiet fonttools brotli pyyaml
+      - run: python build/build.py --check
+      - run: python build/messages.py --check
+      - run: python build/fonts.py --check
+      - run: python build/skill.py --check
+      - name: Install the skill stub into a scratch project
+        run: |
+          dir=$(mktemp -d)
+          sh skills/install.sh --project "$dir"
+          sh skills/install.sh --check --project "$dir"
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -118,7 +139,7 @@ jobs:
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [typecheck, test, storybook, bundle]
+    needs: [check, typecheck, test, storybook, bundle]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:

@@ -1,15 +1,19 @@
 #!/usr/bin/env sh
-# Install the Oxagen branding skill into Claude Code from this checkout.
+# Install the Oxagen branding skill's stub into Claude Code.
 #
-#   skills/install.sh                 link ~/.claude/skills/oxagen-branding to this checkout
-#   skills/install.sh --project DIR   copy the skill into DIR/.claude/skills/oxagen-branding
-#   skills/install.sh --check         report whether the installed skill matches this checkout
+#   skills/install.sh                 install the stub at ~/.claude/skills/oxagen-branding
+#   skills/install.sh --project DIR   install the stub at DIR/.claude/skills/oxagen-branding
+#   skills/install.sh --check         report whether the installed skill is the current stub
 #   skills/install.sh --check --project DIR
 #
-# The per-user install is a symlink, so `git pull` in this repo updates the
-# skill in every project on the machine. A project install is a copy, for a
-# repo that vendors the skill and commits it (the oxagen monorepo does this
-# through its own sync script; do not point this at it). Both are idempotent.
+# The stub is one SKILL.md. It fetches the full skill from macanderson/oxagen-brand
+# at the current main commit and follows it, so an installed stub never goes
+# stale and nothing needs reinstalling when the brand changes. A project commits
+# the stub, which is how cloud sessions get the skill: they load a repository's
+# .claude/skills/ but not ~/.claude/skills/.
+#
+# Both modes replace an older install: the symlink to this checkout, or a full
+# copy of skills/oxagen-branding/. Both are idempotent.
 #
 # ~/.claude/skills/brand-voice-guidelines is an older voice guide from July
 # 2026. This skill supersedes it. The installer does not remove it.
@@ -17,8 +21,7 @@
 set -eu
 
 here=$(cd "$(dirname "$0")" && pwd)
-src="$here/oxagen-branding"
-mode=user
+stub="$here/stub/oxagen-branding/SKILL.md"
 check=0
 project=""
 
@@ -28,65 +31,51 @@ while [ $# -gt 0 ]; do
     --project)
       shift
       [ $# -gt 0 ] || { echo "install.sh: --project needs a directory" >&2; exit 2; }
-      mode=project
       project=$1
       ;;
-    -h|--help) sed -n '2,15p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,19p' "$0"; exit 0 ;;
     *) echo "install.sh: unknown argument $1" >&2; exit 2 ;;
   esac
   shift
 done
 
-[ -f "$src/SKILL.md" ] || { echo "install.sh: no skill at $src" >&2; exit 2; }
+[ -f "$stub" ] || { echo "install.sh: no stub at $stub" >&2; exit 2; }
 
-if [ "$mode" = user ]; then
-  dest="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}/oxagen-branding"
-else
+if [ -n "$project" ]; then
   dest="$project/.claude/skills/oxagen-branding"
+else
+  dest="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}/oxagen-branding"
 fi
 
-# Compare two trees by content, ignoring OS droppings. Exit 0 when identical.
-same_tree() {
-  diff -rq --exclude .DS_Store "$1" "$2" >/dev/null 2>&1
-}
-
 if [ "$check" = 1 ]; then
-  if [ ! -e "$dest" ]; then
+  if [ -L "$dest" ]; then
+    echo "oxagen-branding: $dest is a link from an older install; run $0${project:+ --project $project}"
+    exit 1
+  fi
+  if [ ! -f "$dest/SKILL.md" ]; then
     echo "oxagen-branding: not installed at $dest"
     exit 1
   fi
-  if [ "$mode" = user ] && [ -L "$dest" ]; then
-    target=$(cd "$dest" 2>/dev/null && pwd -P || true)
-    if [ "$target" = "$(cd "$src" && pwd -P)" ]; then
-      echo "oxagen-branding: linked, $dest -> $src"
-      exit 0
-    fi
-    echo "oxagen-branding: linked elsewhere, $dest -> ${target:-?}"
-    exit 1
-  fi
-  if same_tree "$src" "$dest"; then
-    echo "oxagen-branding: installed copy at $dest matches this checkout"
+  extra=$(cd "$dest" && ls -A | sed '/^SKILL\.md$/d; /^\.DS_Store$/d')
+  if cmp -s "$stub" "$dest/SKILL.md" && [ -z "$extra" ]; then
+    echo "oxagen-branding: $dest is the current stub"
     exit 0
   fi
-  echo "oxagen-branding: installed copy at $dest is stale; run $0${project:+ --project $project}"
-  diff -rq --exclude .DS_Store "$src" "$dest" || true
+  echo "oxagen-branding: $dest is not the current stub; run $0${project:+ --project $project}"
   exit 1
 fi
 
-mkdir -p "$(dirname "$dest")"
-
-if [ "$mode" = user ]; then
-  if [ -L "$dest" ]; then
-    rm "$dest"
-  elif [ -e "$dest" ]; then
-    echo "install.sh: $dest exists and is not a link; move it aside first" >&2
+# Replace only what an earlier install of this skill left behind.
+if [ -L "$dest" ]; then
+  rm "$dest"
+elif [ -e "$dest" ]; then
+  if [ "$(sed -n '2p' "$dest/SKILL.md" 2>/dev/null)" != "name: oxagen-branding" ]; then
+    echo "install.sh: $dest exists and is not an oxagen-branding install; move it aside first" >&2
     exit 1
   fi
-  ln -s "$src" "$dest"
-  echo "oxagen-branding: linked $dest -> $src"
-else
   rm -rf "$dest"
-  mkdir -p "$dest"
-  (cd "$src" && tar cf - --exclude .DS_Store .) | (cd "$dest" && tar xf -)
-  echo "oxagen-branding: copied into $dest"
 fi
+
+mkdir -p "$dest"
+cp "$stub" "$dest/SKILL.md"
+echo "oxagen-branding: installed the stub at $dest"
