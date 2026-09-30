@@ -1,0 +1,304 @@
+{
+  "screens": [
+    {
+      "deviceWidth": 440,
+      "deviceHeight": 956,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1320,
+      "height": 2868,
+      "file": "{brand}-splash-1320x2868-{scheme}.png",
+      "media": "(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 402,
+      "deviceHeight": 874,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1206,
+      "height": 2622,
+      "file": "{brand}-splash-1206x2622-{scheme}.png",
+      "media": "(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 430,
+      "deviceHeight": 932,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1290,
+      "height": 2796,
+      "file": "{brand}-splash-1290x2796-{scheme}.png",
+      "media": "(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 393,
+      "deviceHeight": 852,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1179,
+      "height": 2556,
+      "file": "{brand}-splash-1179x2556-{scheme}.png",
+      "media": "(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 428,
+      "deviceHeight": 926,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1284,
+      "height": 2778,
+      "file": "{brand}-splash-1284x2778-{scheme}.png",
+      "media": "(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 390,
+      "deviceHeight": 844,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1170,
+      "height": 2532,
+      "file": "{brand}-splash-1170x2532-{scheme}.png",
+      "media": "(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 375,
+      "deviceHeight": 812,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1125,
+      "height": 2436,
+      "file": "{brand}-splash-1125x2436-{scheme}.png",
+      "media": "(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 414,
+      "deviceHeight": 896,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1242,
+      "height": 2688,
+      "file": "{brand}-splash-1242x2688-{scheme}.png",
+      "media": "(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 414,
+      "deviceHeight": 896,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 828,
+      "height": 1792,
+      "file": "{brand}-splash-828x1792-{scheme}.png",
+      "media": "(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 414,
+      "deviceHeight": 736,
+      "pixelRatio": 3,
+      "orientation": "portrait",
+      "width": 1242,
+      "height": 2208,
+      "file": "{brand}-splash-1242x2208-{scheme}.png",
+      "media": "(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 375,
+      "deviceHeight": 667,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 750,
+      "height": 1334,
+      "file": "{brand}-splash-750x1334-{scheme}.png",
+      "media": "(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 320,
+      "deviceHeight": 568,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 640,
+      "height": 1136,
+      "file": "{brand}-splash-640x1136-{scheme}.png",
+      "media": "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 1032,
+      "deviceHeight": 1376,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 2064,
+      "height": 2752,
+      "file": "{brand}-splash-2064x2752-{scheme}.png",
+      "media": "(device-width: 1032px) and (device-height: 1376px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 1032,
+      "deviceHeight": 1376,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2752,
+      "height": 2064,
+      "file": "{brand}-splash-2752x2064-{scheme}.png",
+      "media": "(device-width: 1032px) and (device-height: 1376px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    },
+    {
+      "deviceWidth": 1024,
+      "deviceHeight": 1366,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 2048,
+      "height": 2732,
+      "file": "{brand}-splash-2048x2732-{scheme}.png",
+      "media": "(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 1024,
+      "deviceHeight": 1366,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2732,
+      "height": 2048,
+      "file": "{brand}-splash-2732x2048-{scheme}.png",
+      "media": "(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    },
+    {
+      "deviceWidth": 834,
+      "deviceHeight": 1210,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 1668,
+      "height": 2420,
+      "file": "{brand}-splash-1668x2420-{scheme}.png",
+      "media": "(device-width: 834px) and (device-height: 1210px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 834,
+      "deviceHeight": 1210,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2420,
+      "height": 1668,
+      "file": "{brand}-splash-2420x1668-{scheme}.png",
+      "media": "(device-width: 834px) and (device-height: 1210px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    },
+    {
+      "deviceWidth": 834,
+      "deviceHeight": 1194,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 1668,
+      "height": 2388,
+      "file": "{brand}-splash-1668x2388-{scheme}.png",
+      "media": "(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 834,
+      "deviceHeight": 1194,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2388,
+      "height": 1668,
+      "file": "{brand}-splash-2388x1668-{scheme}.png",
+      "media": "(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    },
+    {
+      "deviceWidth": 820,
+      "deviceHeight": 1180,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 1640,
+      "height": 2360,
+      "file": "{brand}-splash-1640x2360-{scheme}.png",
+      "media": "(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 820,
+      "deviceHeight": 1180,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2360,
+      "height": 1640,
+      "file": "{brand}-splash-2360x1640-{scheme}.png",
+      "media": "(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    },
+    {
+      "deviceWidth": 834,
+      "deviceHeight": 1112,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 1668,
+      "height": 2224,
+      "file": "{brand}-splash-1668x2224-{scheme}.png",
+      "media": "(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 834,
+      "deviceHeight": 1112,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2224,
+      "height": 1668,
+      "file": "{brand}-splash-2224x1668-{scheme}.png",
+      "media": "(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    },
+    {
+      "deviceWidth": 810,
+      "deviceHeight": 1080,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 1620,
+      "height": 2160,
+      "file": "{brand}-splash-1620x2160-{scheme}.png",
+      "media": "(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 810,
+      "deviceHeight": 1080,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2160,
+      "height": 1620,
+      "file": "{brand}-splash-2160x1620-{scheme}.png",
+      "media": "(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    },
+    {
+      "deviceWidth": 744,
+      "deviceHeight": 1133,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 1488,
+      "height": 2266,
+      "file": "{brand}-splash-1488x2266-{scheme}.png",
+      "media": "(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 744,
+      "deviceHeight": 1133,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2266,
+      "height": 1488,
+      "file": "{brand}-splash-2266x1488-{scheme}.png",
+      "media": "(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    },
+    {
+      "deviceWidth": 768,
+      "deviceHeight": 1024,
+      "pixelRatio": 2,
+      "orientation": "portrait",
+      "width": 1536,
+      "height": 2048,
+      "file": "{brand}-splash-1536x2048-{scheme}.png",
+      "media": "(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    },
+    {
+      "deviceWidth": 768,
+      "deviceHeight": 1024,
+      "pixelRatio": 2,
+      "orientation": "landscape",
+      "width": 2048,
+      "height": 1536,
+      "file": "{brand}-splash-2048x1536-{scheme}.png",
+      "media": "(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    }
+  ]
+}

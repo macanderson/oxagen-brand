@@ -78,6 +78,8 @@ logo/svg,png/      wordmarks, icons, the oxagen lockup: dark · light · adaptiv
 icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webmanifest
 spinners/          the house motion, animated SVG, no script
 wallpapers/        desktop 4K/5K/6K · iphone ×3 · glow | quiet | graph | blocks | orbit | word | echo · dark | light
+splash/            launch screens for an installed app, every iPhone and iPad size, dark | light, and splash-screens.json
+pwa/               install-prompt.js: the card that offers to add a site to the home screen
 social/            avatar · x · linkedin · youtube · open graph · dark | light
 ads/               from messages/ads/ and messages/always-on/: workforce · authority · equipment · finance · keys · night shift · capacity · driver seat · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
 content/           changelog · essay · release · field note · fleet note · always-on cards, 1200×675
@@ -99,6 +101,7 @@ brew install harfbuzz librsvg          # hb-shape and rsvg-convert
 .venv/bin/python build/build.py           # every asset
 .venv/bin/python build/build.py --svg     # skip the raster pass
 .venv/bin/python build/build.py --only ads social   # only these steps
+.venv/bin/python build/build.py --only splash       # the launch screens and their table
 .venv/bin/python build/playbook.py        # rebuild the document
 .venv/bin/python build/messages.py       # rebuild the message bank
 .venv/bin/python github-badges/build.py  # rebuild the GitHub badges
@@ -228,6 +231,37 @@ For a PWA, copy `icons/oxagen-*.png`, `icons/oxagen-favicon.ico` and
 <link rel="apple-touch-icon" href="/oxagen-icon-180.png">
 <link rel="manifest" href="/oxagen.webmanifest">
 ```
+
+An installed app opens on a launch screen. iOS and iPadOS show one only when a
+`<link rel="apple-touch-startup-image">` names an image the exact size of the
+screen, so `splash/` holds the `word` phone wallpaper (the wordmark on the
+glow) at every current iPhone and iPad size, upright and, for an iPad, on its
+side, on ink and on paper. `splash/splash-screens.json` lists each screen with
+the media query Safari matches it on. Write the links from that table:
+
+```html
+<link rel="apple-touch-startup-image"
+      media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)"
+      href="/splash/oxagen-splash-1179x2556-dark.png">
+```
+
+Android draws its own launch screen from the manifest's `background_color`
+and icon, so it needs nothing more.
+
+`pwa/install-prompt.js` is the card that offers to add the site to the home
+screen. It shows once, on a phone or tablet, the first time a person visits.
+On Android and Chromium its button opens the browser's install dialog; on
+iPhone and iPad it says where the command is (Share, then Add to Home Screen).
+Closing it, answering the dialog, or installing sets the `ox_install_prompt`
+cookie for a year, and clearing cookies brings the card back. It has no
+dependencies. Load it as a plain script, and pass translated strings as data
+attributes when the product has a message catalogue:
+
+```html
+<script src="/install-prompt.js" defer data-icon="/oxagen-icon-192.png"></script>
+```
+
+The pages this site serves carry all of it themselves (`build/pwa.py`).
 
 Every raster icon also comes on a white tile, named with `-light`
 (`oxagen-icon-light-180.png`, `oxagen-favicon-light.ico`,
