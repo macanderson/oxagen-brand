@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The agent SDLC | Oxagen</title>
+<meta name="description" content="Your agents finish a change in minutes, then wait for a person to read it. This is the process Oxagen uses to build Oxagen at every hour, and a copy you can make for your team.">
+<link rel="canonical" href="https://sdlc.oxagen.cloud/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Oxagen">
+<meta property="og:url" content="https://sdlc.oxagen.cloud/">
+<meta property="og:title" content="Your agents are bored. The agent SDLC fixes that.">
+<meta property="og:description" content="Agents write a change in minutes, then wait for a person to read every line. See how Oxagen builds Oxagen at every hour, and make a copy for your team.">
+<meta property="og:image" content="https://sdlc.oxagen.cloud/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Three agents wait in a line while one person reads a tall stack of changes. Your agents are bored.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Your agents are bored. The agent SDLC fixes that.">
+<meta name="twitter:description" content="Agents write a change in minutes, then wait for a person to read every line. See how Oxagen builds Oxagen at every hour.">
+<meta name="twitter:image" content="https://sdlc.oxagen.cloud/og.png">
+<meta name="theme-color" content="#09090B">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/space-grotesk-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+  document.documentElement.classList.add("js");
+  try { var t = localStorage.getItem("sdlc-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="stylesheet" href="/sdlc.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "The agent SDLC",
+  "url": "https://sdlc.oxagen.cloud/",
+  "description": "How Oxagen builds Oxagen with agents at every hour, and a template any team can make for itself.",
+  "publisher": { "@type": "Organization", "name": "Oxagen", "url": "https://oxagen.sh" }
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="https://oxagen.sh" aria-label="Oxagen home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 604.125 115.625" class="lockup" aria-hidden="true" focusable="false"><g transform="translate(21.575,22.616) scale(3.437130)"><g data-mark="hive"><path d="M0.000 -6.080L5.800 -3.040L5.800 3.040L0.000 6.080L-5.800 3.040L-5.800 -3.040Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M13.080 -6.080L18.880 -3.040L18.880 3.040L13.080 6.080L7.280 3.040L7.280 -3.040Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M6.540 4.160L12.340 7.200L12.340 13.280L6.540 16.320L0.740 13.280L0.740 7.200Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M19.620 3.660L25.897 6.950L25.897 13.530L19.620 16.820L13.343 13.530L13.343 6.950Z" fill="#D4AF37"/><path d="M0.000 13.900L6.277 17.190L6.277 23.770L0.000 27.060L-6.277 23.770L-6.277 17.190Z" fill="#D4AF37" opacity="0.55"/><path d="M13.080 14.400L18.880 17.440L18.880 23.520L13.080 26.560L7.280 23.520L7.280 17.440Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/></g></g><g transform="translate(150.257,11.190)"><path class="letters" d="M33.9083 68.758Q24.1657 68.758 16.4786 64.7737Q8.79142 60.7894 4.39571 53.2965Q0 45.8035 0 35.3862V33.3718Q0 22.9544 4.39571 15.4615Q8.79142 7.96854 16.4786 3.98427Q24.1657 0 33.9083 0Q43.6509 0 51.3381 3.98427Q59.0252 7.96854 63.4209 15.4615Q67.8166 22.9544 67.8166 33.3718V35.3862Q67.8166 45.8035 63.4209 53.2965Q59.0252 60.7894 51.3381 64.7737Q43.6509 68.758 33.9083 68.758ZM33.9083 55.3486Q42.1895 55.3486 47.4689 50.0198Q52.7484 44.691 52.7484 35.0142V33.7437Q52.7484 24.067 47.5233 18.7382Q42.2981 13.4094 33.9083 13.4094Q25.6502 13.4094 20.3592 18.7382Q15.0683 24.067 15.0683 33.7437V35.0142Q15.0683 44.691 20.3592 50.0198Q25.6502 55.3486 33.9083 55.3486Z M176.569 68.758Q169.637 68.758 164.119 66.3453Q158.601 63.9327 155.387 59.2935Q152.173 54.6542 152.173 48.0088Q152.173 41.3403 155.387 36.8558Q158.601 32.3712 164.27 30.1017Q169.94 27.8323 177.174 27.8323H196.047V23.8925Q196.047 18.7316 192.874 15.5274Q189.701 12.3232 182.99 12.3232Q176.411 12.3232 173.049 15.3842Q169.686 18.4452 168.627 23.3593L154.691 18.7315Q156.27 13.6133 159.748 9.39702Q163.225 5.18071 169.049 2.59035Q174.874 0 183.208 0Q195.972 0 203.326 6.42816Q210.681 12.8563 210.681 24.9392V50.4707Q210.681 54.4204 214.368 54.4204H219.795V66.9148H209.197Q204.464 66.9148 201.442 64.5334Q198.42 62.1521 198.42 58.1563V57.8864H196.126Q195.392 59.6967 193.399 62.2985Q191.406 64.9004 187.388 66.8292Q183.369 68.758 176.569 68.758ZM179.05 56.4348Q186.581 56.4348 191.314 52.1592Q196.047 47.8837 196.047 40.6031V39.2405H178.175Q173.175 39.2405 170.208 41.3881Q167.241 43.5358 167.241 47.5513Q167.241 51.5668 170.34 54.0008Q173.439 56.4348 179.05 56.4348Z M227.767 34.6423V32.6279Q227.767 22.3817 231.86 15.0863Q235.953 7.79081 242.768 3.8954Q249.582 0 257.706 0Q266.935 0 271.762 3.33256Q276.589 6.66512 278.81 10.4107H281.042V1.8432H295.801V79.33Q295.801 85.6989 292.104 89.4725Q288.408 93.2462 282.079 93.2462H238.369V80.0541H277.023Q280.779 80.0541 280.779 76.1043V57.2775H278.547Q277.161 59.5683 274.665 61.8904Q272.168 64.2125 268.057 65.7414Q263.946 67.2702 257.706 67.2702Q249.582 67.2702 242.756 63.3748Q235.93 59.4794 231.848 52.1724Q227.767 44.8655 227.767 34.6423ZM261.938 54.0781Q270.151 54.0781 275.573 48.8612Q280.996 43.6443 280.996 34.2704V32.9999Q280.996 23.4943 275.627 18.3432Q270.259 13.1921 261.938 13.1921Q253.749 13.1921 248.315 18.3432Q242.881 23.4943 242.881 32.9999V34.2704Q242.881 43.6443 248.315 48.8612Q253.749 54.0781 261.938 54.0781Z M344.764 68.758Q334.998 68.758 327.583 64.6108Q320.167 60.4636 316.031 52.9048Q311.896 45.346 311.896 35.1689V33.589Q311.896 23.3889 315.977 15.8416Q320.059 8.2944 327.397 4.1472Q334.735 0 344.385 0Q353.881 0 360.956 4.1867Q368.031 8.37341 371.981 15.8515Q375.931 23.3297 375.931 33.2895V38.6974H327.181Q327.468 46.3334 332.587 50.9496Q337.707 55.5658 345.198 55.5658Q352.522 55.5658 356.101 52.3534Q359.681 49.141 361.553 45.0629L373.985 51.4813Q372.119 55.0656 368.63 59.1042Q365.141 63.1428 359.394 65.9504Q353.648 68.758 344.764 68.758ZM327.313 27.2892H360.622Q360.095 20.7986 355.7 16.9954Q351.304 13.1921 344.277 13.1921Q337.055 13.1921 332.691 16.9954Q328.327 20.7986 327.313 27.2892Z M391.548 66.9148V1.8432H406.353V10.9769H408.585Q410.303 7.25429 414.832 3.99908Q419.361 0.743866 428.435 0.743866Q435.956 0.743866 441.695 4.12911Q447.434 7.51435 450.651 13.5903Q453.868 19.6663 453.868 27.9442V66.9148H438.8V29.1226Q438.8 21.1969 434.891 17.3492Q430.983 13.5015 423.9 13.5015Q415.872 13.5015 411.244 18.8237Q406.617 24.146 406.617 33.9445V66.9148Z" fill="currentColor"/><path class="accent" d="M73.9979 66.9148 98.2261 34.0696 74.3764 1.8432H91.9626L107.9 24.3499H110.131L126.068 1.8432H143.654L119.805 34.0696L144.033 66.9148H126.206L110.131 44.0065H107.9L91.8244 66.9148Z" fill="#D4AF37"/></g></svg></a>
+    <span class="tag">The agent SDLC</span>
+    <nav aria-label="Sections">
+      <a href="#problem">Problem</a>
+      <a href="#new-way">New way</a>
+      <a href="#at-oxagen">At Oxagen</a>
+      <a href="#stages">Stages</a>
+      <a class="btn btn-line" href="#template">Get the template</a>
+    </nav>
+    <button class="theme" type="button" aria-label="Switch light and dark" data-theme-toggle>
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow first">The agent SDLC</p>
+      <h1>Your agents are bored.</h1>
+      <p class="lead">An agent can write a change in minutes. Then the change waits for a person to read it. At night and on weekends, it waits longer. The old way to build software was made for people. This is the new way. It is how Oxagen builds Oxagen.</p>
+
+      <form class="make" action="/api/template" method="post" data-make>
+        <div class="make-row">
+          <label class="field">
+            <span class="label">Company name</span>
+            <input type="text" name="company" maxlength="80" placeholder="Acme Robotics" autocomplete="organization" required>
+          </label>
+          <button class="btn btn-gold" type="submit">Make my SDLC</button>
+        </div>
+        <fieldset class="formats">
+          <legend>Format</legend>
+          <label><input type="radio" name="format" value="docx" checked><span>Word</span></label>
+          <label><input type="radio" name="format" value="gdoc"><span>Google Docs</span></label>
+          <label><input type="radio" name="format" value="pdf"><span>PDF</span></label>
+        </fieldset>
+        <div class="lead-fields" data-lead-fields hidden>
+          <label class="field"><span class="label">First name</span><input type="text" name="firstName" maxlength="120" autocomplete="given-name"></label>
+          <label class="field"><span class="label">Last name</span><input type="text" name="lastName" maxlength="120" autocomplete="family-name"></label>
+          <label class="field wide"><span class="label">Work email</span><input type="email" name="email" maxlength="320" autocomplete="email"></label>
+        </div>
+        <label class="hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        <p class="note">Free. A copy of this process with your name in it, ready to edit.</p>
+        <p class="status" role="status" aria-live="polite" data-status></p>
+        <div class="gdocs" data-gdocs hidden>
+          <strong>Open it in Google Docs</strong>
+          <ol>
+            <li>Your Word file is in your downloads.</li>
+            <li>Open Google Drive. Choose New, then File upload, and pick the file.</li>
+            <li>Open the file. Choose File, then Save as Google Docs.</li>
+          </ol>
+          <a class="btn btn-line" href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener">Open Google Drive</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="queue" aria-label="Illustration: three agents wait for one person to read their changes">
+      <div class="queue-title"><h4>Waiting for review</h4><span>illustration</span></div>
+      <div class="card-wait">
+        <svg class="face" viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 39 12.5v19L22 41 5 31.5v-19z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M13.5 19.5h7M23.5 19.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14.5 19.5a2.5 2.5 0 0 0 5 0zM24.5 19.5a2.5 2.5 0 0 0 5 0z" fill="currentColor"/><path d="M18 29.5h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text class="zz" x="31" y="10">z</text></svg>
+        <div><div class="t">Agent 1</div><div class="s">Change ready. Waiting for a person.</div></div>
+        <div class="clock" data-wait="41400">11h 30m</div>
+      </div>
+      <div class="card-wait">
+        <svg class="face" viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 39 12.5v19L22 41 5 31.5v-19z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M13.5 19.5h7M23.5 19.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14.5 19.5a2.5 2.5 0 0 0 5 0zM24.5 19.5a2.5 2.5 0 0 0 5 0z" fill="currentColor"/><path d="M18 29.5h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text class="zz" x="31" y="10">z</text></svg>
+        <div><div class="t">Agent 2</div><div class="s">Fix done. Waiting for a second read.</div></div>
+        <div class="clock" data-wait="97200">1d 3h</div>
+      </div>
+      <div class="card-wait">
+        <svg class="face" viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 39 12.5v19L22 41 5 31.5v-19z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M13.5 19.5h7M23.5 19.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14.5 19.5a2.5 2.5 0 0 0 5 0zM24.5 19.5a2.5 2.5 0 0 0 5 0z" fill="currentColor"/><path d="M18 29.5h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text class="zz" x="31" y="10">z</text></svg>
+        <div><div class="t">Agent 3</div><div class="s">Tests pass. Waiting since Friday.</div></div>
+        <div class="clock" data-wait="226800">2d 15h</div>
+      </div>
+      <div class="card-person">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 38c1.5-8 7-12 14-12s12.5 4 14 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div>
+          <div class="t">One person</div>
+          <div class="s">Reading every line, one change at a time.</div>
+          </div>
+        <div class="pile" aria-hidden="true" data-pile></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">The problem</p>
+      <h2>The old way was made for people</h2>
+      <p class="lead">Most teams build software the same way. A person writes a change. Another person reads it. They talk, fix it, and wait. Then the change ships. Each step fits a person's work day.</p>
+      <p class="lead">Agents do not have a work day. They can work at any hour. But the old process still stops at every step to wait for a person.</p>
+    </div>
+
+    <div class="panel reveal">
+      <div class="panel-head">
+        <h3>One week has 168 hours</h3>
+        <div class="toggle" role="group" aria-label="Show hours for">
+          <button type="button" aria-pressed="true" data-week="person">A person</button>
+          <button type="button" aria-pressed="false" data-week="agent">An agent</button>
+        </div>
+      </div>
+      <div class="week" data-week-grid role="img" aria-label="A grid of 7 days by 24 hours. A 40-hour work week fills 40 of the 168 hours. An agent can work all 168."></div>
+      <div class="week-legend">
+        <span><b class="lp"></b><span data-week-caption>A 40-hour work week covers 40 of the 168 hours.</span></span>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact reveal">
+        <div class="n">400 lines</div>
+        <p>A person reads code best in chunks of 200 to 400 lines, for up to an hour at a time.</p>
+        <div class="src">Source: <a href="https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/" rel="noopener" target="_blank">SmartBear, a study of a Cisco team</a></div>
+      </div>
+      <div class="fact reveal">
+        <div class="n">1 day</div>
+        <p>At Meta, the slowest quarter of code reviews took as much as a day to get a review.</p>
+        <div class="src">Source: <a href="https://engineering.fb.com/2022/11/16/culture/meta-code-review-time-improving/" rel="noopener" target="_blank">Meta Engineering, 2022</a></div>
+      </div>
+      <div class="fact reveal">
+        <div class="n">7.2%</div>
+        <p>When teams used AI a quarter more, delivery stability fell by an estimated 7.2 percent.</p>
+        <div class="src">Source: <a href="https://cloud.google.com/blog/products/devops-sre/announcing-the-2024-dora-report" rel="noopener" target="_blank">DORA, 2024</a></div>
+      </div>
+      <div class="fact reveal">
+        <div class="n">7 months</div>
+        <p>The length of task an AI agent can finish has doubled about every 7 months since 2019.</p>
+        <div class="src">Source: <a href="https://arxiv.org/abs/2503.14499" rel="noopener" target="_blank">METR, 2025</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="one-day">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">The difference</p>
+      <h2>Same agents, same day, two processes</h2>
+      <p class="lead">Both sides have three agents. On the left, a person reads each change, and the person works from 9 to 5. On the right, checks and a review agent read each change, and a person reads the record each morning.</p>
+    </div>
+    <div class="sim-grid">
+      <div class="panel sim reveal">
+        <div class="panel-head"><h3>The old way</h3><span class="who">A person reads each change</span></div>
+        <div class="sim-scroll">        <svg data-sim="old" viewBox="0 0 1000 256" role="img" aria-label="Simulation of the old way. Three agents finish changes and wait for one person who works 9 to 5. Few changes merge."></svg></div>
+      </div>
+      <div class="panel sim reveal">
+        <div class="panel-head"><h3>The new way</h3><span class="who">Checks read each change</span></div>
+        <div class="sim-scroll">        <svg data-sim="new" viewBox="0 0 1000 256" role="img" aria-label="Simulation of the new way. Three agents finish changes, checks and a review agent read them at any hour, and many changes merge."></svg></div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <button class="btn btn-line" type="button" data-sim-toggle>Pause</button>
+      <span class="legend-shape"><i class="s-work"></i>Working</span>
+      <span class="legend-shape"><i class="s-wait"></i>Waiting</span>
+      <span class="legend-shape"><i class="s-done"></i>One merged change</span>
+    </div>
+    <p class="caption swipe-hint">Swipe each figure sideways to see every column.</p>
+    <p class="caption">Illustration. One simulated day. The timings are made up to show the shape of the problem, not to measure it.</p>
+  </div>
+</section>
+
+<section id="new-way">
+  <div class="wrap">
+    <div class="loop-grid">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow">The new way</p>
+        <h2>Agents do the work. People own it.</h2>
+        <p class="lead">In the new way, agents run every stage at every hour. Checks read every change. People write the rules, make the calls only a person can make, and read the record each day.</p>
+        <p class="muted small">Choose a stage to read what happens in it.</p>
+      </div>
+      <div class="loop reveal">
+        <svg data-loop viewBox="0 0 560 560" role="img" aria-label="The ten stages of the agent SDLC in a loop: issue, triage, claim, build, check, review, merge, release, watch, and learn. People connect to the loop at rules, decisions, and the record."></svg>
+      </div>
+    </div>
+
+    <div class="table-wrap reveal" style="margin-top:48px">
+      <table>
+        <thead><tr><th scope="col">Part of the process</th><th scope="col">The old way</th><th scope="col">The new way</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Who reads each change</th><td class="old">A person</td><td>Automatic checks and review agents</td></tr>
+          <tr><th scope="row">When work moves</th><td class="old">During work hours</td><td>All 168 hours of the week</td></tr>
+          <tr><th scope="row">What people do</th><td class="old">Read code and chase status</td><td>Write rules, make decisions, and read the record</td></tr>
+          <tr><th scope="row">Size of a change</th><td class="old">Grows while it waits</td><td>One issue, one change</td></tr>
+          <tr><th scope="row">When main breaks</th><td class="old">Someone notices</td><td>A check opens an issue, and an agent fixes it</td></tr>
+          <tr><th scope="row">Proof the work is done</th><td class="old">Someone says so</td><td>The checks passed, and the record shows it</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="at-oxagen">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">At Oxagen</p>
+      <h2>How Oxagen builds Oxagen</h2>
+      <p class="lead">Oxagen's own code is built with this process. Four agent tools do the work: Claude Code, Codex, Cursor, and Stella. They all follow one set of written rules, kept in the code next to the product.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat reveal"><div class="n">1,064</div><div class="l">changes merged into Oxagen, September 1 to 29, 2026</div></div>
+      <div class="stat reveal"><div class="n">64%</div><div class="l">merged outside weekday work hours (685 of 1,064)</div></div>
+      <div class="stat reveal"><div class="n">283</div><div class="l">merged on a Saturday or a Sunday</div></div>
+      <div class="stat reveal"><div class="n">289</div><div class="l">merged between 10 pm and 6 am</div></div>
+    </div>
+
+    <div class="panel chart reveal">
+      <div class="panel-head"><h3>Changes merged by hour of day</h3><span class="who">Pacific time</span></div>
+      <svg data-chart viewBox="0 0 1000 300" role="img" aria-label="Bar chart of 1,064 changes merged by hour of day, Pacific time. Every hour has merges. The fewest is 12 at 7 am. The most is 75 at 11 am."></svg>
+      <table class="sr-only" data-chart-table><caption>Changes merged by hour of day, Pacific time, September 1 to 29, 2026</caption><thead><tr><th scope="col">Hour</th><th scope="col">Changes merged</th></tr></thead><tbody></tbody></table>
+      <p class="caption">Source: Oxagen's GitHub repository. Pull requests merged from September 1 to 29, 2026, counted by UTC date and shown in Pacific time. Weekday work hours are 9 am to 6 pm, Monday to Friday.</p>
+    </div>
+
+    <h3 class="reveal" style="margin:56px 0 16px">The rules the agents follow</h3>
+    <ol class="rules reveal">
+      <li>Every change starts as an issue, and the issue says what done looks like.</li>
+      <li>A triage agent sets each issue's priority and size. Whoever files the issue does not.</li>
+      <li>One change has one writer. An agent posts a claim before it writes, and the claim lasts 90 minutes.</li>
+      <li>Automatic checks are the only place Oxagen's code is built and tested.</li>
+      <li>An agent looks at each open change every 60 seconds. It fixes failed checks, answers review comments, and clears conflicts.</li>
+      <li>Review findings are rated P0 to P3. A P0 blocks the change. Leftover small findings go into one follow-up issue.</li>
+      <li>When main breaks, a check opens a P0 issue. The fix goes straight to main, and the check closes the issue when main is green.</li>
+      <li>A database change carries a label. The checks apply it when the change merges, before the code that needs it goes live.</li>
+      <li>Each run ends with a note on the issue: minutes planned, minutes spent, and what the next agent should know.</li>
+    </ol>
+
+    <h3 class="reveal" style="margin:56px 0 4px">Where Oxagen fits</h3>
+    <p class="reveal muted">Oxagen is workforce management for autonomous agents. It is the part of this process that manages the agents themselves.</p>
+    <div class="oxfit">
+      <div class="card reveal"><h4>Identity</h4><p>Each agent gets its own identity. Agents do not share an account.</p></div>
+      <div class="card reveal"><h4>Mandate</h4><p>Each agent works under a mandate: its access, its budget and rules, and its tools and skills.</p></div>
+      <div class="card reveal"><h4>Rules</h4><p>When an agent asks to do something, a rule answers: allowed, denied, or routed to a person.</p></div>
+      <div class="card reveal"><h4>Record</h4><p>For actions routed through Oxagen, the record shows what each agent did and what it cost.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="stages">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">The process</p>
+      <h2>The ten stages</h2>
+      <p class="lead">Each change moves through ten stages. Agents run all ten. People come in where a rule says so.</p>
+    </div>
+    <div class="grid-2">
+      <article class="stage reveal" id="stage-issue"><div class="top-line"><span class="num">01</span><h3>Issue</h3><span class="who">Agent or person</span></div><p>Every change starts as an issue. It says what is wrong, which files to change, how to check the work, and what done looks like.</p><p class="rule"><b>Rule</b>No issue, no change.</p></article>
+      <article class="stage reveal" id="stage-triage"><div class="top-line"><span class="num">02</span><h3>Triage</h3><span class="who">Triage agent</span></div><p>A triage agent sets the priority, the size, and the area. Whoever files the issue adds only one label: triage.</p><p class="rule"><b>Rule</b>The filer does not set the priority.</p></article>
+      <article class="stage reveal" id="stage-claim"><div class="top-line"><span class="num">03</span><h3>Claim</h3><span class="who">Agent</span></div><p>Before an agent writes, it posts a claim on the issue or the change. The claim lasts 90 minutes, and the agent renews it while it works.</p><p class="rule"><b>Rule</b>One change, one writer.</p></article>
+      <article class="stage reveal" id="stage-build"><div class="top-line"><span class="num">04</span><h3>Build</h3><span class="who">Agent</span></div><p>The agent starts a branch from the latest main. It makes the change and adds tests for it. Then it opens a pull request that names the issue.</p><p class="rule"><b>Rule</b>Tests ship with the change.</p></article>
+      <article class="stage reveal" id="stage-check"><div class="top-line"><span class="num">05</span><h3>Check</h3><span class="who">Automatic checks</span></div><p>Checks build and test every push. When a check fails, an agent reads it right away and pushes a fix. Nobody runs a check again just to hope it passes.</p><p class="rule"><b>Rule</b>Checks are the only place code is built and tested.</p></article>
+      <article class="stage reveal" id="stage-review"><div class="top-line"><span class="num">06</span><h3>Review</h3><span class="who">Review agent</span></div><p>Review agents rate each finding from P0 to P3. A P0 blocks the change. Small findings left over go into one follow-up issue.</p><p class="rule"><b>Rule</b>Pass 1 fixes P0 to P2. Pass 2 fixes P0 and P1. Later passes fix P0.</p></article>
+      <article class="stage reveal" id="stage-merge"><div class="top-line"><span class="num">07</span><h3>Merge</h3><span class="who">Agent</span></div><p>A change merges when every check passes, no P0 or P1 finding is open, and nothing conflicts with main.</p><p class="rule"><b>Rule</b>Green checks and no open P0 or P1.</p></article>
+      <article class="stage reveal" id="stage-release"><div class="top-line"><span class="num">08</span><h3>Release</h3><span class="who">Automatic checks</span></div><p>A merge to main deploys. A database change carries a label, and the checks apply it before the code that needs it goes live.</p><p class="rule"><b>Rule</b>The database change goes first.</p></article>
+      <article class="stage reveal" id="stage-watch"><div class="top-line"><span class="num">09</span><h3>Watch</h3><span class="who">Automatic checks</span></div><p>When main breaks, a check opens a P0 issue. The fix goes straight to main. The check closes the issue when main is green again.</p><p class="rule"><b>Rule</b>The time in between is the recovery time.</p></article>
+      <article class="stage reveal" id="stage-learn"><div class="top-line"><span class="num">10</span><h3>Learn</h3><span class="who">Agent</span></div><p>Each run ends with a note on the issue: minutes planned, minutes spent, what shipped, and what the next agent should know.</p><p class="rule"><b>Rule</b>Every run leaves a note.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="people">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">People</p>
+      <h2>What people do</h2>
+      <p class="lead">People own every change. Each agent run has a named operator. The operator does not read every line. The operator sets the rules and reads the record.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal"><h3>Rules</h3><p>People write the rules before the work starts. Security writes the access rules. Finance writes the budget rules. Engineering picks the tools and the checks.</p></div>
+      <div class="card reveal"><h3>Decisions</h3><p>A rule can send a request to a person. Spending over a budget, adding a new tool, and reading production data are common ones. The run waits for the answer.</p></div>
+      <div class="card reveal"><h3>Record</h3><p>Each day, the operator reads what shipped, what is waiting on a person, what broke, and what it all cost.</p></div>
+    </div>
+    <h4 class="reveal" style="margin-top:40px">What people stop doing</h4>
+    <ul class="stop-list reveal">
+      <li>Reading every line of every change</li>
+      <li>Running checks again by hand</li>
+      <li>Chasing status</li>
+      <li>Merging by hand</li>
+    </ul>
+  </div>
+</section>
+
+<section id="adopt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Adoption</p>
+      <h2>Four weeks to start</h2>
+      <p class="lead">Start with one repository. Move one step each week.</p>
+    </div>
+    <ol class="steps">
+      <li class="reveal"><span class="wk">1</span><h3>Rules</h3><p>Pick one repository. Write the rules. Give each agent its own identity.</p></li>
+      <li class="reveal"><span class="wk">2</span><h3>Checks</h3><p>Move every check into CI, the automatic checks. Make CI the only place code is built and tested.</p></li>
+      <li class="reveal"><span class="wk">3</span><h3>Review</h3><p>Turn on review agents and the pass rule. Let agents merge a change when the checks pass and no P0 or P1 is open.</p></li>
+      <li class="reveal"><span class="wk">4</span><h3>Record</h3><p>Read the record each day. Count merges, hours, recovery time, and cost per change. Change the rules that slow the work.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="template">
+  <div class="wrap template-grid">
+    <div class="reveal">
+      <p class="eyebrow">Template</p>
+      <h2 style="margin-bottom:16px">Make this SDLC for your team</h2>
+      <p class="lead" style="margin-bottom:28px">Type your company name. You get this process as a document with your name in it. It has blanks for your rules, your checks, and your people.</p>
+      <form class="make" action="/api/template" method="post" data-make>
+        <div class="make-row">
+          <label class="field">
+            <span class="label">Company name</span>
+            <input type="text" name="company" maxlength="80" placeholder="Acme Robotics" autocomplete="organization" required>
+          </label>
+          <button class="btn btn-gold" type="submit">Make my SDLC</button>
+        </div>
+        <fieldset class="formats">
+          <legend>Format</legend>
+          <label><input type="radio" name="format" value="docx" checked><span>Word</span></label>
+          <label><input type="radio" name="format" value="gdoc"><span>Google Docs</span></label>
+          <label><input type="radio" name="format" value="pdf"><span>PDF</span></label>
+        </fieldset>
+        <div class="lead-fields" data-lead-fields hidden>
+          <label class="field"><span class="label">First name</span><input type="text" name="firstName" maxlength="120" autocomplete="given-name"></label>
+          <label class="field"><span class="label">Last name</span><input type="text" name="lastName" maxlength="120" autocomplete="family-name"></label>
+          <label class="field wide"><span class="label">Work email</span><input type="email" name="email" maxlength="320" autocomplete="email"></label>
+        </div>
+        <label class="hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        <p class="status" role="status" aria-live="polite" data-status></p>
+        <div class="gdocs" data-gdocs hidden>
+          <strong>Open it in Google Docs</strong>
+          <ol>
+            <li>Your Word file is in your downloads.</li>
+            <li>Open Google Drive. Choose New, then File upload, and pick the file.</li>
+            <li>Open the file. Choose File, then Save as Google Docs.</li>
+          </ol>
+          <a class="btn btn-line" href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener">Open Google Drive</a>
+        </div>
+      </form>
+    </div>
+    <div class="panel reveal">
+      <h4 style="margin-bottom:12px">What is inside</h4>
+      <ul class="contents">
+        <li>About this document</li>
+        <li>Why we changed</li>
+        <li>Principles</li>
+        <li>Roles</li>
+        <li>The ten stages</li>
+        <li>Rules</li>
+        <li>Checks</li>
+        <li>Severity</li>
+        <li>Where people step in</li>
+        <li>The daily record</li>
+        <li>Scoreboard</li>
+        <li>Rollout plan</li>
+        <li>Where Oxagen fits</li>
+        <li>Sign-off</li>
+      </ul>
+      <p class="caption">About eight pages. Word, Google Docs, or PDF. Every blank is marked so you can find it.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <a class="brand" href="https://oxagen.sh" aria-label="Oxagen home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 604.125 115.625" class="lockup" aria-hidden="true" focusable="false"><g transform="translate(21.575,22.616) scale(3.437130)"><g data-mark="hive"><path d="M0.000 -6.080L5.800 -3.040L5.800 3.040L0.000 6.080L-5.800 3.040L-5.800 -3.040Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M13.080 -6.080L18.880 -3.040L18.880 3.040L13.080 6.080L7.280 3.040L7.280 -3.040Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M6.540 4.160L12.340 7.200L12.340 13.280L6.540 16.320L0.740 13.280L0.740 7.200Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M19.620 3.660L25.897 6.950L25.897 13.530L19.620 16.820L13.343 13.530L13.343 6.950Z" fill="#D4AF37"/><path d="M0.000 13.900L6.277 17.190L6.277 23.770L0.000 27.060L-6.277 23.770L-6.277 17.190Z" fill="#D4AF37" opacity="0.55"/><path d="M13.080 14.400L18.880 17.440L18.880 23.520L13.080 26.560L7.280 23.520L7.280 17.440Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/></g></g><g transform="translate(150.257,11.190)"><path class="letters" d="M33.9083 68.758Q24.1657 68.758 16.4786 64.7737Q8.79142 60.7894 4.39571 53.2965Q0 45.8035 0 35.3862V33.3718Q0 22.9544 4.39571 15.4615Q8.79142 7.96854 16.4786 3.98427Q24.1657 0 33.9083 0Q43.6509 0 51.3381 3.98427Q59.0252 7.96854 63.4209 15.4615Q67.8166 22.9544 67.8166 33.3718V35.3862Q67.8166 45.8035 63.4209 53.2965Q59.0252 60.7894 51.3381 64.7737Q43.6509 68.758 33.9083 68.758ZM33.9083 55.3486Q42.1895 55.3486 47.4689 50.0198Q52.7484 44.691 52.7484 35.0142V33.7437Q52.7484 24.067 47.5233 18.7382Q42.2981 13.4094 33.9083 13.4094Q25.6502 13.4094 20.3592 18.7382Q15.0683 24.067 15.0683 33.7437V35.0142Q15.0683 44.691 20.3592 50.0198Q25.6502 55.3486 33.9083 55.3486Z M176.569 68.758Q169.637 68.758 164.119 66.3453Q158.601 63.9327 155.387 59.2935Q152.173 54.6542 152.173 48.0088Q152.173 41.3403 155.387 36.8558Q158.601 32.3712 164.27 30.1017Q169.94 27.8323 177.174 27.8323H196.047V23.8925Q196.047 18.7316 192.874 15.5274Q189.701 12.3232 182.99 12.3232Q176.411 12.3232 173.049 15.3842Q169.686 18.4452 168.627 23.3593L154.691 18.7315Q156.27 13.6133 159.748 9.39702Q163.225 5.18071 169.049 2.59035Q174.874 0 183.208 0Q195.972 0 203.326 6.42816Q210.681 12.8563 210.681 24.9392V50.4707Q210.681 54.4204 214.368 54.4204H219.795V66.9148H209.197Q204.464 66.9148 201.442 64.5334Q198.42 62.1521 198.42 58.1563V57.8864H196.126Q195.392 59.6967 193.399 62.2985Q191.406 64.9004 187.388 66.8292Q183.369 68.758 176.569 68.758ZM179.05 56.4348Q186.581 56.4348 191.314 52.1592Q196.047 47.8837 196.047 40.6031V39.2405H178.175Q173.175 39.2405 170.208 41.3881Q167.241 43.5358 167.241 47.5513Q167.241 51.5668 170.34 54.0008Q173.439 56.4348 179.05 56.4348Z M227.767 34.6423V32.6279Q227.767 22.3817 231.86 15.0863Q235.953 7.79081 242.768 3.8954Q249.582 0 257.706 0Q266.935 0 271.762 3.33256Q276.589 6.66512 278.81 10.4107H281.042V1.8432H295.801V79.33Q295.801 85.6989 292.104 89.4725Q288.408 93.2462 282.079 93.2462H238.369V80.0541H277.023Q280.779 80.0541 280.779 76.1043V57.2775H278.547Q277.161 59.5683 274.665 61.8904Q272.168 64.2125 268.057 65.7414Q263.946 67.2702 257.706 67.2702Q249.582 67.2702 242.756 63.3748Q235.93 59.4794 231.848 52.1724Q227.767 44.8655 227.767 34.6423ZM261.938 54.0781Q270.151 54.0781 275.573 48.8612Q280.996 43.6443 280.996 34.2704V32.9999Q280.996 23.4943 275.627 18.3432Q270.259 13.1921 261.938 13.1921Q253.749 13.1921 248.315 18.3432Q242.881 23.4943 242.881 32.9999V34.2704Q242.881 43.6443 248.315 48.8612Q253.749 54.0781 261.938 54.0781Z M344.764 68.758Q334.998 68.758 327.583 64.6108Q320.167 60.4636 316.031 52.9048Q311.896 45.346 311.896 35.1689V33.589Q311.896 23.3889 315.977 15.8416Q320.059 8.2944 327.397 4.1472Q334.735 0 344.385 0Q353.881 0 360.956 4.1867Q368.031 8.37341 371.981 15.8515Q375.931 23.3297 375.931 33.2895V38.6974H327.181Q327.468 46.3334 332.587 50.9496Q337.707 55.5658 345.198 55.5658Q352.522 55.5658 356.101 52.3534Q359.681 49.141 361.553 45.0629L373.985 51.4813Q372.119 55.0656 368.63 59.1042Q365.141 63.1428 359.394 65.9504Q353.648 68.758 344.764 68.758ZM327.313 27.2892H360.622Q360.095 20.7986 355.7 16.9954Q351.304 13.1921 344.277 13.1921Q337.055 13.1921 332.691 16.9954Q328.327 20.7986 327.313 27.2892Z M391.548 66.9148V1.8432H406.353V10.9769H408.585Q410.303 7.25429 414.832 3.99908Q419.361 0.743866 428.435 0.743866Q435.956 0.743866 441.695 4.12911Q447.434 7.51435 450.651 13.5903Q453.868 19.6663 453.868 27.9442V66.9148H438.8V29.1226Q438.8 21.1969 434.891 17.3492Q430.983 13.5015 423.9 13.5015Q415.872 13.5015 411.244 18.8237Q406.617 24.146 406.617 33.9445V66.9148Z" fill="currentColor"/><path class="accent" d="M73.9979 66.9148 98.2261 34.0696 74.3764 1.8432H91.9626L107.9 24.3499H110.131L126.068 1.8432H143.654L119.805 34.0696L144.033 66.9148H126.206L110.131 44.0065H107.9L91.8244 66.9148Z" fill="#D4AF37"/></g></svg></a>
+      <p>Oxagen is workforce management for autonomous agents: give each agent an identity, set its authority and budget, equip it with tools and skills, and review what it did and what its operators spent, through a shared agent control plane.</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="https://oxagen.sh">Explore Oxagen</a>
+      <a href="https://oxagen.sh/blog/agents-are-waiting-on-a-process-built-for-people">Read the research</a>
+      <a href="mailto:hello@oxagen.sh">hello@oxagen.sh</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/sdlc.js" defer></script>
+</body>
+</html>
