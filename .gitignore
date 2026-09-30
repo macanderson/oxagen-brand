@@ -25,6 +25,7 @@ fonts/Aeonik*
 # copies it to /storybook/ at the root for Vercel.
 node_modules/
 ui/dist/
+ui/.turbo/
 ui/storybook-static/
 ui/design-system/
 /storybook/
