@@ -4,5 +4,3 @@ skills/
 /ui/
 /.github/
 node_modules/
-# The agent SDLC site deploys as its own Vercel project (oxagen-sdlc).
-/sdlc/

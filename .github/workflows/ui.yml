@@ -174,5 +174,11 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version-file: ui/.node-version
+      # sdlc/ is its own Vercel project (oxagen-sdlc). It is removed from this
+      # checkout rather than listed in .vercelignore, because the oxagen-sdlc
+      # build reads the root .vercelignore too, and a /sdlc/ line there left
+      # that build with no files.
+      - name: Leave out the SDLC site
+        run: rm -rf sdlc
       - name: Deploy to Vercel
         run: npx --yes vercel@61.0.0 deploy --prod --yes --token "$VERCEL_TOKEN"
