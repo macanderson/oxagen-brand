@@ -4,6 +4,12 @@
   "outputDirectory": "public",
   "redirects": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "sdlc.oxagen.cloud" }],
+      "destination": "https://sdlc.oxagen.sh/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "sdlc.oxagen.cloud" }],
       "destination": "https://sdlc.oxagen.sh/:path*",
