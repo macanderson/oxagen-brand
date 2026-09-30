@@ -1,0 +1,124 @@
+name: fan-out
+
+# Carry every merge to main into every frontend. Once a push to main has passed
+# every job in ui.yml, this runs each consumer's own sync command (listed in
+# consumers.json) against the kit at that commit, and installs the current
+# skill stub. When anything changed, it opens a PR in the consumer with the
+# agent-monitored-pr label and asks GitHub to merge it once the consumer's
+# required checks pass. A newer sync PR closes the older ones it supersedes.
+#
+# Needs one secret, BRAND_SYNC_TOKEN: a fine-grained token with contents and
+# pull-requests write on every repo in consumers.json. GITHUB_TOKEN cannot push
+# to other repos, and a PR it opened would not start the consumer's CI.
+
+on:
+  workflow_run:
+    workflows: [ui]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: fan-out
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      consumers: ${{ steps.read.outputs.consumers }}
+      sha: ${{ steps.read.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - id: read
+        run: |
+          echo "consumers=$(jq -c '[.consumers[] | {repo, sync, apt: (.apt // [])}]' consumers.json)" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  sync:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        consumer: ${{ fromJSON(needs.plan.outputs.consumers) }}
+    env:
+      REPO: ${{ matrix.consumer.repo }}
+      SHA: ${{ needs.plan.outputs.sha }}
+    steps:
+      # A sync with no token would fail deep inside the checkout. This step names
+      # the missing secret instead, and fails so a main push never reads green
+      # while no frontend was updated.
+      - name: Check the token
+        env:
+          TOKEN: ${{ secrets.BRAND_SYNC_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Add the repository secret BRAND_SYNC_TOKEN: a fine-grained token with contents and pull-requests write on every repo in consumers.json."
+            exit 1
+          fi
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.plan.outputs.sha }}
+          path: kit
+      - uses: actions/checkout@v5
+        with:
+          repository: ${{ matrix.consumer.repo }}
+          token: ${{ secrets.BRAND_SYNC_TOKEN }}
+          path: site
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+      - name: Install system tools
+        if: join(matrix.consumer.apt, ' ') != ''
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ${{ join(matrix.consumer.apt, ' ') }}
+      - name: Sync
+        working-directory: site
+        env:
+          KIT: ${{ github.workspace }}/kit
+          SYNC: ${{ matrix.consumer.sync }}
+        run: |
+          mkdir -p .claude/skills/oxagen-branding
+          cp "$KIT/skills/stub/oxagen-branding/SKILL.md" .claude/skills/oxagen-branding/SKILL.md
+          sh -c "$SYNC"
+      - name: Open the PR
+        working-directory: site
+        env:
+          GH_TOKEN: ${{ secrets.BRAND_SYNC_TOKEN }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "$REPO already matches oxagen-brand@${SHA:0:7}."
+            exit 0
+          fi
+          short=${SHA:0:7}
+          branch="brand/sync-$short"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add -A
+          git commit -q -m "Sync the brand from oxagen-brand@$short"
+          git push -q origin "$branch"
+          gh label create agent-monitored-pr --repo "$REPO" --color fd0880 \
+            --description "Agent polls every 60 seconds fixes CI, comments, conflicts." 2>/dev/null || true
+          body="Brand source: oxagen-brand@$short (https://github.com/macanderson/oxagen-brand/commit/$SHA).
+
+          The fan-out workflow in oxagen-brand ran this repo's sync against that commit and installed the current skill stub. Every file here is generated from the kit. To change a value, change oxagen-brand (see its CHANGING.md), not this PR."
+          url=$(gh pr create --repo "$REPO" --head "$branch" --title "Sync the brand from oxagen-brand@$short" \
+            --body "$body" --label agent-monitored-pr)
+          echo "Opened $url"
+          gh pr merge "$url" --auto --squash \
+            || echo "::warning::$REPO does not allow auto-merge, so $url waits for a person or a watcher."
+          for n in $(gh pr list --repo "$REPO" --state open --json number,headRefName \
+              --jq ".[] | select(.headRefName | startswith(\"brand/sync-\")) | select(.headRefName != \"$branch\") | .number"); do
+            gh pr close "$n" --repo "$REPO" --delete-branch --comment "Superseded by $url."
+          done

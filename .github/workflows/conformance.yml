@@ -1,0 +1,55 @@
+name: conformance
+
+# Check every repo and live surface in consumers.json against the kit, every
+# day and on demand. build/conformance.py writes the report. When anything
+# differs, the report becomes the body of one open issue labelled
+# brand-conformance, and the job fails. When everything conforms again, the job
+# closes that issue.
+
+on:
+  schedule:
+    - cron: "17 13 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: conformance
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - id: run
+        continue-on-error: true
+        run: python build/conformance.py --report report.md
+      - name: File, update, or close the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ steps.run.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          open=$(gh issue list --state open --label brand-conformance --json number --jq '.[0].number // empty')
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -n "$open" ]; then
+              gh issue close "$open" --comment "Every repo and surface conforms as of $(date -u +%F). Run: $RUN_URL"
+            fi
+            exit 0
+          fi
+          printf '\nRun: %s\n' "$RUN_URL" >> report.md
+          if [ -n "$open" ]; then
+            gh issue edit "$open" --body-file report.md
+          else
+            gh label create brand-conformance --color 71717A \
+              --description "A repo or live surface differs from the brand kit." 2>/dev/null || true
+            gh issue create --title "Brand conformance" --label brand-conformance --body-file report.md
+          fi
+          exit 1
