@@ -7,6 +7,8 @@ the social art, the ads, and the content cards.
 **Start with [`playbook.html`](playbook.html).** It shows every asset, adapts
 to light and dark, and works offline.
 
+**Changing the brand? Start with [`CHANGING.md`](CHANGING.md).** It walks a colour, a face, a line, and a component from edit to every frontend.
+
 **Writing copy? Start in [`messages/`](messages/).** The registry holds every
 line with its status, scope, evidence, and owner. [`message-bank.html`](message-bank.html)
 is generated from it and shows every line, the held ones marked with their gate.
@@ -83,7 +85,7 @@ pwa/               install-prompt.js: the card that offers to add a site to the 
 social/            avatar · x · linkedin · youtube · open graph · dark | light
 ads/               from messages/ads/ and messages/always-on/: workforce · authority · equipment · finance · keys · night shift · capacity · driver seat · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
 content/           changelog · essay · release · field note · fleet note · always-on cards, 1200×675
-skills/            the oxagen-branding Claude Code skill and its installer
+skills/            the oxagen-branding Claude Code skill, the stub other repos install, and its installer
 ```
 
 ## Every pixel here is generated
@@ -173,11 +175,11 @@ one.
 
 ## Keep agents current
 
-Agents steer from the `oxagen-branding` skill in `skills/`. Its
-`assets/tokens.css` and `assets/logo.svg` are written by the build, and
-`--check` fails if either drifts, so the numbers an agent reads are the
-numbers the products compile. Install the skill as a symlink and `git pull`
-here updates every session on the machine.
+Agents steer from the `oxagen-branding` skill in `skills/`. The skill holds the
+method, and every run reads the brand from this repo at the current `main`
+commit, so an agent never works from a stale copy. Its `assets/tokens.css` and
+`assets/logo.svg` are written by the build, and `--check` fails if either
+drifts, so the numbers an agent reads are the numbers the products compile.
 
 ## Messages
 
@@ -208,19 +210,27 @@ approved, launch-released ad entry produces.
 
 `skills/oxagen-branding/` is the Claude Code skill that carries the positioning,
 the voice, the vocabulary, and worked examples, beside the marks it describes.
-It is the source of truth for every word either brand publishes. The oxagen
-monorepo vendors it through its own sync script; everything else installs it
-from here.
+It is the source of truth for every word either brand publishes, and it is the
+only full copy. Everywhere else installs the stub in `skills/stub/`: one
+`SKILL.md` that fetches the skill from `main` at a pinned commit and follows it.
+Installing the stub once is enough. It never needs reinstalling when the brand
+changes.
 
 ```sh
-skills/install.sh                          # link it into ~/.claude/skills, for every project on this machine
-skills/install.sh --project ~/Projects/x   # copy it into one project's .claude/skills
-skills/install.sh --check                  # does the installed skill match this checkout?
+skills/install.sh                          # the stub in ~/.claude/skills, for every project and account on this machine
+skills/install.sh --project ~/Projects/x   # the stub in one project's .claude/skills; commit it
+skills/install.sh --check                  # is the installed skill the current stub?
 ```
 
-The per-user install is a symlink, so `git pull` here is the update. This skill
-supersedes the older `brand-voice-guidelines` skill some machines still carry
-under `~/.claude/skills`; the installer leaves that one alone.
+Commit the stub in every repo that ships Oxagen or Stella copy. Cloud sessions
+load a repository's `.claude/skills/` and never read `~/.claude/skills/`, so the
+committed stub is how they get the skill. `build/skill.py --check` fails if the
+stub's frontmatter drifts from the skill's, if `SKILL.md` carries a colour or a
+registry line, or if the skill folder holds a file it should not.
+
+This skill supersedes the older `brand-voice-guidelines` skill some machines
+still carry under `~/.claude/skills`. The installer leaves that one alone.
+Delete it, because it answers the same requests with older rules.
 
 For a PWA, copy `icons/oxagen-*.png`, `icons/oxagen-favicon.ico` and
 `icons/oxagen.webmanifest` into the app's public folder and point at them:

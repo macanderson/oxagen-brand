@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/oxagenai/oxagen-brand/messages/schema.json",
+  "$id": "https://github.com/macanderson/oxagen-brand/messages/schema.json",
   "title": "Oxagen message registry entry",
   "description": "One approved, candidate, or retired message. build/messages.py enforces these rules and the prose checks the schema cannot express.",
   "type": "object",
