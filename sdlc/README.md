@@ -4,6 +4,8 @@ The page at [sdlc.oxagen.cloud](https://sdlc.oxagen.cloud) and the template gene
 
 The Vercel project is `oxagen-sdlc` in the `oxagen-inc` team. Its root directory is `sdlc/` in this repository. A push to `main` that changes this folder deploys it.
 
+The build also reads the `.vercelignore` at the root of this repository. A root pattern that matches `sdlc/` leaves the build with no files, and every path returns 404. To keep this folder off brand.oxagen.cloud, the deploy step in `.github/workflows/ui.yml` removes `sdlc/` from its own checkout.
+
 ## Files
 
 | Path | What it holds |
