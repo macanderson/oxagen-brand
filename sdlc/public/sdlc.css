@@ -97,9 +97,11 @@ a:hover { text-decoration-thickness: 2px; }
 .skip:focus { left: 8px; }
 
 /* Type */
-h1, h2, h3 { font-family: var(--display); color: var(--ink); margin: 0; }
+h1, h2, h3 { font-family: var(--sans); color: var(--ink); margin: 0; }
+/* Space Grotesk sets the wordmark and the first line of the hero, nothing else. */
+.hero h1 { font-family: var(--display); }
 h1 { font-size: clamp(44px, 8vw, 72px); line-height: 1.05; font-weight: 700; letter-spacing: -0.03em; }
-h2 { font-size: clamp(30px, 5vw, 40px); line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: clamp(30px, 5vw, 40px); line-height: 1.2; font-weight: 700; letter-spacing: -0.02em; }
 h3 { font-size: 22px; line-height: 1.3; font-weight: 600; }
 h4 { font: 600 17px/1.4 var(--sans); color: var(--ink); margin: 0; }
 p { margin: 0 0 16px; }
@@ -246,7 +248,7 @@ section.hero { border-top: 0; padding: 72px 0 88px; }
 /* Facts */
 .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
 .fact { border: 1px solid var(--line); border-radius: var(--r); padding: 20px; background: var(--panel); display: flex; flex-direction: column; }
-.fact .n { font: 700 34px/1.1 var(--display); color: var(--ink); margin-bottom: 10px; letter-spacing: -0.01em; }
+.fact .n { font: 700 34px/1.1 var(--sans); color: var(--ink); margin-bottom: 10px; letter-spacing: -0.01em; }
 .fact p { font-size: 15px; line-height: 1.55; color: var(--body); }
 .fact .src { margin-top: auto; font-size: 13px; color: var(--muted); }
 .fact .src a { color: var(--muted); }
@@ -298,7 +300,7 @@ section.hero { border-top: 0; padding: 72px 0 88px; }
 .loop .node:focus { outline: none; }
 .loop .node:focus-visible rect { stroke: var(--gold); stroke-width: 2; }
 .loop .pulse { fill: var(--ink); }
-.loop .center-big { font: 700 34px/1 var(--display); fill: var(--ink); text-anchor: middle; }
+.loop .center-big { font: 700 34px/1 var(--sans); fill: var(--ink); text-anchor: middle; }
 .loop .center-small { font: 400 15px/1 var(--sans); fill: var(--muted); text-anchor: middle; }
 .loop .person rect { fill: var(--ground); stroke: var(--muted); stroke-dasharray: 4 3; }
 .loop .person .who-label { font: 400 10px/1 var(--mono); fill: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
@@ -317,7 +319,7 @@ td.old { color: var(--muted); }
 /* Stats and chart */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
 .stat { border: 1px solid var(--line); border-radius: var(--r); padding: 20px; background: var(--panel); }
-.stat .n { font: 700 40px/1 var(--display); color: var(--ink); letter-spacing: -0.02em; }
+.stat .n { font: 700 40px/1 var(--sans); color: var(--ink); letter-spacing: -0.02em; }
 .stat .l { font-size: 15px; line-height: 1.45; color: var(--body); margin-top: 10px; }
 @media (max-width: 960px) { .stats { grid-template-columns: 1fr 1fr; } }
 .chart svg { width: 100%; height: auto; }

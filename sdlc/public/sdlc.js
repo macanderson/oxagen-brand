@@ -124,8 +124,8 @@
   const simEls = $$("[data-sim]");
   if (simEls.length) {
     const COLS = {
-      old: ["Write", "Wait for a person", "Person reads", "Merged"],
-      new: ["Write", "Checks", "Review agent", "Merged"],
+      old: ["Code", "Queue", "Human review", "Merges"],
+      new: ["Code", "Checks", "Agent review", "Merges"],
     };
     const X0 = 92, WIDTHS = [190, 190, 190, 312], GAP = 6, LANE_Y = [44, 92, 140], BAR_Y = 218;
     const START = 8 * 60, DAY = 24 * 60;
@@ -154,8 +154,8 @@
         svg("rect", { x: tX(from), y: BAR_Y - 9, width: tX(to) - tX(from), height: 18, rx: 3, class: "band" }, bar);
         svg("text", { x: tX(from) + 8, y: BAR_Y + 4, class: "band-label" }, bar).textContent = text;
       };
-      if (kind === "old") band(9 * 60, 17 * 60, "Person at work");
-      else band(START, START + DAY, "Checks and agents at work");
+      if (kind === "old") band(9 * 60, 17 * 60, "Reviewer hours");
+      else band(START, START + DAY, "Agent and check hours");
       svg("rect", { x: X0, y: BAR_Y - 9, width: END - X0, height: 18, rx: 3, class: "clockbar" }, bar);
       [8, 12, 16, 20, 24, 28, 32].forEach((h) => {
         const hh = h % 24;
@@ -164,7 +164,7 @@
       });
       if (kind === "new") {
         svg("line", { x1: tX(9 * 60), x2: tX(9 * 60), y1: BAR_Y - 16, y2: BAR_Y + 10, class: "now", "stroke-dasharray": "3 2" }, bar);
-        svg("text", { x: tX(9 * 60) + 6, y: BAR_Y - 19, class: "band-label" }, bar).textContent = "9 am: a person reads the record";
+        svg("text", { x: tX(9 * 60) + 6, y: BAR_Y - 19, class: "band-label" }, bar).textContent = "Record read at 9 am";
       }
       const now = svg("line", { x1: X0, x2: X0, y1: BAR_Y - 13, y2: BAR_Y + 13, class: "now" }, el);
       const time = svg("text", { x: 4, y: BAR_Y + 5, class: "time" }, el);
@@ -217,11 +217,11 @@
         lane.box.classList.toggle("wait", waiting);
         lane.label.classList.toggle("wait", waiting);
         const text = {
-          write: "Writing",
-          queue: `Waiting ${Math.floor((t - ag.since) / 60)}h ${String(Math.floor(t - ag.since) % 60).padStart(2, "0")}m`,
-          read: "Person reads",
-          check: "Checks run",
-          review: "Review agent",
+          write: "Draft",
+          queue: `Idle ${Math.floor((t - ag.since) / 60)}h ${String(Math.floor(t - ag.since) % 60).padStart(2, "0")}m`,
+          read: "Human review",
+          check: "Checks",
+          review: "Agent review",
         }[ag.st];
         if (lane.label.textContent !== text) lane.label.textContent = text;
         while (lane.done.childNodes.length < ag.merged) {
@@ -371,7 +371,7 @@
     const y = (v) => B - (v / max) * (B - T);
     const hourLabel = (h) => (h === 0 ? "12 am" : h === 12 ? "12 pm" : h < 12 ? `${h} am` : `${h - 12} pm`);
     svg("rect", { x: L + 9 * step, y: T - 22, width: 9 * step, height: B - T + 22, class: "band" }, chart);
-    svg("text", { x: L + 9 * step + 8, y: T - 8, class: "band-label" }, chart).textContent = "Weekday work hours";
+    svg("text", { x: L + 9 * step + 8, y: T - 8, class: "band-label" }, chart).textContent = "Work hours (9 am to 6 pm)";
     [0, 20, 40, 60, 80].forEach((v) => {
       svg("line", { x1: L, x2: Rr, y1: y(v), y2: y(v), class: "axis", "stroke-dasharray": v ? "2 4" : "" }, chart);
       svg("text", { x: L - 8, y: y(v) + 4, class: "tick", "text-anchor": "end" }, chart).textContent = String(v);

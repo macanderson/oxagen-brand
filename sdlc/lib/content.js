@@ -102,7 +102,7 @@ export function template({ company, date = new Date() }) {
         ],
       },
 
-      { type: "h2", text: "Why we changed" },
+      { type: "h2", text: "Reasons for the change" },
       {
         type: "p",
         text: "Our old process was made for people. Every change waited for a person to read it. Work stopped at night and on weekends.",
@@ -276,7 +276,7 @@ export function template({ company, date = new Date() }) {
         ],
       },
 
-      { type: "h2", text: "Where people step in" },
+      { type: "h2", text: "Decisions for people" },
       { type: "p", text: "People make these calls:" },
       {
         type: "bullets",
@@ -339,7 +339,7 @@ export function template({ company, date = new Date() }) {
         ],
       },
 
-      { type: "h2", text: "Where Oxagen fits" },
+      { type: "h2", text: "Oxagen's role" },
       {
         type: "p",
         text: "Oxagen is workforce management for autonomous agents. It gives each agent an identity and a mandate: its access, its budget and rules, and its tools and skills. For actions routed through Oxagen, a rule answers each request, and Oxagen keeps the record of what each agent did and what it cost. Learn more at oxagen.sh.",

@@ -18,7 +18,7 @@ The Vercel project is `oxagen-sdlc` in the `oxagen-inc` team. Its root directory
 | `lib/content.js` | The template text. Both renderers read it. Text in `[[double brackets]]` is a blank. |
 | `lib/docx.js`, `lib/pdf.js` | The Word and PDF renderers. |
 | `lib/lead.js` | The optional lead gate. |
-| `fonts/` | Space Grotesk as TTF for the PDF. The font library cannot subset the WOFF2 files. |
+| `fonts/` | Geist at 400, 500, and 700 as static TTF for the PDF, cut from `fonts/geist-latin-wght.woff2` with the fontTools instancer. The font library cannot subset a WOFF2 file. |
 
 The form in the oxagen.sh blog post (`apps/web/content/posts/agents-are-waiting-on-a-process-built-for-people` in the oxagen repo) sends a plain `GET` to `/api/template`, so it works without JavaScript.
 

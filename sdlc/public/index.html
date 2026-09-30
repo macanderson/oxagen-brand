@@ -90,7 +90,7 @@
           <label class="field wide"><span class="label">Work email</span><input type="email" name="email" maxlength="320" autocomplete="email"></label>
         </div>
         <label class="hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-        <p class="note">Free. A copy of this process with your name in it, ready to edit.</p>
+        <p class="note">A free copy of this process with your name in it.</p>
         <p class="status" role="status" aria-live="polite" data-status></p>
         <div class="gdocs" data-gdocs hidden>
           <strong>Open it in Google Docs</strong>
@@ -105,7 +105,7 @@
     </div>
 
     <div class="queue" aria-label="Illustration: three agents wait for one person to read their changes">
-      <div class="queue-title"><h4>Waiting for review</h4><span>illustration</span></div>
+      <div class="queue-title"><h4>Review queue</h4><span>illustration</span></div>
       <div class="card-wait">
         <svg class="face" viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 39 12.5v19L22 41 5 31.5v-19z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M13.5 19.5h7M23.5 19.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14.5 19.5a2.5 2.5 0 0 0 5 0zM24.5 19.5a2.5 2.5 0 0 0 5 0z" fill="currentColor"/><path d="M18 29.5h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text class="zz" x="31" y="10">z</text></svg>
         <div><div class="t">Agent 1</div><div class="s">Change ready. Waiting for a person.</div></div>
@@ -137,14 +137,14 @@
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow">The problem</p>
-      <h2>The old way was made for people</h2>
+      <h2>A process made for people</h2>
       <p class="lead">Most teams build software the same way. A person writes a change. Another person reads it. They talk, fix it, and wait. Then the change ships. Each step fits a person's work day.</p>
       <p class="lead">Agents do not have a work day. They can work at any hour. But the old process still stops at every step to wait for a person.</p>
     </div>
 
     <div class="panel reveal">
       <div class="panel-head">
-        <h3>One week has 168 hours</h3>
+        <h3>Hours in one week</h3>
         <div class="toggle" role="group" aria-label="Show hours for">
           <button type="button" aria-pressed="true" data-week="person">A person</button>
           <button type="button" aria-pressed="false" data-week="agent">An agent</button>
@@ -160,22 +160,22 @@
       <div class="fact reveal">
         <div class="n">400 lines</div>
         <p>A person reads code best in chunks of 200 to 400 lines, for up to an hour at a time.</p>
-        <div class="src">Source: <a href="https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/" rel="noopener" target="_blank">SmartBear, a study of a Cisco team</a></div>
+        <div class="src">Source: <a href="https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/" rel="noopener" target="_blank">SmartBear study of a Cisco team</a></div>
       </div>
       <div class="fact reveal">
         <div class="n">1 day</div>
         <p>At Meta, the slowest quarter of code reviews took as much as a day to get a review.</p>
-        <div class="src">Source: <a href="https://engineering.fb.com/2022/11/16/culture/meta-code-review-time-improving/" rel="noopener" target="_blank">Meta Engineering, 2022</a></div>
+        <div class="src">Source: <a href="https://engineering.fb.com/2022/11/16/culture/meta-code-review-time-improving/" rel="noopener" target="_blank">Meta Engineering (2022)</a></div>
       </div>
       <div class="fact reveal">
         <div class="n">7.2%</div>
         <p>When teams used AI a quarter more, delivery stability fell by an estimated 7.2 percent.</p>
-        <div class="src">Source: <a href="https://cloud.google.com/blog/products/devops-sre/announcing-the-2024-dora-report" rel="noopener" target="_blank">DORA, 2024</a></div>
+        <div class="src">Source: <a href="https://cloud.google.com/blog/products/devops-sre/announcing-the-2024-dora-report" rel="noopener" target="_blank">DORA (2024)</a></div>
       </div>
       <div class="fact reveal">
         <div class="n">7 months</div>
         <p>The length of task an AI agent can finish has doubled about every 7 months since 2019.</p>
-        <div class="src">Source: <a href="https://arxiv.org/abs/2503.14499" rel="noopener" target="_blank">METR, 2025</a></div>
+        <div class="src">Source: <a href="https://arxiv.org/abs/2503.14499" rel="noopener" target="_blank">METR (2025)</a></div>
       </div>
     </div>
   </div>
@@ -185,7 +185,7 @@
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow">The difference</p>
-      <h2>Same agents, same day, two processes</h2>
+      <h2>One day under each process</h2>
       <p class="lead">Both sides have three agents. On the left, a person reads each change, and the person works from 9 to 5. On the right, checks and a review agent read each change, and a person reads the record each morning.</p>
     </div>
     <div class="sim-grid">
@@ -200,12 +200,12 @@
     </div>
     <div class="sim-controls">
       <button class="btn btn-line" type="button" data-sim-toggle>Pause</button>
-      <span class="legend-shape"><i class="s-work"></i>Working</span>
-      <span class="legend-shape"><i class="s-wait"></i>Waiting</span>
-      <span class="legend-shape"><i class="s-done"></i>One merged change</span>
+      <span class="legend-shape"><i class="s-work"></i>Active</span>
+      <span class="legend-shape"><i class="s-wait"></i>Idle</span>
+      <span class="legend-shape"><i class="s-done"></i>Merged change</span>
     </div>
-    <p class="caption swipe-hint">Swipe each figure sideways to see every column.</p>
-    <p class="caption">Illustration. One simulated day. The timings are made up to show the shape of the problem, not to measure it.</p>
+    <p class="caption swipe-hint">Each figure scrolls sideways.</p>
+    <p class="caption">Illustration with made-up timings.</p>
   </div>
 </section>
 
@@ -214,7 +214,7 @@
     <div class="loop-grid">
       <div class="section-head reveal" style="margin-bottom:0">
         <p class="eyebrow">The new way</p>
-        <h2>Agents do the work. People own it.</h2>
+        <h2>A process made for agents</h2>
         <p class="lead">In the new way, agents run every stage at every hour. Checks read every change. People write the rules, make the calls only a person can make, and read the record each day.</p>
         <p class="muted small">Choose a stage to read what happens in it.</p>
       </div>
@@ -243,7 +243,7 @@
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow">At Oxagen</p>
-      <h2>How Oxagen builds Oxagen</h2>
+      <h2>Oxagen's own process</h2>
       <p class="lead">Oxagen's own code is built with this process. Four agent tools do the work: Claude Code, Codex, Cursor, and Stella. They all follow one set of written rules, kept in the code next to the product.</p>
     </div>
 
@@ -258,10 +258,10 @@
       <div class="panel-head"><h3>Changes merged by hour of day</h3><span class="who">Pacific time</span></div>
       <svg data-chart viewBox="0 0 1000 300" role="img" aria-label="Bar chart of 1,064 changes merged by hour of day, Pacific time. Every hour has merges. The fewest is 12 at 7 am. The most is 75 at 11 am."></svg>
       <table class="sr-only" data-chart-table><caption>Changes merged by hour of day, Pacific time, September 1 to 29, 2026</caption><thead><tr><th scope="col">Hour</th><th scope="col">Changes merged</th></tr></thead><tbody></tbody></table>
-      <p class="caption">Source: Oxagen's GitHub repository. Pull requests merged from September 1 to 29, 2026, counted by UTC date and shown in Pacific time. Weekday work hours are 9 am to 6 pm, Monday to Friday.</p>
+      <p class="caption">Source: pull requests merged into Oxagen's GitHub repository from September 1 to 29 of 2026.</p>
     </div>
 
-    <h3 class="reveal" style="margin:56px 0 16px">The rules the agents follow</h3>
+    <h3 class="reveal" style="margin:56px 0 16px">The agents' rules</h3>
     <ol class="rules reveal">
       <li>Every change starts as an issue, and the issue says what done looks like.</li>
       <li>A triage agent sets each issue's priority and size. Whoever files the issue does not.</li>
@@ -274,7 +274,7 @@
       <li>Each run ends with a note on the issue: minutes planned, minutes spent, and what the next agent should know.</li>
     </ol>
 
-    <h3 class="reveal" style="margin:56px 0 4px">Where Oxagen fits</h3>
+    <h3 class="reveal" style="margin:56px 0 4px">Oxagen's role</h3>
     <p class="reveal muted">Oxagen is workforce management for autonomous agents. It is the part of this process that manages the agents themselves.</p>
     <div class="oxfit">
       <div class="card reveal"><h4>Identity</h4><p>Each agent gets its own identity. Agents do not share an account.</p></div>
@@ -311,7 +311,7 @@
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow">People</p>
-      <h2>What people do</h2>
+      <h2>People's role</h2>
       <p class="lead">People own every change. Each agent run has a named operator. The operator does not read every line. The operator sets the rules and reads the record.</p>
     </div>
     <div class="grid-3">
@@ -319,7 +319,7 @@
       <div class="card reveal"><h3>Decisions</h3><p>A rule can send a request to a person. Spending over a budget, adding a new tool, and reading production data are common ones. The run waits for the answer.</p></div>
       <div class="card reveal"><h3>Record</h3><p>Each day, the operator reads what shipped, what is waiting on a person, what broke, and what it all cost.</p></div>
     </div>
-    <h4 class="reveal" style="margin-top:40px">What people stop doing</h4>
+    <h4 class="reveal" style="margin-top:40px">Dropped tasks</h4>
     <ul class="stop-list reveal">
       <li>Reading every line of every change</li>
       <li>Running checks again by hand</li>
@@ -333,7 +333,7 @@
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow">Adoption</p>
-      <h2>Four weeks to start</h2>
+      <h2>Rollout plan</h2>
       <p class="lead">Start with one repository. Move one step each week.</p>
     </div>
     <ol class="steps">
@@ -349,7 +349,7 @@
   <div class="wrap template-grid">
     <div class="reveal">
       <p class="eyebrow">Template</p>
-      <h2 style="margin-bottom:16px">Make this SDLC for your team</h2>
+      <h2 style="margin-bottom:16px">A copy for your team</h2>
       <p class="lead" style="margin-bottom:28px">Type your company name. You get this process as a document with your name in it. It has blanks for your rules, your checks, and your people.</p>
       <form class="make" action="/api/template" method="post" data-make>
         <div class="make-row">
@@ -384,24 +384,24 @@
       </form>
     </div>
     <div class="panel reveal">
-      <h4 style="margin-bottom:12px">What is inside</h4>
+      <h4 style="margin-bottom:12px">Contents</h4>
       <ul class="contents">
         <li>About this document</li>
-        <li>Why we changed</li>
+        <li>Reasons for the change</li>
         <li>Principles</li>
         <li>Roles</li>
         <li>The ten stages</li>
         <li>Rules</li>
         <li>Checks</li>
         <li>Severity</li>
-        <li>Where people step in</li>
+        <li>Decisions for people</li>
         <li>The daily record</li>
         <li>Scoreboard</li>
         <li>Rollout plan</li>
-        <li>Where Oxagen fits</li>
+        <li>Oxagen's role</li>
         <li>Sign-off</li>
       </ul>
-      <p class="caption">About eight pages. Word, Google Docs, or PDF. Every blank is marked so you can find it.</p>
+      <p class="caption">Every blank is marked for you to fill in.</p>
     </div>
   </div>
 </section>
