@@ -1,7 +1,7 @@
 {
   "name": "oxagen-sdlc",
   "private": true,
-  "description": "The agent SDLC page and the template generator behind sdlc.oxagen.cloud.",
+  "description": "The agent SDLC page and the template generator behind sdlc.oxagen.sh.",
   "type": "module",
   "engines": {
     "node": "24.x"
