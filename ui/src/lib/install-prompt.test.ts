@@ -113,6 +113,13 @@ describe("who is offered the card", () => {
     expect(load().eligible(fakeWindow(), document)).toBe(false);
   });
 
+  it("does not offer it inside a frame, where the top page offers instead", () => {
+    withMedia(TOUCH);
+    const frame = fakeWindow();
+    Object.assign(frame, { top: fakeWindow() });
+    expect(load().eligible(frame, document)).toBe(false);
+  });
+
   it("does not offer it inside the installed app", () => {
     withMedia({ ...TOUCH, "(display-mode: standalone)": true });
     expect(load().eligible(fakeWindow(), document)).toBe(false);
