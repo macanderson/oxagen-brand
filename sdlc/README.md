@@ -1,8 +1,10 @@
 # The agent SDLC
 
-The page at [sdlc.oxagen.cloud](https://sdlc.oxagen.cloud) and the template generator behind it. The page shows how Oxagen builds Oxagen with agents at every hour, and it lets a reader make a copy of the process with their company name in it, as a Word file, a PDF, or a Word file to open in Google Docs.
+The page at [sdlc.oxagen.sh](https://sdlc.oxagen.sh) and the template generator behind it. The page shows how Oxagen builds Oxagen with agents at every hour, and it lets a reader make a copy of the process with their company name in it, as a Word file, a PDF, or a Word file to open in Google Docs.
 
 The Vercel project is `oxagen-sdlc` in the `oxagen-inc` team. Its root directory is `sdlc/` in this repository. A push to `main` that changes this folder deploys it.
+
+`sdlc.oxagen.sh` is the main address. The project also answers on `sdlc.oxagen.cloud`, and `vercel.json` sends every request there to the same path on `sdlc.oxagen.sh` with a 308 redirect.
 
 The build also reads the `.vercelignore` at the root of this repository. A root pattern that matches `sdlc/` leaves the build with no files, and every path returns 404. To keep this folder off brand.oxagen.cloud, the deploy step in `.github/workflows/ui.yml` removes `sdlc/` from its own checkout.
 

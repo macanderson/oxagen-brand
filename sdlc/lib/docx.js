@@ -213,9 +213,9 @@ export function buildDocx(doc) {
                     color: MUTED,
                   }),
                   new ExternalHyperlink({
-                    link: "https://sdlc.oxagen.cloud",
+                    link: "https://sdlc.oxagen.sh",
                     children: [
-                      new TextRun({ text: "sdlc.oxagen.cloud", font: FONT, size: 16, color: MUTED, underline: {} }),
+                      new TextRun({ text: "sdlc.oxagen.sh", font: FONT, size: 16, color: MUTED, underline: {} }),
                     ],
                   }),
                   new TextRun({ text: ". Page ", font: FONT, size: 16, color: MUTED }),

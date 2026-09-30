@@ -222,7 +222,7 @@ export function renderPdf(doc) {
       .fontSize(8)
       .fillColor(MUTED)
       .text(
-        `Made from the Oxagen agent SDLC template at sdlc.oxagen.cloud. Page ${i + 1} of ${range.count}`,
+        `Made from the Oxagen agent SDLC template at sdlc.oxagen.sh. Page ${i + 1} of ${range.count}`,
         MARGIN,
         pdf.page.height - MARGIN,
         { width, lineBreak: false },

@@ -82,7 +82,7 @@ export function template({ company, date = new Date() }) {
   return {
     title: `${c} agent SDLC`,
     subtitle: `How ${c} builds and ships software with agents, at every hour of the week.`,
-    meta: `Version 1. Made on ${today} from the Oxagen agent SDLC template at sdlc.oxagen.cloud.`,
+    meta: `Version 1. Made on ${today} from the Oxagen agent SDLC template at sdlc.oxagen.sh.`,
     blocks: [
       { type: "h2", text: "About this document" },
       {
