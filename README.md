@@ -35,10 +35,12 @@ picked: `#F1CE65` is the highlight the shimmer passes through, and `#8A7223`
 is gold as text on white, where the metal itself is 2.1:1. Both names carry
 the one value, so the two marks cannot drift apart.
 
-Three faces set the type, each with one job. Space Grotesk sets the wordmarks
-and h1 to h3. Geist sets h4 to h6 and everything read. Monaspace Neon sets
-code, logs, and data. Two size scales sit on top: marketing for pages read
-once, app for dashboards read all day.
+Three faces set the type. Geist sets every heading and everything read, in
+the app and on the website. Monaspace Neon sets code, logs, and data. Space
+Grotesk sets the two wordmarks and line 1 of a marketing hero, and nothing
+else. Two size scales sit on top: marketing for pages read once, app for
+dashboards read all day. Only the marketing h1 lets its first line take Space
+Grotesk, so an app heading never can.
 
 Where a square is required, Stella uses its asterisk and Oxagen uses **the
 hive**: six hexagonal cells on a honeycomb grid, four drawn as an outline and
@@ -139,10 +141,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 `house-tailwind.css` sets the semantic tokens shadcn components bind to
 (`--background`, `--primary`, `--ring`, `--sidebar-*`) for light, `.dark`, and
 the OS preference, adds the palette as `bg-ox-*` and `text-ox-*` utilities,
-routes h1 to h3, h4 to h6, body, and code to their faces, and defines the two
-scales as `text-m-h1` to `text-m-micro` and `text-a-h1` to `text-a-micro`.
-`next-fonts.ts` loads its fonts from `../fonts/`, so vendor `tokens/` and
-`fonts/` side by side.
+routes every heading and body to Geist and code to Monaspace Neon, and defines
+the two scales as `text-m-h1` to `text-m-micro` and `text-a-h1` to
+`text-a-micro`. `next-fonts.ts` loads its fonts from `../fonts/`, so vendor
+`tokens/` and `fonts/` side by side.
+
+Space Grotesk reaches a product two ways. `--font-wordmark` sets a wordmark
+that is text rather than an SVG. The `hero-line-1` class sets line 1 of a
+marketing hero, and it works only inside a `text-m-h1` heading:
+
+```html
+<h1 class="text-m-h1"><span class="hero-line-1">Govern every agent</span><br>One record for every run</h1>
+```
+
+`text-m-h1` points `--font-hero` at Space Grotesk for its own contents.
+Everywhere else `--font-hero` is Geist, so the same class inside a `text-a-h1`,
+or on any app heading, draws in Geist. An app needs no rule of its own to keep
+Space Grotesk off its headings.
 
 The oxagen monorepo, `oxageninc/product`, vendors these files with
 `tools/scripts/sync-brand-assets.mjs`, and CI runs it with `--check`, so a
@@ -284,9 +299,10 @@ set.
 `--check` reproduces the kit's shipped `oxagen` wordmark from the font (same
 weight, same em, HarfBuzz spacing including kerning) and fails if the geometry
 has moved. It also fails if a gold neighbour stops matching its OKLCH
-derivation, if any text token drops below AA on its ground, if a type step
-sets Space Grotesk below 20 px, if a webfont loses a face or a feature, or if
-the skill's tokens or logo drift from the build.
+derivation, if any text token drops below AA on its ground, if a heading
+leaves Geist, if any step but the marketing h1 admits a Space Grotesk hero
+line, if a webfont loses a face or a feature, or if the skill's tokens or logo
+drift from the build.
 
 ## Rules worth knowing before you use it
 
@@ -315,5 +331,6 @@ the skill's tokens or logo drift from the build.
   take one ad. The short forms keep the scope of the long ones:
   governed, recorded, mediated. Ad copy comes only from approved,
   launch-released entries in `messages/ads/`.
-- **Space Grotesk is for display only.** Nothing below 20 px, and never code.
-  Code, terminal output, and data are Monaspace Neon.
+- **Space Grotesk sets the wordmarks and line 1 of a marketing hero.** Every
+  heading is Geist, h1 to h6, in the app and on the website. Nothing in Space
+  Grotesk is below 20 px. Code, terminal output, and data are Monaspace Neon.

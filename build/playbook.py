@@ -306,7 +306,8 @@ body{{margin:0;background:var(--ink);color:var(--fg);font-family:var(--ox-font);
 section{{padding:72px 0;border-top:1px solid var(--rule)}}
 section:first-of-type{{border-top:0}}
 .eyebrow{{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}}
-h1,h2,h3{{font-family:var(--ox-font-display)}}
+h1,h2,h3{{font-family:var(--ox-font)}}
+.hero-line-1{{font-family:var(--ox-font-display)}}
 h1{{font-size:clamp(40px,6vw,64px);line-height:1.02;letter-spacing:-.02em;font-weight:700;margin:0 0 20px}}
 h2{{font-size:32px;line-height:1.1;letter-spacing:-.015em;font-weight:700;margin:0 0 14px}}
 h3{{font-size:19px;font-weight:600;margin:32px 0 10px}}
@@ -379,9 +380,9 @@ def build_html() -> str:
     a = asterisk()
 
     tokens_rows = "".join(swatch_row(n, v, note) for n, v, note in C.TOKENS)
-    face_name = {"display": "Space Grotesk", "sans": "Geist", "mono": "Monaspace Neon"}
+    hero_note = f'<br><span class="muted">marketing hero line 1: {T.family(T.HERO_ROLE_INSIDE)}</span>'
     scale_rows = "".join(
-        f"<tr><td class=\"mono\">{m.name}</td><td>{face_name[m.face]}</td>"
+        f"<tr><td class=\"mono\">{m.name}</td><td>{T.family(m.role)}{hero_note if m.hero else ''}</td>"
         f"<td class=\"mono\">{m.px} · {m.leading} · {m.weight}</td><td class=\"mono\">{a.px} · {a.leading} · {a.weight}</td></tr>"
         for m, a in zip(T.MARKETING.steps, T.APP.steps)
     )
@@ -456,7 +457,7 @@ def build_html() -> str:
         ("messages/", "the message registry: one YAML file per line, with its status, scope, evidence, and owner"),
         ("build/", "color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py"),
         ("build/reference/", "the kit wordmark and logomark this system is checked against"),
-        ("fonts/", "Space Grotesk, variable and static, with its licence"),
+        ("fonts/", "Space Grotesk, Geist, and Monaspace Neon, each with its licence"),
         ("tokens/", "house-tokens.css · house-tokens.json"),
         ("logo/svg, logo/png", "wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles"),
         ("icons/", "favicons and app icons, 16 to 512"),
@@ -486,8 +487,8 @@ def build_html() -> str:
 <main class="wrap">
 
 <section class="hero">
-<p class="eyebrow">Oxagen house system · v2.3</p>
-<h1>One house.<br>Two names. One gold.</h1>
+<p class="eyebrow">Oxagen house system · v2.4</p>
+<h1><span class="hero-line-1">One house.</span><br>Two names. One gold.</h1>
 <p class="lead">Everything a customer sees from Oxagen and Stella comes from one system: obsidian and white, three faces, and a single gold that each name carries in exactly one glyph.</p>
 <div class="grid g2 plates">
 {plate(ox_d, "oxagen · on ink", cls="ink wm")}
@@ -592,14 +593,18 @@ def build_html() -> str:
 <section id="type">
 <p class="eyebrow">Type</p>
 <h2>Three faces, each with one job</h2>
-<p><b>Space Grotesk</b> sets the wordmarks and h1 to h3, and nothing smaller than 20 px: its wide geometric letters lose their shape below that. <b>Geist</b> sets h4 to h6 and everything read: body, labels, buttons, tables, navigation. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
-<div class="type-row"><span class="mono">display · 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
-<div class="type-row"><span class="mono">display · 600</span><span style="font-family:var(--ox-font-display);font-weight:600;font-size:26px;line-height:1.2">See which agent spent what.</span></div>
-<div class="type-row"><span class="mono">text · 600</span><span style="font-weight:600;font-size:16px">Runs waiting for approval</span></div>
-<div class="type-row"><span class="mono">text · 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
-<div class="type-row"><span class="mono">code · 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:14px">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
+<p><b>Geist</b> sets every heading and everything read: h1 to h6, body, labels, buttons, tables, and navigation, in the app and on the website. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on. <b>Space Grotesk</b> sets the two wordmarks and line 1 of a marketing hero, and nothing else. Its wide geometric letters lose their shape below 20 px, so it is never set smaller.</p>
+<div class="type-row"><span class="mono">hero 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
+<div class="type-row"><span class="mono">heading 700</span><span style="font-weight:700;font-size:32px;line-height:1.1;letter-spacing:-.02em">See which agent spent what.</span></div>
+<div class="type-row"><span class="mono">heading 600</span><span style="font-weight:600;font-size:22px;line-height:1.25">Spend this week</span></div>
+<div class="type-row"><span class="mono">text 600</span><span style="font-weight:600;font-size:16px">Runs waiting for approval</span></div>
+<div class="type-row"><span class="mono">text 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
+<div class="type-row"><span class="mono">code 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:14px">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
 <h3>Two scales</h3>
 <p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a page read once. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for panels, tables, and logs read all day.</p>
+<h3>Hero line</h3>
+<p>Only the marketing h1 admits Space Grotesk. Wrap line 1 of the hero in <span class="mono">{T.HERO_CLASS}</span> inside a <span class="mono">text-m-h1</span> heading, and line 2 stays in Geist. The same class anywhere else, including every app heading, draws in Geist, so an app cannot reach Space Grotesk except through a wordmark.</p>
+<pre><code>&lt;h1 class="text-m-h1"&gt;&lt;span class="{T.HERO_CLASS}"&gt;Line one&lt;/span&gt;&lt;br&gt;Line two&lt;/h1&gt;</code></pre>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>step</th><th>face</th><th>marketing</th><th>app</th></tr></thead>
 <tbody>{scale_rows}</tbody></table></div>

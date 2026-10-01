@@ -15,6 +15,11 @@ interface Sample {
   /** The type utility the sample wears. */
   className: string;
   text: string;
+  /**
+   * Line 2 of a hero. When it is set, `text` is line 1 and wears the
+   * hero-line-1 class, and the caption reads line 1.
+   */
+  rest?: string;
 }
 
 /*
@@ -43,7 +48,13 @@ const APP_SCALE: Sample[] = [
 ];
 
 const MARKETING_SCALE: Sample[] = [
-  { tag: "h1", className: "text-m-h1", text: "Govern every agent" },
+  {
+    tag: "h1",
+    className: "text-m-h1",
+    text: "Govern every agent",
+    rest: "One record for every run",
+  },
+  { tag: "h1", className: "text-m-h1", text: "Release notes for September" },
   { tag: "h2", className: "text-m-h2", text: "Approvals where the work is" },
   { tag: "h3", className: "text-m-h3", text: "One policy for every harness" },
   { tag: "h4", className: "text-m-h4", text: "Spend caps per workspace" },
@@ -55,12 +66,39 @@ const MARKETING_SCALE: Sample[] = [
   { tag: "code", className: "text-m-micro", text: "oxagen policy apply refunds.toml" },
 ];
 
-/** The face tokens, in the order a match is reported. */
-const FACE_TOKENS = ["--font-display", "--font-sans", "--font-mono"] as const;
+/*
+ * The hero line, in both scales. The marketing h1 lets line 1 reach Space
+ * Grotesk. The app h1 wears the same markup and stays in Geist.
+ */
+const HERO_SAMPLES: Sample[] = [
+  {
+    tag: "h1",
+    className: "text-m-h1",
+    text: "Govern every agent",
+    rest: "One record for every run",
+  },
+  {
+    tag: "h1",
+    className: "text-a-h1",
+    text: "Refunds workspace",
+    rest: "Policy review",
+  },
+];
+
+/*
+ * The face tokens. Headings and text share Geist, so a Geist sample matches
+ * both --font-display and --font-sans, and the caption names every match.
+ */
+const FACE_TOKENS = [
+  "--font-display",
+  "--font-sans",
+  "--font-mono",
+  "--font-wordmark",
+] as const;
 
 interface Metrics {
   face: string;
-  token: string | undefined;
+  tokens: string[];
   size: string;
   weight: string;
   lineHeight: string;
@@ -83,14 +121,14 @@ function readMetrics(element: Element): Metrics {
   const style = getComputedStyle(element);
   const root = getComputedStyle(document.documentElement);
   const stack = normaliseStack(style.fontFamily);
-  const token = FACE_TOKENS.find(
+  const tokens = FACE_TOKENS.filter(
     (name) => normaliseStack(root.getPropertyValue(name)) === stack,
   );
   const size = Number.parseFloat(style.fontSize);
   const line = Number.parseFloat(style.lineHeight);
   return {
     face: firstFamily(style.fontFamily),
-    token,
+    tokens,
     size: `${round(size)}px`,
     weight: style.fontWeight,
     lineHeight: Number.isFinite(line) && size > 0 ? round(line / size) : "normal",
@@ -111,7 +149,9 @@ function Specimen({ sample }: { sample: Sample }) {
   const [metrics, setMetrics] = React.useState<Metrics | null>(null);
 
   React.useLayoutEffect(() => {
-    const element = frame.current?.firstElementChild;
+    const heading = frame.current?.firstElementChild;
+    // A hero sample reports line 1, the span that wears hero-line-1.
+    const element = sample.rest ? heading?.firstElementChild : heading;
     if (!element) return;
     setMetrics(readMetrics(element));
     // Web fonts can load after the first paint. Read again once they have.
@@ -127,19 +167,32 @@ function Specimen({ sample }: { sample: Sample }) {
   return (
     <div className="flex flex-col gap-2 border-b border-border py-5 last:border-b-0">
       <div ref={frame} className="min-w-0 [overflow-wrap:anywhere]">
-        {React.createElement(
-          sample.tag,
-          { className: sample.className },
-          sample.text,
-        )}
+        {sample.rest
+          ? React.createElement(
+              sample.tag,
+              { className: sample.className },
+              <span className="hero-line-1">{sample.text}</span>,
+              <br />,
+              sample.rest,
+            )
+          : React.createElement(
+              sample.tag,
+              { className: sample.className },
+              sample.text,
+            )}
       </div>
       <dl className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-xs">
         <Fact term="Element">{sample.tag}</Fact>
         <Fact term="Class">{sample.className}</Fact>
+        {sample.rest && <Fact term="Line 1 class">hero-line-1</Fact>}
         {metrics && (
           <>
-            <Fact term="Face">{metrics.face}</Fact>
-            {metrics.token && <Fact term="Token">{metrics.token}</Fact>}
+            <Fact term={sample.rest ? "Line 1 face" : "Face"}>
+              {metrics.face}
+            </Fact>
+            {metrics.tokens.length > 0 && (
+              <Fact term="Tokens">{metrics.tokens.join(" = ")}</Fact>
+            )}
             <Fact term="Size">{metrics.size}</Fact>
             <Fact term="Weight">{metrics.weight}</Fact>
             <Fact term="Line height">{metrics.lineHeight}</Fact>
@@ -154,7 +207,10 @@ function Scale({ samples }: { samples: Sample[] }) {
   return (
     <div className="flex max-w-[880px] flex-col">
       {samples.map((sample) => (
-        <Specimen key={`${sample.tag}-${sample.className}`} sample={sample} />
+        <Specimen
+          key={`${sample.tag}-${sample.className}-${sample.text}`}
+          sample={sample}
+        />
       ))}
     </div>
   );
@@ -170,4 +226,10 @@ export const AppScale: Story = {
 export const MarketingScale: Story = {
   name: "Marketing scale",
   render: () => <Scale samples={MARKETING_SCALE} />,
+};
+
+/** Line 1 of a hero: Space Grotesk in a marketing h1, Geist in an app h1. */
+export const HeroLine: Story = {
+  name: "Hero line",
+  render: () => <Scale samples={HERO_SAMPLES} />,
 };
