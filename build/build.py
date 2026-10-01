@@ -707,8 +707,8 @@ CONTENT = {
          ["+ agent identity, roles, and budgets on governed calls",
           "+ every run saved as a trace beside its data"]),
         # The card an operator's weekly fleet report goes out on. Its panel is
-        # the fleet's week in three rows, not a terminal: Space Grotesk is not
-        # a code face, so nothing here is set as command output.
+        # the fleet's week in three rows, not a terminal: the card's text face
+        # is Geist, not a code face, so nothing here is set as command output.
         ("Fleet note", ["What the fleet", "asked for this week"], "The weekly fleet report",
          ["9 agents ran under mandate",
           "4 requests routed to a person",
