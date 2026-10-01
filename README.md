@@ -161,7 +161,7 @@ Everywhere else `--font-hero` is Geist, so the same class inside a `text-a-h1`,
 or on any app heading, draws in Geist. An app needs no rule of its own to keep
 Space Grotesk off its headings.
 
-The oxagen monorepo, `macanderson/oxagen`, vendors these files with
+The oxagen monorepo, `oxageninc/product`, vendors these files with
 `tools/scripts/sync-brand-assets.mjs`, and CI runs it with `--check`, so a
 product that has fallen behind the kit fails its build. `consumers.json` lists
 every repo that syncs the kit, and `CHANGING.md` says how a change reaches each

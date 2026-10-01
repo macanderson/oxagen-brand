@@ -110,7 +110,7 @@ jobs:
           git push -q origin "$branch"
           gh label create agent-monitored-pr --repo "$REPO" --color fd0880 \
             --description "Agent polls every 60 seconds fixes CI, comments, conflicts." 2>/dev/null || true
-          body="Brand source: oxagen-brand@$short (https://github.com/macanderson/oxagen-brand/commit/$SHA).
+          body="Brand source: oxagen-brand@$short (https://github.com/oxageninc/brand/commit/$SHA).
 
           The fan-out workflow in oxagen-brand ran this repo's sync against that commit and installed the current skill stub. Every file here is generated from the kit. To change a value, change oxagen-brand (see its CHANGING.md), not this PR."
           url=$(gh pr create --repo "$REPO" --head "$branch" --title "Sync the brand from oxagen-brand@$short" \

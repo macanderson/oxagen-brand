@@ -83,22 +83,22 @@ Edit `ui/src/components/`, and give each state it draws a story. Reskin through 
 
 **brand.oxagen.cloud** deploys from every push to `main`, after the checks pass.
 
-**Frontends** each copy the files they use through their own sync script. `consumers.json` lists every repo, its sync command, and its live surfaces. After a push to `main` passes every check, the `fan-out` workflow runs each repo's sync against that commit, installs the current skill stub, and opens a PR in the repo when anything changed. The PR carries the `agent-monitored-pr` label and merges on its own once the repo's required checks pass, where the repo allows auto-merge. Each repo's `brand-drift.yml` also fails its CI whenever its copy has fallen behind `main`, so a missed sync cannot pass unnoticed.
+**Frontends** each copy the files they use through their own sync script. `consumers.json` lists every repo, its sync command, and its live surfaces. After a push to `main` passes every check, the `fan-out` workflow runs each repo's sync against that commit, installs the current skill stub, and opens a PR in the repo when anything changed. The PR carries the `agent-monitored-pr` label and merges on its own once the repo's required checks pass, where the repo allows auto-merge. Each repo's `brand-drift.yml` compares its copy with the kit's `main`. It fails a push to `main`, the daily run, and any pull request that touches a brand file, so a missed sync cannot pass unnoticed. On a pull request that touches no brand file it warns and passes, because a kit change is not that pull request's fault and the fan-out's sync PR fixes it.
 
-The `fan-out` workflow needs the `BRAND_SYNC_TOKEN` secret, a fine-grained token with contents and pull-requests write on every repo in `consumers.json`. Every consumer is under `macanderson`, so one token with that resource owner covers them all. The `conformance` workflow reads with the same secret when it is set. Until it exists, every fan-out run fails at its first step and no frontend receives a change. `brand-guide.html` lists which repos have a working sync script and drift check today.
+The `fan-out` workflow needs the `BRAND_SYNC_TOKEN` secret: a token with contents and pull-requests write on every repo in `consumers.json`. The consumers sit under two owners, `oxageninc` and `macanderson` (stella), and a fine-grained token covers one owner only. On 2026-10-01 Mac chose the gh CLI's own token. If `gh auth login` runs again, set it again with `gh auth token | gh secret set BRAND_SYNC_TOKEN -R oxageninc/brand`. The `conformance` workflow reads the private consumer repos with the same secret.
 
 | Surface | Repo | Deploy |
 |---|---|---|
-| oxagen.sh, app.oxagen.sh, docs.oxagen.sh | `oxagen` | `pipeline.yml` |
-| stella.oxagen.sh | `stella` | `docs.yml` |
-| roadmap.oxagen.cloud | `oxagen-roadmap` | `deploy-production.yml` |
-| gtm.oxagen.cloud | `oxagen-gtm` | Vercel's Git integration, on every push to `main` |
-| survey.oxagen.cloud | `oxagen-survey` | Vercel's Git integration, on every push to `main` |
+| oxagen.sh, app.oxagen.sh, docs.oxagen.sh | `oxageninc/product` | `pipeline.yml` |
+| stella.oxagen.sh | `macanderson/stella` | `docs.yml` |
+| roadmap.oxagen.cloud | `oxageninc/roadmap` | `deploy-production.yml` |
+| gtm.oxagen.cloud | `oxageninc/gtm` | Vercel's Git integration, on every push to `main` |
+| survey.oxagen.cloud | `oxageninc/oxagen-survey` | Vercel's Git integration, on every push to `main` |
 | brand.oxagen.cloud | this repo | `ui.yml` on every push to `main` |
 | sdlc.oxagen.sh | this repo, `sdlc/` | Vercel project `oxagen-sdlc`, on a push to `main` that changes `sdlc/` |
 
-A merged sync PR ships through the deploy in this table. In `oxagen-gtm` and `oxagen-survey`, Vercel builds production from each push to `main`, with no `vercel deploy` step, so a merge in either repo puts it live. Review a sync PR there as a release.
+A merged sync PR ships through the deploy in this table. In `oxageninc/gtm` and `oxageninc/oxagen-survey`, Vercel builds production from each push to `main`, with no `vercel deploy` step, so a merge in either repo puts it live. Review a sync PR there as a release.
 
-To add a frontend, give its repo a sync script that takes `--brand <path>` and `--check`, commit the stub with `skills/install.sh --project <repo>`, add `.github/workflows/brand-drift.yml` (it checks out this repo's `main` and runs the sync with `--check`), and add the repo and its surfaces to `consumers.json`.
+To add a frontend, give its repo a sync script that takes `--brand <path>` and `--check`, commit the stub with `skills/install.sh --project <repo>`, add `.github/workflows/brand-drift.yml` (it checks out the kit's `main` and runs the sync with `--check`, failing a push to `main` and any pull request that touches a brand file, and warning on other pull requests), and add the repo and its surfaces to `consumers.json`.
 
 **Conformance.** The `conformance` workflow runs `build/conformance.py` every day and on demand. It checks each repo's stub and drift workflow, and each live surface's icons, golds, faces, retired lines, dashes, and exclamation points. When anything differs, it keeps one open issue labelled `brand-conformance` with the report, and it closes that issue when everything conforms again. It reads each consumer through the GitHub API, with `BRAND_SYNC_TOKEN` when it is set, and reports a repo it cannot read as a missing token rather than a missing stub. Run it by hand with `python3 build/conformance.py`.
