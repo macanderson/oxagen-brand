@@ -27,7 +27,7 @@
     },
     {
       "repo": "oxageninc/roadmap",
-      "sync": "node scripts/sync-brand.mjs --brand \"$KIT\"",
+      "sync": "node tools/sync-brand.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [
         { "url": "https://roadmap.oxagen.cloud", "pages": ["/"] }
