@@ -11,6 +11,10 @@ The art is plain SVG drawn in this file with the house ad geometry of
 headline, the rule, the subline, and the action stacked above the wordmark. It
 does not import `surfaces.py`, so the page needs PyYAML and nothing else. The
 builder on the page carries a JavaScript port of `ad()`; change both together.
+
+The website sections follow the house type rule. Every heading is Geist, and
+line 1 of the hero (`.m-h1`) reads `--font-hero`, which is Space Grotesk. The
+ad art still sets all of its text in Space Grotesk, and `WIDTHS` measures it.
 """
 
 from __future__ import annotations
@@ -702,8 +706,8 @@ figcaption a,.uses a{font-family:var(--mono);font-size:11.5px}
 .site .chrome .url{margin-left:8px;font-family:var(--mono);font-size:11.5px;color:var(--dim)}
 .m-body{padding:clamp(22px,5vw,56px)}
 .m-eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 16px}
-.m-h1{font-family:var(--font-display);font-weight:700;font-size:clamp(30px,4.6vw,50px);line-height:1.04;letter-spacing:-.025em;color:var(--fg);margin:0;max-width:20ch;text-wrap:balance}
-.m-h1.m-quiet{color:var(--muted);margin-top:6px}
+.m-h1{font-family:var(--font-hero);font-weight:700;font-size:clamp(30px,4.6vw,50px);line-height:1.04;letter-spacing:-.025em;color:var(--fg);margin:0;max-width:20ch;text-wrap:balance}
+.m-h1.m-quiet{font-family:var(--font-display);color:var(--muted);margin-top:6px}
 .m-h2{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.4vw,36px);line-height:1.1;letter-spacing:-.02em;color:var(--fg);margin:0 0 14px;max-width:26ch;text-wrap:balance}
 .m-lead{font-size:17px;line-height:1.55;color:var(--body);max-width:58ch;margin:16px 0 0}
 .m-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:26px}
