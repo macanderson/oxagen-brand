@@ -66,7 +66,8 @@ Both icons are drawn by code in `build/`. A new icon is a change to that code, n
 
 1. Edit or add the entry under `messages/`, one YAML file per line. `messages/README.md` describes every field. Retire a line by setting `status: retired` and `replaced_by`. Never delete it.
 2. Run `.venv/bin/python build/messages.py`. It writes `messages/index.json`, `message-bank.html`, `always-on.html`, and the skill's `always-on-lines.md`. If the line appears in an ad or a tagline, run `.venv/bin/python build/build.py --only ads social`.
-3. Open the PR. The check fails on a missing field, a held line without a gate, a dash, an avoided word, an unscoped claim, or a retired line's text in an approved entry.
+3. An ad's art carries its `subline`, its `subshort` on the 300×250, and its `qualifier` as a small muted line under either one. The qualifier shrinks to fit the measure on one line, splits once at a sentence boundary if it must, and is left off a size where two lines at 8 px still do not fit (`qualifier_lines` in `build/surfaces.py`, and its twin in `build/campaign.py` for `always-on.html`). A short form keeps the qualifier of its longer version, so write the qualifier as the scope sentence, not as copy.
+4. Open the PR. The check fails on a missing field, a held line without a gate, a dash, an avoided word, an unscoped claim, a retired line's text in an approved entry, or an approved launch ad that has a `subline` and no `subshort`.
 
 ## Change a component
 

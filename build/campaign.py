@@ -125,6 +125,29 @@ def sublines(text: str | None, size: float, max_w: float) -> tuple[float, list[s
     return sub, lines
 
 
+#: The smallest size a qualifier is set at. build/surfaces.py holds the same
+#: floor for the files in ads/, so the page and the files agree.
+QUALIFIER_FLOOR_PX = 8.0
+
+
+def qualifier_lines(text: str | None, size: float, max_w: float) -> tuple[float, list[str]]:
+    """The qualifier under the answer line, as surfaces.qualifier_lines sets it: 34 percent of
+    the headline, shrinking to 26 percent and never below the floor, on one line or split once
+    at the sentence boundary. (0, []) when two lines at the floor still run past the measure."""
+    if not text:
+        return 0.0, []
+    start = max(size * 0.34, QUALIFIER_FLOOR_PX)
+    floor = max(size * 0.26, QUALIFIER_FLOOR_PX)
+    head, sep, rest = text.partition(". ")
+    for lines in [[text]] + ([[head + ".", rest]] if sep and rest else []):
+        q = start
+        while q > floor and max(width(x, q) for x in lines) > max_w * FIT:
+            q = max(floor, q * 0.96)
+        if max(width(x, q) for x in lines) <= max_w * FIT:
+            return q, lines
+    return 0.0, []
+
+
 def first_sentence(text: str) -> tuple[str, str]:
     head, _, rest = text.partition(". ")
     return (head + ".", rest) if rest else (text, "")
@@ -274,14 +297,16 @@ class Art:
 
 
 def ad(uid: str, w: float, h: float, scheme: str, *, lines: list[str] | None = None, text: str | None = None,
-       kicker: str | None = None, subline: str | None = None, cta: str | None = None, picture: str = "ghost",
+       kicker: str | None = None, subline: str | None = None, qualifier: str | None = None,
+       cta: str | None = None, picture: str = "ghost",
        boost: float = 1.0, ghost_at: tuple[float, float, float] = (0.90, 0.12, 0.8)) -> str:
     """The house ad: the picture top right, the words stacked up from the wordmark at the bottom left.
 
     `lines` sets the headline as given. `text` wraps it at each trial size. `ghost_at` places the ghost as
     shares of the width, the height, and the short side; a skyscraper moves it down to fill its middle.
+    `qualifier` goes under the answer line, muted, wherever `qualifier_lines` finds room for it.
     """
-    label = " ".join(x for x in (kicker, " ".join(lines) if lines else text, subline, cta) if x)
+    label = " ".join(x for x in (kicker, " ".join(lines) if lines else text, subline, qualifier, cta) if x)
     a = Art(uid, w, h, scheme, label)
     short, pad = a.short, w * 0.085
     max_w = w - 2 * pad
@@ -297,11 +322,14 @@ def ad(uid: str, w: float, h: float, scheme: str, *, lines: list[str] | None = N
     ceiling = pad + (size * 0.035 / 0.075 * 2.2 if kicker else 0)
     head: list[str] = []
     sub, subs = 0.0, []
+    q, quals = 0.0, []
     for _ in range(24):
         head = list(lines) if lines else balanced(text or "", size, max_w)
         sub, subs = sublines(subline, size, max_w)
+        q, quals = qualifier_lines(qualifier, size, max_w)
         block = ((len(head) - 1) * size * 1.22 + size * 1.9 + (size * 0.85 if cta else 0)
-                 + (size * 1.05 + (len(subs) - 1) * sub * 1.3 if subs else 0))
+                 + (size * 1.05 + (len(subs) - 1) * sub * 1.3 if subs else 0)
+                 + len(quals) * q * 1.3)
         widest = max(width(x, size) for x in head)
         if mark_cy - mark_h / 2 - size * 0.9 - block >= ceiling and widest <= max_w * FIT:
             break
@@ -316,6 +344,9 @@ def ad(uid: str, w: float, h: float, scheme: str, *, lines: list[str] | None = N
     rule_h = max(3, short * 0.011)
     a.rule(pad, y - rule_h, short * 0.13, rule_h)
     y -= rule_h + size * 0.95
+    for j, s in enumerate(reversed(quals)):
+        a.text(pad, y - j * q * 1.3, s, q, 500, a.muted)
+    y -= len(quals) * q * 1.3
     if subs:
         for j, s in enumerate(reversed(subs)):
             a.text(pad, y - j * sub * 1.3, s, sub, 500, a.ink)
@@ -452,14 +483,17 @@ class Campaign:
     def combo(self, e: dict, shape: str, scheme: str) -> str:
         w, h = {s: (sw, sh) for sw, sh, s in MS.AD_SIZES}[shape]
         pic = e.get("picture", "ghost")
+        q = e.get("qualifier")
         if shape == "mpu":
-            art = ad(self.uid(), w, h, scheme, lines=e["short_lines"], kicker=e.get("kicker"), picture=pic)
+            # The 300x250 drops the kicker and the action, as ads/ does, and keeps the answer line short.
+            art = ad(self.uid(), w, h, scheme, lines=e["short_lines"], subline=e.get("subshort"), qualifier=q,
+                     picture=pic)
         elif shape == "landscape":
             art = ad(self.uid(), w, h, scheme, lines=e.get("wide"), text=None if e.get("wide") else e["title"],
-                     kicker=e.get("kicker"), subline=e.get("subline"), cta=e["cta"], picture=pic)
+                     kicker=e.get("kicker"), subline=e.get("subline"), qualifier=q, cta=e["cta"], picture=pic)
         else:
             art = ad(self.uid(), w, h, scheme, lines=e["headline"], kicker=e.get("kicker"), subline=e.get("subline"),
-                     cta=e["cta"], picture=pic)
+                     qualifier=q, cta=e["cta"], picture=pic)
         return self.fig(art, f"{SHAPES[shape]} {w} by {h} on {GROUND[scheme]}", e["id"], w if w < 600 else None)
 
     # ------------------------------------------------------------------ sections

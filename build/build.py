@@ -664,7 +664,10 @@ def ad_svg(brand: str, campaign: dict[str, object], w: int, h: int, tag: str, sc
     A banner is not a poster with the middle line deleted. The 300x250 drops
     the kicker and the call to action -- there is no room for either at a
     legible size -- but it keeps the answer line, in its short form, because
-    that line is the reason the ad exists.
+    that line is the reason the ad exists. The qualifier, the scope sentence
+    the registry keeps beside the line, goes under the answer line at every
+    size where it fits, because a short form keeps the qualifier of its
+    longer version.
     """
     small = tag == "mpu"
     key = "short" if small else ("wide" if tag == "landscape" and "wide" in campaign else "headline")
@@ -674,6 +677,7 @@ def ad_svg(brand: str, campaign: dict[str, object], w: int, h: int, tag: str, sc
         kicker="" if small else str(campaign["kicker"]),
         headline=list(campaign[key]),  # type: ignore[call-overload]
         subline=str(sub),
+        qualifier=str(campaign.get("qualifier", "")),
         cta="" if small else str(campaign["cta"]),
         picture=str(campaign.get("picture", "ghost")),
     )

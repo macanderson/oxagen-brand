@@ -18,6 +18,7 @@ short_lines:
   - Your agents are
   - on the job.
 subline: While you turn in for the night, your fleet of agents keeps working.
+subshort: Your agents keep working overnight.
 picture: orbit
 audience:
   - operator
@@ -32,4 +33,4 @@ owner: Mac Anderson
 review_by: '2026-10-15'
 findings:
   - '07'
-notes: Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.
+notes: Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval. Mac approved the subshort, the answer line of the 300 by 250, in #17, and the PR that closes #17 records that approval.
