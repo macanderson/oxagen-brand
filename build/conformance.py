@@ -321,7 +321,8 @@ def check_surface(surface: dict, house: set[str], house_lch, icons: dict[str, st
             continue
         page = body.decode("utf-8", "replace")
         css_all.append("\n".join(STYLE_BLOCK.findall(page)))
-        css_all.append(" ".join(re.findall(r'style="([^"]*)"', page)))
+        # An inline style is an HTML attribute, so its quotes arrive as &quot;.
+        css_all.append(" ".join(html.unescape(v) for v in re.findall(r'style="([^"]*)"', page)))
         text = visible_text(page)
         text_all.append((url, text))
         sheets, found_icons = links(page, url)
