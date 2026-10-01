@@ -43,6 +43,8 @@ const APP_SCALE: Sample[] = [
 ];
 
 const MARKETING_SCALE: Sample[] = [
+  // Line 1 of the oxagen.sh hero, the one line set in the wordmark face.
+  { tag: "p", className: "text-m-hero", text: "Your agents are a workforce now." },
   { tag: "h1", className: "text-m-h1", text: "Govern every agent" },
   { tag: "h2", className: "text-m-h2", text: "Approvals where the work is" },
   { tag: "h3", className: "text-m-h3", text: "One policy for every harness" },
@@ -55,8 +57,12 @@ const MARKETING_SCALE: Sample[] = [
   { tag: "code", className: "text-m-micro", text: "oxagen policy apply refunds.toml" },
 ];
 
-/** The face tokens, in the order a match is reported. */
-const FACE_TOKENS = ["--font-display", "--font-sans", "--font-mono"] as const;
+/**
+ * The face tokens, in the order a match is reported. --font-display, the
+ * heading role, resolves to the same stack as --font-sans, so a heading reports
+ * --font-sans.
+ */
+const FACE_TOKENS = ["--font-sans", "--font-wordmark", "--font-mono"] as const;
 
 interface Metrics {
   face: string;

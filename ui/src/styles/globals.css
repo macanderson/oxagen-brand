@@ -195,8 +195,7 @@
      * The kit's naming is the mapping: a bare `--ox-st-*` is the value on ink
      * (the dark canvas) and the `-ink` suffix is the same state on paper, so
      * the light theme takes the `-ink` stops and the dark theme takes the bare
-     * ones. Each `-ink` stop clears 4.5:1 on white, which is what the old
-     * `--_clay-ink` pair existed to guarantee by hand.
+     * ones. These are MARK colours: a badge, a dot, a border, a fill.
      *
      * The kit names the states after what Oxagen records rather than after a
      * severity: allowed, approval, denied, proven, failed, critical. The four
@@ -206,22 +205,15 @@
      * this product has to paint and neither is an error. */
     --_clay: var(--ox-st-failed-ink); /* #992F28 — a check that did not hold, on paper */
     --_clay-light: var(--ox-st-failed); /* #C0453C — the same, on ink */
-    /* Failed as TEXT, which the kit does not ship a stop for.
+    /* State as WORDS takes the kit's text stops, never the marks above.
      *
-     * The kit gives each state two values, the bare one for a mark on ink and
-     * the `-ink` one for a mark on paper. Both are MARK colours for their
-     * ground, and a mark only has to clear 3:1. Body text has to clear 4.5:1 on
-     * every surface it sits on, and on the dark side the kit's own stop does
-     * not: #C0453C on the #18181B panel is 3.52:1. Taking it for `--error-ink`
-     * put validation text under the floor, and the value it replaced carried
-     * the measurements it was derived to hit.
-     *
-     * So text keeps a derived stop where the kit has none. On paper the kit's
-     * `-ink` value already clears it (#992F28 on white is 7.5:1) and is used
-     * directly; on ink the red is lifted in lightness on the same hue until it
-     * passes on the canvas, the panel and the popover alike. */
-    --_clay-ink: var(--ox-st-failed-ink); /* #992F28 — failed as text on paper, 7.5:1 on white */
-    --_clay-ink-light: oklch(0.7 0.16 25); /* failed as text on ink: 6.6:1 canvas, 6.3:1 panel, 5.8:1 popover */
+     * A mark only has to clear 3:1, and #C0453C on the #18181B panel is 3.51:1,
+     * so a word set in a mark stop falls under the 4.5:1 text floor. Since kit
+     * 2.4.0 each state has a text stop: `--ox-st-*-text` on ink, which clears
+     * 4.5:1 on ink, panel, and the lifted row, and `--ox-st-*-text-ink` on
+     * paper, which clears it on paper and paper-hl. `build/build.py --check`
+     * measures every one, so the `*-ink` roles below carry the kit's values and
+     * no hand-derived stop. The ratio in each comment is the worst surface. */
     --_moss: var(--ox-st-allowed-ink); /* #2F7D52 — a request a rule allowed, on paper */
     --_moss-light: var(--ox-st-allowed); /* #57A97C — the same, on ink */
     /* The kit's denied stop is a clearly orange-red, well away from the gold,
@@ -267,7 +259,9 @@
     --secondary: var(--_stone-200); /* #F4F4F5 — quiet fill (buttons, badges) */
     --secondary-foreground: var(--_ink);
     --muted: var(--_stone-100);
-    --muted-foreground: var(--_stone-600);
+    /* #6E6E77 — secondary text that clears 4.5:1 on --muted (#F4F4F5, 4.59:1)
+       as well as on white. --ox-muted-ink is 4.40:1 on --muted. */
+    --muted-foreground: var(--ox-muted-text-ink);
     --accent: var(--_stone-200); /* #F4F4F5 — the row wash is NEUTRAL, never gold */
     --accent-foreground: var(--_ink); /* ink stays neutral on the wash */
     --destructive: var(--ox-destructive-ink); /* #992F28 — a destructive action, on paper */
@@ -289,7 +283,7 @@
     --warning-foreground: oklch(0.2 0.03 60);
     --error: var(--_clay);
     --error-foreground: oklch(1 0 0);
-    --error-ink: var(--_clay-ink); /* error words and figures; --error stays the mark */
+    --error-ink: var(--ox-st-failed-text-ink); /* #992F28 — error words and figures, 6.84:1; --error stays the mark */
     --info: var(--_slate);
     --info-foreground: oklch(1 0 0);
     /* The kit's other two states, which the severity names above cannot carry:
@@ -299,6 +293,12 @@
     --proven-foreground: oklch(1 0 0);
     --critical: var(--_rose);
     --critical-foreground: oklch(1 0 0);
+    /* Status words, beside --error-ink. Each is the state's text stop on paper. */
+    --success-ink: var(--ox-st-allowed-text-ink); /* #2F7D52 — 4.57:1 */
+    --warning-ink: var(--ox-st-denied-text-ink); /* #9B4526 — 5.84:1 */
+    --info-ink: var(--ox-st-approval-text-ink); /* #2E6BA8 — 5.05:1 */
+    --proven-ink: var(--ox-st-proven-text-ink); /* #1F7676 — 4.88:1 */
+    --critical-ink: var(--ox-st-critical-text-ink); /* #AE2540 — 6.09:1 */
 
     /* Accent text ink — the shade of the gold that is legible as TEXT on the
        current background. #D4AF37 is the MARK colour and is only 2.1:1 on
@@ -539,13 +539,19 @@
     --warning-foreground: oklch(0.2 0.03 60);
     --error: var(--_clay-light);
     --error-foreground: oklch(1 0 0);
-    --error-ink: var(--_clay-ink-light);
+    --error-ink: var(--ox-st-failed-text); /* #E7685C — 4.63:1 on the lifted row */
     --info: var(--_slate-light);
     --info-foreground: oklch(0.18 0.01 230);
     --proven: var(--_teal-light);
     --proven-foreground: oklch(0.18 0.02 190);
     --critical: var(--_rose-light);
     --critical-foreground: oklch(0.18 0.02 10);
+    /* Status words on ink: each state's text stop, at OKLCH L 0.67. */
+    --success-ink: var(--ox-st-allowed-text); /* #57A97C — 5.23:1 */
+    --warning-ink: var(--ox-st-denied-text); /* #D67858 — 4.74:1 */
+    --info-ink: var(--ox-st-approval-text); /* #6098DB — 4.97:1 */
+    --proven-ink: var(--ox-st-proven-text); /* #44A7A7 — 5.20:1 */
+    --critical-ink: var(--ox-st-critical-text); /* #EF5C72 — 4.57:1 */
 
     --chart-1: var(--ox-ember);
     --chart-2: var(--_slate-light);
@@ -678,9 +684,21 @@
       --warning-foreground: oklch(0.2 0.03 60);
       --error: var(--_clay-light);
       --error-foreground: oklch(1 0 0);
-      --error-ink: var(--_clay-ink-light);
+      --error-ink: var(--ox-st-failed-text); /* #E7685C — 4.63:1 on the lifted row */
       --info: var(--_slate-light);
       --info-foreground: oklch(0.18 0.01 230);
+      /* Keep in sync with .dark. This block had no proven or critical pair, so
+         under the OS preference a proven badge drew the light theme's white
+         foreground on the dark theme's #3FA2A2 fill. */
+      --proven: var(--_teal-light);
+      --proven-foreground: oklch(0.18 0.02 190);
+      --critical: var(--_rose-light);
+      --critical-foreground: oklch(0.18 0.02 10);
+      --success-ink: var(--ox-st-allowed-text); /* #57A97C — 5.23:1 */
+      --warning-ink: var(--ox-st-denied-text); /* #D67858 — 4.74:1 */
+      --info-ink: var(--ox-st-approval-text); /* #6098DB — 4.97:1 */
+      --proven-ink: var(--ox-st-proven-text); /* #44A7A7 — 5.20:1 */
+      --critical-ink: var(--ox-st-critical-text); /* #EF5C72 — 4.57:1 */
 
       --chart-1: var(--ox-ember);
       --chart-2: var(--_slate-light);
@@ -810,6 +828,12 @@
   --color-error-ink: var(--error-ink);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  /* Status words. A badge or a dot takes the bare role; a word takes -ink. */
+  --color-success-ink: var(--success-ink);
+  --color-warning-ink: var(--warning-ink);
+  --color-info-ink: var(--info-ink);
+  --color-proven-ink: var(--proven-ink);
+  --color-critical-ink: var(--critical-ink);
 
   /* Brand / ink */
   --color-brand: var(--brand);
@@ -979,24 +1003,25 @@
 }
 
 /*
- * Brand type tokens — SPACE GROTESK, the house face. NON-inline @theme so the
- * --font-* names are emitted to :root for both the Tailwind font-* utilities
- * AND the raw var(--font-*) refs below.
+ * Brand type tokens. NON-inline @theme so the --font-* names are emitted to
+ * :root for both the Tailwind font-* utilities AND the raw var(--font-*) refs
+ * below. Each one takes its value straight from the kit's token file, so the
+ * fallback stacks are the kit's too.
  *
- * The house system is ONE face at four weights, so --font-sans and
- * --font-display resolve to the same family. The token pair is kept so
- * headings can be retuned (weight, tracking) in one place without touching
- * body copy — not because a second typeface is coming back.
- *
- * --font-sans takes --ox-font straight from the kit's token file, so the
- * fallback stack is the kit's too.
+ * Geist sets every heading and every line of text, so --font-sans and
+ * --font-display resolve to the same family. The pair is kept so headings can
+ * be retuned (weight, tracking) in one place without touching body copy.
+ * --font-wordmark is the one token that names Space Grotesk: the Oxagen and
+ * stella wordmarks, and line 1 of the oxagen.sh hero (text-m-hero). Mac set
+ * that rule on 2026-09-29.
  */
 @theme {
-  --font-sans: var(--ox-font); /* Geist: body, UI, h4 to h6 */
-  --font-display: var(--ox-font-display); /* Space Grotesk: h1 to h3 and the wordmark */
+  --font-sans: var(--ox-font); /* Geist: every heading, body, and UI */
+  --font-display: var(--ox-font-display); /* the heading role, h1 to h3: Geist */
   /* Monaspace Neon: code, logs, ids, and numbers in tables. */
   --font-mono: var(--ox-font-mono);
-  --font-wordmark: var(--ox-font-display);
+  /* Space Grotesk: the two wordmarks and line 1 of the oxagen.sh hero. */
+  --font-wordmark: var(--ox-font-wordmark);
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -1017,10 +1042,11 @@
   }
 
   /*
-   * TYPE RULE: three faces, each with one job. Space Grotesk (--font-display)
-   * sets h1 to h3 and the wordmark, never below 20px. Geist (--font-sans) sets
-   * h4 to h6 at 600 and everything read. Monaspace Neon (--font-mono) sets code
-   * and identifiers, with texture healing on.
+   * TYPE RULE: three faces, each with one job. Geist sets every heading (h1
+   * to h3 through --font-display, h4 to h6 through --font-sans, at 600) and
+   * everything read. Space Grotesk (--font-wordmark) sets the two wordmarks
+   * and line 1 of the oxagen.sh hero, never below 20px. Monaspace Neon
+   * (--font-mono) sets code and identifiers, with texture healing on.
    */
   h4,
   h5,
@@ -1034,10 +1060,9 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    /* The kit's own heading tokens. Space Grotesk at --ox-weight-heading (600)
-       is the same weight the wordmark is set at, which is what ties a page's
-       headings to its logo; --ox-weight-display (700) is for a hero, which the
-       text-m-h1 and text-a-h1 utilities carry. */
+    /* The kit's own heading tokens: Geist at --ox-weight-heading (600).
+       --ox-weight-display (700) is for the largest steps, which the text-m-h1
+       and text-a-h1 utilities carry. */
     font-weight: var(--ox-weight-heading);
     letter-spacing: var(--ox-tracking-heading);
     line-height: 1.12;
@@ -1432,7 +1457,7 @@
     --rule: var(--ox-paper-rule);
     --fg: var(--foreground);
     --body: var(--ox-text-ink-body);
-    --muted: var(--ox-muted-ink);
+    --muted: var(--ox-muted-text-ink); /* #6E6E77 — 4.59:1 on the lifted row */
     --dim: var(--ox-dim-ink);
     --gold: var(--ox-gold);
     --gold-bright: var(--ox-gold-bright);

@@ -40,12 +40,19 @@ the shimmer and spinner motion. It comes last, so it wins on cascade order.
 action. A gold border, dot, or label that means "running", "passed", or "held"
 is a defect. State has its own ramp, `--ox-st-*`.
 
-**Each state has two stops, and both are marks.** The bare name is the mark on
-ink, and the `-ink` suffix is the mark on paper. A mark clears 3:1, which is
-too low for words. A token that renders text needs a derived stop, with its
-measured ratio in a comment beside it. `--error-ink` is the one that exists.
-`build.py --check` measures the house tokens but not the pairs `globals.css`
-derives, so that comment is the only record of the ratio.
+**Marks use the bare stops, and words use the text stops.** Each state has
+four. `--ox-st-failed` is the mark on ink and `--ox-st-failed-ink` the mark on
+paper: a badge, a dot, a border, or a fill, which needs 3:1.
+`--ox-st-failed-text` is the word on ink and `--ox-st-failed-text-ink` the word
+on paper, and each clears 4.5:1 on every surface of its theme: ink, panel, and
+the lifted row, or paper and paper-hl. The destructive red follows the same
+pattern. On paper a text stop equals its mark today. Use it anyway, because the
+split is what keeps a word legible when a mark moves. `globals.css` maps the
+text stops onto `--error-ink`, `--success-ink`, `--warning-ink`, `--info-ink`,
+`--proven-ink`, and `--critical-ink`, and `build.py --check` measures every
+one, so no text stop is derived by hand here. Secondary text on paper is
+`--ox-muted-text-ink`, which clears 4.5:1 on paper-hl, where `--ox-muted-ink`
+does not.
 
 **Every theme block states every pair.** `globals.css` carries the dark theme
 twice, under `.dark` and under `prefers-color-scheme`. A value set in one block
