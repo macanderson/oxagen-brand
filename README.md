@@ -87,7 +87,7 @@ pwa/               install-prompt.js: the card that offers to add a site to the 
 social/            avatar · x · linkedin · youtube · open graph · dark | light
 ads/               from messages/ads/ and messages/always-on/: workforce · authority · equipment · finance · keys · night shift · capacity · driver seat · stella proof · check · 1080×1080 · 1080×1350 · 1200×628 · 300×250
 content/           changelog · essay · release · field note · fleet note · always-on cards, 1200×675
-skills/            the oxagen-branding Claude Code skill, the stub other repos install, and its installer
+skills/            the oxagen-branding and clear-prose Claude Code skills, the branding stub other repos install, and its installer
 ```
 
 ## Every pixel here is generated
@@ -250,6 +250,15 @@ registry line, or if the skill folder holds a file it should not.
 This skill supersedes the older `brand-voice-guidelines` skill some machines
 still carry under `~/.claude/skills`. The installer leaves that one alone.
 Delete it, because it answers the same requests with older rules.
+
+`skills/clear-prose/` holds the clear-prose skill: the rules for writing
+anything a person reads from Oxagen or Stella. It sits beside the branding
+skill and pairs with it. The branding skill owns the words and the
+positioning, and clear-prose owns the sentences. This folder is the source
+copy. The stub, `skills/install.sh`, and the fan-out workflow carry only the
+branding skill today. To install clear-prose, copy `skills/clear-prose/SKILL.md`
+into `~/.claude/skills/clear-prose/` or into a project's
+`.claude/skills/clear-prose/`.
 
 For a PWA, copy `icons/oxagen-*.png`, `icons/oxagen-favicon.ico` and
 `icons/oxagen.webmanifest` into the app's public folder and point at them:
