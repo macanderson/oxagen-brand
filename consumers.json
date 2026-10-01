@@ -2,7 +2,8 @@
   "about": "Every repo that ships Oxagen or Stella, and every live surface it serves. The fan-out workflow runs each repo's sync against the kit after a merge to main and opens a PR there. build/conformance.py checks each repo and surface. Add a repo here when it starts shipping either brand.",
   "kit": {
     "surfaces": [
-      { "url": "https://brand.oxagen.cloud", "pages": ["/"] }
+      { "url": "https://brand.oxagen.cloud", "pages": ["/", "/brand-guide"] },
+      { "url": "https://sdlc.oxagen.sh", "pages": ["/"] }
     ]
   },
   "consumers": [
@@ -20,7 +21,9 @@
       "repo": "macanderson/stella",
       "sync": "node scripts/sync-brand-assets.mjs --brand \"$KIT\"",
       "apt": [],
-      "surfaces": []
+      "surfaces": [
+        { "url": "https://stella.oxagen.sh", "pages": ["/"] }
+      ]
     },
     {
       "repo": "macanderson/oxagen-roadmap",
@@ -43,7 +46,7 @@
       "sync": "node scripts/sync-brand.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [
-        { "url": "https://survey.oxagen.app", "pages": ["/"] }
+        { "url": "https://survey.oxagen.cloud", "pages": ["/"] }
       ]
     }
   ]

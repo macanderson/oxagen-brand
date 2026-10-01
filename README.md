@@ -69,7 +69,7 @@ lockup; its asterisk is already in the word.
 ```
 playbook.html      the document. Read this first.
 message-bank.html  generated from messages/: every line, pitch, card, ad, and rule, with its status.
-finding-wasted-spend.html  the unproductive spend detectors and the 2026-09-27 spend decisions, copied from oxagen-roadmap. Written by hand.
+brand-guide.html   how to change a colour, a font, or an app icon, and which repos receive the change. Written by hand. CHANGING.md is the reference.
 messages/          the message registry: one YAML file per line, schema.json, findings.yaml, index.json (generated)
 build/             color.py · typeset.py · fonts.py · pagecss.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against
@@ -165,8 +165,8 @@ pnpm build-storybook        # static Storybook in storybook-static/
 pnpm build:design-system    # design-system/: components/bundle.js, bundle.css, index.d.ts
 ```
 
-CI (`.github/workflows/ui.yml`) typechecks and tests the kit on every pull
-request that touches `ui/`, `tokens/`, or `fonts/`. It uploads the static
+CI (`.github/workflows/ui.yml`) checks the generators' sources and
+typechecks and tests the kit on every pull request. It uploads the static
 Storybook as the artifact `storybook-static` and the bundle as
 `design-system-bundle`. The bundle sets `window.OxagenUI` and feeds the Claude
 Design project named in `ui/.design-sync/config.json`.
