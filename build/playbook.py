@@ -252,6 +252,157 @@ def gold_card(label: str, hexv: str, note: str, *, sheen: bool = False) -> str:
     )
 
 
+def ground_ladder(rows: list[tuple[str, str]]) -> str:
+    """One theme's surfaces, from the deepest to the heaviest rule."""
+    cells = "".join(
+        f'<div><i style="background:{v}"></i><b>{esc(n)}</b><span class="mono">{v}</span></div>' for n, v in rows
+    )
+    return f'<div class="ladder">{cells}</div>'
+
+
+def text_rows() -> str:
+    """The four text roles, set on each ground, with the contrast the build checks."""
+    roles = (
+        ("primary", C.PAPER_TEXT, C.INK_TEXT, "headings and the words that matter most"),
+        ("body", C.TEXT, C.TEXT_INK, "paragraphs and table cells"),
+        ("secondary", C.MUTED, C.MUTED_INK, "labels, captions, and help text"),
+        ("quietest", C.DIM, C.DIM_INK, "placeholders and decoration, never a word the reader needs"),
+    )
+    out = []
+    for name, on_ink, on_paper, use in roles:
+        out.append(
+            f"<tr><td>{name}</td>"
+            f'<td><span class="tx-sample" style="background:{C.INK};color:{on_ink}">Aa {on_ink}</span>'
+            f' <span class="num">{C.contrast(on_ink, C.INK):.1f}<span class="unit">:1</span></span></td>'
+            f'<td><span class="tx-sample" style="background:{C.PAPER};color:{on_paper};border-color:{C.PAPER_BORDER}">Aa {on_paper}</span>'
+            f' <span class="num">{C.contrast(on_paper, C.PAPER):.1f}<span class="unit">:1</span></span></td>'
+            f'<td class="note">{esc(use)}</td></tr>'
+        )
+    return "".join(out)
+
+
+def state_badge(word: str, mark: str, text: str, ground: str, border: str) -> str:
+    return (
+        f'<span class="stbadge" style="background:{ground};color:{text};border-color:{border}">'
+        f'<i style="background:{mark}"></i>{esc(word)}</span>'
+    )
+
+
+def state_rows() -> str:
+    """Each state as the badge a table draws: the mark is the dot, the word takes the text stop."""
+    out = []
+    for name, dark, light, use in C.STATES:
+        out.append(
+            f"<tr><td>{state_badge(name, dark, C.STATE_TEXT[name]['dark'], C.INK, C.BORDER)}"
+            f'<br><span class="mono hex">dot {dark}<br>word {C.STATE_TEXT[name]["dark"]}</span></td>'
+            f"<td>{state_badge(name, light, C.STATE_TEXT[name]['light'], C.PAPER, C.PAPER_BORDER)}"
+            f'<br><span class="mono hex">dot {light}<br>word {C.STATE_TEXT[name]["light"]}</span></td>'
+            f'<td class="note">{esc(use)}</td></tr>'
+        )
+    return "".join(out)
+
+
+def face_card(face: T.Face, sample: str, var: str) -> str:
+    weights = ", ".join(w.replace(" ", " to ") for _, w in face.files)
+    return (
+        f'<div class="face-card"><span class="sample" style="font-family:{esc(face.css_stack)};'
+        f'font-feature-settings:{face.features}">{sample}</span>'
+        f"<b>{esc(face.family)}</b><span>{esc(face.job[:1].upper() + face.job[1:])}.</span>"
+        f'<span class="mono">{var}</span><span class="mono">weights {esc(weights)}</span></div>'
+    )
+
+
+def weight_rows() -> str:
+    uses = {
+        "display": "h1 and h2 on the marketing scale, and h1 in the app",
+        "logo": "the two wordmarks",
+        "heading": "h3 on the marketing scale, and h2 to h4 in the app",
+        "subheading": "h4 on the marketing scale",
+        "ui": "buttons, labels, and navigation",
+        "body": "paragraphs, table cells, and help text",
+    }
+    return "".join(
+        f'<tr><td class="mono">--ox-weight-{k}</td><td class="num">{w}</td>'
+        f'<td><span style="font-weight:{w};font-size:18px;color:var(--fg)">Runs waiting for approval</span></td>'
+        f'<td class="note">{esc(uses[k])}</td></tr>'
+        for k, w in T.WEIGHTS.items()
+    )
+
+
+def tracking_rows() -> str:
+    out = []
+    for k, v in T.TRACKING.items():
+        steps = [f"{s.name} {st.name}" for s in T.SCALES for st in s.steps if st.tracking == v and v != "0"]
+        where = ", ".join(steps) if steps else "every other step, and the wordmarks"
+        out.append(
+            f'<tr><td class="mono">--ox-tracking-{k}</td><td class="mono">{v}</td>'
+            f'<td><span style="font-weight:700;font-size:24px;letter-spacing:{v};color:var(--fg)">See which agent spent what</span></td>'
+            f'<td class="note">{esc(where)}</td></tr>'
+        )
+    return "".join(out)
+
+
+# The values below live in the kit, not in build/: the v3 layer at the end of
+# ui/src/styles/globals.css and the recipes in ui/src/components/control-styles.ts.
+# They are retyped here, so change this block when either file moves.
+SITE_RADIUS_PX = 12  # --ox-radius, written by build/build.py
+APP_RADIUS_REM = 0.45  # --ui-radius in the v3 layer (oxagen ADR-221)
+RADIUS_STEPS = (  # (step, multiple of --ui-radius, what wears it)
+    ("sm", 0.6, "a checkbox, a small chip"),
+    ("md", 0.8, "a badge, a bare text input, a skeleton"),
+    ("lg", 1.0, "a tooltip, an icon button, a toggle group"),
+    ("xl", 1.4, "an alert, a textarea, an empty state"),
+    ("2xl", 1.8, "a panel, a stat tile, a dialog, a menu row"),
+    ("3xl", 2.2, "a menu, a popover, a hover card, a toast"),
+    ("4xl", 2.6, "a button, a select, a form field"),
+)
+UI_SHADOW = "0 1px 2px oklch(0.15 0 0 / 0.07)"
+POP_SHADOW = {
+    "dark": "0 25px 50px -12px rgb(0 0 0 / 0.6)",
+    "light": f"0 25px 50px -12px color-mix(in srgb, {C.INK} 25%, transparent)",
+}
+POP_RING_PCT = {"dark": 10, "light": 5}  # the text colour, as a 1px ring
+SCRIM = {"dark": "oklch(0 0 0 / 0.6)", "light": "oklch(0.15 0.002 286 / 0.5)"}
+SCRIM_BLUR_PX = 3
+POPUP_FILL_PCT = 70
+POPUP_BLUR_PX = 40  # backdrop-blur-2xl
+POPUP_SATURATE_PCT = 150
+WASH_PCT = 10  # a hovered or highlighted row: the text colour at 10%
+
+
+def radius_px(mult: float) -> float:
+    return APP_RADIUS_REM * 16 * mult
+
+
+def radius_row() -> str:
+    cells = "".join(
+        f'<div><i style="border-radius:{radius_px(m):.2f}px"></i><b>rounded-{s}</b>'
+        f'<span class="mono">{radius_px(m):.0f}px, base × {m:g}</span><span>{esc(use)}</span></div>'
+        for s, m, use in RADIUS_STEPS
+    )
+    full = '<div><i style="border-radius:999px;width:64px;justify-self:start"></i><b>rounded-full</b><span class="mono">circle</span><span>a status dot, a switch, a radio, an avatar</span></div>'
+    return f'<div class="radius-row">{cells}{full}</div>'
+
+
+def demo_menu(*, glass: bool = False) -> str:
+    rows = "".join(
+        f'<div{" class=on" if i == 1 else ""}>{esc(t)}</div>' for i, t in enumerate(("Open run", "Copy run id", "Move to queue"))
+    )
+    return f'<div class="demo-menu{" glass" if glass else ""}">{rows}</div>'
+
+
+def demo_behind() -> str:
+    """A few table rows for a floating surface to sit over."""
+    rows = (
+        ("dod-check run 4f2c", "held"),
+        ("policy deploy-prod", "approval"),
+        ("budget fleet-nightly", "$41.20"),
+        ("steering repo-sync", "allowed"),
+        ("witness build 2210", "proven"),
+    )
+    return '<div class="behind">' + "".join(f"<div><span>{esc(a)}</span><span>{esc(b)}</span></div>" for a, b in rows) + "</div>"
+
+
 def plate(svg: str, cap: str, *, cls: str = "") -> str:
     return f'<figure class="m0"><div class="plate {cls}">{svg}</div><figcaption class="cap">{cap}</figcaption></figure>'
 
@@ -283,15 +434,19 @@ def css() -> str:
   --ox-font:{T.GEIST.css_stack};
   --ox-font-display:{T.SPACE_GROTESK.css_stack};
   --ox-font-mono:{T.MONASPACE_NEON.css_stack};
+  --ui-shadow:{UI_SHADOW};--pop-shadow:{POP_SHADOW["dark"]};--scrim:{SCRIM["dark"]};
+  --pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["dark"]}%,transparent);
 }}
 @media(prefers-color-scheme:light){{:root:not([data-theme="dark"]){{
   --ink:{C.PAPER};--void:{C.PAPER_VOID};--panel:{C.PAPER_PANEL};--hl:{C.PAPER_HL};--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
   --fg:{C.INK_TEXT};--body:{C.TEXT_INK};--muted:{C.MUTED_INK};--dim:{C.DIM_INK};--accent-text:{C.GOLD_DEEP};
-  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);}}}}
+  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);
+  --pop-shadow:{POP_SHADOW["light"]};--scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);}}}}
 :root[data-theme="light"]{{
   --ink:{C.PAPER};--void:{C.PAPER_VOID};--panel:{C.PAPER_PANEL};--hl:{C.PAPER_HL};--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
   --fg:{C.INK_TEXT};--body:{C.TEXT_INK};--muted:{C.MUTED_INK};--dim:{C.DIM_INK};--accent-text:{C.GOLD_DEEP};
-  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);}}
+  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);
+  --pop-shadow:{POP_SHADOW["light"]};--scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);}}
 *,*::before,*::after{{box-sizing:border-box}}
 html{{scroll-behavior:smooth;scroll-padding-top:78px}}
 @media(prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
@@ -365,6 +520,48 @@ footer{{padding:48px 0 80px;border-top:1px solid var(--rule);color:var(--muted);
 .fav-row{{display:flex;align-items:flex-end;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px}}
 .fav-row img{{display:block;image-rendering:auto}}
 .fav-row span{{font-size:11.5px;color:var(--muted);display:block;text-align:center;margin-top:6px}}
+.ladder{{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:14px 0 8px}}
+@media(max-width:640px){{.ladder{{grid-template-columns:repeat(3,minmax(0,1fr))}}}}
+.ladder div,.radius-row div{{display:grid;gap:4px;font-size:12.5px;color:var(--muted);align-content:start}}
+.ladder i{{display:block;height:64px;border-radius:10px;border:1px solid var(--rule)}}
+.ladder b,.radius-row b{{color:var(--fg);font-weight:600;font-size:13px}}
+.tx-sample{{display:inline-block;padding:4px 10px;border-radius:8px;border:1px solid {C.BORDER};font-family:var(--ox-font-mono);font-size:13px}}
+.stbadge{{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;border-radius:999px;border:1px solid;font-size:13px;font-weight:500}}
+.stbadge i{{width:8px;height:8px;border-radius:50%;display:block}}
+.hex{{font-size:11.5px;color:var(--muted);line-height:1.5}}
+.shapes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:14px 0 22px}}
+.shape{{padding:14px 16px;border-radius:12px;background:var(--panel);color:var(--fg);font-size:14px;font-weight:500}}
+.shape span{{display:block;color:var(--muted);font-size:12.5px;font-weight:400}}
+.shape.held{{border:3px double var(--fg)}}
+.shape.pending{{border:1.5px dashed var(--fg)}}
+.shape.broken{{border:1px solid var(--fg)}}
+.face-card{{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;display:grid;gap:6px;font-size:13.5px;color:var(--muted);align-content:start}}
+.face-card .sample{{font-size:52px;line-height:1.1;color:var(--fg);margin-bottom:8px;overflow-wrap:anywhere}}
+.face-card b{{color:var(--fg);font-size:16px}}
+.radius-row{{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:18px 14px;margin:14px 0 22px}}
+.radius-row i{{display:block;height:64px;background:var(--panel);border:1px solid var(--rule);margin-bottom:4px}}
+.stage{{position:relative;background:var(--void);border:1px solid var(--border);border-radius:14px;padding:32px 24px;min-height:220px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;overflow:hidden}}
+.stage.end{{justify-content:flex-end}}
+.demo-card{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(1.8):.2f}px;padding:16px 18px;width:min(100%,240px);color:var(--fg);font-size:14px;font-weight:500}}
+.demo-card span{{display:block;color:var(--muted);font-size:12.5px;font-weight:400;margin-top:2px}}
+.demo-card.lift{{box-shadow:var(--ui-shadow)}}
+.demo-card.glow{{box-shadow:0 0 30px color-mix(in srgb,var(--gold) 55%,transparent)}}
+.demo-card.heavy{{box-shadow:0 22px 44px rgba(0,0,0,.55),0 8px 14px rgba(0,0,0,.3)}}
+.demo-menu{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(2.2):.2f}px;padding:4px;width:min(100%,220px);box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);font-size:14px;color:var(--fg)}}
+.demo-menu.glass{{background:color-mix(in srgb,var(--panel) {POPUP_FILL_PCT}%,transparent);backdrop-filter:blur({POPUP_BLUR_PX}px) saturate({POPUP_SATURATE_PCT}%);-webkit-backdrop-filter:blur({POPUP_BLUR_PX}px) saturate({POPUP_SATURATE_PCT}%)}}
+.demo-menu div{{padding:8px 12px;border-radius:{radius_px(1.8):.2f}px;min-height:36px;display:flex;align-items:center}}
+.demo-menu div.on{{background:color-mix(in srgb,var(--fg) {WASH_PCT}%,transparent)}}
+.behind{{position:absolute;inset:0;padding:18px 22px;display:grid;align-content:start;font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features}}}
+.behind div{{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding:9px 0;color:var(--body);font-size:13px}}
+.scrim{{position:absolute;inset:0;background:var(--scrim);backdrop-filter:blur({SCRIM_BLUR_PX}px);-webkit-backdrop-filter:blur({SCRIM_BLUR_PX}px)}}
+.demo-dialog{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(1.8):.2f}px;box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);padding:18px 20px;width:min(100%,280px);color:var(--fg);font-size:15px;font-weight:600}}
+.demo-dialog p{{font-size:13.5px;font-weight:400;color:var(--muted);margin:4px 0 0}}
+.demo-btns{{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}}
+.pill{{display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border-radius:{radius_px(2.6):.2f}px;font-size:14px;font-weight:500;border:1px solid var(--border);background:var(--panel);color:var(--fg)}}
+.pill.gold{{background:var(--gold);border-color:var(--gold);color:{C.INK}}}
+.pill.field{{min-width:min(100%,240px);color:var(--dim);background:var(--ink)}}
+.demo-panel{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(1.8):.2f}px;padding:18px;width:min(100%,320px);display:grid;gap:12px;color:var(--fg);font-size:14px;font-weight:600}}
+.demo-panel .demo-btns{{margin-top:0}}
 """
 
 
@@ -481,13 +678,13 @@ def build_html() -> str:
 </head>
 <body>
 <div class="bar"><div class="bar-in">{bar}
-<nav><a href="#logos">Logos</a><a href="#icons">Icons</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#motion">Motion</a><a href="#surfaces">Surfaces</a><a href="#files">Files</a>
+<nav><a href="#logos">Logos</a><a href="#icons">Icons</a><a href="#colour">Colour</a><a href="#type">Typography</a><a href="#elements">Other elements</a><a href="#motion">Motion</a><a href="#surfaces">Surfaces</a><a href="#files">Files</a>
 <button type="button" id="theme" aria-label="toggle theme">◐</button></nav></div></div>
 
 <main class="wrap">
 
 <section class="hero">
-<p class="eyebrow">Oxagen house system · v2.4</p>
+<p class="eyebrow">Oxagen house system v2.5</p>
 <h1><span class="hero-line-1">One house.</span><br>Two names. One gold.</h1>
 <p class="lead">Everything a customer sees from Oxagen and Stella comes from one system: obsidian and white, three faces, and a single gold that each name carries in exactly one glyph.</p>
 <div class="grid g2 plates">
@@ -500,7 +697,7 @@ def build_html() -> str:
 
 <section id="decision">
 <p class="eyebrow">The decision</p>
-<h2>Oxagen's kit is the house kit</h2>
+<h2>The house kit</h2>
 <p>The Oxagen brand kit already had the right bones: Space Grotesk and a wordmark whose only colour is one gold letter. This system takes that kit as the base and brings Stella onto it. Since September 2026 it sits on obsidian <span class="mono">{C.INK}</span> and white, with neutral greys between, so the gold is the only warm value on a screen.</p>
 <p><b>oxagen</b> is the kit's wordmark, reproduced from the font: the word in Space Grotesk 600, lowercase, its <b>x</b> in gold. <b>stella*</b> is the same word treatment followed by the font's own asterisk, in the same gold. The asterisk is a character, not a drawing; it was never redrawn, and it must not be.</p>
 <p>The gold is <span class="mono">{C.GOLD}</span>. Both names use it at the same value, so the two marks cannot drift apart.</p>
@@ -516,7 +713,7 @@ def build_html() -> str:
 
 <section id="logos">
 <p class="eyebrow">Logos</p>
-<h2>Two wordmarks, one em</h2>
+<h2>Wordmarks</h2>
 <p>Both are set at the same size, {G.EM:.1f} px per em, the size the kit's <code>oxagen</code> outline was frozen at. Each sits in an ink-tight box, so <code>oxagen</code> ({ox_m['width']:.0f}×{ox_m['height']:.0f}) and <code>stella*</code> ({st_m['width']:.0f}×{st_m['height']:.0f}) are the same height to within a pixel and the same letter size exactly.</p>
 <div class="grid g2">
 {plate(construction_diagram("oxagen"), "oxagen · construction")}
@@ -528,7 +725,7 @@ def build_html() -> str:
 {plate(clearspace_diagram("oxagen"), "clear space: one x on every side")}
 {plate(clearspace_diagram("stella"), "clear space: one asterisk on every side")}
 </div>
-<h3>Variants that ship</h3>
+<h3>Variants</h3>
 <div class="grid g3">
 {plate(inline(wordmark_svg("stella", adaptive=True, uid=uid("v"))), "adaptive: letters follow the page, gold stays", cls="wm")}
 {plate(inline(wordmark_svg("oxagen", mono="currentColor")), "mono: currentColor, for one-colour print", cls="wm")}
@@ -544,7 +741,7 @@ def build_html() -> str:
 </div>
 <h3>Minimum sizes</h3>
 <p>Wordmark 88 px wide on screen, 24 mm in print. Icon 24 px, 8 mm. Lockup 120 px, 32 mm. Below that, use the favicon.</p>
-<h3>Do not</h3>
+<h3>Misuse</h3>
 <div class="grid g3">
 <div class="bad">{plate(misuse_panel("all-gold", "stella"), "paint the whole word gold")}</div>
 <div class="bad">{plate(misuse_panel("drawn-star", "stella"), "draw a star where the asterisk goes")}</div>
@@ -580,9 +777,35 @@ def build_html() -> str:
 
 <section id="colour">
 <p class="eyebrow">Colour</p>
-<h2>One metal, two grounds</h2>
+<h2>Palette</h2>
 <p>The gold is <span class="mono">{C.GOLD}</span>, and its two neighbours are derived from it in OKLCH, not picked: gold-bright is lighter, for the moment the shimmer passes, and gold-deep is darker and a few degrees warmer, for gold set as text on white. The build fails if a pinned value stops matching its derivation. gold clears {C.contrast(C.GOLD, C.INK):.1f}:1 on obsidian; on white it is {C.contrast(C.GOLD, C.PAPER):.1f}:1, which is why gold as <em>text</em> on white becomes gold-deep at {C.contrast(C.GOLD_DEEP, C.PAPER):.1f}:1.</p>
-<div class="grid g4" style="margin:22px 0 34px">{gold_cards}</div>
+<div class="grid g4" style="margin:22px 0 22px">{gold_cards}</div>
+<ul class="rules">
+<li><b>One gold action per screen.</b> The focus ring is gold too, because it marks where that action is.</li>
+<li><b>Gold is never a state, a surface fill, a card border, or a row highlight.</b> If a screen shows two gold things that are not the mark, one of them is wrong.</li>
+<li><b>Gold is flat.</b> The sheen is only for the mark at hero sizes and on the icon tiles. Gold is never translucent, never blurred, and never a shadow.</li>
+</ul>
+<h3>Grounds</h3>
+<p>Dark comes first. Obsidian is the ground, a panel sits one step up, and a lifted row one step above that. The light theme is white, and a card on white is a hairline border, not a tint. The greys are neutral zinc with no hue, so the gold is the only warm colour on a screen. Every page ships both themes.</p>
+{ground_ladder([("void", C.VOID), ("ink", C.INK), ("panel", C.PANEL), ("hl", C.HL), ("border", C.BORDER), ("rule", C.RULE)])}
+{ground_ladder([("paper-void", C.PAPER_VOID), ("paper", C.PAPER), ("paper-panel", C.PAPER_PANEL), ("paper-hl", C.PAPER_HL), ("paper-border", C.PAPER_BORDER), ("paper-rule", C.PAPER_RULE)])}
+<h3>Text</h3>
+<p>Text comes in four roles. Each role has one value on ink and one on paper. Every role that carries meaning clears 4.5:1 on its ground, and the build checks it. On a lifted row in the light theme, secondary text moves to <span class="mono">--ox-muted-text-ink</span> ({C.MUTED_TEXT_INK}, {C.contrast(C.MUTED_TEXT_INK, C.PAPER_HL):.1f}:1), because {C.MUTED_INK} is {C.contrast(C.MUTED_INK, C.PAPER_HL):.1f}:1 there.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>role</th><th>on ink</th><th>on paper</th><th>use</th></tr></thead>
+<tbody>{text_rows()}</tbody></table></div>
+<h3>State</h3>
+<p>A state is shown by border shape first, so it still reads in grayscale, in print, and in either theme. Colour backs the shape up. It is never the only signal.</p>
+<div class="shapes">
+<div class="shape held">Held<span>also allowed and proven: a double border</span></div>
+<div class="shape pending">Pending<span>also approval: a dashed border</span></div>
+<div class="shape broken">Broken<span>also denied and failed: a single border</span></div>
+</div>
+<p>Inside a table, a border is too small to read, so a state becomes a badge. The dot is the state's mark, which needs 3:1. The word takes the state's text stop, which clears 4.5:1 on the ground, a panel, and a lifted row. On paper each text stop equals its mark today. Use the text stop anyway, so a word stays readable when a mark moves.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>on ink</th><th>on paper</th><th>meaning</th></tr></thead>
+<tbody>{state_rows()}</tbody></table></div>
+<p style="margin-top:14px">The destructive red is the one state colour that is also a button fill: <span class="mono">{C.DESTRUCTIVE["dark"]}</span> on ink and <span class="mono">{C.DESTRUCTIVE["light"]}</span> on paper. It clears 4.5:1 both as a fill under its label and as text on its ground.</p>
 <h3>Every token</h3>
 <div style="overflow-x:auto"><table>
 <thead><tr><th></th><th>token</th><th>value</th><th>on ink</th><th>on paper</th><th>use</th></tr></thead>
@@ -591,16 +814,22 @@ def build_html() -> str:
 </section>
 
 <section id="type">
-<p class="eyebrow">Type</p>
-<h2>Three faces, each with one job</h2>
-<p><b>Geist</b> sets every heading and everything read: h1 to h6, body, labels, buttons, tables, and navigation, in the app and on the website. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on. <b>Space Grotesk</b> sets the two wordmarks and line 1 of a marketing hero, and nothing else. Its wide geometric letters lose their shape below 20 px, so it is never set smaller.</p>
+<p class="eyebrow">Typography</p>
+<h2>Typefaces</h2>
+<p><b>Geist</b> sets every heading and everything read: h1 to h6, body, labels, buttons, tables, and navigation, in the app and on the website. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on. <b>Space Grotesk</b> sets the two wordmarks and line 1 of a marketing hero, and nothing else. Its wide geometric letters lose their shape below {T.DISPLAY_FLOOR_PX} px, so it is never set smaller.</p>
+<div class="grid g3" style="margin:22px 0 10px">
+{face_card(T.GEIST, "Aa Gg 1234", "--ox-font")}
+{face_card(T.MONASPACE_NEON, "0O 1lI =&gt;", "--ox-font-mono")}
+{face_card(T.SPACE_GROTESK, "Aa Gg 1234", "--ox-font-display")}
+</div>
+<h3>Samples</h3>
 <div class="type-row"><span class="mono">hero 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
 <div class="type-row"><span class="mono">heading 700</span><span style="font-weight:700;font-size:32px;line-height:1.1;letter-spacing:-.02em">See which agent spent what.</span></div>
 <div class="type-row"><span class="mono">heading 600</span><span style="font-weight:600;font-size:22px;line-height:1.25">Spend this week</span></div>
 <div class="type-row"><span class="mono">text 600</span><span style="font-weight:600;font-size:16px">Runs waiting for approval</span></div>
 <div class="type-row"><span class="mono">text 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
 <div class="type-row"><span class="mono">code 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:14px">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
-<h3>Two scales</h3>
+<h3>Scales</h3>
 <p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a page read once. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for panels, tables, and logs read all day.</p>
 <h3>Hero line</h3>
 <p>Only the marketing h1 admits Space Grotesk. Wrap line 1 of the hero in <span class="mono">{T.HERO_CLASS}</span> inside a <span class="mono">text-m-h1</span> heading, and line 2 stays in Geist. The same class anywhere else, including every app heading, draws in Geist, so an app cannot reach Space Grotesk except through a wordmark.</p>
@@ -608,12 +837,81 @@ def build_html() -> str:
 <div style="overflow-x:auto"><table>
 <thead><tr><th>step</th><th>face</th><th>marketing</th><th>app</th></tr></thead>
 <tbody>{scale_rows}</tbody></table></div>
-<p class="muted" style="margin-top:14px;font-size:13.5px">Sizes in px, then line height and weight. <span class="mono">tokens/house-tailwind.css</span> carries both scales as Tailwind v4 utilities; <span class="mono">tokens/next-fonts.ts</span> loads the three faces with next/font.</p>
+<p class="muted" style="margin-top:14px;font-size:13.5px">Sizes in px, then line height and weight.</p>
+<h3>Weights</h3>
+<p>Six named weights cover every job.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>token</th><th>weight</th><th>sample</th><th>use</th></tr></thead>
+<tbody>{weight_rows()}</tbody></table></div>
+<h3>Tracking</h3>
+<p>Tracking is the space between letters. Headings track tighter as they grow, so large type does not look loose. Smaller headings and body text are not tracked, and neither are the wordmarks.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>token</th><th>value</th><th>sample</th><th>where</th></tr></thead>
+<tbody>{tracking_rows()}</tbody></table></div>
+<h3>Type rules</h3>
+<ul class="rules">
+<li><b>Headings use sentence case.</b> Capitalise the first word and proper names only.</li>
+<li><b>No fourth typeface.</b> A CSS rule names a role, such as <code>--font-display</code> or <code>--font-mono</code>, never a face, so a face can change in one place.</li>
+<li><b>An eyebrow is 12px Geist, uppercase, at 0.14em tracking.</b> An eyebrow is the small label above a heading, like the word above each heading on this page.</li>
+<li><b>Numbers in tables use Monaspace Neon.</b> Every digit is the same width, so columns of figures line up.</li>
+<li><b>Monaspace Neon keeps texture healing and code ligatures on</b> (<code>font-feature-settings: {T.MONASPACE_NEON.features}</code>). Texture healing evens out the space around narrow and wide letters. Ligatures join pairs such as <code>=&gt;</code> into one glyph.</li>
+</ul>
+<h3>Font files</h3>
+<p><span class="mono">tokens/house-fonts.css</span> carries the <code>@font-face</code> rules for all three faces. <span class="mono">tokens/next-fonts.ts</span> loads them with next/font in a Next.js app. <span class="mono">tokens/house-tailwind.css</span> carries both scales as Tailwind v4 utilities. The font files live in <span class="mono">fonts/</span>, each under the SIL Open Font License.</p>
+</section>
+
+<section id="elements">
+<p class="eyebrow">Elements</p>
+<h2>Other elements</h2>
+<p>Three more properties finish every surface: corner radius, shadow, and translucency. One rule ties them together. A surface at rest on the page is flat: a hairline border, almost no shadow, and a solid fill. Only a surface that floats above the page, such as a menu or a dialog, gets a deep shadow and a see-through fill.</p>
+
+<h3>Corner radius</h3>
+<p>On the website, cards, panels, and inputs round their corners at {SITE_RADIUS_PX}px (<code>--ox-radius</code>).</p>
+<p>The app uses a scale instead. Each step multiplies one base value, <code>--ui-radius</code>, which is {APP_RADIUS_REM:g}rem (about {radius_px(1):.0f}px). Change the base, and every corner in the app moves with it. Oxagen ADR-221 records the scale.</p>
+{radius_row()}
+<ul class="rules">
+<li><b>A control you press or type into is a pill.</b> Buttons, selects, and form fields use <code>rounded-4xl</code>. At 36px tall, {radius_px(2.6):.0f}px is more than half the height, so the ends are fully round.</li>
+<li><b>A corner inside a corner is smaller by about the gap between them.</b> That keeps the two curves close to parallel. A menu rounds at <code>rounded-3xl</code> (about {radius_px(2.2):.0f}px) and insets its rows by 4px, so each row takes <code>rounded-2xl</code> (about {radius_px(1.8):.0f}px).</li>
+<li><b>A tile icon rounds at 20 on a 96 box.</b> That is about a fifth of its side.</li>
+</ul>
+<div class="grid g2" style="margin-top:22px">
+<figure class="m0"><div class="stage"><div class="demo-panel">Rename agent<div class="pill field">night-shift-runner</div><div class="demo-btns"><span class="pill">Cancel</span><span class="pill gold">Save</span></div></div></div><figcaption class="cap">a panel at 2xl with a field and buttons at 4xl</figcaption></figure>
+<figure class="m0"><div class="stage">{demo_menu()}</div><figcaption class="cap">a menu at 3xl with rows at 2xl</figcaption></figure>
+</div>
+
+<h3>Shadows</h3>
+<p>A surface at rest gets its edge from a 1px border: <code>--ox-border</code> on ink and <code>--ox-paper-border</code> on paper. The kit allows one faint shadow at rest, <code>--ui-shadow</code> (<span class="mono">{UI_SHADOW}</span>). Every Tailwind shadow step reads that one value, so a theme can turn them all off in one place.</p>
+<p>A floating surface takes <code>shadow-pop</code> instead. Menus, popovers, hover cards, the command menu, dialogs, sheets, and toasts all float. The shadow is <span class="mono">0 25px 50px -12px</span>: obsidian at 25% on paper and black at 60% on ink. A floating surface drops its border for <code>pop-ring</code>, a 1px ring of the text colour at {POP_RING_PCT["light"]}% on paper and {POP_RING_PCT["dark"]}% on ink.</p>
+<div class="grid g3">
+<figure class="m0"><div class="stage"><div class="demo-card">Spend this week<span>border only</span></div></div><figcaption class="cap">at rest with a hairline border</figcaption></figure>
+<figure class="m0"><div class="stage"><div class="demo-card lift">Spend this week<span>border and --ui-shadow</span></div></div><figcaption class="cap">at rest with the faint shadow</figcaption></figure>
+<figure class="m0"><div class="stage">{demo_menu()}</div><figcaption class="cap">floating with pop-ring and shadow-pop</figcaption></figure>
+</div>
+<div class="grid g2" style="margin-top:18px">
+<div class="bad"><figure class="m0"><div class="stage"><div class="demo-card glow">Spend this week<span>a gold glow</span></div></div><figcaption class="cap">add a glow or a coloured shadow</figcaption></figure></div>
+<div class="bad"><figure class="m0"><div class="stage"><div class="demo-card heavy">Spend this week<span>a deep shadow at rest</span></div></div><figcaption class="cap">give a resting card a floating shadow</figcaption></figure></div>
+</div>
+<p style="margin-top:18px">Never add a glow, a coloured shadow, or a text shadow, and never put a shadow on the mark.</p>
+
+<h3>Translucency</h3>
+<p>A translucent surface lets you partly see what is behind it. In the house system, only floating surfaces and the layer behind a dialog are translucent. Cards, panels, tables, buttons, and fields are opaque, and nothing at rest uses a blurred, see-through fill.</p>
+<ul class="rules">
+<li><b>A floating surface fills at {POPUP_FILL_PCT}% of its panel colour.</b> The browser blurs whatever is behind it by {POPUP_BLUR_PX}px and raises its saturation to {POPUP_SATURATE_PCT}%. The page shows through as soft colour, never as text you could read.</li>
+<li><b>A dialog sits on a scrim.</b> The scrim is the dark layer that covers the page behind a dialog: near-black at 50% on paper and black at 60% on ink, with a {SCRIM_BLUR_PX}px blur.</li>
+<li><b>A wash marks a row.</b> A hovered or highlighted row is the text colour at {WASH_PCT}%. A state badge or alert sits on its state colour at 10 to 12%.</li>
+<li><b>Secondary text on ink may use opacity.</b> White at 60% takes the tone of the surface under it. It must still clear 4.5:1.</li>
+<li><b>Gold is never translucent.</b> The mark and the one gold action stay solid on every surface.</li>
+</ul>
+<p style="margin-top:14px">This page's top bar uses the same idea: the page colour at 88% with a 14px blur, so content scrolls under it without clashing.</p>
+<div class="grid g2" style="margin-top:18px">
+<figure class="m0"><div class="stage end">{demo_behind()}{demo_menu(glass=True)}</div><figcaption class="cap">a menu over a table with a {POPUP_FILL_PCT}% fill and a {POPUP_BLUR_PX}px blur</figcaption></figure>
+<figure class="m0"><div class="stage">{demo_behind()}<div class="scrim"></div><div class="demo-dialog">Approve this deploy?<p>The agent runs deploy-prod once you approve.</p><div class="demo-btns"><span class="pill">Cancel</span><span class="pill gold">Approve</span></div></div></div><figcaption class="cap">a dialog over its scrim</figcaption></figure>
+</div>
 </section>
 
 <section id="motion">
 <p class="eyebrow">Motion</p>
-<h2>Light passes over the metal</h2>
+<h2>The shimmer</h2>
 <p>The house motion is the shimmer: a band of light crosses the mark every {SHIMMER_PERIOD:g} seconds. Stella's asterisk turns a sixth of a turn, its own symmetry, as the light passes over its gold. The hive takes the same band over all of it: its outline is held at a third strength and the band brings it up to full, and its two cells catch the highlight as the band crosses them. Same band, same tilt, same easing -- one gesture, made in hue on the metal and in brightness on the ink. All of it is CSS inside the SVG; it runs in an <code>&lt;img&gt;</code> with no script, and <code>prefers-reduced-motion</code> lands it on a still mark at full strength.</p>
 <div class="grid g4">
 {plate(inline(spinner_svg("stella", uid=uid("sp"))), "stella spinner", cls="ink sp")}
@@ -629,9 +927,9 @@ def build_html() -> str:
 
 <section id="surfaces">
 <p class="eyebrow">Surfaces</p>
-<h2>One composition rule</h2>
+<h2>Composition</h2>
 <p>A surface is a ground, one bloom of the metal, the brand's own icon placed off-centre, and at most a few lines of type. When a surface needs more than a mark, it builds the picture out of the mark. Every surface below is the vector the kit ships, not a screenshot.</p>
-<h3>Wallpapers, seven ways</h3>
+<h3>Wallpapers</h3>
 <p><b>graph</b> scatters nodes across the ground, wires each to its two nearest neighbours, and runs gold edges from the mark out to the nodes nearest it: the one-to-many, drawn. <b>blocks</b> rebuilds the mark from blocks on a grid, each tile a shade brighter or deeper than the next, with a bloom of fainter blocks around it. <b>orbit</b> hangs five rings of nodes off the mark, each node wired inward to the ring inside it. <b>glow</b> and <b>quiet</b> are the mark alone, as a bloom and as a hairline -- and both are pulled back inside the canvas rather than cropped, because a mark clipped by a few per cent of its width reads as a mistake and not as a crop. <b>word</b> and <b>echo</b> carry the wordmark and no icon. <b>word</b> is the wordmark alone over its bloom. <b>echo</b> stacks the wordmark above and below itself, each copy fainter than the last and in the surface's ink alone, so the gold stays on the one word that is the mark. Every node is placed by a seeded random, so the same file comes out of every build.</p>
 <div class="grid g2">{walls}</div>
 <div class="grid g4" style="margin-top:18px">{phones}</div>
@@ -648,7 +946,7 @@ def build_html() -> str:
 
 <section id="files">
 <p class="eyebrow">Files</p>
-<h2>Every pixel is generated</h2>
+<h2>Kit files</h2>
 <p>No file in this kit is drawn by hand. Every PNG is a render of the SVG beside it; every SVG is emitted from <code>build/</code>. The colours live in one file, <code>build/color.py</code>, so a change there moves every asset on the next run.</p>
 <div class="files">{files_html}</div>
 <pre><code>python3 -m venv .venv &amp;&amp; .venv/bin/pip install fonttools brotli pyyaml
