@@ -123,7 +123,10 @@ def _semantic(theme: str) -> list[tuple[str, str]]:
         ("secondary", ox("hl" if dark else "paper-hl")),
         ("secondary-foreground", ox("text" if dark else "text-ink")),
         ("muted", ox("hl" if dark else "paper-hl")),
-        ("muted-foreground", ox("muted" if dark else "muted-ink")),
+        # Secondary text sits on `muted` as often as on the canvas. muted-ink is
+        # 4.40:1 on paper-hl, so the light theme takes muted-text-ink, which
+        # clears both. On ink, muted clears 4.5:1 on the lifted row as it is.
+        ("muted-foreground", ox("muted" if dark else "muted-text-ink")),
         # shadcn's `accent` is the hover surface under menu items and rows.
         # It is a surface, so it is never gold: gold never fills a surface.
         ("accent", ox("hl" if dark else "paper-hl")),
@@ -153,6 +156,11 @@ def _semantic(theme: str) -> list[tuple[str, str]]:
 SEMANTIC_NAMES = [name for name, _ in _semantic("dark")]
 
 
+def _state_var(name: str) -> str:
+    """The token stem for a state's stops: `st-failed`, or `destructive` for the red."""
+    return name if name == "destructive" else f"st-{name}"
+
+
 def house_tokens_css() -> str:
     lines = _header(
         "The house colour and type system: one palette and three faces for oxagen and stella.",
@@ -164,10 +172,14 @@ def house_tokens_css() -> str:
         "State is carried by border shape. The st-* colours are for the badge or",
         "dot inside a table where shape is too small to read, never the only",
         "signal. destructive is the failed red lifted until it clears AA on ink.",
+        "A word in a state's colour takes its text stop, st-*-text on ink and",
+        "st-*-text-ink on paper, which clears 4.5:1 on every surface of its theme.",
         "",
-        "Space Grotesk sets the wordmarks and h1 to h3. Geist sets h4 to h6 and",
-        "everything read. Monaspace Neon sets code, logs, digests, and the numbers",
-        "in tables. tokens/house-fonts.css carries the @font-face rules.",
+        "Geist sets every heading and everything read. Space Grotesk sets the",
+        "Oxagen and stella wordmarks and line 1 of the oxagen.sh hero, nothing else.",
+        "Monaspace Neon sets code, logs, digests, and the numbers in tables.",
+        "--ox-font-display names the heading role and points at Geist.",
+        "tokens/house-fonts.css carries the @font-face rules.",
     )
     lines += ["", ":root {"]
     for name, hexv, note in C.TOKENS:
@@ -178,6 +190,10 @@ def house_tokens_css() -> str:
         lines.append(f"  --ox-st-{name}-ink: {light}; /* the same, on paper */")
     lines.append(f"  --ox-destructive: {C.DESTRUCTIVE['dark']}; /* a destructive action, on ink: text and fill */")
     lines.append(f"  --ox-destructive-ink: {C.DESTRUCTIVE['light']}; /* the same, on paper */")
+    lines.append("")
+    for name, text in C.STATE_TEXT.items():
+        lines.append(f"  --ox-{_state_var(name)}-text: {text['dark']}; /* {name} as words, on ink, panel, and hl */")
+        lines.append(f"  --ox-{_state_var(name)}-text-ink: {text['light']}; /* {name} as words, on paper and paper-hl */")
     lines += [
         "",
         f"  --ox-gold-sheen: linear-gradient(45deg, {C.GOLD_DEEP} 0%, {C.GOLD} 38%, "
@@ -187,6 +203,9 @@ def house_tokens_css() -> str:
     for face in T.FACES:
         var = "--ox-font" if face.key == "sans" else f"--ox-font-{face.key}"
         lines.append(f"  {var}: {face.css_stack}; /* {face.job} */")
+    for role, key in T.ROLES.items():
+        target = "--ox-font" if key == "sans" else f"--ox-font-{key}"
+        lines.append(f"  --ox-font-{role}: var({target}); /* every heading: {T.FACE[key].family} */")
     lines.append(f"  --ox-font-mono-features: {T.FACE['mono'].features}; /* texture healing and code ligatures */")
     lines.append("")
     for job, w in T.WEIGHTS.items():
@@ -233,8 +252,10 @@ def house_tailwind_css() -> str:
         "house-fonts.css and the family names below resolve to its @font-face.",
         "",
         "Type: text-m-* is the marketing scale, text-a-* the app scale. A surface",
-        "picks one. h1 to h3 take Space Grotesk, h4 to h6 and body Geist, code",
-        "Monaspace Neon with texture healing on, whichever scale is in use.",
+        "picks one. Every heading and body take Geist (h1 to h3 through",
+        "--font-display), code takes Monaspace Neon with texture healing on,",
+        "whichever scale is in use. Space Grotesk is --font-wordmark: the two",
+        "wordmarks and text-m-hero, line 1 of the oxagen.sh hero, and nothing else.",
     )
     out = "\n".join(lines) + "\n\n"
     out += '@import "./house-tokens.css";\n\n'
@@ -248,9 +269,15 @@ def house_tailwind_css() -> str:
         out += f"  --color-ox-st-{name}-ink: var(--ox-st-{name}-ink);\n"
     out += "  --color-ox-destructive: var(--ox-destructive);\n"
     out += "  --color-ox-destructive-ink: var(--ox-destructive-ink);\n"
+    for name in C.STATE_TEXT:
+        var = _state_var(name)
+        out += f"  --color-ox-{var}-text: var(--ox-{var}-text);\n"
+        out += f"  --color-ox-{var}-text-ink: var(--ox-{var}-text-ink);\n"
     out += "\n"
     for face in T.FACES:
         out += f"  --font-{face.key}: var({face.next_var}, \"{face.family}\"), {face.stack};\n"
+    for role, key in T.ROLES.items():
+        out += f"  --font-{role}: var(--font-{key}); /* every heading: {T.FACE[key].family} */\n"
     out += "\n"
     for job, t in T.TRACKING.items():
         out += f"  --tracking-{job}: {t};\n"
@@ -322,10 +349,11 @@ def next_fonts_ts() -> str:
         '//   <html lang="en" className={fontVariables}>\n'
         "//\n"
         "// Each loader sets one CSS variable on <html>; tokens/house-tailwind.css\n"
-        "// reads them into --font-display, --font-sans and --font-mono.\n\n"
+        "// reads them into --font-wordmark, --font-sans and --font-mono, and points\n"
+        "// --font-display, the heading role, at --font-sans.\n\n"
         'import localFont from "next/font/local";\n\n'
     )
-    names = {"display": "spaceGrotesk", "sans": "geist", "mono": "monaspaceNeon"}
+    names = {"wordmark": "spaceGrotesk", "sans": "geist", "mono": "monaspaceNeon"}
     for face in T.FACES:
         out += f"/** {face.family}: {face.job}. */\n"
         out += f"export const {names[face.key]} = localFont({{\n"
@@ -365,7 +393,7 @@ def build_tokens() -> None:
             "baseline": m["baseline"],
         }
     payload = {
-        "version": "2.3.0",
+        "version": "2.4.0",
         "name": "oxagen house system",
         "built_on": "oxagen brand kit (Space Grotesk), on obsidian and white with one gold",
         "icons": {
@@ -391,12 +419,28 @@ def build_tokens() -> None:
             "deep_on_paper": round(C.contrast(C.GOLD_DEEP, C.PAPER), 2),
         },
         "tokens": {name: value for name, value, _ in C.TOKENS},
-        "states": {name: {"ink": d, "paper": l, "use": u} for name, d, l, u in C.STATES},
-        "destructive": {"ink": C.DESTRUCTIVE["dark"], "paper": C.DESTRUCTIVE["light"], "lift": C.DESTRUCTIVE_LIFT},
+        "states": {
+            name: {
+                "ink": d, "paper": l, "use": u,
+                "text_ink": C.STATE_TEXT[name]["dark"], "text_paper": C.STATE_TEXT[name]["light"],
+            }
+            for name, d, l, u in C.STATES
+        },
+        "destructive": {
+            "ink": C.DESTRUCTIVE["dark"], "paper": C.DESTRUCTIVE["light"], "lift": C.DESTRUCTIVE_LIFT,
+            "text_ink": C.STATE_TEXT["destructive"]["dark"], "text_paper": C.STATE_TEXT["destructive"]["light"],
+        },
+        "state_text": {
+            "rule": "a word in a state's colour takes its text stop; a badge or a dot takes the bare stop",
+            "l_on_ink": C.TEXT_L_ON_INK,
+            "oklch": {name: {t: dict(zip("LCH", v)) for t, v in th.items()} for name, th in C.STATE_TEXT_LCH.items()},
+            "surfaces": C.TEXT_SURFACES,
+        },
         "semantic": {theme: dict(_semantic(theme)) for theme in ("light", "dark")},
         "type": {
             "family": T.GEIST.family,
-            "display_family": T.SPACE_GROTESK.family,
+            "display_family": T.face_of("display").family,
+            "wordmark_family": T.SPACE_GROTESK.family,
             "mono_family": T.MONASPACE_NEON.family,
             "weights": list(G.WEIGHTS),
             "logo_weight": G.LOGO_WEIGHT,

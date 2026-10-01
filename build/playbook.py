@@ -281,7 +281,8 @@ def css() -> str:
   --paper:{C.PAPER};--card:{C.PANEL};
   --shadow:0 1px 0 rgba(255,255,255,.03),0 18px 44px rgba(0,0,0,.5);
   --ox-font:{T.GEIST.css_stack};
-  --ox-font-display:{T.SPACE_GROTESK.css_stack};
+  --ox-font-wordmark:{T.SPACE_GROTESK.css_stack};
+  --ox-font-display:var(--ox-font);
   --ox-font-mono:{T.MONASPACE_NEON.css_stack};
 }}
 @media(prefers-color-scheme:light){{:root:not([data-theme="dark"]){{
@@ -379,11 +380,16 @@ def build_html() -> str:
     a = asterisk()
 
     tokens_rows = "".join(swatch_row(n, v, note) for n, v, note in C.TOKENS)
-    face_name = {"display": "Space Grotesk", "sans": "Geist", "mono": "Monaspace Neon"}
+    app_steps = {st.name: st for st in T.APP.steps}
+
+    def app_cell(name: str) -> str:
+        a = app_steps.get(name)
+        return f"{a.px} · {a.leading} · {a.weight}" if a else "none"
+
     scale_rows = "".join(
-        f"<tr><td class=\"mono\">{m.name}</td><td>{face_name[m.face]}</td>"
-        f"<td class=\"mono\">{m.px} · {m.leading} · {m.weight}</td><td class=\"mono\">{a.px} · {a.leading} · {a.weight}</td></tr>"
-        for m, a in zip(T.MARKETING.steps, T.APP.steps)
+        f"<tr><td class=\"mono\">{m.name}</td><td>{T.face_of(m.face).family}</td>"
+        f"<td class=\"mono\">{m.px} · {m.leading} · {m.weight}</td><td class=\"mono\">{app_cell(m.name)}</td></tr>"
+        for m in T.MARKETING.steps
     )
     gold_cards = "".join(
         [
@@ -592,9 +598,9 @@ def build_html() -> str:
 <section id="type">
 <p class="eyebrow">Type</p>
 <h2>Three faces, each with one job</h2>
-<p><b>Space Grotesk</b> sets the wordmarks and h1 to h3, and nothing smaller than 20 px: its wide geometric letters lose their shape below that. <b>Geist</b> sets h4 to h6 and everything read: body, labels, buttons, tables, navigation. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
-<div class="type-row"><span class="mono">display · 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
-<div class="type-row"><span class="mono">display · 600</span><span style="font-family:var(--ox-font-display);font-weight:600;font-size:26px;line-height:1.2">See which agent spent what.</span></div>
+<p><b>Geist</b> sets every heading and everything read: body, labels, buttons, tables, navigation. <b>Space Grotesk</b> sets three things only: the Oxagen wordmark, the stella wordmark, and line 1 of the oxagen.sh hero, never smaller than 20 px, because its wide geometric letters lose their shape below that. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
+<div class="type-row"><span class="mono">hero · 700</span><span style="font-family:var(--ox-font-wordmark);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
+<div class="type-row"><span class="mono">heading · 600</span><span style="font-family:var(--ox-font-display);font-weight:600;font-size:26px;line-height:1.2">See which agent spent what.</span></div>
 <div class="type-row"><span class="mono">text · 600</span><span style="font-weight:600;font-size:16px">Runs waiting for approval</span></div>
 <div class="type-row"><span class="mono">text · 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
 <div class="type-row"><span class="mono">code · 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:14px">oxagen dod verify --run 4f2c  =&gt;  held</span></div>

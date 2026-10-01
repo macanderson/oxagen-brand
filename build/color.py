@@ -146,6 +146,13 @@ TEXT_INK = "#27272A"  # body text on paper
 MUTED_INK = "#71717A"  # secondary text on paper
 DIM_INK = "#A1A1AA"  # the quietest text on paper; never a word that carries meaning
 
+#: Secondary text on paper that also clears 4.5:1 on a lifted row there.
+#: muted-ink is 4.40:1 on paper-hl, so this is muted-ink moved darker in OKLCH
+#: lightness, on its own hue and chroma, until it clears both. `verify()` fails
+#: if the pinned hex stops matching its (L, C, H).
+MUTED_TEXT_INK_LCH = (0.540, 0.014, 285.9)
+MUTED_TEXT_INK = "#6E6E77"
+
 #: (token, value, use). This list is the palette. Nothing else is.
 TOKENS: list[tuple[str, str, str]] = [
     ("gold", GOLD, "the gold: identity, one action per screen. flat, always"),
@@ -170,6 +177,7 @@ TOKENS: list[tuple[str, str, str]] = [
     ("text-ink", INK_TEXT, "primary text on paper"),
     ("text-ink-body", TEXT_INK, "body text on paper"),
     ("muted-ink", MUTED_INK, "secondary text on paper"),
+    ("muted-text-ink", MUTED_TEXT_INK, "secondary text on paper and on a lifted row there"),
     ("dim-ink", DIM_INK, "the quietest text on paper"),
 ]
 
@@ -206,6 +214,60 @@ DESTRUCTIVE_LIFT = 0.06
 DESTRUCTIVE = {"dark": "#D5584D", "light": STATE["failed"]["light"]}
 DESTRUCTIVE_TEXT_ON = {"dark": INK, "light": PAPER}  # text on a destructive fill
 
+# --------------------------------------------------------------------------
+# state as words
+# --------------------------------------------------------------------------
+
+#: The surfaces a word sits on in each theme: the canvas, a panel, and a
+#: lifted row.
+TEXT_SURFACES = {
+    "dark": {"ink": INK, "panel": PANEL, "hl": HL},
+    "light": {"paper": PAPER, "paper-hl": PAPER_HL},
+}
+
+#: A state stop is a mark: a badge or a dot, which needs 3:1. A word needs
+#: 4.5:1 on every surface it sits on, so each state, and the destructive red,
+#: has a text stop as well. A text stop keeps its mark's OKLCH hue and chroma
+#: and moves only in lightness, away from the ground.
+#:
+#: On ink every text stop sits at L 0.67. That is as far as the reds have to
+#: move to clear 4.5:1 on the lifted row, and one lightness sets every status
+#: word at the same weight. Allowed's mark already sits there, so its text stop
+#: is the mark. The destructive red is the failed red lifted, on the same hue
+#: and chroma, so the two share one text stop on ink.
+#:
+#: On paper every mark already clears 4.5:1 on paper and on paper-hl, so each
+#: text stop keeps its mark's lightness and equals the mark. The token still
+#: exists: words read the text stop and marks read the bare stop, and that
+#: split is what survives a mark that moves.
+#:
+#: `verify()` fails if a pinned hex stops matching its (L, C, H), if a stop
+#: leaves its mark's hue, or if one drops below 4.5:1 on a surface of its theme.
+TEXT_L_ON_INK = 0.67
+STATE_TEXT_LCH: dict[str, dict[str, tuple[float, float, float]]] = {
+    "allowed": {"dark": (0.670, 0.106, 157.8), "light": (0.530, 0.103, 156.0)},
+    "approval": {"dark": (0.670, 0.117, 253.8), "light": (0.518, 0.115, 251.1)},
+    "denied": {"dark": (0.670, 0.126, 39.7), "light": (0.497, 0.123, 39.7)},
+    "proven": {"dark": (0.670, 0.091, 195.2), "light": (0.517, 0.079, 195.0)},
+    "failed": {"dark": (0.670, 0.160, 27.6), "light": (0.464, 0.142, 27.8)},
+    "critical": {"dark": (0.670, 0.181, 14.5), "light": (0.496, 0.172, 15.7)},
+    "destructive": {"dark": (0.670, 0.160, 27.7), "light": (0.464, 0.142, 27.8)},
+}
+STATE_TEXT: dict[str, dict[str, str]] = {
+    "allowed": {"dark": "#57A97C", "light": "#2F7D52"},
+    "approval": {"dark": "#6098DB", "light": "#2E6BA8"},
+    "denied": {"dark": "#D67858", "light": "#9B4526"},
+    "proven": {"dark": "#44A7A7", "light": "#1F7676"},
+    "failed": {"dark": "#E7685C", "light": "#992F28"},
+    "critical": {"dark": "#EF5C72", "light": "#AE2540"},
+    "destructive": {"dark": "#E7685C", "light": "#992F28"},  # the failed text stop: same hue and chroma
+}
+
+
+def state_marks() -> dict[str, dict[str, str]]:
+    """Every mark a text stop is derived from: the six states and the destructive red."""
+    return {**STATE, "destructive": DESTRUCTIVE}
+
 
 # --------------------------------------------------------------------------
 # checks
@@ -240,6 +302,40 @@ def verify() -> list[str]:
         # 1.4.11, non-text), and never the only signal.
         if contrast(dark, INK) < 3 or contrast(light, PAPER) < 3:
             problems.append(f"state {name} is below 3:1 on a ground")
+    if set(STATE_TEXT) != set(state_marks()) or set(STATE_TEXT_LCH) != set(state_marks()):
+        problems.append("every state and the destructive red need a text stop on ink and on paper")
+    for name, marks in state_marks().items():
+        for theme, mark in marks.items():
+            lch, pinned = STATE_TEXT_LCH.get(name, {}).get(theme), STATE_TEXT.get(name, {}).get(theme)
+            if lch is None or pinned is None:
+                continue
+            where = f"{name} text stop on {'ink' if theme == 'dark' else 'paper'}"
+            if oklch_hex(*lch) != pinned:
+                problems.append(f"{where} {pinned} != {oklch_hex(*lch)}")
+            mL, mC, mH = hex_to_oklch(mark)
+            pL, pC, pH = hex_to_oklch(pinned)
+            # rgb_to_hex clamps out-of-gamut channels, which moves the hue, so
+            # the pinned hex is measured, not only its coordinates.
+            if abs((pH - mH + 180) % 360 - 180) > 1 or abs(lch[1] - mC) > 0.001:
+                problems.append(f"{where} leaves its mark's hue or chroma: {pinned} vs {mark}")
+            if theme == "dark" and (lch[0] != TEXT_L_ON_INK or pL < mL - 0.002):
+                problems.append(f"{where} is not at L {TEXT_L_ON_INK}, or is darker than its mark")
+            if theme == "light" and pL > mL + 0.002:
+                problems.append(f"{where} is lighter than its mark {mark}")
+            for surface, ground in TEXT_SURFACES[theme].items():
+                if contrast(pinned, ground) < 4.5:
+                    problems.append(f"{where} is {contrast(pinned, ground):.2f}:1 on {surface}, below AA")
+    if oklch_hex(*MUTED_TEXT_INK_LCH) != MUTED_TEXT_INK:
+        problems.append(f"muted-text-ink {MUTED_TEXT_INK} != {oklch_hex(*MUTED_TEXT_INK_LCH)}")
+    _, mC, mH = hex_to_oklch(MUTED_INK)
+    _, _, pH = hex_to_oklch(MUTED_TEXT_INK)
+    if abs((pH - mH + 180) % 360 - 180) > 1 or abs(MUTED_TEXT_INK_LCH[1] - mC) > 0.001:
+        problems.append("muted-text-ink leaves muted-ink's hue or chroma")
+    for surface, ground in TEXT_SURFACES["light"].items():
+        if contrast(MUTED_TEXT_INK, ground) < 4.5:
+            problems.append(f"muted-text-ink is {contrast(MUTED_TEXT_INK, ground):.2f}:1 on {surface}, below AA")
+    if contrast(MUTED, HL) < 4.5:
+        problems.append(f"muted is {contrast(MUTED, HL):.2f}:1 on hl, below AA")
     if contrast(GOLD, INK) < 4.5:
         problems.append(f"gold on ink is {contrast(GOLD, INK):.2f}:1, below AA")
     if contrast(GOLD_DEEP, PAPER) < 4.5:
