@@ -292,13 +292,14 @@ gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="bu
     <table>
       <thead><tr><th>Use</th><th>Face</th><th>Set in</th></tr></thead>
       <tbody>
-        <tr><td>Both wordmarks, Stella's icon, and line 1 of the oxagen.sh hero</td><td>Space Grotesk 600</td><td><code>build/glyphs.py</code></td></tr>
-        <tr><td>Every heading and all text</td><td>Geist</td><td><code>build/typeset.py</code></td></tr>
+        <tr><td>Both wordmarks and Stella's icon</td><td>Space Grotesk 600</td><td><code>build/glyphs.py</code></td></tr>
+        <tr><td>Line 1 of a marketing hero</td><td>Space Grotesk</td><td><code>build/typeset.py</code></td></tr>
+        <tr><td>Every heading and all text, in the app and on the website</td><td>Geist</td><td><code>build/typeset.py</code></td></tr>
         <tr><td>Code, logs, paths, and numbers in tables</td><td>Monaspace Neon</td><td><code>build/typeset.py</code></td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note"><strong>The kit lags one rule.</strong> You moved every heading to Geist on 2026-09-29. The kit's tokens still set h1 to h3 in Space Grotesk until <a href="https://github.com/macanderson/oxagen-brand/issues/27">#27</a> lands.</p>
+  <p class="note"><strong>One system, two h1 rules.</strong> The app sets every heading in Geist. A website sets line 1 of its hero in Space Grotesk by wrapping it in the <code>hero-line-1</code> class inside a <code>text-m-h1</code> heading. Outside that heading the class draws in Geist, so the app can't reach Space Grotesk by accident.</p>
   <ol class="steps">
     <li><strong>Check the licence.</strong><p>The repo is public, so a house face must allow redistribution in a public repo and embedding on the web. A face licensed per seat or per domain, such as Aeonik, can't be a house face, because committing its files publishes them.</p></li>
     <li><strong>Add the files.</strong><p>Put the <code>.woff2</code> files and the licence under <code>fonts/</code>.</p></li>

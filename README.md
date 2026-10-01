@@ -35,11 +35,12 @@ picked: `#F1CE65` is the highlight the shimmer passes through, and `#8A7223`
 is gold as text on white, where the metal itself is 2.1:1. Both names carry
 the one value, so the two marks cannot drift apart.
 
-Three faces set the type, each with one job. Geist sets every heading and
-everything read. Space Grotesk sets the two wordmarks and line 1 of the
-oxagen.sh hero, and nothing else. Monaspace Neon sets code, logs, and data.
-Two size scales sit on top: marketing for pages read once, app for dashboards
-read all day.
+Three faces set the type. Geist sets every heading and everything read, in
+the app and on the website. Monaspace Neon sets code, logs, and data. Space
+Grotesk sets the two wordmarks and line 1 of a marketing hero, and nothing
+else. Two size scales sit on top: marketing for pages read once, app for
+dashboards read all day. Only the marketing h1 lets its first line take Space
+Grotesk, so an app heading never can.
 
 Where a square is required, Stella uses its asterisk and Oxagen uses **the
 hive**: six hexagonal cells on a honeycomb grid, four drawn as an outline and
@@ -141,12 +142,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 (`--background`, `--primary`, `--ring`, `--sidebar-*`) for light, `.dark`, and
 the OS preference, adds the palette as `bg-ox-*` and `text-ox-*` utilities,
 routes every heading and body to Geist and code to Monaspace Neon, and defines
-the two scales as `text-m-hero` to `text-m-micro` and `text-a-h1` to
-`text-a-micro`. `text-m-hero` and `--font-wordmark` are the only places it names
-Space Grotesk. Each state colour comes as a mark for badges and dots and as a
+the two scales as `text-m-h1` to `text-m-micro` and `text-a-h1` to
+`text-a-micro`. Each state colour comes as a mark for badges and dots and as a
 text stop for words, `--ox-st-*-text` on ink and `--ox-st-*-text-ink` on paper.
 `next-fonts.ts` loads its fonts from `../fonts/`, so vendor `tokens/` and
 `fonts/` side by side.
+
+Space Grotesk reaches a product two ways. `--font-wordmark` sets a wordmark
+that is text rather than an SVG. The `hero-line-1` class sets line 1 of a
+marketing hero, and it works only inside a `text-m-h1` heading:
+
+```html
+<h1 class="text-m-h1"><span class="hero-line-1">Govern every agent</span><br>One record for every run</h1>
+```
+
+`text-m-h1` points `--font-hero` at Space Grotesk for its own contents.
+Everywhere else `--font-hero` is Geist, so the same class inside a `text-a-h1`,
+or on any app heading, draws in Geist. An app needs no rule of its own to keep
+Space Grotesk off its headings.
 
 The oxagen monorepo vendors these files with
 `tools/scripts/sync-brand-assets.mjs`, and CI runs it with `--check`, so a
@@ -286,10 +299,11 @@ set.
 `--check` reproduces the kit's shipped `oxagen` wordmark from the font (same
 weight, same em, HarfBuzz spacing including kerning) and fails if the geometry
 has moved. It also fails if a gold neighbour stops matching its OKLCH
-derivation, if any text token or state text stop drops below AA on a surface
-of its theme, if a type step other than the hero sets Space Grotesk or sets it
-below 20 px, if a webfont loses a face or a feature, or if
-the skill's tokens or logo drift from the build.
+derivation, if any text token drops below AA on its ground, if a state text
+stop drops below AA on a surface of its theme or leaves its mark's hue, if a heading
+leaves Geist, if any step but the marketing h1 admits a Space Grotesk hero
+line, if a webfont loses a face or a feature, or if the skill's tokens or logo
+drift from the build.
 
 ## Rules worth knowing before you use it
 
@@ -318,9 +332,9 @@ the skill's tokens or logo drift from the build.
   take one ad. The short forms keep the scope of the long ones:
   governed, recorded, mediated. Ad copy comes only from approved,
   launch-released entries in `messages/ads/`.
-- **Space Grotesk sets the wordmarks and the hero only.** The two wordmarks
-  and line 1 of the oxagen.sh hero, nothing below 20 px, and never code. Every
-  heading is Geist. Code, terminal output, and data are Monaspace Neon.
+- **Space Grotesk sets the wordmarks and line 1 of a marketing hero.** Every
+  heading is Geist, h1 to h6, in the app and on the website. Nothing in Space
+  Grotesk is below 20 px. Code, terminal output, and data are Monaspace Neon.
 - **A status word takes its text stop.** A badge or a dot takes the state's
   mark. A word in that colour takes `--ox-st-*-text` on ink or
   `--ox-st-*-text-ink` on paper, which clear 4.5:1 on every surface there.

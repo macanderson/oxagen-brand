@@ -47,10 +47,13 @@ def page_vars(*, fonts: bool = True) -> str:
     """Dark first. Light by `data-theme="light"` or the OS preference."""
     extra = ""
     if fonts:
+        # --font-display is the heading face, Geist. Space Grotesk takes two
+        # names, one per job, so no heading reaches it by asking for "display".
         extra = (
+            f"\n  --font-display: {T.GEIST.css_stack};"
             f"\n  --font-wordmark: {T.SPACE_GROTESK.css_stack};"
+            f"\n  --font-hero: {T.SPACE_GROTESK.css_stack};"
             f"\n  --font: {T.GEIST.css_stack};"
-            "\n  --font-display: var(--font);"
             f"\n  --mono: {T.MONASPACE_NEON.css_stack};"
             f"\n  --mono-features: {T.MONASPACE_NEON.features};"
             "\n  --radius: 12px; --wrap: 1120px;"

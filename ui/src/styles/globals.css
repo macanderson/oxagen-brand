@@ -209,7 +209,7 @@
      *
      * A mark only has to clear 3:1, and #C0453C on the #18181B panel is 3.51:1,
      * so a word set in a mark stop falls under the 4.5:1 text floor. Since kit
-     * 2.4.0 each state has a text stop: `--ox-st-*-text` on ink, which clears
+     * 2.5.0 each state has a text stop: `--ox-st-*-text` on ink, which clears
      * 4.5:1 on ink, panel, and the lifted row, and `--ox-st-*-text-ink` on
      * paper, which clears it on paper and paper-hl. `build/build.py --check`
      * measures every one, so the `*-ink` roles below carry the kit's values and
@@ -1004,24 +1004,27 @@
 
 /*
  * Brand type tokens. NON-inline @theme so the --font-* names are emitted to
- * :root for both the Tailwind font-* utilities AND the raw var(--font-*) refs
- * below. Each one takes its value straight from the kit's token file, so the
- * fallback stacks are the kit's too.
+ * :root for both the Tailwind font-* utilities and the raw var(--font-*) refs
+ * below.
  *
- * Geist sets every heading and every line of text, so --font-sans and
+ * Geist sets every heading and everything read, so --font-sans and
  * --font-display resolve to the same family. The pair is kept so headings can
  * be retuned (weight, tracking) in one place without touching body copy.
- * --font-wordmark is the one token that names Space Grotesk: the Oxagen and
- * stella wordmarks, and line 1 of the oxagen.sh hero (text-m-hero). Mac set
- * that rule on 2026-09-29.
+ * Space Grotesk takes one name, --font-wordmark, so no heading reaches it by
+ * asking for "display". The kit's text-m-h1 step points --font-hero at it for
+ * line 1 of a marketing hero (the hero-line-1 class). Everywhere else,
+ * including every app heading, --font-hero is Geist.
+ *
+ * Each value comes straight from the kit's token file, so the fallback stacks
+ * are the kit's too.
  */
 @theme {
-  --font-sans: var(--ox-font); /* Geist: every heading, body, and UI */
-  --font-display: var(--ox-font-display); /* the heading role, h1 to h3: Geist */
+  --font-sans: var(--ox-font); /* Geist: body, UI, every heading */
+  --font-display: var(--ox-font); /* Geist too: the heading token, same face */
   /* Monaspace Neon: code, logs, ids, and numbers in tables. */
   --font-mono: var(--ox-font-mono);
-  /* Space Grotesk: the two wordmarks and line 1 of the oxagen.sh hero. */
-  --font-wordmark: var(--ox-font-wordmark);
+  /* Space Grotesk: the wordmark, and line 1 of a marketing hero. */
+  --font-wordmark: var(--ox-font-display);
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -1042,16 +1045,16 @@
   }
 
   /*
-   * TYPE RULE: three faces, each with one job. Geist sets every heading (h1
-   * to h3 through --font-display, h4 to h6 through --font-sans, at 600) and
-   * everything read. Space Grotesk (--font-wordmark) sets the two wordmarks
-   * and line 1 of the oxagen.sh hero, never below 20px. Monaspace Neon
-   * (--font-mono) sets code and identifiers, with texture healing on.
+   * TYPE RULE: Geist (--font-display for headings, --font-sans for text) sets
+   * every heading and everything read. Monaspace Neon (--font-mono) sets code
+   * and identifiers, with texture healing on. Space Grotesk (--font-wordmark)
+   * sets the wordmark, and line 1 of a marketing hero through text-m-h1 and
+   * hero-line-1. Mac set this rule on 2026-09-29.
    */
   h4,
   h5,
   h6 {
-    font-family: var(--font-sans);
+    font-family: var(--font-display);
     font-weight: 600;
     line-height: 1.4;
   }
@@ -1060,9 +1063,9 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    /* The kit's own heading tokens: Geist at --ox-weight-heading (600).
-       --ox-weight-display (700) is for the largest steps, which the text-m-h1
-       and text-a-h1 utilities carry. */
+    /* The kit's own heading weight and tracking, drawn in Geist.
+       --ox-weight-display (700) is for a page title, which the text-m-h1 and
+       text-a-h1 utilities carry. */
     font-weight: var(--ox-weight-heading);
     letter-spacing: var(--ox-tracking-heading);
     line-height: 1.12;

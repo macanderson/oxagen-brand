@@ -7,13 +7,13 @@
 //   import { fontVariables } from "@/styles/next-fonts";
 //   <html lang="en" className={fontVariables}>
 //
-// Each loader sets one CSS variable on <html>; tokens/house-tailwind.css
-// reads them into --font-wordmark, --font-sans and --font-mono, and points
-// --font-display, the heading role, at --font-sans.
+// Each loader sets one CSS variable on <html>. tokens/house-tailwind.css
+// reads Geist into --font-sans and --font-display, Monaspace Neon into
+// --font-mono, and Space Grotesk into --font-wordmark and a marketing hero.
 
 import localFont from "next/font/local";
 
-/** Space Grotesk: the Oxagen and stella wordmarks, and line 1 of the oxagen.sh hero. */
+/** Space Grotesk: the wordmarks, Stella's icon, and line 1 of a marketing hero. */
 export const spaceGrotesk = localFont({
   src: [
     { path: "../fonts/space-grotesk-latin-400.woff2", weight: "400", style: "normal" },

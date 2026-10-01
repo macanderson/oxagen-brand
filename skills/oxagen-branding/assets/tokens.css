@@ -32,9 +32,10 @@
   --state-critical-text: #EF5C72;
   --destructive-text: #E7685C;
   --muted-text: #A1A1AA;
+  --font-display: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-wordmark: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-hero: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --font: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font);
   --mono: "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --mono-features: "calt", "liga";
   --radius: 12px; --wrap: 1120px;
