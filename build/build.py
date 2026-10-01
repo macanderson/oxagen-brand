@@ -165,9 +165,10 @@ def house_tokens_css() -> str:
         "dot inside a table where shape is too small to read, never the only",
         "signal. destructive is the failed red lifted until it clears AA on ink.",
         "",
-        "Space Grotesk sets the wordmarks and h1 to h3. Geist sets h4 to h6 and",
-        "everything read. Monaspace Neon sets code, logs, digests, and the numbers",
-        "in tables. tokens/house-fonts.css carries the @font-face rules.",
+        "Geist sets every heading and everything read. Monaspace Neon sets code,",
+        "logs, digests, and the numbers in tables. Space Grotesk sets the",
+        "wordmarks and line 1 of a marketing hero, and no other heading.",
+        "tokens/house-fonts.css carries the @font-face rules.",
     )
     lines += ["", ":root {"]
     for name, hexv, note in C.TOKENS:
@@ -233,8 +234,18 @@ def house_tailwind_css() -> str:
         "house-fonts.css and the family names below resolve to its @font-face.",
         "",
         "Type: text-m-* is the marketing scale, text-a-* the app scale. A surface",
-        "picks one. h1 to h3 take Space Grotesk, h4 to h6 and body Geist, code",
+        "picks one. Every heading and all text take Geist, and code takes",
         "Monaspace Neon with texture healing on, whichever scale is in use.",
+        "",
+        "Space Grotesk reaches a page two ways. --font-wordmark sets a wordmark",
+        f"that is text rather than an SVG. The {T.HERO_CLASS} class sets line 1 of",
+        "a marketing hero, inside a text-m-h1 heading:",
+        "",
+        f'    <h1 class="text-m-h1"><span class="{T.HERO_CLASS}">Line one</span><br>Line two</h1>',
+        "",
+        "text-m-h1 points --font-hero at the wordmark face for its own contents.",
+        f"Everywhere else --font-hero is the heading face, so {T.HERO_CLASS} in the",
+        "app, in a text-a-h1, or on any other heading draws in Geist.",
     )
     out = "\n".join(lines) + "\n\n"
     out += '@import "./house-tokens.css";\n\n'
@@ -249,8 +260,11 @@ def house_tailwind_css() -> str:
     out += "  --color-ox-destructive: var(--ox-destructive);\n"
     out += "  --color-ox-destructive-ink: var(--ox-destructive-ink);\n"
     out += "\n"
-    for face in T.FACES:
-        out += f"  --font-{face.key}: var({face.next_var}, \"{face.family}\"), {face.stack};\n"
+    for role in T.ROLES:
+        if role.key == "hero":
+            continue  # set in the base layer below, so a hero step can redefine it
+        face = T.FACE[role.face]
+        out += f"  --font-{role.key}: var({face.next_var}, \"{face.family}\"), {face.stack}; /* {role.job} */\n"
     out += "\n"
     for job, t in T.TRACKING.items():
         out += f"  --tracking-{job}: {t};\n"
@@ -275,15 +289,11 @@ def house_tailwind_css() -> str:
 
     # 3. element routing: which face each element takes, whatever the scale
     out += "\n"
-    for elements, face in T.ROUTING:
-        decl = f"font-family: var(--font-{face});"
-        if face == "mono":
-            decl += f" font-feature-settings: {T.FACE['mono'].features};"
-        if elements.startswith("h1"):
-            decl += " letter-spacing: var(--tracking-display);"
-        if elements.startswith("h4"):
-            decl += f" font-weight: {T.WEIGHTS['subheading']};"
-        out += f"  {elements} {{ {decl} }}\n"
+    out += f"  /* {T.ROLE['hero'].job} */\n"
+    out += f"  :root {{ --font-hero: var(--font-{T.HERO_ROLE_OUTSIDE}); }}\n"
+    for route in T.ROUTING:
+        decl = "; ".join((f"font-family: var(--font-{route.role})", *route.extra)) + ";"
+        out += f"  {route.elements} {{ {decl} }}\n"
     out += "  body { -webkit-font-smoothing: antialiased; }\n"
     out += "  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }\n"
     out += "}\n\n"
@@ -302,8 +312,11 @@ def house_tailwind_css() -> str:
     for scale in T.SCALES:
         out += f"/* {scale.name} scale: {scale.use} */\n"
         for st in scale.steps:
-            out += f"@utility text-{scale.key}-{st.name} {{ {T.step_css(st, family_var=f'--font-{st.face}')} }}\n"
+            out += f"@utility text-{scale.key}-{st.name} {{ {T.step_css(st)} }}\n"
         out += "\n"
+    admitted = " and ".join(f"text-{s.key}-{st.name}" for s in T.SCALES for st in s.steps if st.hero)
+    out += f"/* line 1 of a hero: Space Grotesk inside {admitted}, Geist everywhere else */\n"
+    out += f"@utility {T.HERO_CLASS} {{ font-family: var(--font-hero); }}\n\n"
     out += "/* the code face with texture healing, for anything not already routed */\n"
     out += f"@utility font-code {{ font-family: var(--font-mono); font-feature-settings: {T.FACE['mono'].features}; }}\n"
     return out
@@ -321,8 +334,9 @@ def next_fonts_ts() -> str:
         '//   import { fontVariables } from "@/styles/next-fonts";\n'
         '//   <html lang="en" className={fontVariables}>\n'
         "//\n"
-        "// Each loader sets one CSS variable on <html>; tokens/house-tailwind.css\n"
-        "// reads them into --font-display, --font-sans and --font-mono.\n\n"
+        "// Each loader sets one CSS variable on <html>. tokens/house-tailwind.css\n"
+        "// reads Geist into --font-sans and --font-display, Monaspace Neon into\n"
+        "// --font-mono, and Space Grotesk into --font-wordmark and a marketing hero.\n\n"
         'import localFont from "next/font/local";\n\n'
     )
     names = {"display": "spaceGrotesk", "sans": "geist", "mono": "monaspaceNeon"}
@@ -365,7 +379,7 @@ def build_tokens() -> None:
             "baseline": m["baseline"],
         }
     payload = {
-        "version": "2.3.0",
+        "version": "2.4.0",
         "name": "oxagen house system",
         "built_on": "oxagen brand kit (Space Grotesk), on obsidian and white with one gold",
         "icons": {
@@ -816,7 +830,7 @@ def check(drift: bool = True) -> int:
         print(f"check: gold {C.GOLD}, bright {C.GOLD_BRIGHT} and deep {C.GOLD_DEEP} match their OKLCH derivations")
         print(f"check: {SKILL_TOKENS} matches the build")
         print("check: every text token clears AA on its ground")
-        print(f"check: {len(T.FACES)} faces in fonts/, {len(T.SCALES)} type scales, every step on its face")
+        print(f"check: {len(T.FACES)} faces in fonts/, {len(T.SCALES)} type scales, every heading in Geist, Space Grotesk on the wordmarks and a marketing hero only")
     return 1 if problems else 0
 
 

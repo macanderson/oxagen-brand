@@ -1,9 +1,9 @@
 # fonts
 
-Three faces, each with one job. Space Grotesk sets the wordmarks and h1 to
-h3. Geist sets h4 to h6 and everything read. Monaspace Neon sets code, logs,
-and data. All three are under the SIL Open Font License, so all three live in
-this repo, each with its licence beside it.
+Three faces. Geist sets every heading and everything read. Monaspace Neon sets
+code, logs, and data. Space Grotesk sets the two wordmarks and line 1 of a
+marketing hero, and nothing else. All three are under the SIL Open Font
+License, so all three live in this repo, each with its licence beside it.
 
 | File | Face | Licence |
 |---|---|---|
