@@ -2,7 +2,7 @@
 
     python3 build/conformance.py                      # every repo and surface in consumers.json
     python3 build/conformance.py --report out.md      # also write the report as Markdown
-    python3 build/conformance.py --only gtm           # one repo and its surfaces
+    python3 build/conformance.py --only oxagen-gtm    # one repo and its surfaces
 
 `consumers.json` lists every repo that ships Oxagen or Stella and every live
 surface it serves. For each repo this checks, on its default branch, that:
@@ -12,10 +12,11 @@ surface it serves. For each repo this checks, on its default branch, that:
 - `.github/workflows/brand-drift.yml` exists, so its CI fails when its copies
   of the kit fall behind.
 
-It reads each repo through the GitHub contents API. Most consumers are
-private, so set `BRAND_SYNC_TOKEN` (or `GITHUB_TOKEN`) to a token that can read
-them. A repo the check cannot read is a defect that names the token, so a
-missing token never reads as a missing stub.
+It reads each repo through the GitHub contents API. The consumers are public,
+so the check runs without a token. With `BRAND_SYNC_TOKEN` (or `GITHUB_TOKEN`)
+set, it reads with that token, which raises the API rate limit and reads a
+consumer that turns private. A repo the check cannot read is a defect that
+names the token, so a missing token never reads as a missing stub.
 
 For each live surface it fetches the listed pages and the stylesheets they
 link, and checks that:
@@ -64,7 +65,7 @@ MARKS = ROOT / "logo" / "svg"
 #: and stella's asterisk is labelled "stella mark". A retired mark carries neither.
 LIVE_MARKS = re.compile(rb'data-mark="hive"|aria-label="stella mark"')
 
-UA = "oxagen-brand-conformance/1 (+https://github.com/oxageninc/brand)"
+UA = "oxagen-brand-conformance/1 (+https://github.com/macanderson/oxagen-brand)"
 MAX_BYTES = 5 * 1024 * 1024
 MAX_SHEETS = 12
 

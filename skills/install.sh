@@ -6,7 +6,7 @@
 #   skills/install.sh --check         report whether the installed skill is the current stub
 #   skills/install.sh --check --project DIR
 #
-# The stub is one SKILL.md. It fetches the full skill from oxageninc/brand
+# The stub is one SKILL.md. It fetches the full skill from macanderson/oxagen-brand
 # at the current main commit and follows it, so an installed stub never goes
 # stale and nothing needs reinstalling when the brand changes. A project commits
 # the stub, which is how cloud sessions get the skill: they load a repository's

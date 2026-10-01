@@ -8,7 +8,7 @@
   },
   "consumers": [
     {
-      "repo": "oxageninc/product",
+      "repo": "macanderson/oxagen",
       "sync": "node tools/scripts/sync-brand-assets.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [
@@ -26,7 +26,7 @@
       ]
     },
     {
-      "repo": "oxageninc/roadmap",
+      "repo": "macanderson/oxagen-roadmap",
       "sync": "node tools/sync-brand.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "repo": "oxageninc/gtm",
+      "repo": "macanderson/oxagen-gtm",
       "sync": "node scripts/build-data.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "repo": "oxageninc/survey",
+      "repo": "macanderson/oxagen-survey",
       "sync": "node scripts/sync-brand.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [

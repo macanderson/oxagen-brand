@@ -6,9 +6,9 @@ name: conformance
 # brand-conformance, and the job fails. When everything conforms again, the job
 # closes that issue.
 #
-# Most consumers are private, so the check reads them with BRAND_SYNC_TOKEN,
-# the fan-out's token. Without it, each private repo reports that the check
-# needs the token.
+# The consumers are public, so the check needs no token. When the fan-out's
+# BRAND_SYNC_TOKEN is set, the check reads with it, which raises the GitHub
+# API rate limit and keeps a consumer readable if it turns private.
 
 on:
   schedule:
