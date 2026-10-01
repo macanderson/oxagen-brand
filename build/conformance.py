@@ -12,6 +12,12 @@ surface it serves. For each repo this checks, on its default branch, that:
 - `.github/workflows/brand-drift.yml` exists, so its CI fails when its copies
   of the kit fall behind.
 
+It reads each repo through the GitHub contents API. The consumers are public,
+so the check runs without a token. With `BRAND_SYNC_TOKEN` (or `GITHUB_TOKEN`)
+set, it reads with that token, which raises the API rate limit and reads a
+consumer that turns private. A repo the check cannot read is a defect that
+names the token, so a missing token never reads as a missing stub.
+
 For each live surface it fetches the listed pages and the stylesheets they
 link, and checks that:
 
@@ -35,6 +41,7 @@ import argparse
 import hashlib
 import html
 import json
+import os
 import re
 import sys
 import urllib.error
@@ -93,8 +100,8 @@ class Result:
     notes: list[str] = field(default_factory=list)
 
 
-def fetch(url: str) -> tuple[int, bytes]:
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
+def fetch(url: str, headers: dict[str, str] | None = None) -> tuple[int, bytes]:
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*", **(headers or {})})
     try:
         with urllib.request.urlopen(req, timeout=20) as r:
             return r.status, r.read(MAX_BYTES)
@@ -104,8 +111,24 @@ def fetch(url: str) -> tuple[int, bytes]:
         return 0, str(e).encode()
 
 
-def raw(repo: str, path: str) -> tuple[int, bytes]:
-    return fetch(f"https://raw.githubusercontent.com/{repo}/HEAD/{path}")
+#: The variables a token is read from, in order. The fan-out's BRAND_SYNC_TOKEN
+#: reaches every consumer. GITHUB_TOKEN is for a run by hand.
+TOKEN_VARS = ("BRAND_SYNC_TOKEN", "GITHUB_TOKEN")
+
+
+def token() -> str:
+    return next((os.environ[v] for v in TOKEN_VARS if os.environ.get(v)), "")
+
+
+def github(repo: str, path: str = "") -> tuple[int, bytes]:
+    """GET a repo, or one file's raw bytes on its default branch, from the GitHub API."""
+    headers = {"Accept": "application/vnd.github.raw+json", "X-GitHub-Api-Version": "2022-11-28"}
+    if tok := token():
+        headers["Authorization"] = f"Bearer {tok}"
+    url = f"https://api.github.com/repos/{repo}"
+    if path:
+        url += "/contents/" + urllib.parse.quote(path)
+    return fetch(url, headers)
 
 
 # --------------------------------------------------------------------------
@@ -255,14 +278,33 @@ def links(page: str, base: str) -> tuple[list[str], list[str]]:
 
 def check_repo(repo: str, stub: bytes) -> Result:
     r = Result(repo)
-    status, body = raw(repo, ".claude/skills/oxagen-branding/SKILL.md")
+    # The contents API answers 404 both for a missing file and for a private repo
+    # the caller cannot see. Asking for the repo first tells the two apart.
+    status, _ = github(repo)
+    if status == 404 and token():
+        r.defects.append(f"the token cannot read {repo}; give BRAND_SYNC_TOKEN read access to it")
+        return r
+    if status == 404:
+        r.defects.append(f"{repo} is private or missing, and no token is set; set BRAND_SYNC_TOKEN so the check can read it")
+        return r
+    if status == 401:
+        r.defects.append("GitHub refused the token (HTTP 401); replace BRAND_SYNC_TOKEN")
+        return r
     if status != 200:
+        r.defects.append(f"the GitHub API returned {status or 'no response'} for {repo}")
+        return r
+    status, body = github(repo, ".claude/skills/oxagen-branding/SKILL.md")
+    if status == 404:
         r.defects.append("no stub skill at .claude/skills/oxagen-branding/SKILL.md on the default branch")
+    elif status != 200:
+        r.defects.append(f"reading .claude/skills/oxagen-branding/SKILL.md returned {status or 'no response'}")
     elif body != stub:
         r.defects.append(".claude/skills/oxagen-branding/SKILL.md is not the current stub; run skills/install.sh --project")
-    status, _ = raw(repo, ".github/workflows/brand-drift.yml")
-    if status != 200:
+    status, _ = github(repo, ".github/workflows/brand-drift.yml")
+    if status == 404:
         r.defects.append("no .github/workflows/brand-drift.yml on the default branch")
+    elif status != 200:
+        r.defects.append(f"reading .github/workflows/brand-drift.yml returned {status or 'no response'}")
     return r
 
 

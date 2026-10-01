@@ -5,6 +5,10 @@ name: conformance
 # differs, the report becomes the body of one open issue labelled
 # brand-conformance, and the job fails. When everything conforms again, the job
 # closes that issue.
+#
+# The consumers are public, so the check needs no token. When the fan-out's
+# BRAND_SYNC_TOKEN is set, the check reads with it, which raises the GitHub
+# API rate limit and keeps a consumer readable if it turns private.
 
 on:
   schedule:
@@ -30,6 +34,8 @@ jobs:
           python-version: "3.13"
       - id: run
         continue-on-error: true
+        env:
+          BRAND_SYNC_TOKEN: ${{ secrets.BRAND_SYNC_TOKEN }}
         run: python build/conformance.py --report report.md
       - name: File, update, or close the issue
         env:

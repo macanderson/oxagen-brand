@@ -10,7 +10,7 @@
     {
       "repo": "macanderson/oxagen",
       "sync": "node tools/scripts/sync-brand-assets.mjs --brand \"$KIT\"",
-      "apt": ["librsvg2-bin"],
+      "apt": [],
       "surfaces": [
         { "url": "https://oxagen.sh", "pages": ["/"] },
         { "url": "https://oxagen.app", "pages": ["/"] },
@@ -27,7 +27,7 @@
     },
     {
       "repo": "macanderson/oxagen-roadmap",
-      "sync": "node scripts/sync-brand.mjs --brand \"$KIT\"",
+      "sync": "node tools/sync-brand.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [
         { "url": "https://roadmap.oxagen.cloud", "pages": ["/"] }
