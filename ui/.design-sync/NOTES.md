@@ -18,7 +18,7 @@ reference Storybook and `pnpm build:design-system` for `components/bundle.js`,
 `bundle.css`, and `index.d.ts`. See `.github/workflows/ui.yml`.
 
 This design system is the authority for, and should stay consistent with:
-`oxagenai/oxagen-brand`, `macanderson/oxagen` (`apps/app`, `apps/web`, `apps/docs`,
+`oxageninc/brand`, `oxageninc/product` (`apps/app`, `apps/web`, `apps/docs`,
 `packages/ui`), `macanderson/tmp-oxagen-mockups` (`site/`, `mockups/`) and
 `macanderson/stella` (`website/`). Only `packages/ui` is a real component library;
 the rest are consumers.
