@@ -7,16 +7,16 @@ description: The authority for anything that carries Oxagen or Stella branding o
 
 # Oxagen branding
 
-This skill holds the method. The brand itself lives in `oxageninc/brand` on `main`, and you read it from there every time. Never write brand copy, colours, or type from memory or from an older copy of a file.
+This skill holds the method. The brand itself lives in `macanderson/oxagen-brand` on `main`, and you read it from there every time. Never write brand copy, colours, or type from memory or from an older copy of a file.
 
 ## Get the brand
 
-1. **Inside the brand repo**, when `git remote get-url origin` names `oxageninc/brand` (or its old name, `macanderson/oxagen-brand`), read the working tree. You are editing the source.
+1. **Inside oxagen-brand**, when `git remote get-url origin` names `macanderson/oxagen-brand`, read the working tree. You are editing the source.
 2. **Everywhere else**, pin one commit and read every file from it:
 
    ```sh
-   sha=$(git ls-remote https://github.com/oxageninc/brand refs/heads/main | cut -f1)
-   curl -fsSL "https://raw.githubusercontent.com/oxageninc/brand/$sha/skills/oxagen-branding/references/core.md"
+   sha=$(git ls-remote https://github.com/macanderson/oxagen-brand refs/heads/main | cut -f1)
+   curl -fsSL "https://raw.githubusercontent.com/macanderson/oxagen-brand/$sha/skills/oxagen-branding/references/core.md"
    ```
 
    Use `curl` when you have a shell. A web-fetch tool may summarise what it reads, so without a shell ask it for the file verbatim.
@@ -52,4 +52,4 @@ Every value comes from `tokens/`: `house-tokens.css` and `house-tokens.json` for
 
 ## Where this skill lives
 
-`skills/oxagen-branding/` in `oxageninc/brand` is the only full copy. Every other repo, and `~/.claude/skills/`, holds the stub from `skills/stub/oxagen-branding/`, which fetches this file from `main` and follows it. `skills/install.sh` installs the stub. Never vendor the references.
+`skills/oxagen-branding/` in `macanderson/oxagen-brand` is the only full copy. Every other repo, and `~/.claude/skills/`, holds the stub from `skills/stub/oxagen-branding/`, which fetches this file from `main` and follows it. `skills/install.sh` installs the stub. Never vendor the references.
