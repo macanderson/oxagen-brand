@@ -1,9 +1,15 @@
-"""Outline the house type straight out of Space Grotesk.
+"""Outline the house type straight out of its fonts.
 
 Every logo in this kit is a string set in one face, at one size, and then
 outlined, so the logos never depend on a font being installed and can never
-drift apart from each other. The face is the variable Space Grotesk vendored in
-`fonts/`, instanced to a fixed weight at build time.
+drift apart from each other. The logo face is the variable Space Grotesk
+vendored in `fonts/`, instanced to a fixed weight at build time.
+
+The art's lines of text (headlines, answer lines, kickers, calls to action,
+taglines) are outlined the same way, from Geist, because Geist sets every line
+of text and Space Grotesk sets only the wordmarks and line 1 of the oxagen.sh
+hero (Mac, 2026-09-29). `set_line`, `font`, and `shape` default to the wordmark
+face. `text_width` and `text_path` default to the text face.
 
 Two things are borrowed from the Oxagen brand kit this system is built to
 match, and `verify()` checks both against the kit's own `wordmark-color-light`:
@@ -18,9 +24,11 @@ match, and `verify()` checks both against the kit's own `wordmark-color-light`:
 
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 import subprocess
+import tempfile
 from functools import lru_cache
 from pathlib import Path
 
@@ -32,6 +40,8 @@ from fontTools.varLib import instancer
 
 ROOT = Path(__file__).resolve().parent.parent
 FONT = ROOT / "fonts" / "SpaceGrotesk-VariableFont_wght.ttf"
+#: Geist, the text face: the latin webfont the kit ships, variable on wght.
+TEXT_FONT = ROOT / "fonts" / "geist-latin-wght.woff2"
 REFERENCE = ROOT / "build" / "reference" / "oxagen-wordmark-color-light.svg"
 
 WEIGHTS = (400, 500, 600, 700)
@@ -41,18 +51,45 @@ LOGO_WEIGHT = 600  # the wordmark weight, as the kit ships it
 #: to 96 is a 96/70 lift. This is the em every wordmark is set at.
 EM = 96.0 * 96.0 / 70.0
 
-_FONTS: dict[int, TTFont] = {}
+#: The two faces this module outlines: `wordmark` for the logos, `text` for
+#: every other line the art sets.
+FACES = ("wordmark", "text")
+
+_FONTS: dict[tuple[str, int], TTFont] = {}
 
 
-def font(weight: int = LOGO_WEIGHT) -> TTFont:
-    """One static instance of the variable font per weight, cached."""
-    if weight not in _FONTS:
+@lru_cache(maxsize=None)
+def font_file(face: str = "wordmark") -> Path:
+    """The font file HarfBuzz shapes `face` with.
+
+    HarfBuzz cannot read WOFF2, so the text face is unpacked once to a TTF in
+    the temp directory, named by the webfont's hash so a new webfont never
+    reuses a stale unpack.
+    """
+    if face == "wordmark":
+        return FONT
+    if face != "text":
+        raise ValueError(f"face {face!r} is not one of {FACES}")
+    digest = hashlib.sha256(TEXT_FONT.read_bytes()).hexdigest()[:16]
+    out = Path(tempfile.gettempdir()) / f"oxagen-kit-geist-{digest}.ttf"
+    if not out.exists():
+        f = TTFont(TEXT_FONT)
+        f.flavor = None
+        tmp = out.with_suffix(".tmp")
+        f.save(tmp)
+        tmp.replace(out)
+    return out
+
+
+def font(weight: int = LOGO_WEIGHT, face: str = "wordmark") -> TTFont:
+    """One static instance of the face's variable font per weight, cached."""
+    if (face, weight) not in _FONTS:
         if weight not in WEIGHTS:
             raise ValueError(f"weight {weight} is not one of {WEIGHTS}")
-        _FONTS[weight] = instancer.instantiateVariableFont(
-            TTFont(FONT), {"wght": weight}, inplace=False
+        _FONTS[(face, weight)] = instancer.instantiateVariableFont(
+            TTFont(font_file(face)), {"wght": weight}, inplace=False
         )
-    return _FONTS[weight]
+    return _FONTS[(face, weight)]
 
 
 def _upm(f: TTFont) -> float:
@@ -65,7 +102,9 @@ def _upm(f: TTFont) -> float:
 
 
 @lru_cache(maxsize=None)
-def shape(text: str, weight: int = LOGO_WEIGHT) -> tuple[tuple[str, float, float, float, int], ...]:
+def shape(
+    text: str, weight: int = LOGO_WEIGHT, face: str = "wordmark"
+) -> tuple[tuple[str, float, float, float, int], ...]:
     """`text` through HarfBuzz: (glyph name, x advance, x offset, y offset, cluster).
 
     HarfBuzz is what the reference kit's outlines came from, so this is the
@@ -79,18 +118,28 @@ def shape(text: str, weight: int = LOGO_WEIGHT) -> tuple[tuple[str, float, float
     out = subprocess.run(
         [
             "hb-shape",
-            str(FONT),
+            str(font_file(face)),
             f"--variations=wght={weight}",
             f"--text={text}",
             "--output-format=json",
+            # Glyph ids, not names: the Geist webfont carries no glyph names,
+            # so HarfBuzz would print `gidN`, which fontTools does not know.
+            "--no-glyph-names",
         ],
         check=True,
         capture_output=True,
         text=True,
     ).stdout
+    order = glyph_order(face)
     return tuple(
-        (g["g"], float(g["ax"]), float(g["dx"]), float(g["dy"]), int(g["cl"])) for g in json.loads(out)
+        (order[int(g["g"])], float(g["ax"]), float(g["dx"]), float(g["dy"]), int(g["cl"])) for g in json.loads(out)
     )
+
+
+@lru_cache(maxsize=None)
+def glyph_order(face: str = "wordmark") -> tuple[str, ...]:
+    """fontTools' glyph names for `face`, indexed by glyph id."""
+    return tuple(TTFont(font_file(face)).getGlyphOrder())
 
 
 # --------------------------------------------------------------------------
@@ -118,6 +167,7 @@ def set_line(
     size: float = EM,
     weight: int = LOGO_WEIGHT,
     tracking: float = 0.0,
+    face: str = "wordmark",
 ) -> list[dict[str, object]]:
     """Every glyph of `text` on one baseline at (`x`, `y`), left to right, kerned.
 
@@ -130,9 +180,9 @@ def set_line(
     reference check would fail if it moved -- but a two-letter monogram is a
     drawing, not a word, and is fitted by eye.
     """
-    f = font(weight)
+    f = font(weight, face)
     s = size / _upm(f)
-    glyphs = shape(text, weight)
+    glyphs = shape(text, weight, face)
     out = []
     cx = x
     for i, (name, ax, dx, dy, cl) in enumerate(glyphs):
@@ -155,26 +205,26 @@ def union_bounds(recs: list[dict[str, object]]) -> tuple[float, float, float, fl
     )
 
 
-def text_width(s: str, size: float, weight: int = 400) -> float:
-    f = font(weight)
-    return sum(g[1] for g in shape(s, weight)) * size / _upm(f)
+def text_width(s: str, size: float, weight: int = 400, face: str = "text") -> float:
+    f = font(weight, face)
+    return sum(g[1] for g in shape(s, weight, face)) * size / _upm(f)
 
 
 def text_path(
-    s: str, size: float, x: float, y: float, weight: int = 400, *, anchor: str = "start"
+    s: str, size: float, x: float, y: float, weight: int = 400, *, anchor: str = "start", face: str = "text"
 ) -> str:
-    """A line of text as one outlined SVG path, `y` on the baseline.
+    """A line of text as one outlined SVG path, `y` on the baseline, in Geist unless `face` says otherwise.
 
     Outlined rather than set as `<text>`, because these surfaces are rasterised
     by whatever renderer is to hand, and a `<text>` element that cannot find
-    Space Grotesk silently falls back to a face that is not this brand.
+    the face silently falls back to one that is not this brand.
     """
-    width = text_width(s, size, weight)
+    width = text_width(s, size, weight, face)
     if anchor == "middle":
         x -= width / 2
     elif anchor == "end":
         x -= width
-    return " ".join(str(r["path"]) for r in set_line(s, x, y, size, weight) if r["path"])
+    return " ".join(str(r["path"]) for r in set_line(s, x, y, size, weight, face=face) if r["path"])
 
 
 # --------------------------------------------------------------------------
