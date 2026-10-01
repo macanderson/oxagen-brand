@@ -23,12 +23,12 @@ export type ToneBadgeTone =
   | "quiet";
 
 const TONE: Record<ToneBadgeTone, string> = {
-  allowed: "border-success/42 bg-success/11 text-success",
-  approval: "border-info/42 bg-info/11 text-info",
-  denied: "border-warning/42 bg-warning/11 text-warning",
-  proven: "border-proven/42 bg-proven/11 text-proven",
+  allowed: "border-success/42 bg-success/11 text-success-ink",
+  approval: "border-info/42 bg-info/11 text-info-ink",
+  denied: "border-warning/42 bg-warning/11 text-warning-ink",
+  proven: "border-proven/42 bg-proven/11 text-proven-ink",
   failed: "border-error/42 bg-error/11 text-error-ink",
-  critical: "border-critical/42 bg-critical/12 text-critical",
+  critical: "border-critical/42 bg-critical/12 text-critical-ink",
   quiet: "border-border bg-hl text-muted-foreground",
 };
 

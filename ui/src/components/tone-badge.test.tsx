@@ -19,7 +19,7 @@ describe("Badge", () => {
     );
     const pill = screen.getByText("live");
     expect(pill).toHaveAttribute("data-status", "live");
-    expect(pill.className).toContain("text-success");
+    expect(pill.className).toContain("text-success-ink");
     expect(pill.className).toContain("border-success/42");
     expect(pill.className).toContain("bg-success/11");
     expect(pill.querySelector("[aria-hidden]")).not.toBeNull();

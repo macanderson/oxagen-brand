@@ -38,12 +38,12 @@ const badgeVariants = cva(
         error: "border-transparent bg-error text-error-foreground",
         // Soft status variants: the mockup's `.b-<state>`, a status ink on a
         // 42% border and an 11% wash. ToneBadge draws the same pills by state.
-        "info-soft": "border-info/42 bg-info/11 text-info",
-        "success-soft": "border-success/42 bg-success/11 text-success",
-        "warning-soft": "border-warning/42 bg-warning/11 text-warning",
+        "info-soft": "border-info/42 bg-info/11 text-info-ink",
+        "success-soft": "border-success/42 bg-success/11 text-success-ink",
+        "warning-soft": "border-warning/42 bg-warning/11 text-warning-ink",
         "error-soft": "border-error/42 bg-error/11 text-error-ink",
-        "proven-soft": "border-proven/42 bg-proven/11 text-proven",
-        "critical-soft": "border-critical/42 bg-critical/12 text-critical",
+        "proven-soft": "border-proven/42 bg-proven/11 text-proven-ink",
+        "critical-soft": "border-critical/42 bg-critical/12 text-critical-ink",
         // `.b-q`: the quiet neutral, muted ink on the wash.
         quiet: "border-border bg-hl text-muted-foreground",
         // `.chip`: a neutral tag, body ink at regular weight.

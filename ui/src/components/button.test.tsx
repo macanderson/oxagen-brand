@@ -94,7 +94,7 @@ describe("buttonVariants", () => {
 
   it("applies destructive-outline variant classes", () => {
     const cls = buttonVariants({ variant: "destructive-outline" });
-    expect(cls).toContain("text-error");
+    expect(cls).toContain("text-error-ink");
     expect(cls).toContain("border-error/50");
   });
 

@@ -44,14 +44,14 @@ describe("Stat render", () => {
   it("up trend derives a positive (success) delta with an arrow", () => {
     render(<Stat label="Runs" value="120" delta="+12%" trend="up" />);
     const delta = screen.getByText("+12%").closest("span");
-    expect(delta?.className).toContain("text-success");
+    expect(delta?.className).toContain("text-success-ink");
     expect(delta?.querySelector("svg")).not.toBeNull();
   });
 
   it("down trend derives a negative (error) delta", () => {
     render(<Stat label="Runs" value="90" delta="-8%" trend="down" />);
     expect(screen.getByText("-8%").closest("span")?.className).toContain(
-      "text-error",
+      "text-error-ink",
     );
   });
 
@@ -73,13 +73,13 @@ describe("Stat render", () => {
       />,
     );
     expect(screen.getByText("+40%").closest("span")?.className).toContain(
-      "text-error",
+      "text-error-ink",
     );
   });
 
   it("tone tints the value itself", () => {
     render(<Stat label="Open findings" value="3" tone="warning" />);
-    expect(screen.getByText("3").className).toContain("text-warning");
+    expect(screen.getByText("3").className).toContain("text-warning-ink");
   });
 
   it("hides the icon from assistive tech", () => {
