@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Brand change guide</title>
-<meta name="description" content="How to change the colour, the typefaces, and the app icons of Oxagen and Stella from oxagen-brand, and which repos receive the change.">
+<meta name="description" content="How to change the colour, the typefaces, and the app icons of Oxagen and Stella from oxageninc/brand, and which repos receive the change.">
 <link rel="icon" href="logo/svg/oxagen-favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="tokens/house-tokens.css">
 <link rel="stylesheet" href="tokens/house-fonts.css">
@@ -175,8 +175,8 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
     <img class="mark-light" src="logo/svg/stella-wordmark-light.svg" alt="stella">
   </div>
   <h1>Brand change guide</h1>
-  <p class="lede">Every colour, typeface, and icon on an Oxagen or Stella page starts in the <code>oxagen-brand</code> repo. This guide shows how to change each one, how the change reaches each site, and what still stops it from getting there on its own.</p>
-  <p class="meta">Checked on 2026-09-30 against <code>oxagen-brand</code> at <code>9a14177</code>. The step-by-step reference for agents is <a href="https://github.com/macanderson/oxagen-brand/blob/main/CHANGING.md">CHANGING.md</a>.</p>
+  <p class="lede">Every colour, typeface, and icon on an Oxagen or Stella page starts in the <code>oxageninc/brand</code> repo. This guide shows how to change each one, how the change reaches each site, and what still stops it from getting there on its own.</p>
+  <p class="meta">Checked on 2026-10-01 against <code>oxageninc/brand</code> at <code>3ab3085</code>. The step-by-step reference for agents is <a href="https://github.com/oxageninc/brand/blob/main/CHANGING.md">CHANGING.md</a>.</p>
   <nav class="toc" aria-label="Sections">
     <ul>
       <li><a href="#status">Status</a></li>
@@ -195,7 +195,7 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
 
 <section id="status" aria-labelledby="status-h">
   <h2 id="status-h">Status</h2>
-  <p class="sub">The kit, its checks, and its Storybook work. No change has reached another repo yet.</p>
+  <p class="sub">The kit, its checks, and its Storybook work. No change has reached another repo through the fan-out yet.</p>
   <div class="legend" aria-hidden="true">
     <span><span class="chip works">Works</span>double border</span>
     <span><span class="chip pending">Pending</span>dashed border</span>
@@ -206,44 +206,39 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
     <div class="row"><span class="chip works">Works</span><span class="name">Kit checks</span><p>Every pull request runs the generator checks, the typecheck, the tests, the Storybook build, and the bundle build.</p></div>
     <div class="row"><span class="chip works">Works</span><span class="name">brand.oxagen.cloud</span><p>Each merge to <code>main</code> deploys the playbook, the Storybook, and this guide once the checks pass.</p></div>
     <div class="row"><span class="chip works">Works</span><span class="name">Agents</span><p>The <code>oxagen-branding</code> skill reads the kit from <code>main</code> on every run, so an agent sees a change as soon as it merges.</p></div>
-    <div class="row"><span class="chip broken">Broken</span><span class="name">Sync to other repos</span><p>The <a href="https://github.com/macanderson/oxagen-brand/actions/workflows/fan-out.yml">fan-out</a> has failed on every merge, because the <code>BRAND_SYNC_TOKEN</code> secret does not exist. <a href="#setup">One-time setup</a> fixes it.</p></div>
-    <div class="row"><span class="chip pending">Pending</span><span class="name">Sync scripts</span><p>Two of the five repos have a sync script the fan-out can run: <code>oxagen</code> and <code>stella</code>. The other three are tracked under <a href="https://github.com/macanderson/oxagen-brand/issues/28">#28</a>.</p></div>
-    <div class="row"><span class="chip pending">Pending</span><span class="name">Conformance</span><p>The daily check finds 2 of 12 repos and sites matching the kit. Its live report is <a href="https://github.com/macanderson/oxagen-brand/issues/33">#33</a>.</p></div>
+    <div class="row"><span class="chip broken">Broken</span><span class="name">Sync to other repos</span><p>The <a href="https://github.com/oxageninc/brand/actions/workflows/fan-out.yml">fan-out</a> has failed on every merge, because the <code>BRAND_SYNC_TOKEN</code> secret has never been set. Repository secrets moved with the repo, so the secret goes in <code>oxageninc/brand</code>. <a href="#setup">One-time setup</a> fixes it.</p></div>
+    <div class="row"><span class="chip pending">Pending</span><span class="name">Sync scripts</span><p>Three of the five repos have a sync script the fan-out can run: <code>oxageninc/product</code>, <code>macanderson/stella</code>, and <code>oxageninc/gtm</code>. <code>oxageninc/survey</code> has one in a draft pull request, and <code>oxageninc/roadmap</code> has none. <a href="https://github.com/oxageninc/brand/issues/28">#28</a> tracks both.</p></div>
+    <div class="row"><span class="chip pending">Pending</span><span class="name">Conformance</span><p>The daily check found 4 of 14 repos and sites matching the kit on 2026-10-01. Four of the five repos are private now, so the check cannot read them until <code>BRAND_SYNC_TOKEN</code> is set. Its live report is <a href="https://github.com/oxageninc/brand/issues/33">#33</a>.</p></div>
   </div>
 </section>
 
 <section id="setup" aria-labelledby="setup-h">
   <h2 id="setup-h">One-time setup</h2>
-  <p class="sub">Only you can take these four steps, because each one needs your GitHub account. After them, every merge to the kit opens a sync pull request in each repo.</p>
+  <p class="sub">Only you can take these three steps, because each one needs your GitHub account. After them, every merge to the kit opens a sync pull request in each repo, and the daily conformance check reads the private repos.</p>
   <ol class="steps">
     <li>
       <strong>Create the sync token.</strong>
-      <p>Open <a href="https://github.com/settings/personal-access-tokens/new">github.com/settings/personal-access-tokens/new</a> and fill it in like this:</p>
+      <p>The token has to write to repos under two owners: the four private repos in <code>oxageninc</code>, and <code>macanderson/stella</code>. A fine-grained token has one resource owner, so it cannot cover both. Use a classic token. Open <a href="https://github.com/settings/tokens/new">github.com/settings/tokens/new</a> and fill it in like this:</p>
       <ul>
-        <li>Token name: <code>oxagen-brand fan-out</code>. Resource owner: <code>macanderson</code>.</li>
-        <li>Repository access: only select repositories. Pick <code>oxagen</code>, <code>stella</code>, <code>oxagen-roadmap</code>, <code>oxagen-gtm</code>, and <code>oxagen-survey</code>.</li>
-        <li>Permissions: Contents, read and write. Pull requests, read and write. GitHub adds Metadata, read only, by itself.</li>
+        <li>Note: <code>oxageninc/brand fan-out</code>.</li>
+        <li>Scopes: <code>repo</code> and <code>workflow</code>. <code>workflow</code> lets a sync pull request change a file under <code>.github/workflows/</code>.</li>
         <li>Expiration: your choice. When it lapses, the fan-out fails with an error that names the secret.</li>
+        <li>If the <code>oxageninc</code> organization blocks classic tokens, allow them in its settings first.</li>
       </ul>
+      <p>The other way is to move <code>stella</code> into <code>oxageninc</code>. Then a fine-grained token owned by <code>oxageninc</code>, with Contents and Pull requests set to read and write on the five repos, does the same job.</p>
     </li>
     <li>
       <strong>Save it in the kit.</strong>
-      <p>Run this, then paste the token when it asks.</p>
-      <div class="copybox"><pre id="cmd-secret">gh secret set BRAND_SYNC_TOKEN -R macanderson/oxagen-brand</pre><button type="button" data-copy="cmd-secret">Copy</button></div>
-    </li>
-    <li>
-      <strong>Let sync pull requests merge themselves.</strong>
-      <p><code>oxagen</code> and <code>stella</code> already allow auto-merge. These three repos do not.</p>
-      <div class="copybox"><pre id="cmd-automerge">gh repo edit macanderson/oxagen-roadmap --enable-auto-merge
-gh repo edit macanderson/oxagen-gtm --enable-auto-merge
-gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="button" data-copy="cmd-automerge">Copy</button></div>
+      <p>Run this, then paste the token when it asks. The fan-out writes with it, and the daily conformance check reads the private repos with it.</p>
+      <div class="copybox"><pre id="cmd-secret">gh secret set BRAND_SYNC_TOKEN -R oxageninc/brand</pre><button type="button" data-copy="cmd-secret">Copy</button></div>
     </li>
     <li>
       <strong>Send the current kit to every repo.</strong>
-      <p>It runs each repo's sync against the kit. Expect sync pull requests in <code>oxagen</code> and <code>stella</code>, and failed jobs for the other three repos until their sync scripts land.</p>
-      <div class="copybox"><pre id="cmd-fanout">gh workflow run fan-out.yml -R macanderson/oxagen-brand</pre><button type="button" data-copy="cmd-fanout">Copy</button></div>
+      <p>It runs each repo's sync against the kit. Expect sync pull requests in <code>oxageninc/product</code>, <code>macanderson/stella</code>, and <code>oxageninc/gtm</code>, and failed jobs for <code>oxageninc/roadmap</code> and <code>oxageninc/survey</code> until their sync scripts land.</p>
+      <div class="copybox"><pre id="cmd-fanout">gh workflow run fan-out.yml -R oxageninc/brand</pre><button type="button" data-copy="cmd-fanout">Copy</button></div>
     </li>
   </ol>
+  <p class="note"><strong>Auto-merge.</strong> All five repos let sync pull requests merge themselves, as checked on 2026-10-01. For a repo added later that does not, run <code>gh repo edit oxageninc/&lt;repo&gt; --enable-auto-merge</code>.</p>
 </section>
 
 <section id="flow" aria-labelledby="flow-h">
@@ -251,7 +246,7 @@ gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="bu
   <p class="sub">A change goes through three stages. The dashed step is the one that does not run yet.</p>
   <div class="flow" role="list">
     <div class="lane" role="listitem">
-      <h3>In oxagen-brand</h3>
+      <h3>In the kit</h3>
       <div class="step"><b>Edit the source file</b><small>A colour in <code>build/color.py</code>, a face in <code>build/typeset.py</code>, an icon in <code>build/marks.py</code>.</small></div>
       <div class="step"><b>Run its generator</b><small><code>build/build.py</code> rewrites the tokens and every mark, icon, and image that uses them.</small></div>
       <div class="step"><b>Open a pull request</b><small>CI checks contrast, fonts, marks, messages, the skill, and the component kit.</small></div>
@@ -267,7 +262,7 @@ gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="bu
       <h3>In each repo</h3>
       <div class="step"><b>The repo's checks run</b><small>Its drift check fails whenever its copy of the kit falls behind.</small></div>
       <div class="step"><b>The sync pull request merges</b><small>On its own where the repo allows auto-merge.</small></div>
-      <div class="step"><b>The repo deploys its sites</b><small>On merge, except <code>oxagen-gtm</code> and <code>oxagen-survey</code>, which deploy by hand with <code>vercel deploy --prod</code>.</small></div>
+      <div class="step"><b>The repo deploys its sites</b><small>On merge. <code>oxageninc/gtm</code> and <code>oxageninc/survey</code> deploy from <code>main</code> through Vercel's Git integration, so a merged sync pull request goes live with no deploy step.</small></div>
     </div>
   </div>
   <p class="note"><strong>The short path.</strong> You don't need to run anything yourself. Give an agent one of the prompts below. It edits the kit, runs the generators, and opens the pull request. You review the previews and merge.</p>
@@ -282,7 +277,7 @@ gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="bu
     <li><strong>Update the hand copies.</strong><p>A few copies sit outside the generators: the gold ramp in <code>ui/src/styles/globals.css</code>, <code>BRAND_GOLD</code> and its test, the skill's <code>system.md</code>, the install prompt, and <code>sdlc/</code>. <code>CHANGING.md</code> lists each one.</p></li>
     <li><strong>Open the pull request.</strong><p>The check fails if any text colour drops below 4.5:1 contrast on its ground.</p></li>
   </ol>
-  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-colour">In macanderson/oxagen-brand, change the house gold to #______. Follow CHANGING.md, "Change a colour token": edit build/color.py, run the generators, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the new 512px icons and the light and dark wordmarks in the PR body so I can compare them.</pre><button type="button" data-copy="prompt-colour">Copy</button></div>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-colour">In oxageninc/brand, change the house gold to #______. Follow CHANGING.md, "Change a colour token": edit build/color.py, run the generators, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the new 512px icons and the light and dark wordmarks in the PR body so I can compare them.</pre><button type="button" data-copy="prompt-colour">Copy</button></div>
 </section>
 
 <section id="font" aria-labelledby="font-h">
@@ -298,14 +293,14 @@ gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="bu
       </tbody>
     </table>
   </div>
-  <p class="note"><strong>The kit lags one rule.</strong> You moved every heading to Geist on 2026-09-29. The kit's tokens still set h1 to h3 in Space Grotesk until <a href="https://github.com/macanderson/oxagen-brand/issues/27">#27</a> lands.</p>
+  <p class="note"><strong>The kit lags one rule.</strong> You moved every heading to Geist on 2026-09-29. The kit's tokens still set h1 to h3 in Space Grotesk until <a href="https://github.com/oxageninc/brand/issues/27">#27</a> lands.</p>
   <ol class="steps">
     <li><strong>Check the licence.</strong><p>The repo is public, so a house face must allow redistribution in a public repo and embedding on the web. A face licensed per seat or per domain, such as Aeonik, can't be a house face, because committing its files publishes them.</p></li>
     <li><strong>Add the files.</strong><p>Put the <code>.woff2</code> files and the licence under <code>fonts/</code>.</p></li>
     <li><strong>Point the role at the face.</strong><p>Edit the <code>Face</code> in <code>build/typeset.py</code>, then run <code>build/build.py</code>. It rewrites <code>house-fonts.css</code>, <code>house-tailwind.css</code>, and <code>next-fonts.ts</code>, which every site imports.</p></li>
     <li><strong>For the wordmark face, change the font file.</strong><p>The wordmarks and Stella's icon are outlined from <code>FONT</code> in <code>build/glyphs.py</code>, not from <code>Face</code>. A new wordmark face redraws both logos and Stella's icon, so review it as a logo change.</p></li>
   </ol>
-  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-font">In macanderson/oxagen-brand, make ______ the house face for ______ (headings and text, code, or the wordmarks). Check its licence allows a public repo and web embedding first, and stop if it doesn't. Follow CHANGING.md, "Change a font family", and open a pull request with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-font">Copy</button></div>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-font">In oxageninc/brand, make ______ the house face for ______ (headings and text, code, or the wordmarks). Check its licence allows a public repo and web embedding first, and stop if it doesn't. Follow CHANGING.md, "Change a font family", and open a pull request with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-font">Copy</button></div>
 </section>
 
 <section id="icon" aria-labelledby="icon-h">
@@ -344,10 +339,10 @@ gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="bu
     <li><strong>Start from an SVG.</strong><p>Draw the new icon on a square artboard with its outline and its accent as separate shapes. Every tile paints the outline in the ground's ink and the accent in gold, the way the hive's two lit cells are gold.</p></li>
     <li><strong>Have an agent port it.</strong><p>It replaces the hive drawing in <code>build/marks.py</code>, runs the whole build, and updates the copies no generator writes. <code>CHANGING.md</code> lists them under "Change an app icon".</p></li>
     <li><strong>Review it by eye.</strong><p>No check compares the icon with a reference, so look at the 16px favicon, the 512px icon, and the maskable icon in the pull request before you merge.</p></li>
-    <li><strong>Cut the desktop app icon.</strong><p>The Oxagen desktop app keeps its own icon set. After the sync pull request merges in <code>oxagen</code>, run <code>pnpm --filter @oxagen/desktop icons</code> there and commit <code>apps/desktop/src-tauri/icons/</code>. <a href="https://github.com/macanderson/oxagen/issues/4892">oxagen#4892</a> makes this step automatic.</p></li>
+    <li><strong>Cut the desktop app icon.</strong><p>The Oxagen desktop app keeps its own icon set. The cut records the avatar's hash in <code>apps/desktop/src-tauri/icons/source.sha256</code>, and the brand check in <code>oxageninc/product</code> fails until the icons follow a new avatar. So the sync pull request there stays red until you run <code>pnpm --filter @oxagen/desktop icons</code> on its branch and commit <code>apps/desktop/src-tauri/icons/</code>. The stamp and the check arrive with <a href="https://github.com/oxageninc/product/pull/4906">product#4906</a>.</p></li>
   </ol>
   <p class="note"><strong>Native app icons.</strong> The kit draws web icons only: PNG, ICO, SVG, and web manifests. It makes no iOS or Android icon set. Neither brand has a phone app today, and the desktop app cuts its own set from the kit's avatar.</p>
-  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-icon">In macanderson/oxagen-brand, replace the Oxagen app icon with the attached SVG. Follow CHANGING.md, "Change an app icon": port the shape into build/marks.py with the outline in ink and the accent in gold, run the full build, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the 16px favicon, the 512px icon in light and dark, and the maskable icon in the PR body.</pre><button type="button" data-copy="prompt-icon">Copy</button></div>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-icon">In oxageninc/brand, replace the Oxagen app icon with the attached SVG. Follow CHANGING.md, "Change an app icon": port the shape into build/marks.py with the outline in ink and the accent in gold, run the full build, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the 16px favicon, the 512px icon in light and dark, and the maskable icon in the PR body.</pre><button type="button" data-copy="prompt-icon">Copy</button></div>
 </section>
 
 <section id="brands" aria-labelledby="brands-h">
@@ -372,24 +367,25 @@ gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="bu
 
 <section id="repos" aria-labelledby="repos-h">
   <h2 id="repos-h">Repos and sites</h2>
-  <p class="sub">Every repo named oxagen, stella, or starting with oxagen- or stella-, and what receives a brand change today.</p>
+  <p class="sub">Every repo in <code>oxageninc</code>, and every oxagen- or stella- repo in <code>macanderson</code>, with what receives a brand change today.</p>
   <div class="table">
     <table class="repos">
       <thead><tr><th>Repo</th><th>Sites</th><th>Brand sync</th><th>State</th><th>Tracking</th></tr></thead>
       <tbody>
-        <tr><td>oxagen-brand</td><td>brand.oxagen.cloud, sdlc.oxagen.sh</td><td>The source</td><td><span class="chip works">Works</span></td><td><a href="https://github.com/macanderson/oxagen-brand/issues/37">#37</a></td></tr>
-        <tr><td>oxagen</td><td>oxagen.sh, app.oxagen.sh, docs.oxagen.sh, the desktop app</td><td>Sync script, and a check in <code>pipeline.yml</code> that compares image sizes only</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/oxagen/issues/4804">oxagen#4804</a>, <a href="https://github.com/macanderson/oxagen/issues/4892">oxagen#4892</a></td></tr>
-        <tr><td>stella</td><td>stella.oxagen.sh, the Observatory dashboard</td><td>Sync script for marks and icons. Its check skips in CI, and the palette and Observatory marks are hand copies.</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/stella/issues/6611">stella#6611</a>, <a href="https://github.com/macanderson/stella/issues/6612">stella#6612</a>. Deploys fail: <a href="https://github.com/macanderson/stella/issues/6478">stella#6478</a></td></tr>
-        <tr><td>oxagen-roadmap</td><td>roadmap.oxagen.cloud, GitHub Pages</td><td>No sync script. A hand copy from kit commit <code>3920d49</code>.</td><td><span class="chip broken">Broken</span></td><td><a href="https://github.com/macanderson/oxagen-roadmap/issues/271">oxagen-roadmap#271</a></td></tr>
-        <tr><td>oxagen-gtm</td><td>gtm.oxagen.cloud</td><td>Script exists but ignores the kit path the fan-out passes</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/oxagen-gtm/issues/7">oxagen-gtm#7</a>, PR <a href="https://github.com/macanderson/oxagen-gtm/pull/9">#9</a></td></tr>
-        <tr><td>oxagen-survey</td><td>survey.oxagen.cloud</td><td>Script and drift check in an open pull request</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/oxagen-survey/issues/6">oxagen-survey#6</a>, PR <a href="https://github.com/macanderson/oxagen-survey/pull/7">#7</a></td></tr>
-        <tr><td>stella-website</td><td>None. Its Vercel deploy is disabled.</td><td>None. Carries an old blue palette and retired marks.</td><td><span class="chip pending">Pending</span></td><td>Your call: archive it, or bring it under the kit</td></tr>
-        <tr><td>oxagen-arp</td><td>None yet</td><td>None. Carries brand colours in <code>apps/web</code>.</td><td><span class="chip pending">Pending</span></td><td>Add it to <code>consumers.json</code> before it publishes</td></tr>
-        <tr><td>oxagen-cookbook, oxagen-evals, oxagen-wrapped-agents, oxagen-scratch, stella-examples, stella-digital-twin, stella-engine-proof, stella-proving-ground</td><td>None</td><td>No web pages and no brand files</td><td><span class="chip works">Works</span></td><td>Nothing to sync</td></tr>
+        <tr><td>oxageninc/brand</td><td>brand.oxagen.cloud, sdlc.oxagen.sh</td><td>The source</td><td><span class="chip works">Works</span></td><td><a href="https://github.com/oxageninc/brand/issues/28">#28</a></td></tr>
+        <tr><td>oxageninc/product</td><td>oxagen.sh, app.oxagen.sh, docs.oxagen.sh, the desktop app</td><td>Sync script. The byte-for-byte check and the desktop icon stamp are in an open pull request.</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/oxageninc/product/pull/4906">product#4906</a>, <a href="https://github.com/oxageninc/product/issues/4892">product#4892</a></td></tr>
+        <tr><td>macanderson/stella</td><td>stella.oxagen.sh, the Observatory dashboard</td><td>Sync script for marks and icons. Its check skips in CI, and the palette and Observatory marks are hand copies.</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/stella/issues/6611">stella#6611</a>, <a href="https://github.com/macanderson/stella/issues/6612">stella#6612</a>. Deploys fail: <a href="https://github.com/macanderson/stella/issues/6478">stella#6478</a></td></tr>
+        <tr><td>oxageninc/roadmap</td><td>roadmap.oxagen.cloud, GitHub Pages</td><td>No sync script. A hand copy from kit commit <code>3920d49</code>.</td><td><span class="chip broken">Broken</span></td><td><a href="https://github.com/oxageninc/roadmap/issues/271">roadmap#271</a></td></tr>
+        <tr><td>oxageninc/gtm</td><td>gtm.oxagen.cloud, deployed from <code>main</code> by Vercel</td><td>Sync script and drift check, merged on 2026-10-01</td><td><span class="chip works">Works</span></td><td><a href="https://github.com/oxageninc/gtm/pull/9">gtm#9</a></td></tr>
+        <tr><td>oxageninc/survey</td><td>survey.oxagen.cloud, deployed from <code>main</code> by Vercel</td><td>Script and drift check in a draft pull request</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/oxageninc/survey/issues/6">survey#6</a>, PR <a href="https://github.com/oxageninc/survey/pull/7">#7</a></td></tr>
+        <tr><td>oxageninc/oxageninc.github.io</td><td>oxageninc.github.io</td><td>None. Serves the retired OxagenAI page with a blue palette and Inter.</td><td><span class="chip broken">Broken</span></td><td>Your call: take the page down, or bring it under the kit</td></tr>
+        <tr><td>oxageninc/stella-lang</td><td>None. GitHub Pages is off.</td><td>None. Carries its own palette and Stella marks in <code>brand/</code>.</td><td><span class="chip pending">Pending</span></td><td>Add it to <code>consumers.json</code> before it publishes</td></tr>
+        <tr><td>macanderson/stella-website</td><td>None</td><td>None</td><td>Archived on 2026-10-01</td><td>Nothing to sync</td></tr>
+        <tr><td>oxageninc/.github, macanderson/oxagen-cookbook, macanderson/oxagen-evals, macanderson/oxagen-wrapped-agents, macanderson/oxagen-scratch, macanderson/stella-examples, macanderson/stella-digital-twin, macanderson/stella-engine-proof, macanderson/stella-proving-ground</td><td>None</td><td>No web pages and no brand files</td><td><span class="chip works">Works</span></td><td>Nothing to sync</td></tr>
       </tbody>
     </table>
   </div>
-  <p><code>oxagen-aws-infra</code> is archived and left out.</p>
+  <p><code>oxagen-arp</code> was deleted. <code>oxagen-aws-infra</code> moved to <code>ox-product/aws-infra</code> and is archived. Both are left out.</p>
 </section>
 
 <section id="new-site" aria-labelledby="new-site-h">
@@ -401,23 +397,23 @@ gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="bu
     <li><strong>A drift check.</strong><p><code>.github/workflows/brand-drift.yml</code> checks out the kit's <code>main</code> and runs the sync with <code>--check</code>.</p></li>
     <li><strong>An entry in <code>consumers.json</code>.</strong><p>The repo, its sync command, and its live sites. The fan-out and the daily conformance check both read this file.</p></li>
   </ol>
-  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-site">Bring macanderson/______ under the house brand. Follow oxagen-brand's CHANGING.md, "How a change reaches each surface": add a sync script that takes --brand and --check, install the skill stub, add .github/workflows/brand-drift.yml, and add the repo and its sites to oxagen-brand's consumers.json. Open a pull request in each repo with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-site">Copy</button></div>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-site">Bring oxageninc/______ under the house brand. Follow CHANGING.md in oxageninc/brand, "How a change reaches each surface": add a sync script that takes --brand and --check, install the skill stub, add .github/workflows/brand-drift.yml, and add the repo and its sites to consumers.json in oxageninc/brand. Open a pull request in each repo with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-site">Copy</button></div>
 </section>
 
 <section id="reference" aria-labelledby="reference-h">
   <h2 id="reference-h">Reference</h2>
   <ul>
-    <li><a href="https://github.com/macanderson/oxagen-brand/blob/main/CHANGING.md">CHANGING.md</a>: every step, every hand copy, and every generator command.</li>
+    <li><a href="https://github.com/oxageninc/brand/blob/main/CHANGING.md">CHANGING.md</a>: every step, every hand copy, and every generator command.</li>
     <li><a href="https://brand.oxagen.cloud/playbook">House playbook</a>: the palette, the type, the marks, and the rules.</li>
     <li><a href="https://brand.oxagen.cloud/storybook/">Storybook</a>: every component in light and dark.</li>
-    <li><a href="https://github.com/macanderson/oxagen-brand/issues/33">Conformance report</a>: which repos and sites differ from the kit today.</li>
-    <li><a href="https://github.com/macanderson/oxagen-brand/actions/workflows/fan-out.yml">Fan-out runs</a>: the sync pull request each merge opened.</li>
-    <li><a href="https://github.com/macanderson/oxagen-brand/blob/main/consumers.json">consumers.json</a>: the repos and sites the fan-out and conformance cover.</li>
+    <li><a href="https://github.com/oxageninc/brand/issues/33">Conformance report</a>: which repos and sites differ from the kit today.</li>
+    <li><a href="https://github.com/oxageninc/brand/actions/workflows/fan-out.yml">Fan-out runs</a>: the sync pull request each merge opened.</li>
+    <li><a href="https://github.com/oxageninc/brand/blob/main/consumers.json">consumers.json</a>: the repos and sites the fan-out and conformance cover.</li>
   </ul>
 </section>
 
 <footer>
-  <p>Written by hand in <code>brand-guide.html</code> at the root of oxagen-brand. Update it when <code>CHANGING.md</code> or <code>consumers.json</code> changes.</p>
+  <p>Written by hand in <code>brand-guide.html</code> at the root of <code>oxageninc/brand</code>. Update it when <code>CHANGING.md</code> or <code>consumers.json</code> changes.</p>
 </footer>
 
 </div>

@@ -59,7 +59,10 @@ Both icons are drawn by code in `build/`. A new icon is a change to that code, n
    - `sdlc/public/favicon.svg`, `favicon-32.png`, and `apple-touch-icon.png`.
 6. Keep `data-mark="hive"` on Oxagen's SVG marks, or change `LIVE_MARKS` in `build/conformance.py` in the same PR. Conformance finds the live icon on each surface by that attribute.
 7. Check the result by eye. No check pins the icon's geometry: `build/reference/oxagen-logomark-color.svg` is a reference no code reads.
-8. **Native app icons.** The kit draws web icons only: PNG, ICO, SVG, and web manifests. It makes no `.icns`, Windows app icon set, iOS asset catalogue, or Android adaptive icon. The Oxagen desktop app cuts its Tauri icons from the synced `oxagen-avatar-light.svg` with `pnpm --filter @oxagen/desktop icons` in the oxagen repo, and commits `apps/desktop/src-tauri/icons/` by hand. The oxagen sync does not run that step today (oxagen#4892).
+8. **Native app icons.** The kit draws web icons only: PNG, ICO, SVG, and web manifests. It makes no `.icns`, Windows app icon set, iOS asset catalogue, or Android adaptive icon. The Oxagen desktop app cuts its Tauri icons from the synced `oxagen-avatar-light.svg` with `pnpm --filter @oxagen/desktop icons` in `oxageninc/product`. The cut writes `apps/desktop/src-tauri/icons/source.sha256`: the sha256 of the avatar it cut from, and of every icon it wrote.
+   - The product repo's brand check, `node tools/scripts/sync-brand-assets.mjs --check`, runs in its `brand-drift.yml` and in its required `checks` job. It fails while the stamp does not match the synced avatar or the committed icons.
+   - A kit icon change therefore keeps the fan-out's sync PR in `oxageninc/product` red until someone runs the cut on that PR's branch and commits `apps/desktop/src-tauri/icons/`. The fan-out cannot run the cut, because it needs `rsvg-convert` and the Tauri CLI.
+   - The stamp and the check arrive with oxageninc/product#4906 (oxageninc/product#4892).
 
 ## Change a line
 
@@ -79,18 +82,20 @@ Edit `ui/src/components/`, and give each state it draws a story. Reskin through 
 
 **Frontends** each copy the files they use through their own sync script. `consumers.json` lists every repo, its sync command, and its live surfaces. After a push to `main` passes every check, the `fan-out` workflow runs each repo's sync against that commit, installs the current skill stub, and opens a PR in the repo when anything changed. The PR carries the `agent-monitored-pr` label and merges on its own once the repo's required checks pass, where the repo allows auto-merge. Each repo's `brand-drift.yml` also fails its CI whenever its copy has fallen behind `main`, so a missed sync cannot pass unnoticed.
 
-The `fan-out` workflow needs the `BRAND_SYNC_TOKEN` secret, a fine-grained token with contents and pull-requests write on every repo in `consumers.json`. Until it exists, every run fails at its first step and no frontend receives a change. `brand-guide.html` lists which repos have a working sync script and drift check today.
+The `fan-out` workflow needs the `BRAND_SYNC_TOKEN` secret in `oxageninc/brand`: a classic token with the `repo` and `workflow` scopes. The consumers sit under two owners, `oxageninc` and `macanderson` (for `stella`), and a fine-grained token has one resource owner, so it cannot cover both. Moving `stella` into `oxageninc` would let a fine-grained token do the job. The `conformance` workflow reads the private consumers with the same secret. Until it exists, every fan-out run fails at its first step and no frontend receives a change. `brand-guide.html` lists which repos have a working sync script and drift check today.
 
 | Surface | Repo | Deploy |
 |---|---|---|
-| oxagen.sh, app.oxagen.sh, docs.oxagen.sh | `oxagen` | `pipeline.yml` |
-| stella.oxagen.sh | `stella` | `docs.yml` |
-| roadmap.oxagen.cloud | `oxagen-roadmap` | `deploy-production.yml` |
-| gtm.oxagen.cloud | `oxagen-gtm` | by hand: `vercel deploy --prod` |
-| survey.oxagen.cloud | `oxagen-survey` | by hand: `vercel deploy --prod` |
+| oxagen.sh, app.oxagen.sh, docs.oxagen.sh | `oxageninc/product` | `pipeline.yml` |
+| stella.oxagen.sh | `macanderson/stella` | `docs.yml` |
+| roadmap.oxagen.cloud | `oxageninc/roadmap` | `deploy-production.yml` |
+| gtm.oxagen.cloud | `oxageninc/gtm` | Vercel's Git integration, on every push to `main` |
+| survey.oxagen.cloud | `oxageninc/survey` | Vercel's Git integration, on every push to `main` |
 | brand.oxagen.cloud | this repo | `ui.yml` on every push to `main` |
 | sdlc.oxagen.sh | this repo, `sdlc/` | Vercel project `oxagen-sdlc`, on a push to `main` that changes `sdlc/` |
 
+A merged sync PR ships through the deploy in this table. In `oxageninc/gtm` and `oxageninc/survey`, Vercel builds production from each push to `main`, with no `vercel deploy` step, so review a sync PR there as a release.
+
 To add a frontend, give its repo a sync script that takes `--brand <path>` and `--check`, commit the stub with `skills/install.sh --project <repo>`, add `.github/workflows/brand-drift.yml` (it checks out this repo's `main` and runs the sync with `--check`), and add the repo and its surfaces to `consumers.json`.
 
-**Conformance.** The `conformance` workflow runs `build/conformance.py` every day and on demand. It checks each repo's stub and drift workflow, and each live surface's icons, golds, faces, retired lines, dashes, and exclamation points. When anything differs, it keeps one open issue labelled `brand-conformance` with the report, and it closes that issue when everything conforms again. Run it by hand with `python3 build/conformance.py`.
+**Conformance.** The `conformance` workflow runs `build/conformance.py` every day and on demand. It checks each repo's stub and drift workflow, and each live surface's icons, golds, faces, retired lines, dashes, and exclamation points. When anything differs, it keeps one open issue labelled `brand-conformance` with the report, and it closes that issue when everything conforms again. It reads the private consumers through the GitHub API with `BRAND_SYNC_TOKEN`, and reports a repo it cannot read as a missing token. Run it by hand with a token that can read them: `GITHUB_TOKEN=$(gh auth token) python3 build/conformance.py`.

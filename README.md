@@ -144,9 +144,11 @@ scales as `text-m-h1` to `text-m-micro` and `text-a-h1` to `text-a-micro`.
 `next-fonts.ts` loads its fonts from `../fonts/`, so vendor `tokens/` and
 `fonts/` side by side.
 
-The oxagen monorepo vendors these files with
+The oxagen monorepo, `oxageninc/product`, vendors these files with
 `tools/scripts/sync-brand-assets.mjs`, and CI runs it with `--check`, so a
-product that has fallen behind the kit fails its build.
+product that has fallen behind the kit fails its build. `consumers.json` lists
+every repo that syncs the kit, and `CHANGING.md` says how a change reaches each
+one.
 
 ## Components and Storybook
 
