@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Brand change guide</title>
+<meta name="description" content="How to change the colour, the typefaces, and the app icons of Oxagen and Stella from oxagen-brand, and which repos receive the change.">
+<link rel="icon" href="logo/svg/oxagen-favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="tokens/house-tokens.css">
+<link rel="stylesheet" href="tokens/house-fonts.css">
+<style>
+/* Layout: one reading column on the obsidian canvas, wide tables allowed to scroll inside it.
+   Colours come from the kit's tokens (tokens/house-tokens.css); the hex after each var() is the
+   fallback for a viewer that cannot load that file. Gold is identity only: the two marks. State
+   is shown by border shape: double for works, dashed for pending, single for broken. */
+:root {
+  --bg: var(--ox-ink, #09090B);
+  --panel: var(--ox-panel, #18181B);
+  --lift: var(--ox-hl, #27272A);
+  --line: var(--ox-border, #27272A);
+  --rule: var(--ox-rule, #3F3F46);
+  --fg: var(--ox-text, #FFFFFF);
+  --body: var(--ox-text-body, #E4E4E7);
+  --muted: var(--ox-muted, #A1A1AA);
+  --show-dark: inline-block;
+  --show-light: none;
+  --sans: var(--ox-font, "Geist", system-ui, -apple-system, "Segoe UI", sans-serif);
+  --mono: var(--ox-font-mono, "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+  --radius: var(--ox-radius, 0.75rem);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: var(--ox-paper, #FFFFFF);
+    --panel: var(--ox-paper-void, #F4F4F5);
+    --lift: var(--ox-paper-hl, #F4F4F5);
+    --line: var(--ox-paper-border, #E4E4E7);
+    --rule: var(--ox-paper-rule, #D4D4D8);
+    --fg: var(--ox-text-ink, #09090B);
+    --body: var(--ox-text-ink-body, #27272A);
+    --muted: var(--ox-muted-ink, #71717A);
+    --show-dark: none;
+    --show-light: inline-block;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: var(--ox-paper, #FFFFFF);
+  --panel: var(--ox-paper-void, #F4F4F5);
+  --lift: var(--ox-paper-hl, #F4F4F5);
+  --line: var(--ox-paper-border, #E4E4E7);
+  --rule: var(--ox-paper-rule, #D4D4D8);
+  --fg: var(--ox-text-ink, #09090B);
+  --body: var(--ox-text-ink-body, #27272A);
+  --muted: var(--ox-muted-ink, #71717A);
+  --show-dark: none;
+  --show-light: inline-block;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font: 400 1rem/1.6 var(--sans);
+  padding-inline: 16px;
+}
+.wrap { max-width: 920px; margin-inline: auto; padding-block: 40px 72px; }
+h1, h2, h3 { color: var(--fg); font-family: var(--sans); text-wrap: balance; }
+h1 { font-size: var(--ox-m-h2, 2.5rem); line-height: 1.15; font-weight: 600; letter-spacing: var(--ox-tracking-display, -0.02em); margin: 0; }
+h2 { font-size: var(--ox-m-h3, 1.75rem); line-height: 1.3; font-weight: 600; letter-spacing: var(--ox-tracking-heading, -0.01em); margin: 0; }
+h3 { font-size: var(--ox-m-h4, 1.25rem); line-height: 1.4; font-weight: 600; margin: 0; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--fg); }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; border-radius: 4px; }
+code, kbd, pre { font-family: var(--mono); font-feature-settings: var(--ox-font-mono-features, "calt", "liga"); }
+code { font-size: 0.875em; background: var(--lift); padding: 0.1em 0.35em; border-radius: 4px; color: var(--fg); overflow-wrap: anywhere; }
+ul, ol { margin: 0; padding-left: 1.25rem; display: grid; gap: 8px; }
+li { max-width: 68ch; }
+li::marker { color: var(--muted); }
+
+/* header */
+.marks { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; margin-bottom: 32px; }
+.marks img { height: 22px; width: auto; }
+.mark-dark { display: var(--show-dark); }
+.mark-light { display: var(--show-light); }
+.lede { font-size: 1.125rem; color: var(--body); margin-top: 16px; }
+.meta { color: var(--muted); font-size: 0.875rem; margin-top: 12px; }
+nav.toc { margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 12px; }
+nav.toc ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 20px; }
+nav.toc a { color: var(--muted); text-decoration: none; font-size: 0.9375rem; }
+nav.toc a:hover { color: var(--fg); }
+
+section { margin-top: 64px; display: grid; gap: 20px; }
+section > .sub { color: var(--muted); }
+
+/* state chips: shape carries the state */
+.chip { display: inline-flex; align-items: center; justify-content: center; min-width: 76px; padding: 2px 10px; border-radius: 999px; font-size: 0.8125rem; font-weight: 500; color: var(--fg); white-space: nowrap; }
+.chip.works { border: 3px double var(--muted); }
+.chip.pending { border: 1px dashed var(--muted); }
+.chip.broken { border: 1px solid var(--fg); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--muted); font-size: 0.875rem; align-items: center; }
+.legend span { display: inline-flex; gap: 8px; align-items: center; }
+
+.status { display: grid; border: 1px solid var(--line); border-radius: var(--radius); }
+.status .row { display: grid; grid-template-columns: 92px minmax(0, 170px) minmax(0, 1fr); gap: 12px 16px; padding: 14px 16px; align-items: baseline; }
+.status .row + .row { border-top: 1px solid var(--line); }
+.status .name { color: var(--fg); font-weight: 500; }
+@media (max-width: 640px) {
+  .status .row { grid-template-columns: 92px minmax(0, 1fr); }
+  .status .row p { grid-column: 1 / -1; }
+}
+
+/* steps */
+ol.steps { counter-reset: step; list-style: none; padding: 0; gap: 18px; }
+ol.steps > li { counter-increment: step; display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 4px 12px; max-width: none; }
+ol.steps > li::before { content: counter(step); grid-row: 1 / span 3; width: 28px; height: 28px; border: 1px solid var(--rule); border-radius: 999px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.8125rem; color: var(--fg); font-variant-numeric: tabular-nums; }
+ol.steps > li > * { grid-column: 2; min-width: 0; }
+ol.steps strong { color: var(--fg); font-weight: 600; }
+
+/* command and prompt blocks */
+.copybox { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.copybox pre { margin: 0; padding: 14px 92px 14px 16px; overflow-x: auto; font-size: 0.875rem; line-height: 1.55; color: var(--fg); white-space: pre; }
+.copybox.prompt pre { white-space: pre-wrap; font-family: var(--sans); font-size: 0.9375rem; }
+.copybox .label { display: block; padding: 10px 16px 0; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.copybox button { position: absolute; top: 8px; right: 8px; font: 500 0.8125rem/1 var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 7px 10px; cursor: pointer; }
+.copybox button:hover { border-color: var(--fg); }
+
+.note { border-left: 2px solid var(--rule); padding: 4px 0 4px 14px; color: var(--body); }
+.note strong { color: var(--fg); }
+
+/* flow diagram */
+.flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.lane { display: grid; gap: 10px; align-content: start; }
+.lane h3 { font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.step { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; background: var(--panel); display: grid; gap: 6px; }
+.step b { color: var(--fg); font-weight: 500; }
+.step small { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }
+.step.blocked { border-style: dashed; border-color: var(--rule); background: transparent; }
+@media (max-width: 720px) { .flow { grid-template-columns: minmax(0, 1fr); } }
+
+/* tables */
+.table { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { color: var(--muted); font-weight: 500; font-size: 0.8125rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+td:first-child { color: var(--fg); }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.repos td { min-width: 140px; }
+.repos td:first-child { min-width: 150px; font-family: var(--mono); font-size: 0.875rem; }
+
+.icons { display: flex; flex-wrap: wrap; gap: 16px; }
+.icon-card { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 14px; align-items: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; flex: 1 1 260px; }
+.icon-card img { width: 64px; height: 64px; grid-row: 1 / span 2; }
+.icon-card b { color: var(--fg); font-weight: 600; }
+.icon-card span { color: var(--muted); font-size: 0.875rem; }
+
+footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="marks" aria-label="The two brands">
+    <img class="mark-dark" src="logo/svg/oxagen-wordmark-dark.svg" alt="oxagen">
+    <img class="mark-light" src="logo/svg/oxagen-wordmark-light.svg" alt="oxagen">
+    <img class="mark-dark" src="logo/svg/stella-wordmark-dark.svg" alt="stella">
+    <img class="mark-light" src="logo/svg/stella-wordmark-light.svg" alt="stella">
+  </div>
+  <h1>Brand change guide</h1>
+  <p class="lede">Every colour, typeface, and icon on an Oxagen or Stella page starts in the <code>oxagen-brand</code> repo. This guide shows how to change each one, how the change reaches each site, and what still stops it from getting there on its own.</p>
+  <p class="meta">Checked on 2026-09-30 against <code>oxagen-brand</code> at <code>9a14177</code>. The step-by-step reference for agents is <a href="https://github.com/macanderson/oxagen-brand/blob/main/CHANGING.md">CHANGING.md</a>.</p>
+  <nav class="toc" aria-label="Sections">
+    <ul>
+      <li><a href="#status">Status</a></li>
+      <li><a href="#setup">One-time setup</a></li>
+      <li><a href="#flow">Change path</a></li>
+      <li><a href="#colour">Brand colour</a></li>
+      <li><a href="#font">Typefaces</a></li>
+      <li><a href="#icon">App icons</a></li>
+      <li><a href="#brands">Oxagen and Stella</a></li>
+      <li><a href="#repos">Repos and sites</a></li>
+      <li><a href="#new-site">New sites</a></li>
+      <li><a href="#reference">Reference</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section id="status" aria-labelledby="status-h">
+  <h2 id="status-h">Status</h2>
+  <p class="sub">The kit, its checks, and its Storybook work. No change has reached another repo yet.</p>
+  <div class="legend" aria-hidden="true">
+    <span><span class="chip works">Works</span>double border</span>
+    <span><span class="chip pending">Pending</span>dashed border</span>
+    <span><span class="chip broken">Broken</span>single border</span>
+  </div>
+  <div class="status">
+    <div class="row"><span class="chip works">Works</span><span class="name">Storybook</span><p><a href="https://brand.oxagen.cloud/storybook/">brand.oxagen.cloud/storybook</a> serves all 163 stories in light and dark.</p></div>
+    <div class="row"><span class="chip works">Works</span><span class="name">Kit checks</span><p>Every pull request runs the generator checks, the typecheck, the tests, the Storybook build, and the bundle build.</p></div>
+    <div class="row"><span class="chip works">Works</span><span class="name">brand.oxagen.cloud</span><p>Each merge to <code>main</code> deploys the playbook, the Storybook, and this guide once the checks pass.</p></div>
+    <div class="row"><span class="chip works">Works</span><span class="name">Agents</span><p>The <code>oxagen-branding</code> skill reads the kit from <code>main</code> on every run, so an agent sees a change as soon as it merges.</p></div>
+    <div class="row"><span class="chip broken">Broken</span><span class="name">Sync to other repos</span><p>The <a href="https://github.com/macanderson/oxagen-brand/actions/workflows/fan-out.yml">fan-out</a> has failed on every merge, because the <code>BRAND_SYNC_TOKEN</code> secret does not exist. <a href="#setup">One-time setup</a> fixes it.</p></div>
+    <div class="row"><span class="chip pending">Pending</span><span class="name">Sync scripts</span><p>Two of the five repos have a sync script the fan-out can run: <code>oxagen</code> and <code>stella</code>. The other three are tracked under <a href="https://github.com/macanderson/oxagen-brand/issues/28">#28</a>.</p></div>
+    <div class="row"><span class="chip pending">Pending</span><span class="name">Conformance</span><p>The daily check finds 2 of 12 repos and sites matching the kit. Its live report is <a href="https://github.com/macanderson/oxagen-brand/issues/33">#33</a>.</p></div>
+  </div>
+</section>
+
+<section id="setup" aria-labelledby="setup-h">
+  <h2 id="setup-h">One-time setup</h2>
+  <p class="sub">Only you can take these four steps, because each one needs your GitHub account. After them, every merge to the kit opens a sync pull request in each repo.</p>
+  <ol class="steps">
+    <li>
+      <strong>Create the sync token.</strong>
+      <p>Open <a href="https://github.com/settings/personal-access-tokens/new">github.com/settings/personal-access-tokens/new</a> and fill it in like this:</p>
+      <ul>
+        <li>Token name: <code>oxagen-brand fan-out</code>. Resource owner: <code>macanderson</code>.</li>
+        <li>Repository access: only select repositories. Pick <code>oxagen</code>, <code>stella</code>, <code>oxagen-roadmap</code>, <code>oxagen-gtm</code>, and <code>oxagen-survey</code>.</li>
+        <li>Permissions: Contents, read and write. Pull requests, read and write. GitHub adds Metadata, read only, by itself.</li>
+        <li>Expiration: your choice. When it lapses, the fan-out fails with an error that names the secret.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Save it in the kit.</strong>
+      <p>Run this, then paste the token when it asks.</p>
+      <div class="copybox"><pre id="cmd-secret">gh secret set BRAND_SYNC_TOKEN -R macanderson/oxagen-brand</pre><button type="button" data-copy="cmd-secret">Copy</button></div>
+    </li>
+    <li>
+      <strong>Let sync pull requests merge themselves.</strong>
+      <p><code>oxagen</code> and <code>stella</code> already allow auto-merge. These three repos do not.</p>
+      <div class="copybox"><pre id="cmd-automerge">gh repo edit macanderson/oxagen-roadmap --enable-auto-merge
+gh repo edit macanderson/oxagen-gtm --enable-auto-merge
+gh repo edit macanderson/oxagen-survey --enable-auto-merge</pre><button type="button" data-copy="cmd-automerge">Copy</button></div>
+    </li>
+    <li>
+      <strong>Send the current kit to every repo.</strong>
+      <p>It runs each repo's sync against the kit. Expect sync pull requests in <code>oxagen</code> and <code>stella</code>, and failed jobs for the other three repos until their sync scripts land.</p>
+      <div class="copybox"><pre id="cmd-fanout">gh workflow run fan-out.yml -R macanderson/oxagen-brand</pre><button type="button" data-copy="cmd-fanout">Copy</button></div>
+    </li>
+  </ol>
+</section>
+
+<section id="flow" aria-labelledby="flow-h">
+  <h2 id="flow-h">Change path</h2>
+  <p class="sub">A change goes through three stages. The dashed step is the one that does not run yet.</p>
+  <div class="flow" role="list">
+    <div class="lane" role="listitem">
+      <h3>In oxagen-brand</h3>
+      <div class="step"><b>Edit the source file</b><small>A colour in <code>build/color.py</code>, a face in <code>build/typeset.py</code>, an icon in <code>build/marks.py</code>.</small></div>
+      <div class="step"><b>Run its generator</b><small><code>build/build.py</code> rewrites the tokens and every mark, icon, and image that uses them.</small></div>
+      <div class="step"><b>Open a pull request</b><small>CI checks contrast, fonts, marks, messages, the skill, and the component kit.</small></div>
+      <div class="step"><b>Merge to main</b><small>You review the previews in the pull request and merge.</small></div>
+    </div>
+    <div class="lane" role="listitem">
+      <h3>On merge</h3>
+      <div class="step"><b>brand.oxagen.cloud deploys</b><small>The playbook, the Storybook, and this guide.</small></div>
+      <div class="step"><b>Agents read the new kit</b><small>Every agent's branding skill fetches <code>main</code> on its next run.</small></div>
+      <div class="step blocked"><b>A sync pull request opens in each repo</b><small>Needs <code>BRAND_SYNC_TOKEN</code>. The fan-out runs each repo's sync script against the merged commit.</small></div>
+    </div>
+    <div class="lane" role="listitem">
+      <h3>In each repo</h3>
+      <div class="step"><b>The repo's checks run</b><small>Its drift check fails whenever its copy of the kit falls behind.</small></div>
+      <div class="step"><b>The sync pull request merges</b><small>On its own where the repo allows auto-merge.</small></div>
+      <div class="step"><b>The repo deploys its sites</b><small>On merge, except <code>oxagen-gtm</code> and <code>oxagen-survey</code>, which deploy by hand with <code>vercel deploy --prod</code>.</small></div>
+    </div>
+  </div>
+  <p class="note"><strong>The short path.</strong> You don't need to run anything yourself. Give an agent one of the prompts below. It edits the kit, runs the generators, and opens the pull request. You review the previews and merge.</p>
+</section>
+
+<section id="colour" aria-labelledby="colour-h">
+  <h2 id="colour-h">Brand colour</h2>
+  <p class="sub">One generator run recolours the token files, every logo and icon, the favicons, splash screens, wallpapers, social cards, ads, content cards, and spinners. Both brands change together.</p>
+  <ol class="steps">
+    <li><strong>Change the constant.</strong><p>In <code>build/color.py</code>, change <code>GOLD</code>. Its two neighbours, gold-bright and gold-deep, are derived from it. To move the hue, also change the hue in <code>GOLD_BRIGHT_LCH</code> and <code>GOLD_DEEP_LCH</code>, and the two pinned hex values the generator prints.</p></li>
+    <li><strong>Run the generators.</strong><p><code>.venv/bin/python build/build.py</code>, then <code>build/playbook.py</code> and <code>build/messages.py</code>.</p></li>
+    <li><strong>Update the hand copies.</strong><p>A few copies sit outside the generators: the gold ramp in <code>ui/src/styles/globals.css</code>, <code>BRAND_GOLD</code> and its test, the skill's <code>system.md</code>, the install prompt, and <code>sdlc/</code>. <code>CHANGING.md</code> lists each one.</p></li>
+    <li><strong>Open the pull request.</strong><p>The check fails if any text colour drops below 4.5:1 contrast on its ground.</p></li>
+  </ol>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-colour">In macanderson/oxagen-brand, change the house gold to #______. Follow CHANGING.md, "Change a colour token": edit build/color.py, run the generators, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the new 512px icons and the light and dark wordmarks in the PR body so I can compare them.</pre><button type="button" data-copy="prompt-colour">Copy</button></div>
+</section>
+
+<section id="font" aria-labelledby="font-h">
+  <h2 id="font-h">Typefaces</h2>
+  <p class="sub">The house uses three faces, all under the SIL Open Font License. Both brands use the same three.</p>
+  <div class="table">
+    <table>
+      <thead><tr><th>Use</th><th>Face</th><th>Set in</th></tr></thead>
+      <tbody>
+        <tr><td>Both wordmarks, Stella's icon, and line 1 of the oxagen.sh hero</td><td>Space Grotesk 600</td><td><code>build/glyphs.py</code></td></tr>
+        <tr><td>Every heading and all text</td><td>Geist</td><td><code>build/typeset.py</code></td></tr>
+        <tr><td>Code, logs, paths, and numbers in tables</td><td>Monaspace Neon</td><td><code>build/typeset.py</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note"><strong>The kit lags one rule.</strong> You moved every heading to Geist on 2026-09-29. The kit's tokens still set h1 to h3 in Space Grotesk until <a href="https://github.com/macanderson/oxagen-brand/issues/27">#27</a> lands.</p>
+  <ol class="steps">
+    <li><strong>Check the licence.</strong><p>The repo is public, so a house face must allow redistribution in a public repo and embedding on the web. A face licensed per seat or per domain, such as Aeonik, can't be a house face, because committing its files publishes them.</p></li>
+    <li><strong>Add the files.</strong><p>Put the <code>.woff2</code> files and the licence under <code>fonts/</code>.</p></li>
+    <li><strong>Point the role at the face.</strong><p>Edit the <code>Face</code> in <code>build/typeset.py</code>, then run <code>build/build.py</code>. It rewrites <code>house-fonts.css</code>, <code>house-tailwind.css</code>, and <code>next-fonts.ts</code>, which every site imports.</p></li>
+    <li><strong>For the wordmark face, change the font file.</strong><p>The wordmarks and Stella's icon are outlined from <code>FONT</code> in <code>build/glyphs.py</code>, not from <code>Face</code>. A new wordmark face redraws both logos and Stella's icon, so review it as a logo change.</p></li>
+  </ol>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-font">In macanderson/oxagen-brand, make ______ the house face for ______ (headings and text, code, or the wordmarks). Check its licence allows a public repo and web embedding first, and stop if it doesn't. Follow CHANGING.md, "Change a font family", and open a pull request with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-font">Copy</button></div>
+</section>
+
+<section id="icon" aria-labelledby="icon-h">
+  <h2 id="icon-h">App icons</h2>
+  <p class="sub">The app icon is the one mark each brand has to itself.</p>
+  <div class="icons">
+    <div class="icon-card">
+      <img class="mark-dark" src="logo/svg/oxagen-icon-dark.svg" alt="The Oxagen hive">
+      <img class="mark-light" src="logo/svg/oxagen-icon-light.svg" alt="The Oxagen hive">
+      <b>Oxagen: the hive</b>
+      <span>Drawn cell by cell in <code>build/marks.py</code></span>
+    </div>
+    <div class="icon-card">
+      <img class="mark-dark" src="logo/svg/stella-icon-dark.svg" alt="The Stella asterisk">
+      <img class="mark-light" src="logo/svg/stella-icon-light.svg" alt="The Stella asterisk">
+      <b>Stella: the asterisk</b>
+      <span>The <code>*</code> of the wordmark face</span>
+    </div>
+  </div>
+  <p>Each icon is drawn by code, so a new icon means new drawing code. An agent can write it from a designer's SVG. One generator run then redraws every file that carries the icon:</p>
+  <div class="table">
+    <table>
+      <thead><tr><th>Folder</th><th>What it holds</th><th>Oxagen</th><th>Stella</th></tr></thead>
+      <tbody>
+        <tr><td><code>icons/</code></td><td>Favicons 16 to 512, maskable icons, <code>.ico</code>, web manifests</td><td class="num">19</td><td class="num">19</td></tr>
+        <tr><td><code>logo/</code></td><td>Icons, tiles, wordmarks, and the Oxagen lockup, as SVG and PNG</td><td class="num">97</td><td class="num">63</td></tr>
+        <tr><td><code>splash/</code></td><td>Phone launch screens, light and dark</td><td class="num">120</td><td class="num">120</td></tr>
+        <tr><td><code>wallpapers/</code></td><td>Desktop and phone wallpapers</td><td class="num">168</td><td class="num">168</td></tr>
+        <tr><td><code>social/</code></td><td>Avatars, banners, and link previews</td><td class="num">20</td><td class="num">20</td></tr>
+        <tr><td><code>ads/</code>, <code>content/</code></td><td>Ads and content cards</td><td class="num">148</td><td class="num">44</td></tr>
+        <tr><td><code>spinners/</code></td><td>Loading spinners</td><td class="num">3</td><td class="num">3</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ol class="steps">
+    <li><strong>Start from an SVG.</strong><p>Draw the new icon on a square artboard with its outline and its accent as separate shapes. Every tile paints the outline in the ground's ink and the accent in gold, the way the hive's two lit cells are gold.</p></li>
+    <li><strong>Have an agent port it.</strong><p>It replaces the hive drawing in <code>build/marks.py</code>, runs the whole build, and updates the copies no generator writes. <code>CHANGING.md</code> lists them under "Change an app icon".</p></li>
+    <li><strong>Review it by eye.</strong><p>No check compares the icon with a reference, so look at the 16px favicon, the 512px icon, and the maskable icon in the pull request before you merge.</p></li>
+    <li><strong>Cut the desktop app icon.</strong><p>The Oxagen desktop app keeps its own icon set. After the sync pull request merges in <code>oxagen</code>, run <code>pnpm --filter @oxagen/desktop icons</code> there and commit <code>apps/desktop/src-tauri/icons/</code>. <a href="https://github.com/macanderson/oxagen/issues/4892">oxagen#4892</a> makes this step automatic.</p></li>
+  </ol>
+  <p class="note"><strong>Native app icons.</strong> The kit draws web icons only: PNG, ICO, SVG, and web manifests. It makes no iOS or Android icon set. Neither brand has a phone app today, and the desktop app cuts its own set from the kit's avatar.</p>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-icon">In macanderson/oxagen-brand, replace the Oxagen app icon with the attached SVG. Follow CHANGING.md, "Change an app icon": port the shape into build/marks.py with the outline in ink and the accent in gold, run the full build, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the 16px favicon, the 512px icon in light and dark, and the maskable icon in the PR body.</pre><button type="button" data-copy="prompt-icon">Copy</button></div>
+</section>
+
+<section id="brands" aria-labelledby="brands-h">
+  <h2 id="brands-h">Oxagen and Stella</h2>
+  <p class="sub">A colour or typeface change reaches both brands at once. An icon change reaches one.</p>
+  <div class="table">
+    <table>
+      <thead><tr><th>Part</th><th>Oxagen</th><th>Stella</th></tr></thead>
+      <tbody>
+        <tr><td>Colours</td><td colspan="2">Shared: obsidian, white, the greys, and one gold</td></tr>
+        <tr><td>Typefaces</td><td colspan="2">Shared: Space Grotesk, Geist, and Monaspace Neon</td></tr>
+        <tr><td>Components</td><td colspan="2">Shared: <code>@oxagen/ui</code>, shown in the Storybook</td></tr>
+        <tr><td>Layout</td><td colspan="2">Shared: 12px card radius and a 1120px page width</td></tr>
+        <tr><td>Voice and lines</td><td colspan="2">Shared: the message registry under <code>messages/</code></td></tr>
+        <tr><td>Wordmark</td><td><code>oxagen</code>, with a gold x</td><td><code>stella</code>, with a gold asterisk</td></tr>
+        <tr><td>App icon</td><td>The hive</td><td>The asterisk</td></tr>
+        <tr><td>Lockup</td><td>The hive beside the word</td><td>None, since the asterisk is part of the word</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="repos" aria-labelledby="repos-h">
+  <h2 id="repos-h">Repos and sites</h2>
+  <p class="sub">Every repo named oxagen, stella, or starting with oxagen- or stella-, and what receives a brand change today.</p>
+  <div class="table">
+    <table class="repos">
+      <thead><tr><th>Repo</th><th>Sites</th><th>Brand sync</th><th>State</th><th>Tracking</th></tr></thead>
+      <tbody>
+        <tr><td>oxagen-brand</td><td>brand.oxagen.cloud, sdlc.oxagen.sh</td><td>The source</td><td><span class="chip works">Works</span></td><td><a href="https://github.com/macanderson/oxagen-brand/issues/37">#37</a></td></tr>
+        <tr><td>oxagen</td><td>oxagen.sh, app.oxagen.sh, docs.oxagen.sh, the desktop app</td><td>Sync script, and a check in <code>pipeline.yml</code> that compares image sizes only</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/oxagen/issues/4804">oxagen#4804</a>, <a href="https://github.com/macanderson/oxagen/issues/4892">oxagen#4892</a></td></tr>
+        <tr><td>stella</td><td>stella.oxagen.sh, the Observatory dashboard</td><td>Sync script for marks and icons. Its check skips in CI, and the palette and Observatory marks are hand copies.</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/stella/issues/6611">stella#6611</a>, <a href="https://github.com/macanderson/stella/issues/6612">stella#6612</a>. Deploys fail: <a href="https://github.com/macanderson/stella/issues/6478">stella#6478</a></td></tr>
+        <tr><td>oxagen-roadmap</td><td>roadmap.oxagen.cloud, GitHub Pages</td><td>No sync script. A hand copy from kit commit <code>3920d49</code>.</td><td><span class="chip broken">Broken</span></td><td><a href="https://github.com/macanderson/oxagen-roadmap/issues/271">oxagen-roadmap#271</a></td></tr>
+        <tr><td>oxagen-gtm</td><td>gtm.oxagen.cloud</td><td>Script exists but ignores the kit path the fan-out passes</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/oxagen-gtm/issues/7">oxagen-gtm#7</a>, PR <a href="https://github.com/macanderson/oxagen-gtm/pull/9">#9</a></td></tr>
+        <tr><td>oxagen-survey</td><td>survey.oxagen.cloud</td><td>Script and drift check in an open pull request</td><td><span class="chip pending">Pending</span></td><td><a href="https://github.com/macanderson/oxagen-survey/issues/6">oxagen-survey#6</a>, PR <a href="https://github.com/macanderson/oxagen-survey/pull/7">#7</a></td></tr>
+        <tr><td>stella-website</td><td>None. Its Vercel deploy is disabled.</td><td>None. Carries an old blue palette and retired marks.</td><td><span class="chip pending">Pending</span></td><td>Your call: archive it, or bring it under the kit</td></tr>
+        <tr><td>oxagen-arp</td><td>None yet</td><td>None. Carries brand colours in <code>apps/web</code>.</td><td><span class="chip pending">Pending</span></td><td>Add it to <code>consumers.json</code> before it publishes</td></tr>
+        <tr><td>oxagen-cookbook, oxagen-evals, oxagen-wrapped-agents, oxagen-scratch, stella-examples, stella-digital-twin, stella-engine-proof, stella-proving-ground</td><td>None</td><td>No web pages and no brand files</td><td><span class="chip works">Works</span></td><td>Nothing to sync</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><code>oxagen-aws-infra</code> is archived and left out.</p>
+</section>
+
+<section id="new-site" aria-labelledby="new-site-h">
+  <h2 id="new-site-h">New sites</h2>
+  <p class="sub">Before a new oxagen- or stella- repo publishes a page, it needs four things.</p>
+  <ol class="steps">
+    <li><strong>A sync script.</strong><p>It takes <code>--brand &lt;path&gt;</code> and <code>--check</code>, and copies the tokens, fonts, and icons the site uses from the kit.</p></li>
+    <li><strong>The skill stub.</strong><p><code>skills/install.sh --project &lt;repo&gt;</code> installs it, so agents in that repo read the live kit.</p></li>
+    <li><strong>A drift check.</strong><p><code>.github/workflows/brand-drift.yml</code> checks out the kit's <code>main</code> and runs the sync with <code>--check</code>.</p></li>
+    <li><strong>An entry in <code>consumers.json</code>.</strong><p>The repo, its sync command, and its live sites. The fan-out and the daily conformance check both read this file.</p></li>
+  </ol>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-site">Bring macanderson/______ under the house brand. Follow oxagen-brand's CHANGING.md, "How a change reaches each surface": add a sync script that takes --brand and --check, install the skill stub, add .github/workflows/brand-drift.yml, and add the repo and its sites to oxagen-brand's consumers.json. Open a pull request in each repo with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-site">Copy</button></div>
+</section>
+
+<section id="reference" aria-labelledby="reference-h">
+  <h2 id="reference-h">Reference</h2>
+  <ul>
+    <li><a href="https://github.com/macanderson/oxagen-brand/blob/main/CHANGING.md">CHANGING.md</a>: every step, every hand copy, and every generator command.</li>
+    <li><a href="https://brand.oxagen.cloud/playbook">House playbook</a>: the palette, the type, the marks, and the rules.</li>
+    <li><a href="https://brand.oxagen.cloud/storybook/">Storybook</a>: every component in light and dark.</li>
+    <li><a href="https://github.com/macanderson/oxagen-brand/issues/33">Conformance report</a>: which repos and sites differ from the kit today.</li>
+    <li><a href="https://github.com/macanderson/oxagen-brand/actions/workflows/fan-out.yml">Fan-out runs</a>: the sync pull request each merge opened.</li>
+    <li><a href="https://github.com/macanderson/oxagen-brand/blob/main/consumers.json">consumers.json</a>: the repos and sites the fan-out and conformance cover.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Written by hand in <code>brand-guide.html</code> at the root of oxagen-brand. Update it when <code>CHANGING.md</code> or <code>consumers.json</code> changes.</p>
+</footer>
+
+</div>
+<script>
+document.querySelectorAll("[data-copy]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var el = document.getElementById(btn.getAttribute("data-copy"));
+    if (!el) return;
+    var text = el.textContent;
+    var done = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy"; }, 1600); };
+    var select = function () {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      btn.textContent = "Selected";
+      setTimeout(function () { btn.textContent = "Copy"; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, select);
+    } else {
+      select();
+    }
+  });
+});
+</script>
+</body>
+</html>
