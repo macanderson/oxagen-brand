@@ -17,7 +17,7 @@ The greys are neutral zinc and carry no hue, so the gold is the only warm value 
 | secondary | `#A1A1AA` (7.8:1) | `#71717A` (4.8:1) |
 | quietest | `#71717A` (4.1:1) | `#A1A1AA` (2.6:1) |
 
-Every text role that carries meaning clears 4.5:1 on its ground, and the build checks it. The quietest shade is for placeholders and decoration, never for a word the reader needs. On obsidian, secondary text may also be the primary colour at reduced opacity (`text-white/60`), so it takes the tone of the ground; never a flat mid grey below 4.5:1.
+Every text role that carries meaning clears 4.5:1 on its ground, and the build checks it. On a lifted row in the light theme (`#F4F4F5`), secondary text is `#6E6E77` (`muted-text-ink`, 4.6:1), because `#71717A` is 4.4:1 there. The quietest shade is for placeholders and decoration, never for a word the reader needs. On obsidian, secondary text may also be the primary colour at reduced opacity (`text-white/60`), so it takes the tone of the ground; never a flat mid grey below 4.5:1.
 
 ## Gold
 
@@ -35,30 +35,33 @@ Verdicts and statuses are carried by border shape, not colour, so they survive g
 | pending, approval | dashed border |
 | broken, denied, failed | single border |
 
-The semantic colours (`--state-allowed`, `--state-approval`, `--state-denied`, `--state-proven`, `--state-failed`, `--state-critical`) exist for badges and dots inside tables where shape alone is too small to read. They are never the only signal. The destructive red (`#D5584D` on obsidian, `#992F28` on white) is the one state colour that is also text and a button fill, and it clears 4.5:1 both ways.
+The semantic colours (`--state-allowed`, `--state-approval`, `--state-denied`, `--state-proven`, `--state-failed`, `--state-critical`) exist for badges and dots inside tables where shape alone is too small to read. They are never the only signal. The destructive red (`#D5584D` on obsidian, `#992F28` on white) is the one state colour that is also a button fill, and it clears 4.5:1 on its ground both ways.
+
+A state colour is a mark, and a mark needs only 3:1. A word in a state's colour takes the state's text stop: `--state-failed-text` in `assets/tokens.css`, or `--ox-st-failed-text` on obsidian and `--ox-st-failed-text-ink` on white in the token files. Each text stop clears 4.5:1 on every surface of its theme: the ground, a panel, and a lifted row. On obsidian the text stops sit at one OKLCH lightness, so `#E7685C` is failed as words where `#C0453C` is failed as a dot. On white each text stop equals its mark today. Use the text stop anyway, so a word stays legible when a mark moves.
 
 ## Type
 
-Three faces, each with one job.
+Three faces, each with one job. Mac set the current rule on 2026-09-29.
 
-- **Space Grotesk** is the display face: the wordmarks and h1 to h3, and nothing set below 20px. Its wide geometric letters lose their shape at small sizes.
-- **Geist** is the text face: h4 to h6, body, labels, buttons, tooltips, tables, navigation. Everything read rather than seen. Small headings take weight 500 or 600 to separate from body.
+- **Geist** is the text face: every heading from h1 to h6, body, labels, buttons, tooltips, tables, navigation. Everything read. Small headings take weight 500 or 600 to separate from body.
+- **Space Grotesk** is the wordmark face. It sets three things only: the Oxagen wordmark, the stella wordmark, and line 1 of the oxagen.sh hero. Nothing in it is set below 20px, because its wide geometric letters lose their shape at small sizes.
 - **Monaspace Neon** is the code face: code, commands, terminal output, logs, digests, paths, frame kinds, verdict values, ids, and the numbers in tables. Texture healing and code ligatures are on (`font-feature-settings: "calt", "liga"`).
 
-No fourth typeface, ever. In CSS the faces are `--font-display`, `--font-sans` (the kit's pages call it `--font`), and `--font-mono`. All three ship in the kit's `fonts/` under the SIL Open Font License. Headings are sentence case.
+No fourth typeface, ever. In CSS the faces are `--font-sans` (the kit's pages call it `--font`), `--font-wordmark`, and `--font-mono`. `--font-display` is the heading role, and it points at Geist. `text-m-hero` sets line 1 of the oxagen.sh hero in Space Grotesk. All three ship in the kit's `fonts/` under the SIL Open Font License. Headings are sentence case.
 
 Two scales. A surface picks one and keeps it.
 
 | Step | Face | Marketing (`text-m-*`) | App (`text-a-*`) |
 |---|---|---|---|
-| h1 | Space Grotesk | 72px, 1.05, 700, -0.03em | 30px, 1.15, 700, -0.02em |
-| h2 | Space Grotesk | 40px, 1.2, 700, -0.01em | 24px, 1.2, 600 |
-| h3 | Space Grotesk | 28px, 1.3, 600 | 20px, 1.25, 600 |
+| hero | Space Grotesk | 72px, 1.05, 700, -0.03em | none |
+| h1 | Geist | 72px, 1.05, 700, -0.03em | 30px, 1.15, 700, -0.02em |
+| h2 | Geist | 40px, 1.2, 700, -0.01em | 24px, 1.2, 600 |
+| h3 | Geist | 28px, 1.3, 600 | 20px, 1.25, 600 |
 | h4 | Geist | 20px, 1.4, 500 | 16px, 1.4, 600 |
 | body | Geist | 18px, 1.65, 400 | 14px, 1.5, 400 |
 | micro | Monaspace Neon | 14px, 1.5, 400 | 12px, 1.4, 400 |
 
-Marketing is for landing pages, posts, and anything read once: large and spaced. App is for dashboards, panels, tables, terminals, and logs read all day: dense. An eyebrow is 12px Geist, uppercase, at 0.14em tracking.
+The hero step is for line 1 of the oxagen.sh hero and nothing else. Marketing is for landing pages, posts, and anything read once: large and spaced. App is for dashboards, panels, tables, terminals, and logs read all day: dense. An eyebrow is 12px Geist, uppercase, at 0.14em tracking.
 
 ## Layout
 
