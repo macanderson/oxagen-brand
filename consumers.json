@@ -8,9 +8,9 @@
   },
   "consumers": [
     {
-      "repo": "macanderson/oxagen",
+      "repo": "oxageninc/product",
       "sync": "node tools/scripts/sync-brand-assets.mjs --brand \"$KIT\"",
-      "apt": ["librsvg2-bin"],
+      "apt": [],
       "surfaces": [
         { "url": "https://oxagen.sh", "pages": ["/"] },
         { "url": "https://oxagen.app", "pages": ["/"] },
@@ -26,7 +26,7 @@
       ]
     },
     {
-      "repo": "macanderson/oxagen-roadmap",
+      "repo": "oxageninc/roadmap",
       "sync": "node scripts/sync-brand.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "repo": "macanderson/oxagen-gtm",
+      "repo": "oxageninc/gtm",
       "sync": "node scripts/build-data.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "repo": "macanderson/oxagen-survey",
+      "repo": "oxageninc/survey",
       "sync": "node scripts/sync-brand.mjs --brand \"$KIT\"",
       "apt": [],
       "surfaces": [

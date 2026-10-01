@@ -58,7 +58,7 @@ MARKS = ROOT / "logo" / "svg"
 #: and stella's asterisk is labelled "stella mark". A retired mark carries neither.
 LIVE_MARKS = re.compile(rb'data-mark="hive"|aria-label="stella mark"')
 
-UA = "oxagen-brand-conformance/1 (+https://github.com/macanderson/oxagen-brand)"
+UA = "oxagen-brand-conformance/1 (+https://github.com/oxageninc/brand)"
 MAX_BYTES = 5 * 1024 * 1024
 MAX_SHEETS = 12
 
