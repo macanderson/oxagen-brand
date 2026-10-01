@@ -783,7 +783,7 @@ def build_html() -> str:
 <ul class="rules">
 <li><b>One gold action per screen.</b> The focus ring is gold too, because it marks where that action is.</li>
 <li><b>Gold is never a state, a surface fill, a card border, or a row highlight.</b> If a screen shows two gold things that are not the mark, one of them is wrong.</li>
-<li><b>Gold is flat.</b> The sheen is for the mark at hero sizes. Gold is never translucent, never blurred, and never a shadow.</li>
+<li><b>Gold is flat.</b> The sheen is only for the mark at hero sizes and on the icon tiles. Gold is never translucent, never blurred, and never a shadow.</li>
 </ul>
 <h3>Grounds</h3>
 <p>Dark comes first. Obsidian is the ground, a panel sits one step up, and a lifted row one step above that. The light theme is white, and a card on white is a hairline border, not a tint. The greys are neutral zinc with no hue, so the gold is the only warm colour on a screen. Every page ships both themes.</p>
