@@ -58,6 +58,9 @@ not help.
   meaning is unclear.
 - Use numbers for steps in a process, priorities, or items readers may need
   to reference later. Use bullets for unordered lists.
+- Use complete, direct sentences in updates. State the fact or action instead 
+  of announcing the kind of information you will give. Name the actual issue 
+  instead of using phrases such as “one thing,” “a wrinkle,” or “a caveat.”
 
 ## Claims, facts, and technical language
 
