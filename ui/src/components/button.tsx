@@ -43,7 +43,7 @@ const buttonVariants = cva(
           "bg-error text-error-foreground hover:bg-error/90 active:bg-error/80 focus-visible:ring-error disabled:bg-button-disabled-bg disabled:text-button-disabled-fg",
         // The error colour on an outline, for a destructive action that should not shout.
         "destructive-outline":
-          "border border-error/50 bg-background text-error hover:bg-error/10 focus-visible:ring-error disabled:text-button-disabled-fg",
+          "border border-error/50 bg-background text-error-ink hover:bg-error/10 focus-visible:ring-error disabled:text-button-disabled-fg",
         link: "text-foreground underline-offset-4 hover:underline hover:scale-100 focus-visible:ring-button-default-ring disabled:text-button-disabled-fg",
         // An alias of `primary`. It renders the same flat fill with no gradient.
         gradient:

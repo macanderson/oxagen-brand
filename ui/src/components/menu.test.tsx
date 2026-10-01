@@ -168,7 +168,7 @@ describe("MenuItem", () => {
       </Menu>,
     );
     const item = await findByText("Delete");
-    expect(item.className).toContain("text-error");
+    expect(item.className).toContain("text-error-ink");
     expect(item.className).toContain("data-[highlighted]:bg-error/10");
   });
 

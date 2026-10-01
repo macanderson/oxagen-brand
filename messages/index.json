@@ -290,6 +290,7 @@
         "They're capacity."
       ],
       "subline": "Focus on traction, not tracking.",
+      "subshort": "Focus on traction.",
       "picture": "ghost",
       "audience": [
         "operator"
@@ -306,7 +307,7 @@
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of reframe-capacity and momentum-traction. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.",
+      "notes": "Mac's example combination of reframe-capacity and momentum-traction. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval. Mac approved the subshort, the answer line of the 300 by 250, in",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-capacity.yaml"
     },
@@ -386,6 +387,7 @@
         "the momentum."
       ],
       "subline": "Operators set the course, agents execute and report.",
+      "subshort": "Operators set the course.",
       "picture": "orbit",
       "audience": [
         "operator"
@@ -403,7 +405,7 @@
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of split-prioritize-steer and split-driver-seat. From Mac's draft of 2026-09-26. Mac's combination rewords the division of labor line as Operators set the course. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.",
+      "notes": "Mac's example combination of split-prioritize-steer and split-driver-seat. From Mac's draft of 2026-09-26. Mac's combination rewords the division of labor line as Operators set the course. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval. Mac approved the subshort, the answer line of the 300 by 250, in",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-driver-seat.yaml"
     },
@@ -657,6 +659,7 @@
         "on the job."
       ],
       "subline": "While you turn in for the night, your fleet of agents keeps working.",
+      "subshort": "Your agents keep working overnight.",
       "picture": "orbit",
       "audience": [
         "operator"
@@ -674,7 +677,7 @@
       "findings": [
         "07"
       ],
-      "notes": "Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval.",
+      "notes": "Mac's example combination of value-overnight and night-sleep-tight. From Mac's draft of 2026-09-26. Approved in the PR that answers Mac's 2026-09-26 request to render the always-on ads. Merging that PR is the approval. Mac approved the subshort, the answer line of the 300 by 250, in",
       "group": "always-on",
       "path": "messages/always-on/ad-oxagen-night-shift.yaml"
     },

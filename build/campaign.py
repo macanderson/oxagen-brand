@@ -14,7 +14,8 @@ builder on the page carries a JavaScript port of `ad()`; change both together.
 
 The website sections follow the house type rule. Every heading is Geist, and
 line 1 of the hero (`.m-h1`) reads `--font-hero`, which is Space Grotesk. The
-ad art still sets all of its text in Space Grotesk, and `WIDTHS` measures it.
+ad art sets all of its text in Geist, as the files in `ads/` do, and `WIDTHS`
+measures it. Only the wordmark is Space Grotesk, and it is a drawn path.
 """
 
 from __future__ import annotations
@@ -30,19 +31,21 @@ import pwa
 PAGE = MS.ROOT / "always-on.html"
 TITLE = "Oxagen always-on campaign"
 T, A = MS.T, MS.A
-DISPLAY = "'Space Grotesk', 'Helvetica Neue', Arial, sans-serif"
+DISPLAY = "'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif"
 
-#: Space Grotesk 700 advances in em, read from fonts/SpaceGrotesk-VariableFont_wght.ttf.
-#: Line breaks and fits measure with these, so the art wraps where the font does.
+#: Geist 700 advances in em, read from fonts/geist-latin-wght.woff2 instanced at
+#: wght 700 (`glyphs.font(700, "text")`). Line breaks and fits measure with
+#: these, so the art wraps where the font does. A change of text face needs a
+#: new table, and the JavaScript port reads this one.
 CHARS = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~’·"
 WIDTHS = (
-    0.254, 0.298, 0.514, 0.636, 0.606, 0.758, 0.591, 0.294, 0.398, 0.39, 0.54, 0.62, 0.294, 0.432, 0.298, 0.388,
-    0.648, 0.452, 0.594, 0.608, 0.636, 0.6, 0.618, 0.554, 0.6, 0.618, 0.298, 0.298, 0.62, 0.62, 0.62, 0.578,
-    1.014, 0.634, 0.664, 0.644, 0.666, 0.554, 0.534, 0.662, 0.656, 0.264, 0.61, 0.626, 0.542, 0.882, 0.67, 0.676,
-    0.604, 0.676, 0.632, 0.606, 0.588, 0.672, 0.618, 0.898, 0.644, 0.624, 0.576, 0.358, 0.388, 0.358, 0.62, 0.62,
-    0.296, 0.578, 0.638, 0.586, 0.638, 0.577, 0.436, 0.638, 0.616, 0.266, 0.268, 0.564, 0.266, 0.854, 0.616, 0.612,
-    0.638, 0.638, 0.396, 0.524, 0.456, 0.616, 0.548, 0.784, 0.592, 0.616, 0.518, 0.466, 0.258, 0.466, 0.62, 0.294,
-    0.218,
+    0.228, 0.257, 0.39, 0.589, 0.67, 0.825, 0.706, 0.203, 0.323, 0.323, 0.422, 0.57, 0.236, 0.417, 0.236, 0.522,
+    0.693, 0.449, 0.653, 0.65, 0.656, 0.671, 0.627, 0.544, 0.664, 0.631, 0.311, 0.311, 0.55, 0.552, 0.55, 0.591,
+    0.962, 0.73, 0.703, 0.734, 0.716, 0.622, 0.604, 0.738, 0.721, 0.3, 0.627, 0.689, 0.589, 0.915, 0.75, 0.776,
+    0.672, 0.769, 0.697, 0.681, 0.599, 0.703, 0.73, 1.015, 0.688, 0.631, 0.594, 0.39, 0.501, 0.39, 0.461, 0.561,
+    0.278, 0.594, 0.634, 0.598, 0.634, 0.605, 0.447, 0.634, 0.611, 0.281, 0.331, 0.647, 0.313, 0.9, 0.611, 0.618,
+    0.634, 0.634, 0.425, 0.57, 0.445, 0.607, 0.609, 0.849, 0.65, 0.586, 0.583, 0.408, 0.294, 0.408, 0.523, 0.247,
+    0.236,
 )
 assert len(CHARS) == len(WIDTHS), "one advance per character"
 ADVANCE = dict(zip(CHARS, WIDTHS))
@@ -127,6 +130,29 @@ def sublines(text: str | None, size: float, max_w: float) -> tuple[float, list[s
         sub *= 0.96
         lines = wrap(text, sub, max_w)
     return sub, lines
+
+
+#: The smallest size a qualifier is set at. build/surfaces.py holds the same
+#: floor for the files in ads/, so the page and the files agree.
+QUALIFIER_FLOOR_PX = 8.0
+
+
+def qualifier_lines(text: str | None, size: float, max_w: float) -> tuple[float, list[str]]:
+    """The qualifier under the answer line, as surfaces.qualifier_lines sets it: 34 percent of
+    the headline, shrinking to 26 percent and never below the floor, on one line or split once
+    at the sentence boundary. (0, []) when two lines at the floor still run past the measure."""
+    if not text:
+        return 0.0, []
+    start = max(size * 0.34, QUALIFIER_FLOOR_PX)
+    floor = max(size * 0.26, QUALIFIER_FLOOR_PX)
+    head, sep, rest = text.partition(". ")
+    for lines in [[text]] + ([[head + ".", rest]] if sep and rest else []):
+        q = start
+        while q > floor and max(width(x, q) for x in lines) > max_w * FIT:
+            q = max(floor, q * 0.96)
+        if max(width(x, q) for x in lines) <= max_w * FIT:
+            return q, lines
+    return 0.0, []
 
 
 def first_sentence(text: str) -> tuple[str, str]:
@@ -278,14 +304,16 @@ class Art:
 
 
 def ad(uid: str, w: float, h: float, scheme: str, *, lines: list[str] | None = None, text: str | None = None,
-       kicker: str | None = None, subline: str | None = None, cta: str | None = None, picture: str = "ghost",
+       kicker: str | None = None, subline: str | None = None, qualifier: str | None = None,
+       cta: str | None = None, picture: str = "ghost",
        boost: float = 1.0, ghost_at: tuple[float, float, float] = (0.90, 0.12, 0.8)) -> str:
     """The house ad: the picture top right, the words stacked up from the wordmark at the bottom left.
 
     `lines` sets the headline as given. `text` wraps it at each trial size. `ghost_at` places the ghost as
     shares of the width, the height, and the short side; a skyscraper moves it down to fill its middle.
+    `qualifier` goes under the answer line, muted, wherever `qualifier_lines` finds room for it.
     """
-    label = " ".join(x for x in (kicker, " ".join(lines) if lines else text, subline, cta) if x)
+    label = " ".join(x for x in (kicker, " ".join(lines) if lines else text, subline, qualifier, cta) if x)
     a = Art(uid, w, h, scheme, label)
     short, pad = a.short, w * 0.085
     max_w = w - 2 * pad
@@ -301,11 +329,14 @@ def ad(uid: str, w: float, h: float, scheme: str, *, lines: list[str] | None = N
     ceiling = pad + (size * 0.035 / 0.075 * 2.2 if kicker else 0)
     head: list[str] = []
     sub, subs = 0.0, []
+    q, quals = 0.0, []
     for _ in range(24):
         head = list(lines) if lines else balanced(text or "", size, max_w)
         sub, subs = sublines(subline, size, max_w)
+        q, quals = qualifier_lines(qualifier, size, max_w)
         block = ((len(head) - 1) * size * 1.22 + size * 1.9 + (size * 0.85 if cta else 0)
-                 + (size * 1.05 + (len(subs) - 1) * sub * 1.3 if subs else 0))
+                 + (size * 1.05 + (len(subs) - 1) * sub * 1.3 if subs else 0)
+                 + len(quals) * q * 1.3)
         widest = max(width(x, size) for x in head)
         if mark_cy - mark_h / 2 - size * 0.9 - block >= ceiling and widest <= max_w * FIT:
             break
@@ -320,6 +351,9 @@ def ad(uid: str, w: float, h: float, scheme: str, *, lines: list[str] | None = N
     rule_h = max(3, short * 0.011)
     a.rule(pad, y - rule_h, short * 0.13, rule_h)
     y -= rule_h + size * 0.95
+    for j, s in enumerate(reversed(quals)):
+        a.text(pad, y - j * q * 1.3, s, q, 500, a.muted)
+    y -= len(quals) * q * 1.3
     if subs:
         for j, s in enumerate(reversed(subs)):
             a.text(pad, y - j * sub * 1.3, s, sub, 500, a.ink)
@@ -456,14 +490,17 @@ class Campaign:
     def combo(self, e: dict, shape: str, scheme: str) -> str:
         w, h = {s: (sw, sh) for sw, sh, s in MS.AD_SIZES}[shape]
         pic = e.get("picture", "ghost")
+        q = e.get("qualifier")
         if shape == "mpu":
-            art = ad(self.uid(), w, h, scheme, lines=e["short_lines"], kicker=e.get("kicker"), picture=pic)
+            # The 300x250 drops the kicker and the action, as ads/ does, and keeps the answer line short.
+            art = ad(self.uid(), w, h, scheme, lines=e["short_lines"], subline=e.get("subshort"), qualifier=q,
+                     picture=pic)
         elif shape == "landscape":
             art = ad(self.uid(), w, h, scheme, lines=e.get("wide"), text=None if e.get("wide") else e["title"],
-                     kicker=e.get("kicker"), subline=e.get("subline"), cta=e["cta"], picture=pic)
+                     kicker=e.get("kicker"), subline=e.get("subline"), qualifier=q, cta=e["cta"], picture=pic)
         else:
             art = ad(self.uid(), w, h, scheme, lines=e["headline"], kicker=e.get("kicker"), subline=e.get("subline"),
-                     cta=e["cta"], picture=pic)
+                     qualifier=q, cta=e["cta"], picture=pic)
         return self.fig(art, f"{SHAPES[shape]} {w} by {h} on {GROUND[scheme]}", e["id"], w if w < 600 else None)
 
     # ------------------------------------------------------------------ sections

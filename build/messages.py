@@ -192,7 +192,7 @@ def ad_campaigns(entries: list[dict] | None = None) -> dict[str, list[dict[str, 
             "cta": e["cta"],
             "id": e["id"],
         }
-        for f in ("wide", "subline", "subshort", "picture"):
+        for f in ("wide", "subline", "subshort", "picture", "qualifier"):
             if f in e:
                 c[f] = list(e[f]) if isinstance(e[f], list) else e[f]
         out[e["brand"]].append(c)
@@ -478,6 +478,11 @@ def validate(entries: list[dict], findings: list[dict], *, today: dt.date | None
             for k in ("headline", "wide"):
                 if isinstance(e.get(k), list) and _norm(" ".join(e[k])) != title:
                     err(f"{k} does not join to the title")
+            # The 300x250 keeps the answer line in its short form, so a live ad
+            # that carries a subline needs a subshort. Without one the banner
+            # shows the headline alone (#17).
+            if status == "approved" and e.get("release") == "launch" and e.get("subline") and not e.get("subshort"):
+                err("an approved launch ad with a subline needs a subshort, the answer line of the 300x250")
             terms_ = [t.lower() for t in e.get("scope_terms") or []]
             if terms_:
                 for k in ("subline", "subshort"):

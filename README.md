@@ -143,8 +143,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 the OS preference, adds the palette as `bg-ox-*` and `text-ox-*` utilities,
 routes every heading and body to Geist and code to Monaspace Neon, and defines
 the two scales as `text-m-h1` to `text-m-micro` and `text-a-h1` to
-`text-a-micro`. `next-fonts.ts` loads its fonts from `../fonts/`, so vendor
-`tokens/` and `fonts/` side by side.
+`text-a-micro`. Each state colour comes as a mark for badges and dots and as a
+text stop for words, `--ox-st-*-text` on ink and `--ox-st-*-text-ink` on paper.
+`next-fonts.ts` loads its fonts from `../fonts/`, so vendor `tokens/` and
+`fonts/` side by side.
 
 Space Grotesk reaches a product two ways. `--font-wordmark` sets a wordmark
 that is text rather than an SVG. The `hero-line-1` class sets line 1 of a
@@ -299,7 +301,8 @@ set.
 `--check` reproduces the kit's shipped `oxagen` wordmark from the font (same
 weight, same em, HarfBuzz spacing including kerning) and fails if the geometry
 has moved. It also fails if a gold neighbour stops matching its OKLCH
-derivation, if any text token drops below AA on its ground, if a heading
+derivation, if any text token drops below AA on its ground, if a state text
+stop drops below AA on a surface of its theme or leaves its mark's hue, if a heading
 leaves Geist, if any step but the marketing h1 admits a Space Grotesk hero
 line, if a webfont loses a face or a feature, or if the skill's tokens or logo
 drift from the build.
@@ -334,3 +337,6 @@ drift from the build.
 - **Space Grotesk sets the wordmarks and line 1 of a marketing hero.** Every
   heading is Geist, h1 to h6, in the app and on the website. Nothing in Space
   Grotesk is below 20 px. Code, terminal output, and data are Monaspace Neon.
+- **A status word takes its text stop.** A badge or a dot takes the state's
+  mark. A word in that colour takes `--ox-st-*-text` on ink or
+  `--ox-st-*-text-ink` on paper, which clear 4.5:1 on every surface there.

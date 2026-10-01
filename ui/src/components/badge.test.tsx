@@ -58,14 +58,14 @@ describe("badgeVariants — class map", () => {
     const cls = badgeVariants({ variant: "success-soft" });
     expect(cls).toContain("border-success/42");
     expect(cls).toContain("bg-success/11");
-    expect(cls).toContain("text-success");
+    expect(cls).toContain("text-success-ink");
     expect(badgeVariants({ variant: "warning-soft" })).toContain(
-      "text-warning",
+      "text-warning-ink",
     );
     expect(badgeVariants({ variant: "error-soft" })).toContain(
       "text-error-ink",
     );
-    expect(badgeVariants({ variant: "info-soft" })).toContain("text-info");
+    expect(badgeVariants({ variant: "info-soft" })).toContain("text-info-ink");
     expect(badgeVariants({ variant: "proven-soft" })).toContain(
       "bg-proven/11",
     );
@@ -74,7 +74,7 @@ describe("badgeVariants — class map", () => {
     const cls = badgeVariants({ variant: "critical-soft" });
     expect(cls).toContain("border-critical/42");
     expect(cls).toContain("bg-critical/12");
-    expect(cls).toContain("text-critical");
+    expect(cls).toContain("text-critical-ink");
   });
   it("the neutral variants sit on the wash with the hairline", () => {
     expect(badgeVariants({ variant: "quiet" })).toContain("bg-hl");

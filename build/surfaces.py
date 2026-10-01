@@ -626,6 +626,35 @@ def og_card(w: int, h: int, brand: str, scheme: str, *, tagline: str) -> str:
     return s.svg()
 
 
+#: The smallest size a qualifier is set at, in px of the art. Smaller than this
+#: it cannot be read on a 300x250, so a size with no room above it drops it.
+QUALIFIER_FLOOR_PX = 8.0
+
+
+def qualifier_lines(text: str, size: float, measure: float) -> tuple[float, list[str]]:
+    """The qualifier's size and lines under a headline of `size`, or (0, []) when it does not fit.
+
+    It starts at 34 percent of the headline and shrinks to 26 percent, never
+    below QUALIFIER_FLOOR_PX, to fit the measure on one line. A qualifier of two
+    sentences that still does not fit splits once, at the sentence boundary, and
+    shrinks again. If two lines at the floor still run past the measure, the
+    size has no room for it.
+    """
+    if not text:
+        return 0.0, []
+    start = max(size * 0.34, QUALIFIER_FLOOR_PX)
+    floor = max(size * 0.26, QUALIFIER_FLOOR_PX)
+    head, sep, rest = text.partition(". ")
+    layouts = [[text]] + ([[head + ".", rest]] if sep and rest else [])
+    for lines in layouts:
+        q = start
+        while q > floor and max(text_width(ln, q, 500) for ln in lines) > measure:
+            q = max(floor, q * 0.96)
+        if max(text_width(ln, q, 500) for ln in lines) <= measure:
+            return q, lines
+    return 0.0, []
+
+
 def ad(
     w: int,
     h: int,
@@ -635,6 +664,7 @@ def ad(
     headline: list[str],
     kicker: str = "",
     subline: str = "",
+    qualifier: str = "",
     cta: str = "",
     picture: str = "ghost",
 ) -> str:
@@ -648,6 +678,10 @@ def ad(
     says what Oxagen does about it. It is set at a little under half the
     headline and in the full text colour rather than the muted one, because
     it is the substance of the ad and not a caption to it.
+
+    `qualifier` is the scope sentence the registry keeps beside the line. It
+    sits under the answer line, smaller and in the muted colour, wherever
+    `qualifier_lines` finds room for it, and the fit loop makes that room.
 
     `picture` is which of the mark's own compositions sits in the top right.
     `ghost` is the mark oversized, which is what an ad about one thing wants.
@@ -674,12 +708,15 @@ def ad(
 
     size = min(w * 0.075, h * 0.105)
     ceiling = pad + (size * 0.035 / 0.075 * 2.2 if kicker else 0)
+    q_size, q_lines = 0.0, []
     for _ in range(24):
+        q_size, q_lines = qualifier_lines(qualifier, size, w - pad * 2)
         block = (
             (len(headline) - 1) * size * 1.22
             + size * 1.9
             + (size * 0.85 if cta else 0)
             + (size * 1.05 if subline else 0)
+            + (len(q_lines) * q_size * 1.3 if q_lines else 0)
         )
         wide = max(text_width(ln, size, 700) for ln in headline)
         if mark_cy - mark_h / 2 - size * 0.9 - block >= ceiling and wide <= w - pad * 2:
@@ -701,6 +738,10 @@ def ad(
     rule_h = max(3.0, short * 0.011)
     s.rule(pad, y - rule_h, short * 0.13, rule_h)
     y -= rule_h + size * 0.95
+    if q_lines:
+        for j, ln in enumerate(reversed(q_lines)):
+            s.line(ln, pad, y - j * q_size * 1.3, q_size, weight=500, fill=s.muted)
+        y -= len(q_lines) * q_size * 1.3
     if subline:
         # The answer line never wraps and never runs into the margin: it is
         # one sentence, so if it will not fit the measure it is set smaller.

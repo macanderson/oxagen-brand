@@ -56,17 +56,19 @@ const trendIcon = {
   down: TrendDownIcon,
   flat: MinusIcon,
 } as const;
+// Words and figures take the state's text stop (the `-ink` roles), which clears
+// 4.5:1 on every surface of its theme. The bare roles are marks.
 const intentClass = {
-  positive: "text-success",
-  negative: "text-error",
+  positive: "text-success-ink",
+  negative: "text-error-ink",
   neutral: "text-muted-foreground",
 } as const;
 
 const toneClass = {
   neutral: "text-foreground",
-  success: "text-success",
-  warning: "text-warning",
-  error: "text-error",
+  success: "text-success-ink",
+  warning: "text-warning-ink",
+  error: "text-error-ink",
 } as const;
 
 function isBlank(value: React.ReactNode): boolean {

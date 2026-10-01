@@ -21,6 +21,8 @@ def _dark() -> dict[str, str]:
         "accent-text": C.GOLD, "on-gold": C.INK, "destructive": C.DESTRUCTIVE["dark"],
     }
     v.update({f"state-{n}": d for n, d, _, _ in C.STATES})
+    v.update({f"state-{n}-text": C.STATE_TEXT[n]["dark"] for n, _, _, _ in C.STATES})
+    v.update({"destructive-text": C.STATE_TEXT["destructive"]["dark"], "muted-text": C.MUTED})
     return v
 
 
@@ -32,6 +34,8 @@ def _light() -> dict[str, str]:
         "accent-text": C.GOLD_DEEP, "destructive": C.DESTRUCTIVE["light"],
     }
     v.update({f"state-{n}": l for n, _, l, _ in C.STATES})
+    v.update({f"state-{n}-text": C.STATE_TEXT[n]["light"] for n, _, _, _ in C.STATES})
+    v.update({"destructive-text": C.STATE_TEXT["destructive"]["light"], "muted-text": C.MUTED_TEXT_INK})
     return v
 
 

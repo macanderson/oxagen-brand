@@ -123,7 +123,10 @@ def _semantic(theme: str) -> list[tuple[str, str]]:
         ("secondary", ox("hl" if dark else "paper-hl")),
         ("secondary-foreground", ox("text" if dark else "text-ink")),
         ("muted", ox("hl" if dark else "paper-hl")),
-        ("muted-foreground", ox("muted" if dark else "muted-ink")),
+        # Secondary text sits on `muted` as often as on the canvas. muted-ink is
+        # 4.40:1 on paper-hl, so the light theme takes muted-text-ink, which
+        # clears both. On ink, muted clears 4.5:1 on the lifted row as it is.
+        ("muted-foreground", ox("muted" if dark else "muted-text-ink")),
         # shadcn's `accent` is the hover surface under menu items and rows.
         # It is a surface, so it is never gold: gold never fills a surface.
         ("accent", ox("hl" if dark else "paper-hl")),
@@ -153,6 +156,11 @@ def _semantic(theme: str) -> list[tuple[str, str]]:
 SEMANTIC_NAMES = [name for name, _ in _semantic("dark")]
 
 
+def _state_var(name: str) -> str:
+    """The token stem for a state's stops: `st-failed`, or `destructive` for the red."""
+    return name if name == "destructive" else f"st-{name}"
+
+
 def house_tokens_css() -> str:
     lines = _header(
         "The house colour and type system: one palette and three faces for oxagen and stella.",
@@ -164,6 +172,8 @@ def house_tokens_css() -> str:
         "State is carried by border shape. The st-* colours are for the badge or",
         "dot inside a table where shape is too small to read, never the only",
         "signal. destructive is the failed red lifted until it clears AA on ink.",
+        "A word in a state's colour takes its text stop, st-*-text on ink and",
+        "st-*-text-ink on paper, which clears 4.5:1 on every surface of its theme.",
         "",
         "Geist sets every heading and everything read. Monaspace Neon sets code,",
         "logs, digests, and the numbers in tables. Space Grotesk sets the",
@@ -179,6 +189,10 @@ def house_tokens_css() -> str:
         lines.append(f"  --ox-st-{name}-ink: {light}; /* the same, on paper */")
     lines.append(f"  --ox-destructive: {C.DESTRUCTIVE['dark']}; /* a destructive action, on ink: text and fill */")
     lines.append(f"  --ox-destructive-ink: {C.DESTRUCTIVE['light']}; /* the same, on paper */")
+    lines.append("")
+    for name, text in C.STATE_TEXT.items():
+        lines.append(f"  --ox-{_state_var(name)}-text: {text['dark']}; /* {name} as words, on ink, panel, and hl */")
+        lines.append(f"  --ox-{_state_var(name)}-text-ink: {text['light']}; /* {name} as words, on paper and paper-hl */")
     lines += [
         "",
         f"  --ox-gold-sheen: linear-gradient(45deg, {C.GOLD_DEEP} 0%, {C.GOLD} 38%, "
@@ -259,6 +273,10 @@ def house_tailwind_css() -> str:
         out += f"  --color-ox-st-{name}-ink: var(--ox-st-{name}-ink);\n"
     out += "  --color-ox-destructive: var(--ox-destructive);\n"
     out += "  --color-ox-destructive-ink: var(--ox-destructive-ink);\n"
+    for name in C.STATE_TEXT:
+        var = _state_var(name)
+        out += f"  --color-ox-{var}-text: var(--ox-{var}-text);\n"
+        out += f"  --color-ox-{var}-text-ink: var(--ox-{var}-text-ink);\n"
     out += "\n"
     for role in T.ROLES:
         if role.key == "hero":
@@ -379,7 +397,7 @@ def build_tokens() -> None:
             "baseline": m["baseline"],
         }
     payload = {
-        "version": "2.4.0",
+        "version": "2.5.0",
         "name": "oxagen house system",
         "built_on": "oxagen brand kit (Space Grotesk), on obsidian and white with one gold",
         "icons": {
@@ -405,8 +423,23 @@ def build_tokens() -> None:
             "deep_on_paper": round(C.contrast(C.GOLD_DEEP, C.PAPER), 2),
         },
         "tokens": {name: value for name, value, _ in C.TOKENS},
-        "states": {name: {"ink": d, "paper": l, "use": u} for name, d, l, u in C.STATES},
-        "destructive": {"ink": C.DESTRUCTIVE["dark"], "paper": C.DESTRUCTIVE["light"], "lift": C.DESTRUCTIVE_LIFT},
+        "states": {
+            name: {
+                "ink": d, "paper": l, "use": u,
+                "text_ink": C.STATE_TEXT[name]["dark"], "text_paper": C.STATE_TEXT[name]["light"],
+            }
+            for name, d, l, u in C.STATES
+        },
+        "destructive": {
+            "ink": C.DESTRUCTIVE["dark"], "paper": C.DESTRUCTIVE["light"], "lift": C.DESTRUCTIVE_LIFT,
+            "text_ink": C.STATE_TEXT["destructive"]["dark"], "text_paper": C.STATE_TEXT["destructive"]["light"],
+        },
+        "state_text": {
+            "rule": "a word in a state's colour takes its text stop; a badge or a dot takes the bare stop",
+            "l_on_ink": C.TEXT_L_ON_INK,
+            "oklch": {name: {t: dict(zip("LCH", v)) for t, v in th.items()} for name, th in C.STATE_TEXT_LCH.items()},
+            "surfaces": C.TEXT_SURFACES,
+        },
         "semantic": {theme: dict(_semantic(theme)) for theme in ("light", "dark")},
         "type": {
             "family": T.GEIST.family,
@@ -634,7 +667,10 @@ def ad_svg(brand: str, campaign: dict[str, object], w: int, h: int, tag: str, sc
     A banner is not a poster with the middle line deleted. The 300x250 drops
     the kicker and the call to action -- there is no room for either at a
     legible size -- but it keeps the answer line, in its short form, because
-    that line is the reason the ad exists.
+    that line is the reason the ad exists. The qualifier, the scope sentence
+    the registry keeps beside the line, goes under the answer line at every
+    size where it fits, because a short form keeps the qualifier of its
+    longer version.
     """
     small = tag == "mpu"
     key = "short" if small else ("wide" if tag == "landscape" and "wide" in campaign else "headline")
@@ -644,6 +680,7 @@ def ad_svg(brand: str, campaign: dict[str, object], w: int, h: int, tag: str, sc
         kicker="" if small else str(campaign["kicker"]),
         headline=list(campaign[key]),  # type: ignore[call-overload]
         subline=str(sub),
+        qualifier=str(campaign.get("qualifier", "")),
         cta="" if small else str(campaign["cta"]),
         picture=str(campaign.get("picture", "ghost")),
     )
@@ -670,8 +707,8 @@ CONTENT = {
          ["+ agent identity, roles, and budgets on governed calls",
           "+ every run saved as a trace beside its data"]),
         # The card an operator's weekly fleet report goes out on. Its panel is
-        # the fleet's week in three rows, not a terminal: Space Grotesk is not
-        # a code face, so nothing here is set as command output.
+        # the fleet's week in three rows, not a terminal: the card's text face
+        # is Geist, not a code face, so nothing here is set as command output.
         ("Fleet note", ["What the fleet", "asked for this week"], "The weekly fleet report",
          ["9 agents ran under mandate",
           "4 requests routed to a person",

@@ -106,7 +106,7 @@ const MenuItem = React.forwardRef<
       menuItem,
       "relative transition-colors",
       variant === "destructive" &&
-        "text-error data-[highlighted]:bg-error/10 data-[highlighted]:text-error [&_svg]:text-error",
+        "text-error-ink data-[highlighted]:bg-error/10 data-[highlighted]:text-error-ink [&_svg]:text-error",
       inset && insetPad,
       className,
     )}
