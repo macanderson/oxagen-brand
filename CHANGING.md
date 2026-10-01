@@ -94,7 +94,7 @@ The `fan-out` workflow needs the `BRAND_SYNC_TOKEN` secret in `oxageninc/brand`:
 | brand.oxagen.cloud | this repo | `ui.yml` on every push to `main` |
 | sdlc.oxagen.sh | this repo, `sdlc/` | Vercel project `oxagen-sdlc`, on a push to `main` that changes `sdlc/` |
 
-A merged sync PR ships through the deploy in this table. In `oxageninc/gtm` and `oxageninc/survey`, Vercel builds production from each push to `main`, with no `vercel deploy` step, so review a sync PR there as a release.
+A merged sync PR ships through the deploy in this table. In `oxageninc/gtm` and `oxageninc/survey`, Vercel builds production from each push to `main`, with no `vercel deploy` step, so a merge in either repo puts it live. Review a sync PR there as a release.
 
 To add a frontend, give its repo a sync script that takes `--brand <path>` and `--check`, commit the stub with `skills/install.sh --project <repo>`, add `.github/workflows/brand-drift.yml` (it checks out this repo's `main` and runs the sync with `--check`), and add the repo and its surfaces to `consumers.json`.
 
