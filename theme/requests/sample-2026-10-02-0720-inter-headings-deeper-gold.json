@@ -1,0 +1,23 @@
+{
+  "$schema": "../request.schema.json",
+  "summary": "Inter for headings, gold #C99B2E, corners",
+  "requested_at": "2026-10-02T07:20Z",
+  "color": {
+    "gold": "#C99B2E"
+  },
+  "radius": {
+    "base": "0.5rem"
+  },
+  "faces": {
+    "display": {
+      "family": "Inter",
+      "source": "google",
+      "weights": [
+        400,
+        500,
+        600,
+        700
+      ]
+    }
+  }
+}
