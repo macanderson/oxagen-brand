@@ -44,6 +44,8 @@ jobs:
           sudo apt-get install -y -qq libharfbuzz-bin librsvg2-bin
           python -m pip install --quiet fonttools brotli pyyaml
       - run: python build/build.py --check
+      - name: Test the theme request and apply scripts
+        run: python -m unittest discover -s build -p "test_*.py" -v
       - run: python build/messages.py --check
       - run: python build/fonts.py --check
       - run: python build/skill.py --check

@@ -38,6 +38,7 @@ import marks as MK
 import messages as MS
 import surfaces as SF
 import pagecss as PG
+import request as RQ
 import typeset as T
 from theme import THEME, rem_px
 from marks import (
@@ -1038,7 +1039,7 @@ def drift() -> list[str]:
 
 
 def check(drift_check: bool = True) -> int:
-    problems = C.verify() + G.verify() + T.verify() + [f"fonts: {p}" for p in FT.check()]
+    problems = C.verify() + G.verify() + T.verify() + [f"fonts: {p}" for p in FT.check()] + RQ.check_schema()
     logo, lockup = ROOT / SKILL_LOGO, ROOT / "logo/svg/oxagen-lockup-adaptive.svg"
     if drift_check and (not logo.exists() or not lockup.exists() or logo.read_bytes() != lockup.read_bytes()):
         problems.append(f"{SKILL_LOGO} is not the adaptive lockup; run build/build.py --only logos")
