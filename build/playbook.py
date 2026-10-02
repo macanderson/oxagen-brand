@@ -346,7 +346,7 @@ def tracking_rows() -> str:
 
 # The corners and the shadows come from theme/theme.json, which the tokens and
 # the kit's globals.css read too. The values below that remain live in the
-# kit: the v3 layer at the end of ui/src/styles/globals.css and the recipes in
+# kit: ui/src/styles/globals.css and the recipes in
 # ui/src/components/control-styles.ts. They are retyped here, so change this
 # block when either file moves.
 SITE_RADIUS_PX = rem_px(THEME["radius"]["site"])  # --ox-radius, written by build/build.py
@@ -874,7 +874,7 @@ def build_html() -> str:
 
 <h3>Corner radius</h3>
 <p>On the website, cards, panels, and inputs round their corners at {SITE_RADIUS_PX:g}px (<code>--ox-radius</code>).</p>
-<p>The app uses a scale instead. Each step multiplies one base value, <code>--ui-radius</code>, which is {APP_RADIUS_REM:g}rem (about {radius_px(STEP_MULT["lg"]):.0f}px). Change the base, and every corner in the app moves with it. Oxagen ADR-221 records the scale.</p>
+<p>The app uses a scale instead. Each step multiplies one base value, <code>--ox-radius-base</code>, which is {APP_RADIUS_REM:g}rem (about {radius_px(STEP_MULT["lg"]):.0f}px). Change the base in <code>theme/theme.json</code>, and every corner in the app moves with it. Oxagen ADR-221 records the scale.</p>
 {radius_row()}
 <ul class="rules">
 <li><b>A control you press or type into is a pill.</b> Buttons, selects, and form fields use <code>rounded-4xl</code>. At 36px tall, {radius_px(STEP_MULT["4xl"]):.0f}px is more than half the height, so the ends are fully round.</li>
