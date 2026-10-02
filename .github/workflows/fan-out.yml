@@ -27,7 +27,9 @@ permissions:
 
 jobs:
   plan:
-    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    # A dispatch fans out only from main. From any other branch it would sync
+    # an unmerged kit into every consumer with the write token.
+    if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -69,19 +71,33 @@ jobs:
         with:
           ref: ${{ needs.plan.outputs.sha }}
           path: kit
+      # The token clones the consumer and is then removed from site/.git, so
+      # the consumer's own sync command below runs with no credential. Only
+      # the step that pushes and opens the PR holds the token.
       - uses: actions/checkout@v5
         with:
           repository: ${{ matrix.consumer.repo }}
           token: ${{ secrets.BRAND_SYNC_TOKEN }}
           path: site
+          persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 24
+      # The package names come from consumers.json, so they reach the shell
+      # through the environment and must be plain package names.
       - name: Install system tools
         if: join(matrix.consumer.apt, ' ') != ''
+        env:
+          APT: ${{ join(matrix.consumer.apt, ' ') }}
         run: |
+          if ! printf '%s\n' "$APT" | grep -Eqx '[a-z0-9][a-z0-9.+-]*( [a-z0-9][a-z0-9.+-]*)*'; then
+            echo "::error::consumers.json lists an apt entry that is not a package name: $APT"
+            exit 1
+          fi
           sudo apt-get update -qq
-          sudo apt-get install -y -qq ${{ join(matrix.consumer.apt, ' ') }}
+          # Word splitting is wanted here: one argument per package name.
+          # shellcheck disable=SC2086
+          sudo apt-get install -y -qq $APT
       - name: Sync
         working-directory: site
         env:
@@ -107,6 +123,9 @@ jobs:
           git switch -c "$branch"
           git add -A
           git commit -q -m "Sync the brand from oxagen-brand@$short"
+          # The checkout kept no credential, so git takes the token from gh
+          # in this step alone.
+          gh auth setup-git
           git push -q origin "$branch"
           gh label create agent-monitored-pr --repo "$REPO" --color fd0880 \
             --description "Agent polls every 60 seconds fixes CI, comments, conflicts." 2>/dev/null || true
