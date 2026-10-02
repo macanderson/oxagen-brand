@@ -12,13 +12,14 @@
  * brand hex. Light is the default; `.dark` on <html> is the dark theme, and
  * a system preference falls back to it when neither class is set.
  *
- * Fonts: tokens/next-fonts.ts sets --font-space-grotesk, --font-geist and
- * --font-monaspace-neon on <html>. Without next/font, import
- * house-fonts.css and the family names below resolve to its @font-face.
+ * Fonts: tokens/next-fonts.ts sets --font-space-grotesk, --font-geist,
+ * --font-inter and --font-monaspace-neon on <html>. Without next/font,
+ * import house-fonts.css and the family names below resolve to its
+ * @font-face.
  *
  * Type: text-m-* is the marketing scale, text-a-* the app scale. A surface
- * picks one. Every heading and all text take Geist, and code takes
- * Monaspace Neon with texture healing on, whichever scale is in use.
+ * picks one. Every heading takes Inter, all text takes Geist, and code
+ * takes Monaspace Neon with texture healing on, whichever scale is in use.
  *
  * Space Grotesk reaches a page two ways. --font-wordmark sets a wordmark
  * that is text rather than an SVG. The hero-line-1 class sets line 1 of
@@ -88,7 +89,7 @@
   --color-ox-destructive-text-ink: var(--ox-destructive-text-ink);
 
   --font-sans: var(--font-geist, "Geist"), system-ui, -apple-system, "Segoe UI", sans-serif; /* body, labels, buttons, tables, navigation */
-  --font-display: var(--font-geist, "Geist"), system-ui, -apple-system, "Segoe UI", sans-serif; /* every heading, h1 to h6 */
+  --font-display: var(--font-inter, "Inter"), system-ui, -apple-system, "Segoe UI", sans-serif; /* every heading, h1 to h6 */
   --font-mono: var(--font-monaspace-neon, "Monaspace Neon"), ui-monospace, "SF Mono", Menlo, Consolas, monospace; /* code, logs, ids, and numbers in tables */
   --font-wordmark: var(--font-space-grotesk, "Space Grotesk"), "Helvetica Neue", Arial, sans-serif; /* a wordmark set as text rather than drawn */
 

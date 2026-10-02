@@ -4,7 +4,7 @@
     {
       "name": "shipped",
       "color": {
-        "gold": "#D4AF37",
+        "gold": "#C99B2E",
         "gold_bright": {
           "lightness": 0.86,
           "chroma": 0.13
@@ -70,9 +70,9 @@
         "destructive_lift_on_ink": 0.06
       },
       "vars": {
-        "--ox-gold": "#D4AF37",
-        "--ox-gold-bright": "#F1CE65",
-        "--ox-gold-deep": "#8A7223",
+        "--ox-gold": "#C99B2E",
+        "--ox-gold-bright": "#F9C965",
+        "--ox-gold-deep": "#906F23",
         "--ox-ink": "#09090B",
         "--ox-void": "#000000",
         "--ox-panel": "#18181B",
@@ -122,7 +122,7 @@
         "--ox-st-critical-text-ink": "#AE2540",
         "--ox-destructive-text": "#E7685C",
         "--ox-destructive-text-ink": "#992F28",
-        "--ox-gold-sheen": "linear-gradient(45deg, #8A7223 0%, #D4AF37 38%, #F1CE65 56%, #D4AF37 74%, #8A7223 100%)"
+        "--ox-gold-sheen": "linear-gradient(45deg, #906F23 0%, #C99B2E 38%, #F9C965 56%, #C99B2E 74%, #906F23 100%)"
       },
       "problems": []
     },
@@ -510,7 +510,7 @@
     {
       "name": "neighbours moved",
       "color": {
-        "gold": "#D4AF37",
+        "gold": "#C99B2E",
         "gold_bright": {
           "lightness": 0.9,
           "chroma": 0.15
@@ -576,9 +576,9 @@
         "destructive_lift_on_ink": 0.06
       },
       "vars": {
-        "--ox-gold": "#D4AF37",
-        "--ox-gold-bright": "#FFDA5A",
-        "--ox-gold-deep": "#7D5F00",
+        "--ox-gold": "#C99B2E",
+        "--ox-gold-bright": "#FFD55A",
+        "--ox-gold-deep": "#835B00",
         "--ox-ink": "#09090B",
         "--ox-void": "#000000",
         "--ox-panel": "#18181B",
@@ -628,16 +628,17 @@
         "--ox-st-critical-text-ink": "#AE2540",
         "--ox-destructive-text": "#E7685C",
         "--ox-destructive-text-ink": "#992F28",
-        "--ox-gold-sheen": "linear-gradient(45deg, #7D5F00 0%, #D4AF37 38%, #FFDA5A 56%, #D4AF37 74%, #7D5F00 100%)"
+        "--ox-gold-sheen": "linear-gradient(45deg, #835B00 0%, #C99B2E 38%, #FFD55A 56%, #C99B2E 74%, #835B00 100%)"
       },
       "problems": [
-        "gold-deep #7D5F00 leaves the gold's hue: lightness 0.5 and chroma 0.12 fall outside sRGB there"
+        "gold-bright #FFD55A leaves the gold's hue: lightness 0.9 and chroma 0.15 fall outside sRGB there",
+        "gold-deep #835B00 leaves the gold's hue: lightness 0.5 and chroma 0.12 fall outside sRGB there"
       ]
     },
     {
       "name": "states moved",
       "color": {
-        "gold": "#D4AF37",
+        "gold": "#C99B2E",
         "gold_bright": {
           "lightness": 0.86,
           "chroma": 0.13
@@ -703,9 +704,9 @@
         "destructive_lift_on_ink": 0.08
       },
       "vars": {
-        "--ox-gold": "#D4AF37",
-        "--ox-gold-bright": "#F1CE65",
-        "--ox-gold-deep": "#8A7223",
+        "--ox-gold": "#C99B2E",
+        "--ox-gold-bright": "#F9C965",
+        "--ox-gold-deep": "#906F23",
         "--ox-ink": "#09090B",
         "--ox-void": "#000000",
         "--ox-panel": "#18181B",
@@ -755,14 +756,14 @@
         "--ox-st-critical-text-ink": "#AE2540",
         "--ox-destructive-text": "#F66D60",
         "--ox-destructive-text-ink": "#992F28",
-        "--ox-gold-sheen": "linear-gradient(45deg, #8A7223 0%, #D4AF37 38%, #F1CE65 56%, #D4AF37 74%, #8A7223 100%)"
+        "--ox-gold-sheen": "linear-gradient(45deg, #906F23 0%, #C99B2E 38%, #F9C965 56%, #C99B2E 74%, #906F23 100%)"
       },
       "problems": []
     },
     {
       "name": "text moved",
       "color": {
-        "gold": "#D4AF37",
+        "gold": "#C99B2E",
         "gold_bright": {
           "lightness": 0.86,
           "chroma": 0.13
@@ -828,9 +829,9 @@
         "destructive_lift_on_ink": 0.06
       },
       "vars": {
-        "--ox-gold": "#D4AF37",
-        "--ox-gold-bright": "#F1CE65",
-        "--ox-gold-deep": "#8A7223",
+        "--ox-gold": "#C99B2E",
+        "--ox-gold-bright": "#F9C965",
+        "--ox-gold-deep": "#906F23",
         "--ox-ink": "#09090B",
         "--ox-void": "#000000",
         "--ox-panel": "#18181B",
@@ -880,7 +881,7 @@
         "--ox-st-critical-text-ink": "#AE2540",
         "--ox-destructive-text": "#E7685C",
         "--ox-destructive-text-ink": "#992F28",
-        "--ox-gold-sheen": "linear-gradient(45deg, #8A7223 0%, #D4AF37 38%, #F1CE65 56%, #D4AF37 74%, #8A7223 100%)"
+        "--ox-gold-sheen": "linear-gradient(45deg, #906F23 0%, #C99B2E 38%, #F9C965 56%, #C99B2E 74%, #906F23 100%)"
       },
       "problems": [
         "denied text stop on ink is 4.30:1 on hl, below AA",

@@ -118,7 +118,7 @@
      (class="dark", data-theme="dark"), otherwise the system's. */
   var CSS =
     ":host{all:initial}" +
-    ".card{--bg:#FFFFFF;--fg:#09090B;--muted:#52525B;--line:#E4E4E7;--gold:#D4AF37;" +
+    ".card{--bg:#FFFFFF;--fg:#09090B;--muted:#52525B;--line:#E4E4E7;--gold:#C99B2E;" +
     "position:fixed;z-index:2147483000;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));" +
     "margin:0 auto;max-width:380px;box-sizing:border-box;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;" +
     "padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--fg);" +

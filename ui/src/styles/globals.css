@@ -46,14 +46,14 @@
  *   DARK    page #09090B (obsidian) → panel #18181B → lifted row #27272A →
  *           hairline #27272A, ink #FFFFFF, secondary ink #A1A1AA.
  *
- * The greys are neutral and carry no hue, so the single GOLD (#D4AF37) is the
+ * The greys are neutral and carry no hue, so the single GOLD (#C99B2E) is the
  * only warm value on a screen. Gold is IDENTITY and at most ONE action per
  * screen; it never encodes a state and it is never a surface. The primary
  * button is obsidian on white and white on obsidian; gold is --brand.
  *
  * Gold as INK on white is only 2.1:1, so — exactly as the kit specifies — the
  * light theme renders every gold *mark* (accent copy, links, the focus ring)
- * in the gold's own deep shade #8A7223 (4.65:1), and dark mode uses the gold
+ * in the gold's own deep shade #906F23 (4.65:1), and dark mode uses the gold
  * itself (9.5:1). A gold FILL is unaffected: ink on gold is 9.5:1 in both.
  *
  * Card and table HEADERS stay flat — surface plus hairline, never shaded bars.
@@ -125,10 +125,10 @@
        apps/ and packages/ bind to these identifiers; a skin owns the values,
        not the names. All three stops are the kit's gold, unaltered. */
     --ox-surface: var(--ox-paper-panel); /* #FFFFFF — light card */
-    --ox-ember-deep: var(--ox-gold-deep); /* #8A7223 — gold as INK on paper (4.65:1) */
-    --ox-ember: var(--ox-gold); /* #D4AF37 — the metal */
-    --ox-ember-light: var(--ox-gold-bright); /* #F1CE65 — the shimmer highlight */
-    --ox-ember-soft: oklch(0.25 0.035 88); /* gold at 14% over obsidian: a tinted fill on the dark canvas */
+    --ox-ember-deep: var(--ox-gold-deep); /* #906F23 — gold as INK on paper (4.65:1) */
+    --ox-ember: var(--ox-gold); /* #C99B2E — the metal */
+    --ox-ember-light: var(--ox-gold-bright); /* #F9C965 — the shimmer highlight */
+    --ox-ember-soft: oklch(0.25 0.035 81); /* gold at 14% over obsidian: a tinted fill on the dark canvas */
 
     /* RULE — the house system has exactly ONE accent hue, the gold. There is no
        second brand colour anywhere: the categorical ramp spends the palette's
@@ -164,23 +164,23 @@
        kit's gold-bright / gold / gold-deep, so the ramp interpolates through
        real brand stops rather than around them; the rest are tints toward the
        paper and shades toward the ink, on the gold's own hue. */
-    --_amber-50: oklch(0.985 0.02 95); /* the palest gold tint */
-    --_amber-100: oklch(0.965 0.04 95);
-    --_amber-200: oklch(0.925 0.08 93);
-    --_amber-300: var(--ox-gold-bright); /* #F1CE65 */
-    --_amber-400: var(--ox-gold); /* #D4AF37 — the metal */
-    --_amber-500: oklch(0.66 0.125 88); /* between gold and gold-deep */
-    --_amber-600: var(--ox-gold-deep); /* #8A7223 — gold as ink on white */
-    --_amber-700: oklch(0.47 0.09 80); /* link hover on white */
-    --_amber-800: oklch(0.38 0.07 80);
-    --_amber-900: oklch(0.3 0.05 80);
+    --_amber-50: oklch(0.985 0.02 88); /* the palest gold tint */
+    --_amber-100: oklch(0.965 0.04 88);
+    --_amber-200: oklch(0.925 0.08 86);
+    --_amber-300: var(--ox-gold-bright); /* #F9C965 */
+    --_amber-400: var(--ox-gold); /* #C99B2E — the metal */
+    --_amber-500: oklch(0.66 0.125 81); /* between gold and gold-deep */
+    --_amber-600: var(--ox-gold-deep); /* #906F23 — gold as ink on white */
+    --_amber-700: oklch(0.47 0.09 73); /* link hover on white */
+    --_amber-800: oklch(0.38 0.07 73);
+    --_amber-900: oklch(0.3 0.05 73);
 
     /* Brand mark gradient stops — the kit's own sheen, deep → metal → highlight.
        Used for the tab underline and any surface that shows the metal moving;
        the MARKS themselves never take it (a mark is one colour). */
-    --_ember-a: var(--ox-gold-deep); /* #8A7223 */
-    --_ember-b: var(--ox-gold); /* #D4AF37 */
-    --_ember-c: var(--ox-gold-bright); /* #F1CE65 */
+    --_ember-a: var(--ox-gold-deep); /* #906F23 */
+    --_ember-b: var(--ox-gold); /* #C99B2E */
+    --_ember-c: var(--ox-gold-bright); /* #F9C965 */
     --_ember-navy: var(--ox-ink); /* #09090B — the canvas black */
 
     /* Status hues, from the kit's own state ramp.
@@ -269,11 +269,11 @@
     --border: var(--_stone-300); /* #E4E4E7 — paper-border, the hairline */
     --input: var(--_stone-300);
     /* The ring is a MARK on paper, not a fill, so it follows the kit's rule
-       that gold on white becomes its deep shade: #D4AF37 is 2.1:1 here
-       and would fail WCAG 1.4.11 (3:1 for a focus indicator); #8A7223 is
+       that gold on white becomes its deep shade: #C99B2E is 2.1:1 here
+       and would fail WCAG 1.4.11 (3:1 for a focus indicator); #906F23 is
        4.65:1. Dark mode keeps the metal itself at 9.5:1. */
     --ring: var(--ox-ember-deep);
-    --link: var(--ox-ember-deep); /* #8A7223 — gold as ink on paper (4.65:1); the metal itself is 2.1:1 */
+    --link: var(--ox-ember-deep); /* #906F23 — gold as ink on paper (4.65:1); the metal itself is 2.1:1 */
     --link-hover: var(--_amber-700); /* a darker gold, on white */
 
     /* Status — semantic names (error == destructive). */
@@ -301,11 +301,11 @@
     --critical-ink: var(--ox-st-critical-text-ink); /* #AE2540 — 6.09:1 */
 
     /* Accent text ink — the shade of the gold that is legible as TEXT on the
-       current background. #D4AF37 is the MARK colour and is only 2.1:1 on
+       current background. #C99B2E is the MARK colour and is only 2.1:1 on
        paper, so accent copy must not use it directly: light mode takes the
-       gold's own deep shade (#8A7223, 4.65:1) and dark mode the gold itself
+       gold's own deep shade (#906F23, 4.65:1) and dark mode the gold itself
        (9.5:1). This is the kit's "gold as text on paper" rule. */
-    --ember-ink: var(--ox-ember-deep); /* #8A7223 — the kit's "gold as text on paper" */
+    --ember-ink: var(--ox-ember-deep); /* #906F23 — the kit's "gold as text on paper" */
 
     /* The metal in motion — the kit's sheen (deep → metal → highlight), laid
        out horizontally for the tab underline and any rule that shows it. The
@@ -528,10 +528,10 @@
     --destructive-foreground: var(--ox-ink);
     --border: var(--_stone-800); /* #27272A — the hairline on ink */
     --input: var(--ox-rule); /* #3F3F46 — the heavier rule on ink */
-    --ring: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
-    --ember-ink: var(--ox-ember); /* #D4AF37 — the metal reads as ink on the canvas (9.5:1) */
-    --link: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas */
-    --link-hover: var(--ox-ember-light); /* #F1CE65 — gold-bright */
+    --ring: var(--ox-ember); /* #C99B2E — 9.5:1 on the canvas, no deep shade needed */
+    --ember-ink: var(--ox-ember); /* #C99B2E — the metal reads as ink on the canvas (9.5:1) */
+    --link: var(--ox-ember); /* #C99B2E — 9.5:1 on the canvas */
+    --link-hover: var(--ox-ember-light); /* #F9C965 — gold-bright */
 
     --success: var(--_moss-light);
     --success-foreground: oklch(0.18 0.03 160);
@@ -673,10 +673,10 @@
       --destructive-foreground: var(--ox-ink); /* 4.92:1; white on this fill is 3.92:1 */
       --border: var(--_stone-800); /* #27272A — the hairline on ink */
       --input: var(--ox-rule); /* #3F3F46 — the heavier rule on ink */
-      --ring: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
-      --ember-ink: var(--ox-ember); /* #D4AF37 — the metal reads as ink on the canvas (9.5:1) */
-      --link: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas */
-      --link-hover: var(--ox-ember-light); /* #F1CE65 — gold-bright */
+      --ring: var(--ox-ember); /* #C99B2E — 9.5:1 on the canvas, no deep shade needed */
+      --ember-ink: var(--ox-ember); /* #C99B2E — the metal reads as ink on the canvas (9.5:1) */
+      --link: var(--ox-ember); /* #C99B2E — 9.5:1 on the canvas */
+      --link-hover: var(--ox-ember-light); /* #F9C965 — gold-bright */
 
       --success: var(--_moss-light);
       --success-foreground: oklch(0.18 0.03 160);
@@ -1256,9 +1256,9 @@
   .ox-grad-surface {
     background-image: linear-gradient(
       100deg,
-      var(--_ember-a, #8A7223) 0%,
-      var(--_ember-b, #D4AF37) 46%,
-      var(--_ember-c, #F1CE65) 100%
+      var(--_ember-a, #906F23) 0%,
+      var(--_ember-b, #C99B2E) 46%,
+      var(--_ember-c, #F9C965) 100%
     );
   }
 
@@ -1479,7 +1479,7 @@
     --gold-deep: var(--ox-gold-deep);
     --accent-text: var(--ember-ink);
     --on-gold: var(--ox-ink);
-    /* The glyph on a gold-deep fill (#8A7223): paper reads at 4.66:1. */
+    /* The glyph on a gold-deep fill (#906F23): paper reads at 4.66:1. */
     --on-gold-deep: var(--ox-paper);
     /* Governance states. A warning toast draws in --st-denied. */
     --st-allowed: var(--success);

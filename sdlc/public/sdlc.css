@@ -14,9 +14,9 @@
 @font-face{font-family:"Monaspace Neon";font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/monaspace-neon-latin-wght.woff2) format("woff2")}
 
 :root {
-  --gold: #D4AF37;
-  --gold-bright: #F1CE65;
-  --gold-text: #D4AF37;
+  --gold: #C99B2E;
+  --gold-bright: #F9C965;
+  --gold-text: #C99B2E;
   --on-gold: #09090B;
 
   --ground: #09090B;
@@ -42,7 +42,7 @@
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
-    --gold-text: #8A7223;
+    --gold-text: #906F23;
     --ground: #FFFFFF;
     --panel: #FFFFFF;
     --hl: #F4F4F5;
@@ -57,7 +57,7 @@
   }
 }
 :root[data-theme="light"] {
-  --gold-text: #8A7223;
+  --gold-text: #906F23;
   --ground: #FFFFFF;
   --panel: #FFFFFF;
   --hl: #F4F4F5;
