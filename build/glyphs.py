@@ -41,7 +41,8 @@ from fontTools.varLib import instancer
 from theme import THEME
 
 ROOT = Path(__file__).resolve().parent.parent
-#: The wordmark face's variable font, from `faces.wordmark.outline` in the theme.
+#: The wordmark face's variable font, from `faces.wordmark.outline` in the
+#: theme. `build/theme.py` holds it to Space Grotesk at weight 600.
 FONT = ROOT / "fonts" / THEME["faces"]["wordmark"]["outline"]["file"]
 #: The text face: the latin webfont the kit ships, variable on wght, from
 #: `faces.sans.outline` in the theme.
@@ -276,34 +277,19 @@ def glyph_paths(m: dict[str, object], accent: set[str]) -> tuple[str, str]:
 # --------------------------------------------------------------------------
 
 
-#: The face and weight the reference wordmark was drawn in.
-REFERENCE_OUTLINE = ("SpaceGrotesk-VariableFont_wght.ttf", 600)
-
-
-def reference_applies() -> bool:
-    """Whether the theme draws the marks from the reference wordmark's face and weight.
-
-    The reference check holds the drawn `oxagen` to the kit it was built to
-    match. A theme that draws the marks from another face or weight changes
-    the logo on purpose, so the comparison does not apply to it, and
-    `build/build.py --check` says the check was skipped.
-    """
-    return (FONT.name, LOGO_WEIGHT) == REFERENCE_OUTLINE
-
-
 def verify() -> list[str]:
     """Reproduce the kit's `oxagen` wordmark, or say exactly how it differs.
 
     Compares the box, the glyph-to-glyph spacing and the ink height against
     the kit's shipped `wordmark-color-light.svg`. The kit's box has a little
     slack from how its renderer rounded glyph extents, so the box is held to a
-    small tolerance and the spacing to a tight one.
+    small tolerance and the spacing to a tight one. It runs on every check:
+    the wordmark face is fixed (`build/theme.py` refuses any other), so the
+    drawn marks always answer to the reference.
     """
     import re
 
     problems: list[str] = []
-    if not reference_applies():
-        return problems
     if not REFERENCE.exists():
         return [f"reference wordmark missing: {REFERENCE}"]
     src = REFERENCE.read_text()

@@ -19,15 +19,14 @@ import {
   uploadUrl,
   uploadsNeeded,
 } from "./request";
-import { SHIPPED, clone, type FaceChoice, type Role } from "./theme";
+import { FACE_ROLES, SHIPPED, clone, type FaceChoice, type FaceRole } from "./theme";
 
 const NOW = new Date("2026-10-01T23:05:42Z");
 
 /** The first of `choices` that differs from `value`, so a test changes the theme whatever it ships. */
 const other = <T,>(value: T, ...choices: T[]): T => choices.find((c) => c !== value) as T;
 
-const shippedFaces = (): Record<Role, FaceChoice> => ({
-  wordmark: { kind: "shipped" },
+const shippedFaces = (): Record<FaceRole, FaceChoice> => ({
   display: { kind: "shipped" },
   sans: { kind: "shipped" },
   mono: { kind: "shipped" },
@@ -120,6 +119,27 @@ describe("the request", () => {
     const named = request.faces as Record<string, { files: unknown } | undefined>;
     expect(Object.keys(named)).toEqual(["display"]);
     expect(named.display?.files).toEqual(SHIPPED.faces.mono.files);
+  });
+
+  it("never names the wordmark face, even when a stale draft holds a choice for it", () => {
+    expect(FACE_ROLES).not.toContain("wordmark");
+    const faces = {
+      ...shippedFaces(),
+      wordmark: { kind: "google", family: "Inter", weights: [600] },
+    } as Record<FaceRole, FaceChoice>;
+    const request = buildRequest(clone(SHIPPED), faces, "", NOW);
+    expect(request).not.toHaveProperty("faces");
+    expect(requestChanges(request)).toBe(false);
+    expect(draftChanges(clone(SHIPPED), faces)).toEqual([]);
+    expect(autoSummary(clone(SHIPPED), faces)).toBe("");
+  });
+
+  it("sends a gold change without a face, so the wordmarks' accents follow the gold", () => {
+    const theme = clone(SHIPPED);
+    theme.color.gold = other(SHIPPED.color.gold, "#C99B2E", "#D9B13B");
+    const request = buildRequest(theme, shippedFaces(), "", NOW);
+    expect(request.color).toEqual({ gold: theme.color.gold });
+    expect(request).not.toHaveProperty("faces");
   });
 
   it("lists face changes in the diff view", () => {

@@ -6,12 +6,17 @@
  * editor opens GitHub's new-file page with the request filled in, and Mac
  * commits it to a new branch with his own login. The apply-theme workflow
  * then merges it into `theme/theme.json` on that branch's pull request.
+ *
+ * A request never names the wordmark face. It is fixed, so the request schema
+ * has no `faces.wordmark` and the workflow refuses one. A gold change still
+ * reaches the wordmarks' gold x and asterisk through `color.gold`.
  */
 import {
+  FACE_ROLES,
   ROLES,
   SHIPPED,
   type FaceChoice,
-  type Role,
+  type FaceRole,
   type Theme,
 } from "./theme";
 
@@ -65,7 +70,7 @@ export function partialDiff(before: unknown, after: unknown): Json | undefined {
 }
 
 /** A face choice as the request names it, or undefined when the role keeps its shipped face. */
-export function faceRequest(role: Role, choice: FaceChoice): Json | undefined {
+export function faceRequest(role: FaceRole, choice: FaceChoice): Json | undefined {
   const shipped = SHIPPED.faces[role];
   switch (choice.kind) {
     case "shipped":
@@ -94,12 +99,12 @@ export function faceRequest(role: Role, choice: FaceChoice): Json | undefined {
 }
 
 /** The fields a draft changes, for the diff view: theme fields, then faces. */
-export function draftChanges(theme: Theme, faces: Record<Role, FaceChoice>): Change[] {
+export function draftChanges(theme: Theme, faces: Record<FaceRole, FaceChoice>): Change[] {
   const out: Change[] = [];
   for (const section of PARTIAL_SECTIONS) {
     out.push(...diffJson(SHIPPED[section], theme[section], section));
   }
-  for (const role of ROLES) {
+  for (const role of FACE_ROLES) {
     const face = faceRequest(role, faces[role]);
     if (face !== undefined) {
       out.push({ path: `faces.${role}`, before: SHIPPED.faces[role].family, after: face });
@@ -122,20 +127,19 @@ export function cleanSummary(text: string): string {
     .trim();
 }
 
-const ROLE_WORDS: Record<Role, string> = {
-  wordmark: "wordmark",
+const ROLE_WORDS: Record<FaceRole, string> = {
   display: "headings",
   sans: "text",
   mono: "code",
 };
 
 /** A summary written from the changes, for when Mac does not write one. */
-export function autoSummary(theme: Theme, faces: Record<Role, FaceChoice>): string {
+export function autoSummary(theme: Theme, faces: Record<FaceRole, FaceChoice>): string {
   const parts: string[] = [];
   if (theme.color.gold !== SHIPPED.color.gold) parts.push(`gold ${theme.color.gold}`);
   const colours = diffJson(SHIPPED.color, theme.color).filter((c) => c.path !== "gold").length;
   if (colours) parts.push(`${colours} colour${colours === 1 ? "" : "s"}`);
-  for (const role of ROLES) {
+  for (const role of FACE_ROLES) {
     const choice = faces[role];
     if (faceRequest(role, choice) !== undefined && choice.kind !== "shipped") {
       parts.push(`${choice.family} for ${ROLE_WORDS[role]}`);
@@ -154,10 +158,10 @@ export function autoSummary(theme: Theme, faces: Record<Role, FaceChoice>): stri
   return cleanSummary(text.charAt(0).toUpperCase() + text.slice(1));
 }
 
-/** The request file for a draft. */
+/** The request file for a draft. It names only the roles in `FACE_ROLES`, so never the wordmark. */
 export function buildRequest(
   theme: Theme,
-  faces: Record<Role, FaceChoice>,
+  faces: Record<FaceRole, FaceChoice>,
   summary: string,
   now: Date,
 ): Record<string, Json> {
@@ -171,7 +175,7 @@ export function buildRequest(
     if (part !== undefined) request[section] = part;
   }
   const faceEntries: { [key: string]: Json } = {};
-  for (const role of ROLES) {
+  for (const role of FACE_ROLES) {
     const face = faceRequest(role, faces[role]);
     if (face !== undefined) faceEntries[role] = face;
   }
@@ -236,9 +240,9 @@ export function uploadUrl(folder: "fonts" | "theme/requests", branch = "main"): 
 }
 
 /** The uploaded files a request needs on its branch before the workflow can apply it. */
-export function uploadsNeeded(faces: Record<Role, FaceChoice>): string[] {
+export function uploadsNeeded(faces: Record<FaceRole, FaceChoice>): string[] {
   const names = new Set<string>();
-  for (const role of ROLES) {
+  for (const role of FACE_ROLES) {
     const choice = faces[role];
     if (choice.kind === "upload") for (const f of choice.files) names.add(f.name);
   }

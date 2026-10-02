@@ -97,7 +97,7 @@ class ProblemsTest(unittest.TestCase):
                 }
             },
         }
-        self.assertTrue(any("only wordmark and sans" in p for p in R.problems(req)))
+        self.assertTrue(any("only sans is drawn from one" in p for p in R.problems(req)))
 
     def test_summary_rejects_markup(self) -> None:
         self.assertTrue(R.problems({"summary": "<script>", "color": {"gold": "#C9A227"}}))
@@ -161,7 +161,7 @@ class FaceEntryTest(unittest.TestCase):
 
     def test_an_outline_role_needs_an_outline(self) -> None:
         with self.assertRaises(ValueError):
-            R.face_entry("wordmark", theme()["faces"]["wordmark"], {"family": "Inter", "source": "google"}, [], None)
+            R.face_entry("sans", theme()["faces"]["sans"], {"family": "Inter", "source": "google"}, [], None)
 
     def test_nearest_prefers_a_variable_file_that_covers_the_weight(self) -> None:
         files = [
@@ -171,6 +171,70 @@ class FaceEntryTest(unittest.TestCase):
         ]
         self.assertEqual(R.nearest(files, 600)["file"], "a-wght.woff2")
         self.assertEqual(R.nearest(files[:1] + files[2:], 600)["file"], "a-700.woff2")
+
+
+class WordmarkTest(unittest.TestCase):
+    """The wordmark face is fixed: Space Grotesk, drawn at 600 (Mac, 2026-10-02)."""
+
+    FACES = (
+        {"family": "Inter", "source": "google", "weights": [600]},
+        {"family": "Aeonik", "source": "upload", "files": [{"file": "Aeonik-Bold.otf", "weight": "600"}]},
+        {"family": "Geist", "source": "kit", "files": [{"file": "geist-latin-wght.woff2", "weight": "100 900"}]},
+    )
+
+    def test_the_schema_has_no_wordmark_face(self) -> None:
+        schema = R.request_schema()
+        self.assertNotIn("wordmark", schema["properties"]["faces"]["properties"])
+        self.assertEqual(sorted(schema["properties"]["faces"]["properties"]), sorted(R.REQUEST_ROLES))
+        self.assertNotIn("weight", schema["$defs"]["face_request"]["properties"]["outline"]["properties"])
+
+    def test_a_request_cannot_change_the_wordmark_face(self) -> None:
+        for face in self.FACES:
+            found = R.problems({"summary": "New wordmark", "faces": {"wordmark": face}})
+            self.assertEqual(found, [R.WORDMARK_REFUSED], face["source"])
+        self.assertIn("the wordmark face is fixed", R.WORDMARK_REFUSED)
+        self.assertIn("Space Grotesk", R.WORDMARK_REFUSED)
+
+    def test_a_wordmark_face_fails_beside_a_valid_change(self) -> None:
+        req = {"summary": "Gold and wordmark", "color": {"gold": "#C9A227"}, "faces": {"wordmark": self.FACES[0]}}
+        self.assertEqual(R.problems(req), [R.WORDMARK_REFUSED])
+
+    def test_face_entry_refuses_the_wordmark(self) -> None:
+        current = theme()["faces"]["wordmark"]
+        with self.assertRaises(ValueError):
+            R.face_entry("wordmark", current, self.FACES[0], [], {"file": current["outline"]["file"]})
+
+    def test_the_shipped_theme_draws_the_fixed_wordmark(self) -> None:
+        import theme as TH
+
+        face = theme()["faces"]["wordmark"]
+        self.assertEqual(face["family"], TH.WORDMARK_FAMILY)
+        self.assertEqual(face["outline"], TH.WORDMARK_OUTLINE)
+        self.assertEqual(TH.problems(), [])
+
+    def test_the_theme_refuses_another_wordmark_face(self) -> None:
+        import theme as TH
+
+        for field, value in (("family", "Inter"), ("file", "geist-latin-wght.woff2"), ("weight", 700)):
+            t = theme()
+            if field == "family":
+                t["faces"]["wordmark"]["family"] = value
+            else:
+                t["faces"]["wordmark"]["outline"][field] = value
+            found = TH.problems(t)
+            self.assertEqual(len(found), 1, field)
+            self.assertIn(TH.WORDMARK_FIXED, found[0])
+
+    def test_a_gold_request_leaves_the_wordmark_face_alone(self) -> None:
+        import theme as TH
+
+        before = theme()
+        gold = other(before["color"]["gold"], "#C99B2E", "#D9B13B")
+        req = {"summary": "A new gold", "color": {"gold": gold}}
+        self.assertEqual(R.problems(req), [])
+        after = R.merge(before, req)
+        self.assertEqual(after["faces"]["wordmark"], before["faces"]["wordmark"])
+        self.assertEqual(TH.problems(after), [])
 
 
 class LayoutTest(unittest.TestCase):

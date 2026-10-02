@@ -69,6 +69,18 @@ describe("loading and saving", () => {
     expect(draft.faces.mono).toEqual({ kind: "shipped" });
   });
 
+  it("drops a wordmark choice saved before the wordmark face was fixed", () => {
+    const mono = { kind: "google", family: "Example Mono", weights: [400] };
+    const saved = { faces: { wordmark: { kind: "google", family: "Inter", weights: [600] }, mono } };
+    const draft = loadDraft(memoryStorage({ [STORAGE_KEY]: JSON.stringify(saved) }));
+    expect(Object.keys(draft.faces)).toEqual(["display", "sans", "mono"]);
+    expect(draft.faces.mono).toEqual(mono);
+    expect(previewVars(draft)["--ox-font-display"]).toBeUndefined();
+
+    const onlyWordmark = { faces: { wordmark: { kind: "upload", family: "Aeonik", files: [] } } };
+    expect(isShipped(loadDraft(memoryStorage({ [STORAGE_KEY]: JSON.stringify(onlyWordmark) })))).toBe(true);
+  });
+
   it("survives an unreadable draft", () => {
     expect(isShipped(loadDraft(memoryStorage({ [STORAGE_KEY]: "{not json" })))).toBe(true);
   });

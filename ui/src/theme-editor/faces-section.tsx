@@ -1,7 +1,9 @@
 "use client";
 /**
- * The faces part of the theme editor: for each role, the shipped face, a
- * face the kit already ships, a Google family, or uploaded files.
+ * The faces part of the theme editor. The wordmark role is read-only: its
+ * face is fixed, Space Grotesk drawn at weight 600 (Mac, 2026-10-02). Each
+ * other role takes the shipped face, a face the kit already ships, a Google
+ * family, or uploaded files.
  */
 import * as React from "react";
 import { OxagenWordmark, StellaWordmark } from "../components/brand";
@@ -19,7 +21,17 @@ import {
   saveFontBytes,
   weightFromName,
 } from "./fonts";
-import { ROLES, SHIPPED, choiceFamily, fontStack, type FaceChoice, type Role, type UploadedFile } from "./theme";
+import {
+  ROLES,
+  SHIPPED,
+  WORDMARK_STACK,
+  choiceFamily,
+  fontStack,
+  type FaceChoice,
+  type FaceRole,
+  type Role,
+  type UploadedFile,
+} from "./theme";
 
 export const ROLE_LABELS: Record<Role, string> = {
   wordmark: "Wordmark",
@@ -53,13 +65,47 @@ const UPLOAD_WEIGHTS = [
   { value: "100 900", label: "Variable, 100 to 900" },
 ];
 
+/**
+ * The wordmark role: its face, a line set in it, and the drawn marks. The
+ * face is fixed, so the row has no picker. The marks paint their gold x and
+ * asterisk from `--ox-gold`, so they follow the primary colour as it changes.
+ */
+export function WordmarkFace() {
+  const face = SHIPPED.faces.wordmark;
+  return (
+    <div
+      role="group"
+      aria-label={ROLE_LABELS.wordmark}
+      className="flex flex-col gap-2.5 rounded-2xl border border-border/70 bg-background/40 p-3"
+    >
+      <div className="flex items-center gap-2">
+        <span className="min-w-0 flex-1 text-sm text-foreground">{ROLE_LABELS.wordmark}</span>
+        <span className="text-xs text-muted-foreground">{face.family}</span>
+      </div>
+      <p
+        className="truncate rounded-lg bg-muted/60 px-2.5 py-2 text-xl font-semibold text-foreground"
+        style={{ fontFamily: WORDMARK_STACK }}
+      >
+        {ROLE_SAMPLES.wordmark}
+      </p>
+      <div className="flex items-center gap-4 text-foreground">
+        <OxagenWordmark className="h-5" />
+        <StellaWordmark className="h-5" />
+      </div>
+      <p className="text-xs leading-normal text-muted-foreground">
+        The wordmark face is fixed. The gold x and asterisk follow the primary colour.
+      </p>
+    </div>
+  );
+}
+
 export function FaceEditor({
   role,
   choice,
   load,
   onChange,
 }: {
-  role: Role;
+  role: FaceRole;
   choice: FaceChoice;
   load: LoadState;
   onChange: (choice: FaceChoice) => void;
@@ -104,25 +150,12 @@ export function FaceEditor({
       <p
         className={cn(
           "truncate rounded-lg bg-muted/60 px-2.5 py-2 text-foreground",
-          role === "display" ? "text-lg font-semibold" : role === "wordmark" ? "text-xl font-semibold" : "text-sm",
+          role === "display" ? "text-lg font-semibold" : "text-sm",
         )}
         style={{ fontFamily: family ? fontStack(role, choice) : undefined }}
       >
         {ROLE_SAMPLES[role]}
       </p>
-
-      {role === "wordmark" ? (
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-4 text-foreground">
-            <OxagenWordmark className="h-5" />
-            <StellaWordmark className="h-5" />
-          </div>
-          <p className="text-xs leading-normal text-muted-foreground">
-            The drawn marks above keep their shipped outlines. The line above them shows the face you chose. The
-            apply-theme workflow redraws the marks from that face.
-          </p>
-        </div>
-      ) : null}
     </div>
   );
 }
@@ -135,7 +168,7 @@ function GoogleFields({
   load,
   onChange,
 }: {
-  role: Role;
+  role: FaceRole;
   choice: Extract<FaceChoice, { kind: "google" }>;
   listId: string;
   suggestions: string[];
@@ -149,8 +182,8 @@ function GoogleFields({
       ? "Loading from Google Fonts."
       : load === "failed"
         ? `Google Fonts has no family named ${choice.family} at these weights.`
-        : role === "wordmark" || role === "sans"
-          ? "The workflow also fetches a TTF of this family, which the marks or the art's text are drawn from."
+        : role === "sans"
+          ? "The workflow also fetches a TTF of this family, which the art's text is drawn from."
           : "The workflow fetches the latin files at these weights into fonts/.";
   return (
     <>

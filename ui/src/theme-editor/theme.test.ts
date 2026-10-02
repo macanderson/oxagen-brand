@@ -9,7 +9,18 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { goldHue } from "./color";
-import { GOLD_RAMP, SHIPPED, fontStack, pxRem, rampVars, remPx, themeVars, type FaceChoice, type Role } from "./theme";
+import {
+  GOLD_RAMP,
+  SHIPPED,
+  WORDMARK_STACK,
+  fontStack,
+  pxRem,
+  rampVars,
+  remPx,
+  themeVars,
+  type FaceChoice,
+  type FaceRole,
+} from "./theme";
 
 /** A tint's hue for a gold: the gold's whole-degree hue plus the tint's offset. */
 const hueFor = (gold: string, offset: number) => (((goldHue(gold) + offset) % 360) + 360) % 360;
@@ -18,8 +29,7 @@ const read = (path: string) => readFileSync(new URL(path, import.meta.url), "utf
 const tokensCss = read("../../../tokens/house-tokens.css");
 const globalsCss = read("../styles/globals.css");
 
-const shippedFaces: Record<Role, FaceChoice> = {
-  wordmark: { kind: "shipped" },
+const shippedFaces: Record<FaceRole, FaceChoice> = {
   display: { kind: "shipped" },
   sans: { kind: "shipped" },
   mono: { kind: "shipped" },
@@ -70,7 +80,13 @@ describe("faces", () => {
   it("writes the shipped stacks as house-tokens.css does", () => {
     expect(fontStack("sans", { kind: "shipped" })).toBe(declared(tokensCss, "--ox-font"));
     expect(fontStack("mono", { kind: "shipped" })).toBe(declared(tokensCss, "--ox-font-mono"));
-    expect(fontStack("wordmark", { kind: "shipped" })).toBe(declared(tokensCss, "--ox-font-display"));
+    expect(WORDMARK_STACK).toBe(declared(tokensCss, "--ox-font-display"));
+  });
+
+  it("keeps the wordmark in Space Grotesk, drawn at 600", () => {
+    expect(SHIPPED.faces.wordmark.family).toBe("Space Grotesk");
+    expect(SHIPPED.faces.wordmark.outline).toEqual({ file: "SpaceGrotesk-VariableFont_wght.ttf", weight: 600 });
+    expect(themeVars(SHIPPED, shippedFaces)["--ox-font-display"]).toBe(WORDMARK_STACK);
   });
 
   it("gives another kit face its own fallback, as the request names it", () => {

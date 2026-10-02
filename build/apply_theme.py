@@ -12,10 +12,11 @@ result, and comments on the pull request with `report`.
 validates:
 
 1. Validates each request against `theme/request.schema.json`
-   (`build/request.py`).
+   (`build/request.py`). A request that names `faces.wordmark` fails here:
+   the wordmark face is fixed, Space Grotesk drawn at weight 600.
 2. Resolves each face the request names. A `google` face is fetched from
    Google Fonts: the latin WOFF2 files at the requested weights, a TTF to draw
-   from where the role has an outline, and the family's licence from the
+   the art's text from for the text role, and the family's licence from the
    google/fonts repository. An `upload` face must already be in `fonts/` on
    the branch, and a TTF, OTF, or WOFF upload gets a WOFF2 copy for the web.
 3. Merges the requests into `theme/theme.json`, in file-name order, and
@@ -304,8 +305,8 @@ def local_files(role: str, face: dict, fonts_dir: Path) -> tuple[list[dict], lis
 # --------------------------------------------------------------------------
 
 
-def outline_weight(role: str, current: dict, face: dict) -> int:
-    return face.get("outline", {}).get("weight", current.get("outline", {}).get("weight", 600 if role == "wordmark" else 400))
+#: The weight the text role's outline is picked at when the request names no file.
+TEXT_OUTLINE_WEIGHT = 400
 
 
 def resolve_faces(theme: dict, request: dict, fonts_dir: Path, log: dict) -> dict[str, dict]:
@@ -317,8 +318,9 @@ def resolve_faces(theme: dict, request: dict, fonts_dir: Path, log: dict) -> dic
         if face["source"] == "google":
             google_weights.setdefault(face["family"], set()).update(face["weights"])
     for role, face in request.get("faces", {}).items():
+        if role not in R.REQUEST_ROLES:
+            raise ApplyError(R.WORDMARK_REFUSED)
         current = theme["faces"][role]
-        weight = outline_weight(role, current, face)
         outline: dict | None = None
         if face["source"] == "google":
             family = face["family"]
@@ -331,7 +333,7 @@ def resolve_faces(theme: dict, request: dict, fonts_dir: Path, log: dict) -> dic
             files = fetched[family]["files"]
             if role in R.OUTLINE_ROLES:
                 if "outline" not in fetched[family]:
-                    fetched[family]["outline"] = fetch_google_outline(family, weight, fonts_dir, fetched[family]["listing"])
+                    fetched[family]["outline"] = fetch_google_outline(family, TEXT_OUTLINE_WEIGHT, fonts_dir, fetched[family]["listing"])
                     log["fonts"].append({"family": family, "source": "google/fonts", "files": [fetched[family]["outline"]], "licence": ""})
                 outline = {"file": fetched[family]["outline"]}
         else:
@@ -345,10 +347,8 @@ def resolve_faces(theme: dict, request: dict, fonts_dir: Path, log: dict) -> dic
                 elif face["family"] == current["family"] and "outline" in current:
                     name = current["outline"]["file"]
                 else:
-                    name = R.nearest(face["files"], weight)["file"]
+                    name = R.nearest(face["files"], TEXT_OUTLINE_WEIGHT)["file"]
                 outline = {"file": name}
-        if outline is not None and role == "wordmark":
-            outline["weight"] = weight
         out[role] = R.face_entry(role, current, face, files, outline)
     return out
 
@@ -503,16 +503,6 @@ def report(state: dict, pushed: bool = True, run_url: str = "") -> str:
         lines += ["", "### Gold copies", "", "The new gold also reached the files no generator writes:", ""]
         lines += [f"- `{rel}`" for rel in state["carried"]]
 
-    wordmark = before["faces"]["wordmark"].get("outline") != after["faces"]["wordmark"].get("outline")
-    if wordmark:
-        lines += [
-            "",
-            "### Logo",
-            "",
-            "This request changes the face the marks are drawn from, which changes the logo. The build redrew every mark, "
-            "icon, and image. Three copies need a hand update in this PR: `WORDMARK` in `build/messages.py`, "
-            "`ui/src/components/brand-marks.generated.ts`, and `build/reference/`. See CHANGING.md.",
-        ]
     lines += ["", "### Next", ""]
     if pushed:
         lines.append(

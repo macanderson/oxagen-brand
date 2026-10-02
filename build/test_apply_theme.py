@@ -3,20 +3,26 @@
     python3 -m unittest discover -s build -p "test_*.py"
 
 Nothing here reaches the network. The apply-theme workflow's proof run
-covers the fetches.
+covers the fetches. The wordmark test shapes with `hb-shape`, which the
+`check` job installs.
 """
 
 from __future__ import annotations
 
 import json
+import re
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
+import uuid
 from pathlib import Path
 
 import apply_theme as A
 import color as C
-from theme import ROOT, THEME_FILE
+import request as R
+from theme import ROOT, THEME_FILE, WORDMARK_FIXED
 
 CSS = """/* latin-ext */
 @font-face {
@@ -119,18 +125,29 @@ class UploadTest(Scratch):
         shutil.copy(ROOT / "fonts" / "SpaceGrotesk-VariableFont_wght.ttf", self.fonts / "Brand-Variable.ttf")
         req = {
             "summary": "Upload",
-            "faces": {"wordmark": {"family": "Brand", "source": "upload", "files": [{"file": "Brand-Variable.ttf", "weight": "300 700"}]}},
+            "faces": {"sans": {"family": "Brand", "source": "upload", "files": [{"file": "Brand-Variable.ttf", "weight": "300 700"}]}},
         }
+        self.assertEqual(R.problems(req), [])
         log: dict = {"fonts": []}
-        current = theme()
-        faces = A.resolve_faces(current, req, self.fonts, log)
-        face = faces["wordmark"]
+        faces = A.resolve_faces(theme(), req, self.fonts, log)
+        face = faces["sans"]
         self.assertEqual(face["source"], "kit")
         self.assertEqual(face["files"], [{"file": "Brand-Variable.woff2", "weight": "300 700"}])
-        weight = current["faces"]["wordmark"]["outline"]["weight"]
-        self.assertEqual(face["outline"], {"file": "Brand-Variable.ttf", "weight": weight})
+        self.assertEqual(face["outline"], {"file": "Brand-Variable.ttf"})
+        self.assertEqual(face["fallback"], R.DEFAULT_FALLBACK["sans"])
         self.assertTrue((self.fonts / "Brand-Variable.woff2").is_file())
         self.assertEqual(log["fonts"][0]["converted"], ["Brand-Variable.woff2"])
+
+    def test_resolving_a_wordmark_face_is_refused(self) -> None:
+        shutil.copy(ROOT / "fonts" / "SpaceGrotesk-VariableFont_wght.ttf", self.fonts / "Brand-Variable.ttf")
+        req = {
+            "summary": "Upload",
+            "faces": {"wordmark": {"family": "Brand", "source": "upload", "files": [{"file": "Brand-Variable.ttf", "weight": "300 700"}]}},
+        }
+        with self.assertRaises(A.ApplyError) as e:
+            A.resolve_faces(theme(), req, self.fonts, {"fonts": []})
+        self.assertIn(WORDMARK_FIXED, str(e.exception))
+        self.assertFalse((self.fonts / "Brand-Variable.woff2").exists(), "nothing is written for a refused face")
 
     def test_a_missing_upload_says_where_to_put_it(self) -> None:
         req = {"summary": "Upload", "faces": {"sans": {"family": "Aeonik", "source": "upload", "files": [{"file": "Aeonik-Regular.woff2", "weight": "400"}]}}}
@@ -196,6 +213,89 @@ class GoldTest(Scratch):
     def test_every_carry_file_exists(self) -> None:
         for rel in A.CARRY_FILES:
             self.assertTrue((ROOT / rel).is_file(), rel)
+
+
+class WordmarkRequestTest(unittest.TestCase):
+    """`apply` refuses a request that names the wordmark face, before it writes anything."""
+
+    def test_apply_refuses_a_wordmark_face_and_leaves_the_theme(self) -> None:
+        folder = ROOT / "theme" / "requests"
+        made = not folder.exists()
+        folder.mkdir(parents=True, exist_ok=True)
+        path = folder / f"test-wordmark-{uuid.uuid4().hex[:12]}.json"
+        before = THEME_FILE.read_bytes()
+        try:
+            path.write_text(
+                json.dumps({"summary": "Inter for the wordmark", "faces": {"wordmark": {"family": "Inter", "source": "google", "weights": [600]}}})
+            )
+            state: dict = {}
+            with self.assertRaises(A.ApplyError) as e:
+                A.apply([path.relative_to(ROOT).as_posix()], state)
+            self.assertIn("the wordmark face is fixed", str(e.exception))
+            self.assertIn("Remove faces.wordmark", str(e.exception))
+            self.assertEqual(THEME_FILE.read_bytes(), before)
+            self.assertTrue(path.is_file(), "a refused request stays on the branch")
+        finally:
+            path.unlink(missing_ok=True)
+            if made:
+                shutil.rmtree(folder, ignore_errors=True)
+
+
+#: Draws both wordmarks for the theme on disk with a request merged in, as the
+#: build does after `apply`. Runs in its own process, because the colour and
+#: glyph modules read the theme once, when they are imported.
+DRAW = """
+import json, sys
+import request as R
+import theme
+req = json.loads(sys.argv[1])
+merged = R.merge(theme.THEME, req)
+found = theme.problems(merged)
+if found:
+    raise SystemExit("; ".join(found))
+theme.THEME.clear()
+theme.THEME.update(merged)
+import marks
+print(json.dumps({
+    brand: {
+        "plain": marks.wordmark_svg(brand, uid=brand + "-t"),
+        "light": marks.wordmark_svg(brand, letters=marks.INK_TEXT, uid=brand + "-l"),
+        "sheen": marks.wordmark_svg(brand, sheen=True, uid=brand + "-s"),
+    }
+    for brand in ("oxagen", "stella")
+}))
+"""
+
+
+def draw(request: dict) -> dict:
+    out = subprocess.run(
+        [sys.executable, "-c", DRAW, json.dumps(request)], cwd=ROOT / "build", check=True, capture_output=True, text=True
+    )
+    return json.loads(out.stdout)
+
+
+class GoldWordmarkTest(unittest.TestCase):
+    """A new gold recolours the gold x and the gold asterisk, and leaves every outline as it was."""
+
+    def test_a_gold_request_recolours_only_the_accent(self) -> None:
+        before = theme()
+        gold = other(before["color"]["gold"], "#C99B2E", "#D9B13B")
+        req = {"summary": "A new gold", "color": {"gold": gold}}
+        self.assertEqual(R.problems(req), [])
+        after = R.merge(before, req)
+        old, new = A.golds(before), A.golds(after)
+        shipped, changed = draw({"summary": "Nothing"}), draw(req)
+        accent = re.compile(r'<path class="accent" d="[^"]*" fill="([^"]+)"/>')
+        for brand in ("oxagen", "stella"):
+            for variant in ("plain", "light", "sheen"):
+                a, b = shipped[brand][variant], changed[brand][variant]
+                where = f"{brand} {variant}"
+                self.assertNotEqual(a, b, where)
+                self.assertEqual(re.findall(r' d="([^"]*)"', a), re.findall(r' d="([^"]*)"', b), f"{where}: the outlines moved")
+                self.assertEqual(A.replace_hexes(b, {new[k]: old[k] for k in new}), a, f"{where}: more than the gold changed")
+            self.assertEqual(accent.search(shipped[brand]["plain"]).group(1), old["gold"], brand)  # type: ignore[union-attr]
+            self.assertEqual(accent.search(changed[brand]["plain"]).group(1), gold, brand)  # type: ignore[union-attr]
+            self.assertIn(new["gold-bright"], changed[brand]["sheen"], brand)
 
 
 class ReportTest(unittest.TestCase):
