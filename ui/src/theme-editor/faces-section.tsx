@@ -221,6 +221,10 @@ function UploadFields({
       setError("");
     }
     const family = choice.family || guessFamily(files[0]?.name ?? "");
+    if (!isFamilyName(family)) {
+      setError("Type the family name first, then add the files.");
+      return;
+    }
     const added: UploadedFile[] = [];
     for (const file of files.filter((f) => isFontFile(f.name))) {
       const name = fontFileName(file.name);

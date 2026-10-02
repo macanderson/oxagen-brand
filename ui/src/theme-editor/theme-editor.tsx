@@ -238,21 +238,22 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
                 <ChecksSection problems={problems} />
                 <ChangesSection draft={draft} />
               </div>
-              <footer className="flex shrink-0 flex-wrap items-center gap-2 border-t border-border/70 px-5 py-3">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  startIcon={<ArrowCounterClockwiseIcon aria-hidden />}
-                  disabled={isShipped(draft)}
-                  onClick={() => setDraft(shippedDraft())}
-                >
-                  Reset
-                </Button>
-                <ExportButtons draft={draft} />
+              <footer className="flex shrink-0 flex-col gap-2 border-t border-border/70 px-5 py-3">
+                <div className="flex flex-wrap items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    startIcon={<ArrowCounterClockwiseIcon aria-hidden />}
+                    disabled={isShipped(draft)}
+                    onClick={() => setDraft(shippedDraft())}
+                  >
+                    Reset
+                  </Button>
+                  <ExportButtons draft={draft} />
+                </div>
                 <Button
                   variant="primary"
-                  size="sm"
-                  className="ml-auto"
+                  className="w-full"
                   disabled={!changes.length}
                   onClick={() => setPublishAt(new Date())}
                 >
