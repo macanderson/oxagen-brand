@@ -303,11 +303,11 @@ export function AttachmentCard({
       <AttachmentContent className="leading-[1.35]">
         <AttachmentTitle
           title={file.name}
-          className="max-w-none text-[12.5px] text-foreground"
+          className="max-w-none text-sm text-foreground"
         >
           {file.name}
         </AttachmentTitle>
-        <AttachmentDescription className="mt-0 max-w-none text-[11.5px]">
+        <AttachmentDescription className="mt-0 max-w-none text-sm">
           {state === "uploading" ? (
             <span>Uploading</span>
           ) : state === "error" ? (

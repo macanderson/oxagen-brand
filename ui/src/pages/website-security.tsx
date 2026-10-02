@@ -28,7 +28,7 @@ function Hero() {
       />
       <div className={cn(siteWrap, "pt-36 pb-24 max-md:pt-28 max-md:pb-16")}>
         <p className={eyebrow}>Security</p>
-        <h1 className="mt-5 max-w-[18ch] text-m-h1 text-foreground max-lg:text-[3.5rem] max-sm:text-[2.5rem]">
+        <h1 className="mt-5 max-w-[18ch] text-m-h1 text-foreground max-lg:text-(length:--ox-m-h2)">
           Don&apos;t hand your agents the keys.
         </h1>
         <p className="mt-6 max-w-[44rem] text-m-body text-muted-foreground">
@@ -137,10 +137,14 @@ function ScopePopover({ open }: { open: boolean }) {
  * `access-keys`, `security-headline`, the `ie-*` and `mc-*` cards,
  * `access-request-model`, and the `keys-*` entries. The popover's text joins
  * the glossary's definitions of a governed action and a mediated connection.
+ *
+ * The wrapper points `--font-heading` at Space Grotesk, the one line a
+ * marketing site writes, so every h1 to h3 on the page takes it. The Scope
+ * popover renders outside the wrapper, so its 14px title stays in Aeonik.
  */
 export function SecurityPage({ scopeOpen }: { scopeOpen: boolean }) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground [--font-heading:var(--font-display)]">
       <SiteNav current="security" />
       <main>
         <Hero />

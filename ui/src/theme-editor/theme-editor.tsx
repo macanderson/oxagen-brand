@@ -177,7 +177,7 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
         <PaletteIcon className="size-4" aria-hidden />
         Theme
         {changes.length ? (
-          <span className="rounded-full bg-foreground/10 px-1.5 font-mono text-[11px] tabular-nums">
+          <span className="rounded-full bg-foreground/10 px-1.5 font-mono text-sm tabular-nums">
             {changes.length}
             <span className="sr-only"> changes</span>
           </span>
@@ -191,7 +191,7 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
           )}
         >
           <header className="flex shrink-0 flex-col gap-1 border-b border-border/70 px-5 pt-4 pb-3 pr-12">
-            <DialogPrimitive.Title className="text-base font-semibold text-foreground">Theme</DialogPrimitive.Title>
+            <DialogPrimitive.Title className="text-a-h4 text-foreground">Theme</DialogPrimitive.Title>
             <DialogPrimitive.Description className="text-xs leading-normal text-muted-foreground">
               Changes preview on this page. Nothing reaches a site until you update all sites.
             </DialogPrimitive.Description>
@@ -789,7 +789,7 @@ function ChangesSection({ draft }: { draft: Draft }) {
   return (
     <Section title="Changes">
       {changes.length ? (
-        <ul className="flex flex-col gap-1 font-mono text-[11px] leading-relaxed">
+        <ul className="flex flex-col gap-1 font-mono text-sm leading-relaxed">
           {changes.map((c) => (
             <li key={c.path} className="flex flex-col rounded-lg bg-muted/60 px-2 py-1">
               <span className="text-foreground">{c.path}</span>
@@ -952,7 +952,7 @@ function PublishView({
 
         <details>
           <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">Request</summary>
-          <pre className="mt-2 max-h-64 overflow-auto rounded-xl bg-muted/60 p-3 font-mono text-[11px] leading-relaxed text-foreground">
+          <pre className="mt-2 max-h-64 overflow-auto rounded-xl bg-muted/60 p-3 font-mono text-sm leading-relaxed text-foreground">
             {requestText(request)}
           </pre>
         </details>

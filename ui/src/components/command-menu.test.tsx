@@ -295,7 +295,7 @@ describe("CommandMenu recipe", () => {
     );
     expect(screen.getByText("Claude Code, Codex or Stella")).toHaveClass(
       "font-mono",
-      "text-[11px]",
+      "text-sm",
     );
   });
 

@@ -15,17 +15,13 @@ interface Sample {
   /** The type utility the sample wears. */
   className: string;
   text: string;
-  /**
-   * Line 2 of a hero. When it is set, `text` is line 1 and wears the
-   * hero-line-1 class, and the caption reads line 1.
-   */
-  rest?: string;
 }
 
 /*
  * The samples name no face and no size. Each one takes both from the kit's
  * base rules for its element and from its type utility, and the caption under
- * it reads them back from the browser.
+ * it reads them back from the browser. No sample is below 14px, the floor for
+ * every surface.
  */
 const APP_SCALE: Sample[] = [
   { tag: "h1", className: "text-a-h1", text: "Refunds workspace" },
@@ -48,12 +44,6 @@ const APP_SCALE: Sample[] = [
 ];
 
 const MARKETING_SCALE: Sample[] = [
-  {
-    tag: "h1",
-    className: "text-m-h1",
-    text: "Govern every agent",
-    rest: "One record for every run",
-  },
   { tag: "h1", className: "text-m-h1", text: "Release notes for September" },
   { tag: "h2", className: "text-m-h2", text: "Approvals where the work is" },
   { tag: "h3", className: "text-m-h3", text: "One policy for every harness" },
@@ -67,30 +57,34 @@ const MARKETING_SCALE: Sample[] = [
 ];
 
 /*
- * The hero line, in both scales. The marketing h1 lets line 1 reach Space
- * Grotesk. The app h1 wears the same markup and stays in Aeonik.
+ * The heading rule. On a marketing or customer site, h1 to h3 wear
+ * text-m-h1 to text-m-h3, which set Space Grotesk. In the app and the
+ * internal tools, h1 to h3 wear text-a-h1 to text-a-h3, which read
+ * --font-heading, Aeonik by default. Every h4 to h6 is Aeonik on both.
  */
-const HERO_SAMPLES: Sample[] = [
-  {
-    tag: "h1",
-    className: "text-m-h1",
-    text: "Govern every agent",
-    rest: "One record for every run",
-  },
-  {
-    tag: "h1",
-    className: "text-a-h1",
-    text: "Refunds workspace",
-    rest: "Policy review",
-  },
+const MARKETING_HEADINGS: Sample[] = [
+  { tag: "h1", className: "text-m-h1", text: "Govern every agent" },
+  { tag: "h2", className: "text-m-h2", text: "One record for every run" },
+  { tag: "h3", className: "text-m-h3", text: "Approvals where the work is" },
+  { tag: "h4", className: "text-m-h4", text: "Spend caps per workspace" },
+];
+
+const APP_HEADINGS: Sample[] = [
+  { tag: "h1", className: "text-a-h1", text: "Refunds workspace" },
+  { tag: "h2", className: "text-a-h2", text: "Policy review" },
+  { tag: "h3", className: "text-a-h3", text: "Spend this week" },
+  { tag: "h4", className: "text-a-h4", text: "Approvals waiting" },
 ];
 
 /*
- * The face tokens. Headings and text share Aeonik, so an Aeonik sample matches
- * both --font-display and --font-sans, and the caption names every match.
+ * The face tokens. Aeonik sets --font-sans and, by default, --font-heading,
+ * so an Aeonik sample matches both. Space Grotesk sets --font-display and
+ * --font-wordmark, so a Space Grotesk sample matches both. The caption names
+ * every match.
  */
 const FACE_TOKENS = [
   "--font-display",
+  "--font-heading",
   "--font-sans",
   "--font-mono",
   "--font-wordmark",
@@ -149,9 +143,7 @@ function Specimen({ sample }: { sample: Sample }) {
   const [metrics, setMetrics] = React.useState<Metrics | null>(null);
 
   React.useLayoutEffect(() => {
-    const heading = frame.current?.firstElementChild;
-    // A hero sample reports line 1, the span that wears hero-line-1.
-    const element = sample.rest ? heading?.firstElementChild : heading;
+    const element = frame.current?.firstElementChild;
     if (!element) return;
     setMetrics(readMetrics(element));
     // Web fonts can load after the first paint. Read again once they have.
@@ -167,29 +159,18 @@ function Specimen({ sample }: { sample: Sample }) {
   return (
     <div className="flex flex-col gap-2 border-b border-border py-5 last:border-b-0">
       <div ref={frame} className="min-w-0 [overflow-wrap:anywhere]">
-        {sample.rest
-          ? React.createElement(
-              sample.tag,
-              { className: sample.className },
-              <span className="hero-line-1">{sample.text}</span>,
-              <br />,
-              sample.rest,
-            )
-          : React.createElement(
-              sample.tag,
-              { className: sample.className },
-              sample.text,
-            )}
+        {React.createElement(
+          sample.tag,
+          { className: sample.className },
+          sample.text,
+        )}
       </div>
       <dl className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-xs">
         <Fact term="Element">{sample.tag}</Fact>
         <Fact term="Class">{sample.className}</Fact>
-        {sample.rest && <Fact term="Line 1 class">hero-line-1</Fact>}
         {metrics && (
           <>
-            <Fact term={sample.rest ? "Line 1 face" : "Face"}>
-              {metrics.face}
-            </Fact>
+            <Fact term="Face">{metrics.face}</Fact>
             {metrics.tokens.length > 0 && (
               <Fact term="Tokens">{metrics.tokens.join(" = ")}</Fact>
             )}
@@ -203,9 +184,12 @@ function Specimen({ sample }: { sample: Sample }) {
   );
 }
 
-function Scale({ samples }: { samples: Sample[] }) {
+function Scale({ samples, label }: { samples: Sample[]; label?: string }) {
   return (
     <div className="flex max-w-[880px] flex-col">
+      {label ? (
+        <p className="text-sm font-semibold text-muted-foreground">{label}</p>
+      ) : null}
       {samples.map((sample) => (
         <Specimen
           key={`${sample.tag}-${sample.className}-${sample.text}`}
@@ -228,8 +212,17 @@ export const MarketingScale: Story = {
   render: () => <Scale samples={MARKETING_SCALE} />,
 };
 
-/** Line 1 of a hero: Space Grotesk in a marketing h1, Aeonik in an app h1. */
-export const HeroLine: Story = {
-  name: "Hero line",
-  render: () => <Scale samples={HERO_SAMPLES} />,
+/**
+ * Headings on each surface. A marketing or customer site sets h1 to h3 in
+ * Space Grotesk. The app and the internal tools set them in Aeonik. Every h4
+ * is Aeonik.
+ */
+export const Headings: Story = {
+  name: "Headings",
+  render: () => (
+    <div className="flex flex-col gap-10">
+      <Scale label="Marketing and customer sites" samples={MARKETING_HEADINGS} />
+      <Scale label="App and internal tools" samples={APP_HEADINGS} />
+    </div>
+  ),
 };

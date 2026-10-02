@@ -336,7 +336,7 @@ def weight_rows() -> str:
     }
     return "".join(
         f'<tr><td class="mono">--ox-weight-{k}</td><td class="num">{w}</td>'
-        f'<td><span style="font-weight:{w};font-size:18px;color:var(--fg)">Runs waiting for approval</span></td>'
+        f'<td><span style="font-weight:{w};font-size:var(--m-h4);color:var(--fg)">Runs waiting for approval</span></td>'
         f'<td class="note">{esc(uses[k])}</td></tr>'
         for k, w in T.WEIGHTS.items()
     )
@@ -349,7 +349,7 @@ def tracking_rows() -> str:
         where = ", ".join(steps) if steps else "every other step, and the wordmarks"
         out.append(
             f'<tr><td class="mono">--ox-tracking-{k}</td><td class="mono">{v}</td>'
-            f'<td><span style="font-weight:700;font-size:24px;letter-spacing:{v};color:var(--fg)">See which agent spent what</span></td>'
+            f'<td><span style="font-weight:700;font-size:var(--a-h2);letter-spacing:{v};color:var(--fg)">See which agent spent what</span></td>'
             f'<td class="note">{esc(where)}</td></tr>'
         )
     return "".join(out)
@@ -452,6 +452,7 @@ def css() -> str:
   --ox-font:{T.TEXT_FACE.css_stack};
   --ox-font-display:{T.DISPLAY_FACE.css_stack};
   --ox-font-mono:{T.MONASPACE_NEON.css_stack};
+{PG._block(PG.type_sizes())}
   --ui-shadow:{UI_SHADOW["dark"]};--pop-shadow:{POP_SHADOW["dark"]};--scrim:{SCRIM["dark"]};
   --pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["dark"]}%,transparent);
 }}
@@ -468,28 +469,28 @@ def css() -> str:
 *,*::before,*::after{{box-sizing:border-box}}
 html{{scroll-behavior:smooth;scroll-padding-top:78px}}
 @media(prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
-body{{margin:0;background:var(--ink);color:var(--fg);font-family:var(--ox-font);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}}
+body{{margin:0;background:var(--ink);color:var(--fg);font-family:var(--ox-font);font-size:var(--m-body);line-height:1.65;-webkit-font-smoothing:antialiased}}
 .bar{{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--ink) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}}
 .bar-in{{max-width:1180px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:20px}}
 .bar svg{{height:20px;width:auto;display:block}}
 .bar nav{{display:flex;gap:16px;margin-left:auto;flex-wrap:wrap;align-items:center}}
-.bar a,.bar button{{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:.02em;padding:4px 0;border:0;background:none;font-family:inherit;cursor:pointer;border-bottom:1px solid transparent}}
+.bar a,.bar button{{color:var(--muted);text-decoration:none;font-size:var(--a-body);font-weight:500;letter-spacing:.02em;padding:4px 0;border:0;background:none;font-family:inherit;cursor:pointer;border-bottom:1px solid transparent}}
 .bar a:hover,.bar button:hover{{color:var(--fg);border-bottom-color:var(--accent-text)}}
 .wrap{{max-width:1180px;margin:0 auto;padding:0 28px}}
 section{{padding:72px 0;border-top:1px solid var(--rule)}}
 section:first-of-type{{border-top:0}}
-.eyebrow{{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}}
+.eyebrow{{font-size:var(--m-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}}
 h1,h2,h3{{font-family:var(--ox-font-display)}}
-h1{{font-size:clamp(40px,6vw,64px);line-height:1.02;letter-spacing:-.02em;font-weight:700;margin:0 0 20px}}
-h2{{font-size:32px;line-height:1.1;letter-spacing:-.015em;font-weight:700;margin:0 0 14px}}
-h3{{font-size:19px;font-weight:600;margin:32px 0 10px}}
+h1{{font-size:clamp(var(--m-h2),6vw,var(--m-h1));line-height:1.02;letter-spacing:-.02em;font-weight:700;margin:0 0 20px}}
+h2{{font-size:var(--m-h2);line-height:1.1;letter-spacing:-.015em;font-weight:700;margin:0 0 14px}}
+h3{{font-size:var(--m-h4);font-weight:600;margin:32px 0 10px}}
 p{{max-width:66ch;color:var(--body);margin:0 0 14px}}
-p.lead{{font-size:20px;line-height:1.5;color:var(--fg);max-width:56ch}}
-.mono{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:.92em}}
+p.lead{{font-size:var(--m-h4);line-height:1.5;color:var(--fg);max-width:56ch}}
+.mono{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features}}}
 .muted{{color:var(--muted)}}
 a{{color:var(--accent-text)}}
-code{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:.9em;background:var(--hl);padding:.1em .35em;border-radius:4px}}
-pre{{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;font-size:13.5px;line-height:1.55;color:var(--body)}}
+code{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};background:var(--hl);padding:.1em .35em;border-radius:4px}}
+pre{{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;font-size:var(--a-body);line-height:1.55;color:var(--body)}}
 pre code{{background:none;padding:0}}
 .grid{{display:grid;gap:18px}}
 .g2{{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}}
@@ -506,78 +507,78 @@ pre code{{background:none;padding:0}}
 .plate.icon>svg{{width:120px;height:120px}}
 .plate.sp>svg{{width:88px;height:88px}}
 .m0{{margin:0}}
-.cap{{font-size:12.5px;color:var(--muted);margin-top:8px;letter-spacing:.01em}}
+.cap{{font-size:var(--a-body);color:var(--muted);margin-top:8px;letter-spacing:.01em}}
 .diagram{{width:100%;height:auto;color:var(--fg);font-family:var(--ox-font-mono)}}
 .hero{{padding:90px 0 60px}}
 .hero .plates{{margin-top:36px}}
-table{{border-collapse:collapse;width:100%;font-size:14px}}
+table{{border-collapse:collapse;width:100%;font-size:var(--a-body)}}
 th,td{{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}}
-th{{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}}
+th{{font-size:var(--a-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}}
 td.num{{font-variant-numeric:tabular-nums}}
-.unit{{color:var(--dim);font-size:.85em}}
+.unit{{color:var(--dim)}}
 .chip{{display:inline-block;width:28px;height:28px;border-radius:7px;border:1px solid var(--border)}}
 .note{{color:var(--muted)}}
 .gold-card{{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}}
 .gold-sw{{height:110px}}
-.gold-meta{{padding:14px 16px;display:grid;gap:4px;font-size:13.5px;color:var(--muted)}}
-.gold-meta b{{color:var(--fg);font-size:15px}}
+.gold-meta{{padding:14px 16px;display:grid;gap:4px;font-size:var(--a-body);color:var(--muted)}}
+.gold-meta b{{color:var(--fg);font-size:var(--m-body)}}
 .rules{{list-style:none;padding:0;margin:0;display:grid;gap:12px;max-width:70ch}}
 .rules li{{padding-left:26px;position:relative;color:var(--body)}}
-.rules li::before{{content:"*";position:absolute;left:0;top:-2px;color:var(--gold);font-weight:700;font-size:22px;line-height:1}}
+.rules li::before{{content:"*";position:absolute;left:0;top:-2px;color:var(--gold);font-weight:700;font-size:var(--a-h2);line-height:1}}
 .rules b{{color:var(--fg)}}
 .type-row{{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--border)}}
-.type-row .mono{{color:var(--muted);font-size:12.5px}}
+.type-row .mono{{color:var(--muted);font-size:var(--a-body)}}
 .bad .cap::before{{content:"✕  ";color:#C0392B}}
-.files{{display:grid;grid-template-columns:200px 1fr;gap:8px 20px;font-size:14px}}
+.files{{display:grid;grid-template-columns:200px 1fr;gap:8px 20px;font-size:var(--a-body)}}
 .files .mono{{color:var(--fg)}}
 .files span{{color:var(--muted)}}
-footer{{padding:48px 0 80px;border-top:1px solid var(--rule);color:var(--muted);font-size:13.5px}}
+footer{{padding:48px 0 80px;border-top:1px solid var(--rule);color:var(--muted);font-size:var(--a-body)}}
 .shimmer-demo svg{{width:min(100%,420px);height:auto}}
 .favs{{display:flex;gap:28px;flex-wrap:wrap;margin-top:14px}}
 .fav-row{{display:flex;align-items:flex-end;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px}}
 .fav-row img{{display:block;image-rendering:auto}}
-.fav-row span{{font-size:11.5px;color:var(--muted);display:block;text-align:center;margin-top:6px}}
+.fav-row span{{font-size:var(--a-body);color:var(--muted);display:block;text-align:center;margin-top:6px}}
 .ladder{{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:14px 0 8px}}
 @media(max-width:640px){{.ladder{{grid-template-columns:repeat(3,minmax(0,1fr))}}}}
-.ladder div,.radius-row div{{display:grid;gap:4px;font-size:12.5px;color:var(--muted);align-content:start}}
+.ladder div,.radius-row div{{display:grid;gap:4px;font-size:var(--a-body);color:var(--muted);align-content:start}}
 .ladder i{{display:block;height:64px;border-radius:10px;border:1px solid var(--rule)}}
-.ladder b,.radius-row b{{color:var(--fg);font-weight:600;font-size:13px}}
-.tx-sample{{display:inline-block;padding:4px 10px;border-radius:8px;border:1px solid {C.BORDER};font-family:var(--ox-font-mono);font-size:13px}}
-.stbadge{{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;border-radius:999px;border:1px solid;font-size:13px;font-weight:500}}
+.ladder b,.radius-row b{{color:var(--fg);font-weight:600;font-size:var(--a-body)}}
+.tx-sample{{display:inline-block;padding:4px 10px;border-radius:8px;border:1px solid {C.BORDER};font-family:var(--ox-font-mono);font-size:var(--a-body)}}
+.stbadge{{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;border-radius:999px;border:1px solid;font-size:var(--a-body);font-weight:500}}
 .stbadge i{{width:8px;height:8px;border-radius:50%;display:block}}
-.hex{{font-size:11.5px;color:var(--muted);line-height:1.5}}
+.hex{{font-size:var(--a-body);color:var(--muted);line-height:1.5}}
 .shapes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:14px 0 22px}}
-.shape{{padding:14px 16px;border-radius:12px;background:var(--panel);color:var(--fg);font-size:14px;font-weight:500}}
-.shape span{{display:block;color:var(--muted);font-size:12.5px;font-weight:400}}
+.shape{{padding:14px 16px;border-radius:12px;background:var(--panel);color:var(--fg);font-size:var(--a-body);font-weight:500}}
+.shape span{{display:block;color:var(--muted);font-size:var(--a-body);font-weight:400}}
 .shape.held{{border:3px double var(--fg)}}
 .shape.pending{{border:1.5px dashed var(--fg)}}
 .shape.broken{{border:1px solid var(--fg)}}
-.face-card{{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;display:grid;gap:6px;font-size:13.5px;color:var(--muted);align-content:start}}
-.face-card .sample{{font-size:52px;line-height:1.1;color:var(--fg);margin-bottom:8px;overflow-wrap:anywhere}}
-.face-card b{{color:var(--fg);font-size:16px}}
+.face-card{{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;display:grid;gap:6px;font-size:var(--a-body);color:var(--muted);align-content:start}}
+.face-card .sample{{font-size:var(--m-h2);line-height:1.1;color:var(--fg);margin-bottom:8px;overflow-wrap:anywhere}}
+.face-card b{{color:var(--fg);font-size:var(--m-body)}}
 .radius-row{{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:18px 14px;margin:14px 0 22px}}
 .radius-row i{{display:block;height:64px;background:var(--panel);border:1px solid var(--rule);margin-bottom:4px}}
 .stage{{position:relative;background:var(--void);border:1px solid var(--border);border-radius:14px;padding:32px 24px;min-height:220px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;overflow:hidden}}
 .stage.end{{justify-content:flex-end}}
-.demo-card{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:16px 18px;width:min(100%,240px);color:var(--fg);font-size:14px;font-weight:500}}
-.demo-card span{{display:block;color:var(--muted);font-size:12.5px;font-weight:400;margin-top:2px}}
+.demo-card{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:16px 18px;width:min(100%,240px);color:var(--fg);font-size:var(--a-body);font-weight:500}}
+.demo-card span{{display:block;color:var(--muted);font-size:var(--a-body);font-weight:400;margin-top:2px}}
 .demo-card.lift{{box-shadow:var(--ui-shadow)}}
 .demo-card.glow{{box-shadow:0 0 30px color-mix(in srgb,var(--gold) 55%,transparent)}}
 .demo-card.heavy{{box-shadow:0 22px 44px rgba(0,0,0,.55),0 8px 14px rgba(0,0,0,.3)}}
-.demo-menu{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(STEP_MULT["3xl"]):.2f}px;padding:4px;width:min(100%,220px);box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);font-size:14px;color:var(--fg)}}
+.demo-menu{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(STEP_MULT["3xl"]):.2f}px;padding:4px;width:min(100%,220px);box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);font-size:var(--a-body);color:var(--fg)}}
 .demo-menu.glass{{background:color-mix(in srgb,var(--panel) {POPUP_FILL_PCT}%,transparent);backdrop-filter:blur({POPUP_BLUR_PX}px) saturate({POPUP_SATURATE_PCT}%);-webkit-backdrop-filter:blur({POPUP_BLUR_PX}px) saturate({POPUP_SATURATE_PCT}%)}}
 .demo-menu div{{padding:8px 12px;border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;min-height:36px;display:flex;align-items:center}}
 .demo-menu div.on{{background:color-mix(in srgb,var(--fg) {WASH_PCT}%,transparent)}}
 .behind{{position:absolute;inset:0;padding:18px 22px;display:grid;align-content:start;font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features}}}
-.behind div{{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding:9px 0;color:var(--body);font-size:13px}}
+.behind div{{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding:9px 0;color:var(--body);font-size:var(--a-body)}}
 .scrim{{position:absolute;inset:0;background:var(--scrim);backdrop-filter:blur({SCRIM_BLUR_PX}px);-webkit-backdrop-filter:blur({SCRIM_BLUR_PX}px)}}
-.demo-dialog{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);padding:18px 20px;width:min(100%,280px);color:var(--fg);font-size:15px;font-weight:600}}
-.demo-dialog p{{font-size:13.5px;font-weight:400;color:var(--muted);margin:4px 0 0}}
+.demo-dialog{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);padding:18px 20px;width:min(100%,280px);color:var(--fg);font-size:var(--m-body);font-weight:600}}
+.demo-dialog p{{font-size:var(--a-body);font-weight:400;color:var(--muted);margin:4px 0 0}}
 .demo-btns{{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}}
-.pill{{display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border-radius:{radius_px(STEP_MULT["4xl"]):.2f}px;font-size:14px;font-weight:500;border:1px solid var(--border);background:var(--panel);color:var(--fg)}}
+.pill{{display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border-radius:{radius_px(STEP_MULT["4xl"]):.2f}px;font-size:var(--a-body);font-weight:500;border:1px solid var(--border);background:var(--panel);color:var(--fg)}}
 .pill.gold{{background:var(--gold);border-color:var(--gold);color:{C.INK}}}
 .pill.field{{min-width:min(100%,240px);color:var(--dim);background:var(--ink)}}
-.demo-panel{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:18px;width:min(100%,320px);display:grid;gap:12px;color:var(--fg);font-size:14px;font-weight:600}}
+.demo-panel{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:18px;width:min(100%,320px);display:grid;gap:12px;color:var(--fg);font-size:var(--a-body);font-weight:600}}
 .demo-panel .demo-btns{{margin-top:0}}
 """
 
@@ -826,7 +827,7 @@ def build_html() -> str:
 <div style="overflow-x:auto"><table>
 <thead><tr><th></th><th>token</th><th>value</th><th>on ink</th><th>on paper</th><th>use</th></tr></thead>
 <tbody>{tokens_rows}</tbody></table></div>
-<p class="muted" style="margin-top:14px;font-size:13.5px">Contrast is WCAG 2.x. Text tokens clear 4.5:1 on their own ground; the build checks it.</p>
+<p class="muted" style="margin-top:14px;font-size:var(--a-body)">Contrast is WCAG 2.x. Text tokens clear 4.5:1 on their own ground; the build checks it.</p>
 </section>
 
 <section id="type">
@@ -840,12 +841,12 @@ def build_html() -> str:
 {face_card(T.DISPLAY_FACE, "Aa Gg 1234", "--ox-font-display")}
 </div>
 <h3>Samples</h3>
-<div class="type-row"><span class="mono">hero 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
-<div class="type-row"><span class="mono">heading 700</span><span style="font-weight:700;font-size:32px;line-height:1.1;letter-spacing:-.02em">See which agent spent what.</span></div>
-<div class="type-row"><span class="mono">heading 600</span><span style="font-weight:600;font-size:22px;line-height:1.25">Spend this week</span></div>
-<div class="type-row"><span class="mono">text 600</span><span style="font-weight:600;font-size:16px">Runs waiting for approval</span></div>
-<div class="type-row"><span class="mono">text 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
-<div class="type-row"><span class="mono">code 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:14px">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
+<div class="type-row"><span class="mono">hero 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:var(--m-h2);line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
+<div class="type-row"><span class="mono">heading 700</span><span style="font-weight:700;font-size:var(--m-h3);line-height:1.1;letter-spacing:-.02em">See which agent spent what.</span></div>
+<div class="type-row"><span class="mono">heading 600</span><span style="font-weight:600;font-size:var(--a-h2);line-height:1.25">Spend this week</span></div>
+<div class="type-row"><span class="mono">text 600</span><span style="font-weight:600;font-size:var(--m-body)">Runs waiting for approval</span></div>
+<div class="type-row"><span class="mono">text 400</span><span style="font-weight:400;font-size:var(--m-body);color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
+<div class="type-row"><span class="mono">code 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:var(--a-body)">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
 <h3>Scales</h3>
 <p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a landing page or a post read once. Its body is {T.MARKETING.step('body').px}px. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for the web app, panels, tables, and logs. Its body is {T.APP.step('body').px}px. No step on either scale is below {T.TYPE_FLOOR_PX}px, and no page writes a size of its own: every size reads a step.</p>
 <h3>Headings</h3>
@@ -854,7 +855,7 @@ def build_html() -> str:
 <div style="overflow-x:auto"><table>
 <thead><tr><th>step</th><th>marketing face</th><th>app face</th><th>marketing</th><th>app</th></tr></thead>
 <tbody>{scale_rows}</tbody></table></div>
-<p class="muted" style="margin-top:14px;font-size:13.5px">Sizes in px, then line height and weight.</p>
+<p class="muted" style="margin-top:14px;font-size:var(--a-body)">Sizes in px, then line height and weight.</p>
 <h3>Weights</h3>
 <p>Six named weights cover every job.</p>
 <div style="overflow-x:auto"><table>
@@ -869,7 +870,7 @@ def build_html() -> str:
 <ul class="rules">
 <li><b>Headings use sentence case.</b> Capitalise the first word and proper names only.</li>
 <li><b>No fourth role face.</b> A CSS rule names a role, such as <code>--font-display</code> or <code>--font-mono</code>, never a face, so a face can change in one place.</li>
-<li><b>An eyebrow is 12px {T.TEXT_FACE.family}, uppercase, at 0.14em tracking.</b> An eyebrow is the small label above a heading, like the word above each heading on this page.</li>
+<li><b>An eyebrow is 14px {T.TEXT_FACE.family}, uppercase, at 0.14em tracking.</b> An eyebrow is the small label above a heading, like the word above each heading on this page. It stands apart by case, tracking, weight, and colour, not by size.</li>
 <li><b>Numbers in tables use Monaspace Neon.</b> Every digit is the same width, so columns of figures line up.</li>
 <li><b>Monaspace Neon keeps texture healing and code ligatures on</b> (<code>font-feature-settings: {T.MONASPACE_NEON.features}</code>). Texture healing evens out the space around narrow and wide letters. Ligatures join pairs such as <code>=&gt;</code> into one glyph.</li>
 </ul>

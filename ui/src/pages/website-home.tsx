@@ -25,8 +25,8 @@ function Hero() {
       <HexField className="ox-hex-float pointer-events-none absolute inset-0 -z-10 h-full w-full text-foreground" />
       <div className={cn(siteWrap, "pt-36 pb-28 max-md:pt-28 max-md:pb-20")}>
         <p className={eyebrow}>Workforce management for autonomous agents</p>
-        <h1 className="mt-5 text-m-h1 text-foreground max-lg:text-[3.5rem] max-sm:text-[2.5rem]">
-          <span className="hero-line-1">Your agents are a workforce now.</span>
+        <h1 className="mt-5 text-m-h1 text-foreground max-lg:text-(length:--ox-m-h2)">
+          Your agents are a workforce now.
           <br />
           Manage them like one.
         </h1>
@@ -154,10 +154,13 @@ const PROOFS = [
  * entries, `section-audit`, and the `proof-*` entries. Headings and card
  * titles are plain nouns, and an approved line that is a sentence opens the
  * body under them.
+ *
+ * The wrapper points `--font-heading` at Space Grotesk, the one line a
+ * marketing site writes, so every h1 to h3 on the page takes it.
  */
 export function HomePage({ productMenuOpen }: { productMenuOpen: boolean }) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground [--font-heading:var(--font-display)]">
       <SiteNav productMenuOpen={productMenuOpen} />
       <main>
         <Hero />

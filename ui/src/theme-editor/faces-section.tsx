@@ -85,7 +85,7 @@ export function WordmarkFace() {
         <span className="text-xs text-muted-foreground">{face.family}</span>
       </div>
       <p
-        className="truncate rounded-lg bg-muted/60 px-2.5 py-2 text-xl font-semibold text-foreground"
+        className="truncate rounded-lg bg-muted/60 px-2.5 py-2 text-(length:--ox-a-h3) font-semibold text-foreground"
         style={{ fontFamily: WORDMARK_STACK }}
       >
         {ROLE_SAMPLES.wordmark}
@@ -152,7 +152,7 @@ export function FaceEditor({
       <p
         className={cn(
           "truncate rounded-lg bg-muted/60 px-2.5 py-2 text-foreground",
-          role === "display" ? "text-lg font-semibold" : "text-sm",
+          role === "display" ? "text-(length:--ox-a-h3) font-semibold" : "text-sm",
         )}
         style={{ fontFamily: family ? fontStack(role, choice) : undefined }}
       >
@@ -211,7 +211,7 @@ function GoogleFields({
               <label
                 key={w}
                 className={cn(
-                  "inline-flex cursor-pointer items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[11px]",
+                  "inline-flex cursor-pointer items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-sm",
                   on ? "border-foreground/40 bg-foreground/10 text-foreground" : "border-border text-muted-foreground",
                 )}
               >

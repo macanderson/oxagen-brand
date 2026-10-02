@@ -144,11 +144,11 @@ describe("Dialog recipe", () => {
     expect(footer?.className).toContain("sm:justify-end");
   });
 
-  it("sets the title at 16px and the description at 12.5px", () => {
+  it("sets the title at 16px and the description at 14px", () => {
     const { getByText } = render(<OpenDialog />);
     expect(getByText("Edit agent").className).toContain("text-base");
     expect(getByText("Changes apply to the next run.").className).toContain(
-      "text-[12.5px]",
+      "text-sm",
     );
   });
 

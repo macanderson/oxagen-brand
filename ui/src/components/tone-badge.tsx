@@ -36,7 +36,7 @@ const TONE: Record<ToneBadgeTone, string> = {
 export const TONE_BADGE_TONES = Object.keys(TONE) as ToneBadgeTone[];
 
 const badgeBase =
-  "inline-flex items-center gap-[5px] whitespace-nowrap rounded-md border px-[7px] py-0.5 text-[11px] font-semibold leading-normal tracking-[0.02em]";
+  "inline-flex items-center gap-[5px] whitespace-nowrap rounded-md border px-[7px] py-0.5 text-sm font-semibold leading-normal tracking-[0.02em]";
 
 export function ToneBadge({
   tone,
@@ -68,7 +68,7 @@ export function ToneBadge({
       className={cn(
         badgeBase,
         TONE[tone],
-        mono && "font-mono text-[10.5px] font-medium lowercase",
+        mono && "font-mono text-sm font-medium lowercase",
         className,
       )}
     >

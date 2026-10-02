@@ -159,7 +159,7 @@ function ToastList() {
         data-tone={tone}
         className={ROOT_CLASS}
       >
-        <ToastPrimitive.Content className="flex items-start gap-2.5 py-3.5 pr-3 pl-4 text-[13px] leading-[1.4] transition-opacity duration-[250ms] data-[behind]:pointer-events-none data-[behind]:opacity-0 data-[expanded]:pointer-events-auto data-[expanded]:opacity-100">
+        <ToastPrimitive.Content className="flex items-start gap-2.5 py-3.5 pr-3 pl-4 text-sm leading-[1.4] transition-opacity duration-[250ms] data-[behind]:pointer-events-none data-[behind]:opacity-0 data-[expanded]:pointer-events-auto data-[expanded]:opacity-100">
           <span
             data-slot="toast-icon"
             className="grid h-[18px] flex-none place-items-center"

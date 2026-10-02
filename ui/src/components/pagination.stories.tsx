@@ -12,7 +12,7 @@ function RunsPager({ total, start = 1 }: { total: number; start?: number }) {
   const to = Math.min(total, current * perPage);
   return (
     <div className="w-[640px] max-w-full rounded-lg border border-border bg-card">
-      <p className="px-3 py-6 text-center text-[13px] text-muted-foreground">
+      <p className="px-3 py-6 text-center text-sm text-muted-foreground">
         Runs {from} to {to}
       </p>
       <RowsPager

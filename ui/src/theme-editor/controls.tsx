@@ -49,7 +49,7 @@ export function Ratio({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[11px] tabular-nums",
+        "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-sm tabular-nums",
         low ? "bg-error/10 text-error-ink" : "bg-muted text-muted-foreground",
       )}
       title={min === undefined ? "The build does not check this ratio." : `The build needs ${min}:1 or more.`}
