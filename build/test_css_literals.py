@@ -77,8 +77,40 @@ class FontSizes(unittest.TestCase):
     def test_the_font_shorthand_is_read(self) -> None:
         self.assertEqual(len(flagged(".a { font: 600 14px/1.2 var(--font-sans); }")), 1)
 
-    def test_a_relative_size_and_a_token_pass(self) -> None:
-        self.assertEqual(flagged(".a { font-size: 0.9em; } .b { font-size: 120%; } .c { font-size: var(--ox-a-micro); }"), [])
+    def test_a_relative_size_of_one_or_more_and_a_token_pass(self) -> None:
+        css = ".a { font-size: 1em; } .b { font-size: 120%; } .c { font-size: var(--ox-a-micro); } .d { font-size: var(--x, 13px); }"
+        self.assertEqual(flagged(css), [])
+
+    def test_a_relative_size_below_its_parent_fails(self) -> None:
+        css = ".a { font-size: 0.9em; }\n.b { font-size: 85%; }\n.c { font-size: smaller; }"
+        self.assertEqual([h[0] for h in flagged(css)], [1, 2, 3])
+
+
+class FontSizesEverywhere(unittest.TestCase):
+    def test_the_scope_sets_every_font_size_from_a_token(self) -> None:
+        hits, _used = L.font_size_hits()
+        self.assertEqual([f"{h.path}:{h.line} {h.value}" for h in hits], [])
+
+    def test_a_tailwind_arbitrary_size_fails(self) -> None:
+        hits = L.script_font_sizes('const a = "px-2 text-[13px] font-medium";\nconst b = "text-[0.75rem]";', "x.tsx")
+        self.assertEqual([(h.line, h.value) for h in hits], [(1, "text-[13px]"), (2, "text-[0.75rem]")])
+
+    def test_a_tailwind_size_that_reads_a_token_passes(self) -> None:
+        code = 'const a = "text-(length:--ox-a-h2) text-[length:var(--ox-m-h2)] text-[var(--body)] text-sm text-a-body";'
+        self.assertEqual(L.script_font_sizes(code, "x.tsx"), [])
+
+    def test_a_font_size_prop_and_css_in_a_string_fail(self) -> None:
+        code = 'h({ fontSize: "0.75rem" });\nconst css = ".t{font:14px/1.45 Aeonik}.b{font-size:13px}";'
+        hits = L.script_font_sizes(code, "x.js")
+        self.assertEqual([(h.line, h.prop) for h in hits], [(1, "fontSize"), (2, "font"), (2, "font-size")])
+
+    def test_a_comment_in_a_script_is_not_read(self) -> None:
+        code = "/** `.th { font-size:10.5px }` */\n// text-[11px]\nconst url = \"https://x.test/a\";"
+        self.assertEqual(L.script_font_sizes(code, "x.ts"), [])
+
+    def test_a_page_style_block_and_attribute_are_read(self) -> None:
+        html = '<style>\n.a{font-size:12px}\n.b{font-size:var(--a-body)}\n</style>\n<p style="font-size:13.5px">x</p>'
+        self.assertEqual([(h.line, h.value) for h in L.html_font_sizes(html, "x.html")], [(2, "12px"), (5, "13.5px")])
 
 
 class HeadingLineHeights(unittest.TestCase):
