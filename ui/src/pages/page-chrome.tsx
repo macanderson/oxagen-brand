@@ -5,6 +5,12 @@
 // `.design-sync/tsconfig.types.json` leaves this folder out of the bundle's
 // types.
 //
+// Each page's body lives in its own module (`website-home.tsx` and the
+// rest), and its `.stories.tsx` file only sets the story's args. A tool that
+// wraps the pages, such as a theme editor (#63), imports a page component and
+// renders it. Every colour, face, radius, and shadow here comes from a kit
+// token or recipe, so a change to a token reaches the pages with no edit.
+//
 // Glass appears only where the kit's rule allows it: the sticky nav and
 // header take `glassBar`, and the menus, popovers, the command menu, and the
 // toast take `floatingSurface` through their own components. Cards and
@@ -457,11 +463,11 @@ export function AppShell({
               aria-hidden
               className="flex size-7 items-center justify-center rounded-full bg-hl text-xs font-semibold text-foreground"
             >
-              P
+              D
             </span>
             <span className="min-w-0 text-sm">
               <span className="block truncate font-medium text-foreground">
-                Priya
+                Dana
               </span>
               <span className="block truncate text-xs text-muted-foreground">
                 Operator
