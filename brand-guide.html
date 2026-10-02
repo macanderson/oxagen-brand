@@ -182,6 +182,7 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
       <li><a href="#status">Status</a></li>
       <li><a href="#setup">Sync token</a></li>
       <li><a href="#flow">Change path</a></li>
+      <li><a href="#theme">Theme file</a></li>
       <li><a href="#colour">Brand colour</a></li>
       <li><a href="#font">Typefaces</a></li>
       <li><a href="#icon">App icons</a></li>
@@ -229,9 +230,9 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
   <div class="flow" role="list">
     <div class="lane" role="listitem">
       <h3>In oxagen-brand</h3>
-      <div class="step"><b>Edit the source file</b><small>A colour in <code>build/color.py</code>, a face in <code>build/typeset.py</code>, an icon in <code>build/marks.py</code>.</small></div>
+      <div class="step"><b>Edit the source file</b><small>A colour, a face, a corner, a shadow, the spacing, or a type size in <code>theme/theme.json</code>. An icon in <code>build/marks.py</code>.</small></div>
       <div class="step"><b>Run its generator</b><small><code>build/build.py</code> rewrites the tokens and every mark, icon, and image that uses them.</small></div>
-      <div class="step"><b>Open a pull request</b><small>CI checks contrast, fonts, marks, messages, the skill, and the component kit.</small></div>
+      <div class="step"><b>Open a pull request</b><small>CI checks the theme against its schema, contrast, fonts, marks, every generated file, messages, the skill, and the component kit.</small></div>
       <div class="step"><b>Merge to main</b><small>You review the previews in the pull request and merge.</small></div>
     </div>
     <div class="lane" role="listitem">
@@ -250,40 +251,64 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
   <p class="note"><strong>The short path.</strong> You don't need to run anything yourself. Give an agent one of the prompts below. It edits the kit, runs the generators, and opens the pull request. You review the previews and merge.</p>
 </section>
 
+<section id="theme" aria-labelledby="theme-h">
+  <h2 id="theme-h">Theme file</h2>
+  <p class="sub"><code>theme/theme.json</code> holds every value of the house design you may change, and the generators read it.</p>
+  <div class="table">
+    <table>
+      <thead><tr><th>Field</th><th>What it sets</th></tr></thead>
+      <tbody>
+        <tr><td><code>color</code></td><td>The gold, the lightness and chroma of its two neighbours, the ink and paper surfaces, the text colours, the six state marks, the lightness of their text stops on ink, and the destructive lift.</td></tr>
+        <tr><td><code>faces</code></td><td>The face of each role: <code>wordmark</code>, <code>display</code>, <code>sans</code>, and <code>mono</code>. Each lists its family, source, files and weights, fallback families, and features.</td></tr>
+        <tr><td><code>radius</code></td><td>The base every corner multiplies, each step's multiplier, the step a card takes, and the website's corner.</td></tr>
+        <tr><td><code>shadow</code></td><td>The shadow under a control and the shadow under a floating surface, each on ink and on paper.</td></tr>
+        <tr><td><code>spacing</code></td><td>The spacing unit and the page width.</td></tr>
+        <tr><td><code>type</code></td><td>The weights, the tracking, and the marketing and app scales.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ol class="steps">
+    <li><strong>Edit the theme.</strong><p>Change the field in <code>theme/theme.json</code>. <code>theme/theme.schema.json</code> describes each one.</p></li>
+    <li><strong>Run the generators.</strong><p><code>.venv/bin/python build/build.py</code>, then <code>build/playbook.py</code> and <code>build/messages.py</code>.</p></li>
+    <li><strong>Run the check.</strong><p><code>.venv/bin/python build/build.py --check</code> fails when the theme does not match its schema, when a colour drops below 4.5:1 contrast, or when a generated file differs from what the theme produces.</p></li>
+    <li><strong>Open the pull request.</strong><p><code>CHANGING.md</code>, "Change the theme", names every field and the copies no generator writes.</p></li>
+  </ol>
+</section>
+
 <section id="colour" aria-labelledby="colour-h">
   <h2 id="colour-h">Brand colour</h2>
   <p class="sub">One generator run recolours the token files, every logo and icon, the favicons, splash screens, wallpapers, social cards, ads, content cards, and spinners. Both brands change together.</p>
   <ol class="steps">
-    <li><strong>Change the constant.</strong><p>In <code>build/color.py</code>, change <code>GOLD</code>. Its two neighbours, gold-bright and gold-deep, are derived from it. To move the hue, also change the hue in <code>GOLD_BRIGHT_LCH</code> and <code>GOLD_DEEP_LCH</code>, and the two pinned hex values the generator prints.</p></li>
+    <li><strong>Change the gold.</strong><p>In <code>theme/theme.json</code>, change <code>color.gold</code>. Its two neighbours, gold-bright and gold-deep, are derived from it on the gold's own hue. <code>color.gold_bright</code> and <code>color.gold_deep</code> set their lightness and chroma.</p></li>
     <li><strong>Run the generators.</strong><p><code>.venv/bin/python build/build.py</code>, then <code>build/playbook.py</code> and <code>build/messages.py</code>.</p></li>
     <li><strong>Update the hand copies.</strong><p>A few copies sit outside the generators: the gold ramp in <code>ui/src/styles/globals.css</code>, <code>BRAND_GOLD</code> and its test, the skill's <code>system.md</code>, the install prompt, and <code>sdlc/</code>. <code>CHANGING.md</code> lists each one.</p></li>
     <li><strong>Open the pull request.</strong><p>The check fails if any text colour drops below 4.5:1 contrast on its ground.</p></li>
   </ol>
-  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-colour">In oxageninc/brand, change the house gold to #______. Follow CHANGING.md, "Change a colour token": edit build/color.py, run the generators, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the new 512px icons and the light and dark wordmarks in the PR body so I can compare them.</pre><button type="button" data-copy="prompt-colour">Copy</button></div>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-colour">In oxageninc/brand, change the house gold to #______. Follow CHANGING.md, "Change a colour token": edit color.gold in theme/theme.json, run the generators, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the new 512px icons and the light and dark wordmarks in the PR body so I can compare them.</pre><button type="button" data-copy="prompt-colour">Copy</button></div>
 </section>
 
 <section id="font" aria-labelledby="font-h">
   <h2 id="font-h">Typefaces</h2>
-  <p class="sub">The house uses three faces, all under the SIL Open Font License. Both brands use the same three.</p>
+  <p class="sub">The house uses three faces, all under the SIL Open Font License today. Both brands use the same three.</p>
   <div class="table">
     <table>
-      <thead><tr><th>Use</th><th>Face</th><th>Set in</th></tr></thead>
+      <thead><tr><th>Use</th><th>Face</th><th>Field in theme/theme.json</th></tr></thead>
       <tbody>
-        <tr><td>Both wordmarks and Stella's icon</td><td>Space Grotesk 600</td><td><code>build/glyphs.py</code></td></tr>
-        <tr><td>Line 1 of a marketing hero</td><td>Space Grotesk</td><td><code>build/typeset.py</code></td></tr>
-        <tr><td>Every heading and all text, in the app and on the website</td><td>Geist</td><td><code>build/typeset.py</code></td></tr>
-        <tr><td>Code, logs, paths, and numbers in tables</td><td>Monaspace Neon</td><td><code>build/typeset.py</code></td></tr>
+        <tr><td>Both wordmarks and Stella's icon</td><td>Space Grotesk 600</td><td><code>faces.wordmark.outline</code></td></tr>
+        <tr><td>Line 1 of a marketing hero</td><td>Space Grotesk</td><td><code>faces.wordmark</code></td></tr>
+        <tr><td>Every heading and all text, in the app and on the website</td><td>Geist</td><td><code>faces.display</code> and <code>faces.sans</code></td></tr>
+        <tr><td>Code, logs, paths, and numbers in tables</td><td>Monaspace Neon</td><td><code>faces.mono</code></td></tr>
       </tbody>
     </table>
   </div>
   <p class="note"><strong>One system, two h1 rules.</strong> The app sets every heading in Geist. A website sets line 1 of its hero in Space Grotesk by wrapping it in the <code>hero-line-1</code> class inside a <code>text-m-h1</code> heading. Outside that heading the class draws in Geist, so the app can't reach Space Grotesk by accident.</p>
   <ol class="steps">
-    <li><strong>Check the licence.</strong><p>The repo is public, so a house face must allow redistribution in a public repo and embedding on the web. A face licensed per seat or per domain, such as Aeonik, can't be a house face, because committing its files publishes them.</p></li>
+    <li><strong>Check the licence.</strong><p>On 2026-10-01 you decided that a licensed face, such as Aeonik, may be committed to this public repo like the open faces. Its licence must still allow web embedding on Oxagen's sites.</p></li>
     <li><strong>Add the files.</strong><p>Put the <code>.woff2</code> files and the licence under <code>fonts/</code>.</p></li>
-    <li><strong>Point the role at the face.</strong><p>Edit the <code>Face</code> in <code>build/typeset.py</code>, then run <code>build/build.py</code>. It rewrites <code>house-fonts.css</code>, <code>house-tailwind.css</code>, and <code>next-fonts.ts</code>, which every site imports.</p></li>
-    <li><strong>For the wordmark face, change the font file.</strong><p>The wordmarks and Stella's icon are outlined from <code>FONT</code> in <code>build/glyphs.py</code>, not from <code>Face</code>. A new wordmark face redraws both logos and Stella's icon, so review it as a logo change.</p></li>
+    <li><strong>Point the role at the face.</strong><p>Edit the role's entry in <code>faces</code> in <code>theme/theme.json</code>, then run <code>build/build.py</code>. It rewrites <code>house-fonts.css</code>, <code>house-tailwind.css</code>, and <code>next-fonts.ts</code>, which every site imports.</p></li>
+    <li><strong>For the wordmark face, change the outline file.</strong><p>The wordmarks and Stella's icon are outlined from <code>faces.wordmark.outline</code>, not from its webfont files. A new outline file redraws both logos and Stella's icon, so review it as a logo change.</p></li>
   </ol>
-  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-font">In oxageninc/brand, make ______ the house face for ______ (headings and text, code, or the wordmarks). Check its licence allows a public repo and web embedding first, and stop if it doesn't. Follow CHANGING.md, "Change a font family", and open a pull request with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-font">Copy</button></div>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-font">In oxageninc/brand, make ______ the house face for ______ (headings and text, code, or the wordmarks). Check its licence allows web embedding on Oxagen's sites first, and stop if it doesn't. Follow CHANGING.md, "Change a font family", and open a pull request with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-font">Copy</button></div>
 </section>
 
 <section id="icon" aria-labelledby="icon-h">

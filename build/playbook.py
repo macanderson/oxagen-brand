@@ -12,8 +12,10 @@ import html
 from pathlib import Path
 
 import color as C
+import pagecss as PG
 import pwa
 import typeset as T
+from theme import THEME, rem_px
 import glyphs as G
 import surfaces as SF
 from build import AD_COPY, CONTENT, TAGLINES, ad_svg
@@ -342,25 +344,28 @@ def tracking_rows() -> str:
     return "".join(out)
 
 
-# The values below live in the kit, not in build/: the v3 layer at the end of
-# ui/src/styles/globals.css and the recipes in ui/src/components/control-styles.ts.
-# They are retyped here, so change this block when either file moves.
-SITE_RADIUS_PX = 12  # --ox-radius, written by build/build.py
-APP_RADIUS_REM = 0.45  # --ui-radius in the v3 layer (oxagen ADR-221)
-RADIUS_STEPS = (  # (step, multiple of --ui-radius, what wears it)
-    ("sm", 0.6, "a checkbox, a small chip"),
-    ("md", 0.8, "a badge, a bare text input, a skeleton"),
-    ("lg", 1.0, "a tooltip, an icon button, a toggle group"),
-    ("xl", 1.4, "an alert, a textarea, an empty state"),
-    ("2xl", 1.8, "a panel, a stat tile, a dialog, a menu row"),
-    ("3xl", 2.2, "a menu, a popover, a hover card, a toast"),
-    ("4xl", 2.6, "a button, a select, a form field"),
+# The corners and the shadows come from theme/theme.json, which the tokens and
+# the kit's globals.css read too. The values below that remain live in the
+# kit: the v3 layer at the end of ui/src/styles/globals.css and the recipes in
+# ui/src/components/control-styles.ts. They are retyped here, so change this
+# block when either file moves.
+SITE_RADIUS_PX = rem_px(THEME["radius"]["site"])  # --ox-radius, written by build/build.py
+APP_RADIUS_REM = rem_px(THEME["radius"]["base"]) / 16  # --ox-radius-base, which the kit reads as --ui-radius
+_RADIUS_USE = (  # (step, what wears it)
+    ("sm", "a checkbox, a small chip"),
+    ("md", "a badge, a bare text input, a skeleton"),
+    ("lg", "a tooltip, an icon button, a toggle group"),
+    ("xl", "an alert, a textarea, an empty state"),
+    ("2xl", "a panel, a stat tile, a dialog, a menu row"),
+    ("3xl", "a menu, a popover, a hover card, a toast"),
+    ("4xl", "a button, a select, a form field"),
 )
-UI_SHADOW = "0 1px 2px oklch(0.15 0 0 / 0.07)"
-POP_SHADOW = {
-    "dark": "0 25px 50px -12px rgb(0 0 0 / 0.6)",
-    "light": f"0 25px 50px -12px color-mix(in srgb, {C.INK} 25%, transparent)",
-}
+STEP_MULT = THEME["radius"]["steps"]
+RADIUS_STEPS = tuple((step, STEP_MULT[step], use) for step, use in _RADIUS_USE)
+UI_SHADOW = {"dark": PG.resolve(THEME["shadow"]["ui"]["ink"]), "light": PG.resolve(THEME["shadow"]["ui"]["paper"])}
+POP_SHADOW = {"dark": PG.resolve(THEME["shadow"]["pop"]["ink"]), "light": PG.resolve(THEME["shadow"]["pop"]["paper"])}
+#: The light theme restates the quiet shadow only when the theme gives paper its own.
+LIGHT_UI_SHADOW = "" if UI_SHADOW["light"] == UI_SHADOW["dark"] else f"--ui-shadow:{UI_SHADOW['light']};"
 POP_RING_PCT = {"dark": 10, "light": 5}  # the text colour, as a 1px ring
 SCRIM = {"dark": "oklch(0 0 0 / 0.6)", "light": "oklch(0.15 0.002 286 / 0.5)"}
 SCRIM_BLUR_PX = 3
@@ -436,19 +441,19 @@ def css() -> str:
   --ox-font:{T.GEIST.css_stack};
   --ox-font-display:{T.SPACE_GROTESK.css_stack};
   --ox-font-mono:{T.MONASPACE_NEON.css_stack};
-  --ui-shadow:{UI_SHADOW};--pop-shadow:{POP_SHADOW["dark"]};--scrim:{SCRIM["dark"]};
+  --ui-shadow:{UI_SHADOW["dark"]};--pop-shadow:{POP_SHADOW["dark"]};--scrim:{SCRIM["dark"]};
   --pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["dark"]}%,transparent);
 }}
 @media(prefers-color-scheme:light){{:root:not([data-theme="dark"]){{
   --ink:{C.PAPER};--void:{C.PAPER_VOID};--panel:{C.PAPER_PANEL};--hl:{C.PAPER_HL};--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
   --fg:{C.INK_TEXT};--body:{C.TEXT_INK};--muted:{C.MUTED_INK};--dim:{C.DIM_INK};--accent-text:{C.GOLD_DEEP};
   --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);
-  --pop-shadow:{POP_SHADOW["light"]};--scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);}}}}
+  --pop-shadow:{POP_SHADOW["light"]};--scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);{LIGHT_UI_SHADOW}}}}}
 :root[data-theme="light"]{{
   --ink:{C.PAPER};--void:{C.PAPER_VOID};--panel:{C.PAPER_PANEL};--hl:{C.PAPER_HL};--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
   --fg:{C.INK_TEXT};--body:{C.TEXT_INK};--muted:{C.MUTED_INK};--dim:{C.DIM_INK};--accent-text:{C.GOLD_DEEP};
   --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);
-  --pop-shadow:{POP_SHADOW["light"]};--scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);}}
+  --pop-shadow:{POP_SHADOW["light"]};--scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);{LIGHT_UI_SHADOW}}}
 *,*::before,*::after{{box-sizing:border-box}}
 html{{scroll-behavior:smooth;scroll-padding-top:78px}}
 @media(prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
@@ -544,25 +549,25 @@ footer{{padding:48px 0 80px;border-top:1px solid var(--rule);color:var(--muted);
 .radius-row i{{display:block;height:64px;background:var(--panel);border:1px solid var(--rule);margin-bottom:4px}}
 .stage{{position:relative;background:var(--void);border:1px solid var(--border);border-radius:14px;padding:32px 24px;min-height:220px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;overflow:hidden}}
 .stage.end{{justify-content:flex-end}}
-.demo-card{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(1.8):.2f}px;padding:16px 18px;width:min(100%,240px);color:var(--fg);font-size:14px;font-weight:500}}
+.demo-card{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:16px 18px;width:min(100%,240px);color:var(--fg);font-size:14px;font-weight:500}}
 .demo-card span{{display:block;color:var(--muted);font-size:12.5px;font-weight:400;margin-top:2px}}
 .demo-card.lift{{box-shadow:var(--ui-shadow)}}
 .demo-card.glow{{box-shadow:0 0 30px color-mix(in srgb,var(--gold) 55%,transparent)}}
 .demo-card.heavy{{box-shadow:0 22px 44px rgba(0,0,0,.55),0 8px 14px rgba(0,0,0,.3)}}
-.demo-menu{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(2.2):.2f}px;padding:4px;width:min(100%,220px);box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);font-size:14px;color:var(--fg)}}
+.demo-menu{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(STEP_MULT["3xl"]):.2f}px;padding:4px;width:min(100%,220px);box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);font-size:14px;color:var(--fg)}}
 .demo-menu.glass{{background:color-mix(in srgb,var(--panel) {POPUP_FILL_PCT}%,transparent);backdrop-filter:blur({POPUP_BLUR_PX}px) saturate({POPUP_SATURATE_PCT}%);-webkit-backdrop-filter:blur({POPUP_BLUR_PX}px) saturate({POPUP_SATURATE_PCT}%)}}
-.demo-menu div{{padding:8px 12px;border-radius:{radius_px(1.8):.2f}px;min-height:36px;display:flex;align-items:center}}
+.demo-menu div{{padding:8px 12px;border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;min-height:36px;display:flex;align-items:center}}
 .demo-menu div.on{{background:color-mix(in srgb,var(--fg) {WASH_PCT}%,transparent)}}
 .behind{{position:absolute;inset:0;padding:18px 22px;display:grid;align-content:start;font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features}}}
 .behind div{{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding:9px 0;color:var(--body);font-size:13px}}
 .scrim{{position:absolute;inset:0;background:var(--scrim);backdrop-filter:blur({SCRIM_BLUR_PX}px);-webkit-backdrop-filter:blur({SCRIM_BLUR_PX}px)}}
-.demo-dialog{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(1.8):.2f}px;box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);padding:18px 20px;width:min(100%,280px);color:var(--fg);font-size:15px;font-weight:600}}
+.demo-dialog{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);padding:18px 20px;width:min(100%,280px);color:var(--fg);font-size:15px;font-weight:600}}
 .demo-dialog p{{font-size:13.5px;font-weight:400;color:var(--muted);margin:4px 0 0}}
 .demo-btns{{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}}
-.pill{{display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border-radius:{radius_px(2.6):.2f}px;font-size:14px;font-weight:500;border:1px solid var(--border);background:var(--panel);color:var(--fg)}}
+.pill{{display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border-radius:{radius_px(STEP_MULT["4xl"]):.2f}px;font-size:14px;font-weight:500;border:1px solid var(--border);background:var(--panel);color:var(--fg)}}
 .pill.gold{{background:var(--gold);border-color:var(--gold);color:{C.INK}}}
 .pill.field{{min-width:min(100%,240px);color:var(--dim);background:var(--ink)}}
-.demo-panel{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(1.8):.2f}px;padding:18px;width:min(100%,320px);display:grid;gap:12px;color:var(--fg);font-size:14px;font-weight:600}}
+.demo-panel{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:18px;width:min(100%,320px);display:grid;gap:12px;color:var(--fg);font-size:14px;font-weight:600}}
 .demo-panel .demo-btns{{margin-top:0}}
 """
 
@@ -868,12 +873,12 @@ def build_html() -> str:
 <p>Three more properties finish every surface: corner radius, shadow, and translucency. One rule ties them together. A surface at rest on the page is flat: a hairline border, almost no shadow, and a solid fill. Only a surface that floats above the page, such as a menu or a dialog, gets a deep shadow and a see-through fill.</p>
 
 <h3>Corner radius</h3>
-<p>On the website, cards, panels, and inputs round their corners at {SITE_RADIUS_PX}px (<code>--ox-radius</code>).</p>
-<p>The app uses a scale instead. Each step multiplies one base value, <code>--ui-radius</code>, which is {APP_RADIUS_REM:g}rem (about {radius_px(1):.0f}px). Change the base, and every corner in the app moves with it. Oxagen ADR-221 records the scale.</p>
+<p>On the website, cards, panels, and inputs round their corners at {SITE_RADIUS_PX:g}px (<code>--ox-radius</code>).</p>
+<p>The app uses a scale instead. Each step multiplies one base value, <code>--ui-radius</code>, which is {APP_RADIUS_REM:g}rem (about {radius_px(STEP_MULT["lg"]):.0f}px). Change the base, and every corner in the app moves with it. Oxagen ADR-221 records the scale.</p>
 {radius_row()}
 <ul class="rules">
-<li><b>A control you press or type into is a pill.</b> Buttons, selects, and form fields use <code>rounded-4xl</code>. At 36px tall, {radius_px(2.6):.0f}px is more than half the height, so the ends are fully round.</li>
-<li><b>A corner inside a corner is smaller by about the gap between them.</b> That keeps the two curves close to parallel. A menu rounds at <code>rounded-3xl</code> (about {radius_px(2.2):.0f}px) and insets its rows by 4px, so each row takes <code>rounded-2xl</code> (about {radius_px(1.8):.0f}px).</li>
+<li><b>A control you press or type into is a pill.</b> Buttons, selects, and form fields use <code>rounded-4xl</code>. At 36px tall, {radius_px(STEP_MULT["4xl"]):.0f}px is more than half the height, so the ends are fully round.</li>
+<li><b>A corner inside a corner is smaller by about the gap between them.</b> That keeps the two curves close to parallel. A menu rounds at <code>rounded-3xl</code> (about {radius_px(STEP_MULT["3xl"]):.0f}px) and insets its rows by 4px, so each row takes <code>rounded-2xl</code> (about {radius_px(STEP_MULT["2xl"]):.0f}px).</li>
 <li><b>A tile icon rounds at 20 on a 96 box.</b> That is about a fifth of its side.</li>
 </ul>
 <div class="grid g2" style="margin-top:22px">
@@ -882,7 +887,7 @@ def build_html() -> str:
 </div>
 
 <h3>Shadows</h3>
-<p>A surface at rest gets its edge from a 1px border: <code>--ox-border</code> on ink and <code>--ox-paper-border</code> on paper. The kit allows one faint shadow at rest, <code>--ui-shadow</code> (<span class="mono">{UI_SHADOW}</span>). Every Tailwind shadow step reads that one value, so a theme can turn them all off in one place.</p>
+<p>A surface at rest gets its edge from a 1px border: <code>--ox-border</code> on ink and <code>--ox-paper-border</code> on paper. The kit allows one faint shadow at rest, <code>--ui-shadow</code> (<span class="mono">{UI_SHADOW["dark"]}</span>). Every Tailwind shadow step reads that one value, so a theme can turn them all off in one place.</p>
 <p>A floating surface takes <code>shadow-pop</code> instead. Menus, popovers, hover cards, the command menu, dialogs, sheets, and toasts all float. The shadow is <span class="mono">0 25px 50px -12px</span>: obsidian at 25% on paper and black at 60% on ink. A floating surface drops its border for <code>pop-ring</code>, a 1px ring of the text colour at {POP_RING_PCT["light"]}% on paper and {POP_RING_PCT["dark"]}% on ink.</p>
 <div class="grid g3">
 <figure class="m0"><div class="stage"><div class="demo-card">Spend this week<span>border only</span></div></div><figcaption class="cap">at rest with a hairline border</figcaption></figure>

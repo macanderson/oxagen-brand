@@ -11,11 +11,6 @@ __pycache__/
 # publish them in this public repo.
 messages/rules/*.local.txt
 
-# Aeonik is licensed from CoType Foundry, not open-licensed like Space Grotesk.
-# The webfonts are dropped in locally and never committed to this public repo.
-fonts/aeonik-*.woff2
-fonts/Aeonik*
-
 # Oxagen: this machine's link to a workspace; never committed.
 .oxagen/workspace.json
 .stella/private/

@@ -38,14 +38,18 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.ttLib import TTFont
 from fontTools.varLib import instancer
 
+from theme import THEME
+
 ROOT = Path(__file__).resolve().parent.parent
-FONT = ROOT / "fonts" / "SpaceGrotesk-VariableFont_wght.ttf"
-#: Geist, the text face: the latin webfont the kit ships, variable on wght.
-TEXT_FONT = ROOT / "fonts" / "geist-latin-wght.woff2"
+#: The wordmark face's variable font, from `faces.wordmark.outline` in the theme.
+FONT = ROOT / "fonts" / THEME["faces"]["wordmark"]["outline"]["file"]
+#: The text face: the latin webfont the kit ships, variable on wght, from
+#: `faces.sans.outline` in the theme.
+TEXT_FONT = ROOT / "fonts" / THEME["faces"]["sans"]["outline"]["file"]
 REFERENCE = ROOT / "build" / "reference" / "oxagen-wordmark-color-light.svg"
 
 WEIGHTS = (400, 500, 600, 700)
-LOGO_WEIGHT = 600  # the wordmark weight, as the kit ships it
+LOGO_WEIGHT = THEME["faces"]["wordmark"]["outline"]["weight"]  # the wordmark weight
 
 #: The kit rendered at 96 px and its ink box came out 70 tall; scaling that box
 #: to 96 is a 96/70 lift. This is the em every wordmark is set at.

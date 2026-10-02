@@ -32,7 +32,7 @@ link, and checks that:
 
 It exits 1 when any check fails. A page rendered only in the browser shows
 little text to a plain fetch, so the text checks see only what the server
-sends. Standard library only, plus `build/color.py`.
+sends. Standard library only, plus `build/color.py` and `build/theme.py`.
 """
 
 from __future__ import annotations
@@ -52,6 +52,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import color as C  # noqa: E402
+from theme import THEME  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 CONSUMERS = ROOT / "consumers.json"
@@ -69,9 +70,14 @@ UA = "oxagen-brand-conformance/1 (+https://github.com/oxageninc/brand)"
 MAX_BYTES = 5 * 1024 * 1024
 MAX_SHEETS = 12
 
-#: Substrings that mark a house face, including the names next/font generates
-#: from the loaders in tokens/next-fonts.ts (for example `__spaceGrotesk_1a2b3c`).
-HOUSE_FACES = ("space grotesk", "grotesk", "geist", "monaspace")
+#: Substrings that mark a house face: each family `theme/theme.json` names, as
+#: written, joined, and hyphenated, so the names next/font generates from the
+#: loaders in tokens/next-fonts.ts match too (for example `__spaceGrotesk_1a2b3c`).
+HOUSE_FACES = tuple(dict.fromkeys(
+    form
+    for face in THEME["faces"].values()
+    for form in (face["family"].lower(), face["family"].lower().replace(" ", ""), face["family"].lower().replace(" ", "-"))
+))
 #: Generic families and the system stacks Tailwind and the kit fall back to.
 SYSTEM_FACES = {
     "serif", "sans-serif", "monospace", "cursive", "fantasy", "system-ui", "ui-sans-serif", "ui-serif",

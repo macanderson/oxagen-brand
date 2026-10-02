@@ -12,6 +12,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import color as C
+
 ROOT = Path(__file__).resolve().parent.parent
 SPLASH_TABLE = ROOT / "splash/splash-screens.json"
 
@@ -37,8 +39,8 @@ def head(title: str = "Oxagen") -> str:
         '<link rel="icon" href="/icons/oxagen-favicon.ico" sizes="16x16 32x32 48x48">',
         '<link rel="apple-touch-icon" href="/icons/oxagen-icon-180.png" sizes="180x180">',
         '<link rel="manifest" href="/icons/oxagen.webmanifest">',
-        '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">',
-        '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#09090B">',
+        f'<meta name="theme-color" media="(prefers-color-scheme: light)" content="{C.PAPER}">',
+        f'<meta name="theme-color" media="(prefers-color-scheme: dark)" content="{C.INK}">',
         '<meta name="mobile-web-app-capable" content="yes">',
         '<meta name="apple-mobile-web-app-capable" content="yes">',
         '<meta name="apple-mobile-web-app-status-bar-style" content="default">',

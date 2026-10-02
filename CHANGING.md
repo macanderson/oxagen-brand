@@ -8,7 +8,7 @@ Oxagen and Stella share one house system: the palette, the three faces, the comp
 
 ## Rules for every change
 
-1. Edit the source file. Run its generator. Commit the source and everything the generator writes, in one PR.
+1. Edit the source file. For a colour, a face, a corner, a shadow, the spacing, or a type size, that is `theme/theme.json`. Run its generator. Commit the source and everything the generator writes, in one PR.
 2. Never edit a generated file by hand: `tokens/`, `logo/`, `icons/`, `spinners/`, `wallpapers/`, `splash/`, `social/`, `ads/`, `content/`, `github-badges/`, `messages/index.json`, `message-bank.html`, `always-on.html`, `playbook.html`, `skills/oxagen-branding/assets/`, and `skills/oxagen-branding/references/always-on-lines.md`.
 3. Open a pull request. On every PR, CI runs `build/build.py --check`, `build/messages.py --check`, `build/fonts.py --check`, `build/skill.py --check`, and an install of the skill stub, and the kit's typecheck, tests, Storybook, and bundle beside them. The deploy to brand.oxagen.cloud waits for all of them.
 4. The generators run on your machine. The checks run in CI. `build/build.py` checks its sources before it writes, and it prints a `problem:` line and writes nothing when one fails.
@@ -20,11 +20,49 @@ python3 -m venv .venv && .venv/bin/pip install fonttools brotli pyyaml
 brew install harfbuzz librsvg
 ```
 
+`build/theme.py` validates the theme with the standard library alone, so the schema needs no extra package.
+
+## Change the theme
+
+`theme/theme.json` holds every value of the house design a person may change. `theme/theme.schema.json` describes each field. The generators read the theme, so one edit there moves every token file, mark, icon, and image.
+
+| Field | What it sets |
+|---|---|
+| `color.gold` | The primary brand colour, as six uppercase hex digits. It fills the gold glyph of each wordmark, the hive's lit cells, Stella's asterisk, the primary button, and the focus ring. |
+| `color.gold_bright`, `color.gold_deep` | The OKLCH lightness and chroma of the gold's two neighbours. The build takes the hue from the gold and derives the hex. |
+| `color.ink`, `color.paper` | The dark and the light surfaces: the canvas, `void`, `panel`, `hl`, `border`, and `rule`. |
+| `color.text_on_ink`, `color.text_on_paper` | Body, muted, and dim text. Primary text is the other ground: paper on ink, and ink on paper. `muted_text_lightness` sets muted-text-ink, the secondary text that also clears 4.5:1 on a lifted row on paper. |
+| `color.states` | Each governance state's mark on ink and on paper. |
+| `color.state_text_lightness_on_ink` | The OKLCH lightness of every state's text stop on ink. The build derives each text stop from its mark. |
+| `color.destructive_lift_on_ink` | How far the destructive red on ink sits above the failed mark in OKLCH lightness. |
+| `faces.wordmark` | The face of both wordmarks, Stella's asterisk icon, and line 1 of a marketing hero. `outline` names the variable font file and the weight the marks are drawn from. |
+| `faces.display` | The face of every heading. When it names the same family as `faces.sans`, it must list the same files, fallback, and features. |
+| `faces.sans` | The face of everything read. `outline` names the variable font file the art's lines of text are drawn from. |
+| `faces.mono` | The face of code, logs, digests, paths, ids, and the numbers in tables. |
+| `radius.base` | The corner every step multiplies, as `--ox-radius-base`. The kit's UI reads it as `--ui-radius`. |
+| `radius.steps` | Each step's multiplier, as `--ox-radius-xs` to `--ox-radius-4xl`. The kit's `rounded-xs` to `rounded-4xl` read these. |
+| `radius.card` | The step a card and a panel take, as `--ox-radius-card`. |
+| `radius.site` | The website's corner for cards, panels, and inputs, as `--ox-radius`. It does not follow the base yet. |
+| `shadow.ui`, `shadow.pop` | The quiet shadow under a control, and the shadow under a menu, popover, dialog, or toast, each on ink and on paper. The tokens are `--ox-shadow-ui`, `--ox-shadow-ui-ink`, `--ox-shadow-pop`, and `--ox-shadow-pop-ink`. The `-ink` twin is the value on paper, as for every other house token. |
+| `spacing.unit` | The spacing unit, as `--ox-space`. Tailwind's `--spacing` reads it, so `p-4` is four units. |
+| `spacing.wrap` | The widest a page's content runs, as `--ox-wrap`. |
+| `type.weights` | The weight for each job, as `--ox-weight-*`. The wordmarks take `faces.wordmark.outline.weight`. |
+| `type.tracking` | Letter spacing, as `--ox-tracking-*`. |
+| `type.scales.marketing`, `type.scales.app` | Each step's size, leading, weight, and tracking, as `--ox-m-*` and `--ox-a-*`, their `-leading` twins, and the `text-m-*` and `text-a-*` utilities. |
+
+Each face lists its `family`, its `source`, its `files` with their weights, its `fallback` families in order, and its OpenType `features`. `source` is `kit` for files already in `fonts/`, or `google` for a Google family. A later apply workflow (phase 3 of oxageninc/brand#63) will fetch a `google` family into `fonts/`. Until it exists, add the files to `fonts/` yourself.
+
+1. Edit `theme/theme.json`.
+2. Run `.venv/bin/python build/build.py`, then `.venv/bin/python build/playbook.py` and `.venv/bin/python build/messages.py`. `--svg` skips the rasters while you iterate, and it deletes the PNGs in the steps it runs, so run the full build before you commit.
+3. Run `.venv/bin/python build/build.py --check`. It fails when the theme does not match its schema, when a value breaks a rule (contrast, the gold between its neighbours, the wordmark reference, the type scales), or when a generated file differs from what the theme produces.
+4. Change the copies no generator writes. The colour and font sections below list them.
+5. Open the PR.
+
 ## Change a colour token
 
-1. Edit `build/color.py`. Every colour is one constant there, and `TOKENS` lists the ones the token files carry.
-2. The gold's two neighbours are derived in OKLCH: `GOLD_BRIGHT_LCH` and `GOLD_DEEP_LCH` hold the coordinates, and `GOLD_BRIGHT` and `GOLD_DEEP` pin the hex they produce. To move the gold's hue, change `GOLD`, the hue in both triples, and the two pinned hex values. `.venv/bin/python build/build.py --check` prints the hex each triple produces when a pin is wrong.
-   - Each state, and the destructive red, also has a text stop for words, derived the same way. `STATE_TEXT_LCH` holds its coordinates: the mark's hue and chroma, at `TEXT_L_ON_INK` on ink and at the mark's own lightness on paper. `STATE_TEXT` pins the hex. When a state's mark moves, move its text stop's hue and chroma with it, and repin the hex the check prints. `MUTED_TEXT_INK_LCH` and `MUTED_TEXT_INK` do the same for secondary text on paper-hl.
+1. Edit `color` in `theme/theme.json`. Every colour the token files carry is a field there, or is derived from one.
+2. The gold's two neighbours are derived in OKLCH. `gold_bright` and `gold_deep` hold each neighbour's lightness and chroma, the hue is the gold's own, rounded to a whole degree, and `build/color.py` derives the hex. A new gold moves both neighbours with it.
+   - Each state, and the destructive red, also has a text stop for words, derived from its mark. A text stop keeps the mark's hue and chroma. On ink it sits at `state_text_lightness_on_ink`, and on paper it keeps the mark's own lightness. When a state's mark moves, its text stop moves with it. `muted_text_lightness` does the same for secondary text on paper-hl.
 3. Run `.venv/bin/python build/build.py`. It rewrites the token files, the skill's `assets/tokens.css`, the marks, the icons, and every raster that paints the colour. Add `--svg` to skip the rasters while you iterate.
 4. Run `.venv/bin/python build/playbook.py` and `.venv/bin/python build/messages.py`. Both pages embed the tokens.
 5. If the change moves a semantic role, edit `ui/src/styles/globals.css`. It maps the tokens onto roles, and it carries the dark theme in two pairs of blocks, each under `.dark` and under `prefers-color-scheme`: the base layer and the v3 layer. Change all four. Status words (`--error-ink`, `--success-ink`, and the rest) map to the kit's text stops, never to a mark, and each keeps its worst measured ratio in a comment beside it (see `ui/THEME.md`).
@@ -32,19 +70,19 @@ brew install harfbuzz librsvg
    - the gold ramp `--_amber-*` and `--ox-ember-soft` in `ui/src/styles/globals.css`, typed as `oklch()` values. `build/conformance.py` treats every colour in this file as on palette, so a stale value here hides an off-palette gold everywhere.
    - `BRAND_GOLD` in `ui/src/components/brand-marks.generated.ts`, and the literal gold that `ui/src/components/brand.test.tsx` asserts. The `test` job fails until both match `tokens/house-tokens.json`.
    - the hex values in `skills/oxagen-branding/references/system.md`.
-   - `pwa/install-prompt.js`, and the `theme-color` grounds in `build/pwa.py`.
+   - `pwa/install-prompt.js`.
    - the copies under `sdlc/`.
-7. Open the PR. The check fails if a text token drops below 4.5:1 on its ground, if a state text stop drops below 4.5:1 on any surface of its theme or leaves its mark's hue, or if a pinned value stops matching its derivation.
+7. Open the PR. The check fails if a text token drops below 4.5:1 on its ground, if a state text stop drops below 4.5:1 on any surface of its theme or leaves its mark's hue, if the gold's lightness leaves the space between its neighbours, or if a generated file differs from what the theme produces.
 
 ## Change a font family
 
-1. **Check the licence first.** This repo is public, so a house face must allow redistribution in a public repository and embedding on the web. The three faces today are under the SIL Open Font License. A face licensed per seat or per domain, such as Aeonik, cannot be a house face: `.gitignore` keeps its files out of this repo, and a product that commits them publishes them.
+1. **Check the licence first.** On 2026-10-01 Mac decided that a licensed face, such as Aeonik, may be committed to this public repo like the open faces. The face's licence must still allow web embedding on Oxagen's sites, which are every surface `consumers.json` lists and brand.oxagen.cloud. Read the licence before you add the files, and stop if it does not allow that. The three faces today are under the SIL Open Font License.
 2. Add the webfont files under `fonts/` with the licence beside them. For a variable text or code face, add a target to `build/fonts.py` so it subsets the release to the latin set and pins the axes the house does not use. `build/fonts.py --check` then guards the file.
-3. Edit the `Face` in `build/typeset.py`: the family, the fallback stack, the CSS variable `next/font` sets, the files and their weights, and the feature settings. The same file maps each role (`--font-sans`, `--font-display`, `--font-mono`, `--font-wordmark`, `--font-hero`) to a face in `ROLES`, routes each element to a role in `ROUTING`, and holds both size scales. On 2026-09-29 Mac narrowed the type rule: Geist sets every heading and every line of text, and Space Grotesk sets only the two wordmarks and line 1 of a marketing hero. A `Step` with `hero=True` admits that line, and `verify()` fails unless the marketing h1 is the only one.
-4. Run `.venv/bin/python build/build.py`. It rewrites `tokens/house-fonts.css`, `tokens/house-tailwind.css`, `tokens/next-fonts.ts`, the skill's tokens, and every asset set in type.
-5. **The wordmarks and the Stella icon come from a font file, not from `Face`.** `build/glyphs.py` outlines both wordmarks and Stella's asterisk from `FONT` (`fonts/SpaceGrotesk-VariableFont_wght.ttf`) at `LOGO_WEIGHT`, and `glyphs.verify()` compares the result with `build/reference/oxagen-wordmark-color-light.svg`. Editing `Face` moves the CSS and leaves the marks alone. To change the face the marks are set in, change `FONT` and `LOGO_WEIGHT`, update `build/reference/`, the `family` of the Stella icon in `build/build.py`, and the pasted `WORDMARK` in `build/messages.py`, all in one PR. That is a logo change, so say so in the PR body.
-   - **The art's lines of text come from `TEXT_FONT`** (`fonts/geist-latin-wght.woff2`) in `build/glyphs.py`: every headline, answer line, qualifier, kicker, call to action, and tagline in `ads/`, `social/`, and `content/`. `text_path` and `text_width` outline and measure in it. `WIDTHS` in `build/campaign.py` holds the same face's 700 advances for the always-on page, and its JavaScript port reads them. To change the text face, change `TEXT_FONT`, regenerate `WIDTHS` from `glyphs.font(700, "text")`, set `DISPLAY` in `build/campaign.py` to the new stack, and run `build/build.py --only ads social content`.
-6. Update the face names in `skills/oxagen-branding/references/core.md` (the checklist), `skills/oxagen-branding/references/system.md` (the type section), and `HOUSE_FACES` in `build/conformance.py`, which flags any other face it finds on a live page.
+3. Edit the role's entry in `faces` in `theme/theme.json`: the family, the source, the files and their weights, the fallback families, and the feature settings. The build derives the CSS variable `next/font` sets from the family, such as `--font-space-grotesk`. `build/typeset.py` maps each role (`--font-sans`, `--font-display`, `--font-mono`, `--font-wordmark`, `--font-hero`) to a face in `ROLES` and routes each element to a role in `ROUTING`. On 2026-09-29 Mac narrowed the type rule: Geist sets every heading and every line of text, and Space Grotesk sets only the two wordmarks and line 1 of a marketing hero. Only the marketing h1 admits that line, and `verify()` fails if another step does.
+4. Run `.venv/bin/python build/build.py`. It rewrites `tokens/house-fonts.css`, `tokens/house-tailwind.css`, `tokens/next-fonts.ts`, the skill's tokens, and every asset set in type. `next-fonts.ts` names each export after its family, so a new family renames the export a product imports.
+5. **The wordmarks and the Stella icon come from a font file.** `build/glyphs.py` outlines both wordmarks and Stella's asterisk from `faces.wordmark.outline` (today `fonts/SpaceGrotesk-VariableFont_wght.ttf` at weight 600), and `glyphs.verify()` compares the result with `build/reference/oxagen-wordmark-color-light.svg`. Changing `faces.wordmark.files` moves the CSS and leaves the marks alone. To change the face the marks are set in, change `faces.wordmark.outline`, update `build/reference/` and the pasted `WORDMARK` in `build/messages.py`, all in one PR. That is a logo change, so say so in the PR body.
+   - **The art's lines of text come from `faces.sans.outline`** (today `fonts/geist-latin-wght.woff2`): every headline, answer line, qualifier, kicker, call to action, and tagline in `ads/`, `social/`, and `content/`. `text_path` and `text_width` in `build/glyphs.py` outline and measure in it. `WIDTHS` in `build/campaign.py` holds the same face's 700 advances for the always-on page, and its JavaScript port reads them. To change the text face, change `faces.sans.outline`, regenerate `WIDTHS` from `glyphs.font(700, "text")`, set `DISPLAY` in `build/campaign.py` to the new stack, and run `build/build.py`.
+6. Update the face names in `skills/oxagen-branding/references/core.md` (the checklist), `skills/oxagen-branding/references/system.md` (the type section), and the prose of `build/playbook.py` and `build/typeset.py`. `build/conformance.py` reads the house families from the theme, and it flags any other face it finds on a live page.
 7. Open the PR.
 
 ## Change an app icon
@@ -52,7 +90,7 @@ brew install harfbuzz librsvg
 Both icons are drawn by code in `build/`. A new icon is a change to that code, not a file dropped into `icons/`. One run of the generator then redraws every size, tile, favicon, splash screen, wallpaper, social card, ad, and spinner that carries it.
 
 1. **Oxagen's hive.** Edit `build/marks.py`: `HIVE` holds the cell's radius, width, pitch, and stroke, `HIVE_CELLS` lists each cell and whether it is outlined or gold, and `HIVE_HALF` is the opacity of the half-strength cell. A shape that is not a hive also replaces `hive()`, `hive_mark()`, `hive_hit()`, `hive_lit()`, `icon_geometry()`, `icon_hit()`, `icon_body()`, and `mark_sweep()`, and the `icons` entry that `build/build.py` writes into `tokens/house-tokens.json`.
-2. **Stella's asterisk.** It is the `*` of the wordmark face, outlined by `asterisk()` in `build/marks.py` through `glyphs.set_line("*")`. A change to `glyphs.FONT` changes it too.
+2. **Stella's asterisk.** It is the `*` of the wordmark face, outlined by `asterisk()` in `build/marks.py` through `glyphs.set_line("*")`. A change to `faces.wordmark.outline` in `theme/theme.json` changes it too.
 3. **Size on the tile.** `ICON_FILL` in `build/marks.py` and `MASKABLE_FILL` in `build/build.py` set how much of each tile the icon fills, per brand. `FAVICON_WEIGHT` in `build/marks.py` thickens the hive's outline at favicon sizes.
 4. Run the whole build, `.venv/bin/python build/build.py`, with no `--only`. Then run `.venv/bin/python build/playbook.py` and `.venv/bin/python build/messages.py`.
 5. Change the copies no generator writes, in the same PR:
