@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://brand.oxagen.cloud/theme/request.schema.json",
   "title": "Oxagen theme request",
-  "description": "The fields of theme/theme.json one change asks for. The theme editor writes a request into theme/requests/, and the apply-theme workflow merges it into theme/theme.json, fetches any Google face, and runs the generators. Every field is optional except summary. A face names the whole face of a role.",
+  "description": "The fields of theme/theme.json one change asks for. The theme editor writes a request into theme/requests/, and the apply-theme workflow merges it into theme/theme.json, fetches any Google face, and runs the generators. Every field is optional except summary. A face names the whole face of a role. The wordmark face is fixed, so faces has no wordmark.",
   "type": "object",
   "required": [
     "summary"
@@ -292,13 +292,10 @@
       }
     },
     "faces": {
-      "description": "The roles whose face changes. Each names the whole face.",
+      "description": "The roles whose face changes. Each names the whole face. The wordmark face is fixed: Space Grotesk, drawn at weight 600.",
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "wordmark": {
-          "$ref": "#/$defs/face_request"
-        },
         "display": {
           "$ref": "#/$defs/face_request"
         },
@@ -620,21 +617,12 @@
           "$ref": "#/$defs/features"
         },
         "outline": {
-          "description": "For wordmark and sans: the file the marks or the art's text are drawn from, and for wordmark the weight. When it is left out, the workflow picks the file closest to the weight.",
+          "description": "For sans: the file the art's text is drawn from. When it is left out, the workflow picks the file closest to weight 400.",
           "type": "object",
           "additionalProperties": false,
           "properties": {
             "file": {
               "$ref": "#/$defs/file"
-            },
-            "weight": {
-              "type": "integer",
-              "enum": [
-                400,
-                500,
-                600,
-                700
-              ]
             }
           }
         }

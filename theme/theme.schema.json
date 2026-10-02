@@ -170,7 +170,7 @@
       "additionalProperties": false,
       "properties": {
         "wordmark": {
-          "description": "The face of both wordmarks, Stella's asterisk icon, and line 1 of a marketing hero. The build outlines the marks from its outline file, so a change here redraws every logo and icon.",
+          "description": "The face of both wordmarks, Stella's asterisk icon, and line 1 of a marketing hero. It is fixed: Space Grotesk, drawn from SpaceGrotesk-VariableFont_wght.ttf at weight 600. build/theme.py refuses any other family, outline file, or weight, and a theme request cannot name this role.",
           "type": "object",
           "required": [
             "family",

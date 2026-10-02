@@ -124,6 +124,32 @@ def validate(value: object, schema: dict, root: dict, where: str = "") -> list[s
     return problems
 
 
+#: The wordmark face, which never changes. Mac, 2026-10-02: "i would never
+#: change the wordmark font - that is always going to be space grotesk for the
+#: forseeable future". The build draws both wordmarks and Stella's asterisk
+#: from this file at this weight, and `glyphs.verify()` holds the result to
+#: the reference drawing in `build/reference/`.
+WORDMARK_FAMILY = "Space Grotesk"
+WORDMARK_OUTLINE = {"file": "SpaceGrotesk-VariableFont_wght.ttf", "weight": 600}
+WORDMARK_FIXED = (
+    "the wordmark face is fixed: Space Grotesk, drawn from fonts/SpaceGrotesk-VariableFont_wght.ttf at weight 600"
+)
+
+
+def wordmark_problems(theme: dict) -> list[str]:
+    """How `theme`'s wordmark face differs from the fixed one. Expects a theme that validates."""
+    face = theme["faces"]["wordmark"]
+    found = []
+    if face["family"] != WORDMARK_FAMILY:
+        found.append(f"faces.wordmark.family is {json.dumps(face['family'])}, and {WORDMARK_FIXED}")
+    outline = face.get("outline", {})
+    if outline.get("file") != WORDMARK_OUTLINE["file"]:
+        found.append(f"faces.wordmark.outline.file is {json.dumps(outline.get('file'))}, and {WORDMARK_FIXED}")
+    if outline.get("weight") != WORDMARK_OUTLINE["weight"]:
+        found.append(f"faces.wordmark.outline.weight is {json.dumps(outline.get('weight'))}, and {WORDMARK_FIXED}")
+    return found
+
+
 def problems(theme: object | None = None) -> list[str]:
     """What is wrong with the theme on disk, or with `theme` when given."""
     try:
@@ -135,7 +161,10 @@ def problems(theme: object | None = None) -> list[str]:
             theme = json.loads(THEME_FILE.read_text())
         except (OSError, ValueError) as e:
             return [f"{THEME_FILE.relative_to(ROOT)} cannot be read: {e}"]
-    return validate(theme, schema, schema)
+    found = validate(theme, schema, schema)
+    if found or not isinstance(theme, dict):
+        return found
+    return wordmark_problems(theme)
 
 
 def load() -> dict:

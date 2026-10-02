@@ -14,8 +14,10 @@ beside it, so a colour can only be changed in one place -- `theme/theme.json`
 -- and everything downstream follows on the next run.
 
 `--check` writes nothing. It fails when `theme/theme.json` does not match
-`theme/theme.schema.json`, when the palette or the type breaks a rule, or when
-a generated file differs from what the theme produces: every token file, mark,
+`theme/theme.schema.json`, when the wordmark face is not Space Grotesk drawn at
+weight 600, when the drawn `oxagen` differs from the reference in
+`build/reference/`, when the palette or the type breaks a rule, or when a
+generated file differs from what the theme produces: every token file, mark,
 icon, and image the build writes as text, and `playbook.html`. A PNG is checked
 for presence, because a render differs byte for byte between versions of
 librsvg.
@@ -1054,11 +1056,7 @@ def check(drift_check: bool = True) -> int:
         print("check: theme/theme.json matches theme/theme.schema.json")
         print(f"check: {ads} ads and {len(TAGLINES)} taglines come from approved, launch-released registry entries")
         m = G.wordmark("oxagen")
-        if G.reference_applies():
-            print(f"check: oxagen reproduces the kit wordmark ({m['width']:g} x {m['height']:g}, em {G.EM:.2f})")
-        else:
-            print(f"check: the marks are drawn from fonts/{G.FONT.name} at {G.LOGO_WEIGHT}, so the reference "
-                  f"wordmark check is skipped: this theme changes the logo ({m['width']:g} x {m['height']:g})")
+        print(f"check: oxagen reproduces the kit wordmark ({m['width']:g} x {m['height']:g}, em {G.EM:.2f})")
         print(f"check: gold {C.GOLD}, with bright {C.GOLD_BRIGHT} and deep {C.GOLD_DEEP} derived from it in OKLCH")
         print("check: every text token clears AA on its ground")
         print(f"check: {len(T.FACES)} faces in fonts/, {len(T.SCALES)} type scales, every heading in {T.HEADING_FACE.family}, "

@@ -20,6 +20,12 @@ and where its files come from:
 - `upload`: files someone uploaded to `fonts/` on the same branch.
 - `kit`: files already in `fonts/`, such as a face the kit ships.
 
+A request cannot change the wordmark face. It is always Space Grotesk, drawn
+from `fonts/SpaceGrotesk-VariableFont_wght.ttf` at weight 600 (Mac,
+2026-10-02), so the schema leaves `faces.wordmark` out and `problems()` says
+why. A new gold still recolours the wordmarks' gold x and asterisk, because
+the marks paint their accent from `color.gold`.
+
 `theme/request.schema.json` is derived from `theme/theme.schema.json` by
 `request_schema()`, so the two cannot drift: `--check` fails when the
 committed file differs from what this module writes, and `build/build.py
@@ -36,7 +42,7 @@ import json
 import sys
 from pathlib import Path
 
-from theme import ROOT, SCHEMA_FILE, validate
+from theme import ROOT, SCHEMA_FILE, WORDMARK_FIXED, validate
 
 REQUEST_SCHEMA_FILE = ROOT / "theme" / "request.schema.json"
 REQUESTS_DIR = ROOT / "theme" / "requests"
@@ -45,15 +51,18 @@ FONTS_DIR = ROOT / "fonts"
 #: The four type roles a theme names, in the order the theme lists them.
 ROLES = ("wordmark", "display", "sans", "mono")
 
-#: The roles the build draws outlines from: the marks and the art's text.
-OUTLINE_ROLES = ("wordmark", "sans")
+#: The roles a request may change. The wordmark face is fixed.
+REQUEST_ROLES = ("display", "sans", "mono")
+
+#: The role a request may give an outline file: the art's text is drawn from
+#: it. The marks are drawn from the wordmark face, which is fixed.
+OUTLINE_ROLES = ("sans",)
 
 #: The sections a request may change field by field.
 PARTIAL_SECTIONS = ("color", "radius", "shadow", "spacing", "type")
 
 #: The fallback a new family takes when the request names none.
 DEFAULT_FALLBACK = {
-    "wordmark": ["Helvetica Neue", "Arial", "sans-serif"],
     "display": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
     "sans": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
     "mono": ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
@@ -120,14 +129,13 @@ def request_schema() -> dict:
             "features": {"$ref": "#/$defs/features"},
             "outline": {
                 "description": (
-                    "For wordmark and sans: the file the marks or the art's text are drawn from, and for wordmark the weight. "
-                    "When it is left out, the workflow picks the file closest to the weight."
+                    "For sans: the file the art's text is drawn from. "
+                    "When it is left out, the workflow picks the file closest to weight 400."
                 ),
                 "type": "object",
                 "additionalProperties": False,
                 "properties": {
                     "file": {"$ref": "#/$defs/file"},
-                    "weight": {"type": "integer", "enum": [400, 500, 600, 700]},
                 },
             },
         },
@@ -140,7 +148,8 @@ def request_schema() -> dict:
         "description": (
             "The fields of theme/theme.json one change asks for. The theme editor writes a request into "
             "theme/requests/, and the apply-theme workflow merges it into theme/theme.json, fetches any Google face, "
-            "and runs the generators. Every field is optional except summary. A face names the whole face of a role."
+            "and runs the generators. Every field is optional except summary. A face names the whole face of a role. "
+            "The wordmark face is fixed, so faces has no wordmark."
         ),
         "type": "object",
         "required": ["summary"],
@@ -159,10 +168,13 @@ def request_schema() -> dict:
             },
             **{name: _partial(props[name]) for name in PARTIAL_SECTIONS},
             "faces": {
-                "description": "The roles whose face changes. Each names the whole face.",
+                "description": (
+                    "The roles whose face changes. Each names the whole face. "
+                    "The wordmark face is fixed: Space Grotesk, drawn at weight 600."
+                ),
                 "type": "object",
                 "additionalProperties": False,
-                "properties": {role: {"$ref": "#/$defs/face_request"} for role in ROLES},
+                "properties": {role: {"$ref": "#/$defs/face_request"} for role in REQUEST_ROLES},
             },
         },
         "$defs": defs,
@@ -178,10 +190,21 @@ def schema_text() -> str:
 # --------------------------------------------------------------------------
 
 
+#: What `problems()` says about a request that names the wordmark face.
+WORDMARK_REFUSED = (
+    f"faces.wordmark cannot change, because {WORDMARK_FIXED}. "
+    "Remove faces.wordmark from the request. A new color.gold still recolours the wordmarks' gold x and asterisk."
+)
+
+
 def problems(request: object) -> list[str]:
     """Every way `request` breaks the request schema or the rules beside it."""
     schema = request_schema()
     found = validate(request, schema, schema, "")
+    faces = request.get("faces") if isinstance(request, dict) else None
+    if isinstance(faces, dict) and "wordmark" in faces:
+        # The schema's own line names the field without saying why.
+        found = [WORDMARK_REFUSED] + [p for p in found if p != "faces has wordmark, which the schema does not name"]
     if found or not isinstance(request, dict):
         return [p.replace("the theme", "the request", 1) for p in found]
     if not any(key in request for key in (*PARTIAL_SECTIONS, "faces")):
@@ -197,9 +220,7 @@ def problems(request: object) -> list[str]:
         if src in ("upload", "kit") and "weights" in face:
             found.append(f"faces.{role} is a {src} face, so its files carry the weights and weights is not used")
         if "outline" in face and role not in OUTLINE_ROLES:
-            found.append(f"faces.{role} has an outline, and only wordmark and sans are drawn from one")
-        if "weight" in face.get("outline", {}) and role != "wordmark":
-            found.append(f"faces.{role} names an outline weight, and only the wordmark has one")
+            found.append(f"faces.{role} has an outline, and only sans is drawn from one")
     return found
 
 
@@ -240,8 +261,11 @@ def face_entry(role: str, current: dict, request_face: dict, files: list[dict], 
 
     A field the request leaves out keeps the current face's value when the
     family stays the same. A new family starts from the role's default
-    fallback and no features.
+    fallback and no features. The wordmark face is fixed, so `role` is never
+    the wordmark.
     """
+    if role not in REQUEST_ROLES:
+        raise ValueError(WORDMARK_REFUSED)
     same = request_face["family"] == current["family"]
     face = {
         "family": request_face["family"],
