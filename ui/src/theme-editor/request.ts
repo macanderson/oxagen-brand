@@ -18,10 +18,13 @@ import {
 export const REPO = "oxageninc/brand";
 
 /**
- * The longest new-file link the editor opens. GitHub answers a longer request
- * line with an error, so a request that does not fit is downloaded instead.
+ * The longest new-file link the editor opens. On 2026-10-02 GitHub answered a
+ * new-file link of about 6,900 characters with an error: a signed-out visit
+ * redirects to sign-in with the whole link inside the redirect, and that
+ * fails first. Past 9,000 characters every visit fails. The editor stops at
+ * 6,000 and offers a download instead.
  */
-export const MAX_URL_LENGTH = 8000;
+export const MAX_URL_LENGTH = 6000;
 
 /** The sections a request changes field by field. */
 const PARTIAL_SECTIONS = ["color", "radius", "shadow", "spacing", "type"] as const;
