@@ -12,6 +12,11 @@ const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],
   framework: { name: "@storybook/react-vite", options: {} },
   core: { disableTelemetry: true },
+  // tokens/house-fonts.css names each face as `url(../fonts/<file>)`, which the
+  // CSS keeps as written. In the built Storybook that resolves from assets/ to
+  // fonts/ beside it, so the kit's fonts/ folder ships there. Without it every
+  // story fell back to system fonts and the browser logged a 404 per face.
+  staticDirs: [{ from: "../../fonts", to: "/fonts" }],
 };
 
 export default config;
