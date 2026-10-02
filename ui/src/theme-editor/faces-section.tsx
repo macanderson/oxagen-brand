@@ -3,7 +3,9 @@
  * The faces part of the theme editor. The wordmark role is read-only: its
  * face is fixed, Space Grotesk drawn at weight 600 (Mac, 2026-10-02). Each
  * other role takes the shipped face, a face the kit already ships, a Google
- * family, or uploaded files.
+ * family, or uploaded files. Marketing headings is the display role: h1 to h3
+ * on a marketing or customer site. App headings and every h4 to h6 take the
+ * text face.
  */
 import * as React from "react";
 import { OxagenWordmark, StellaWordmark } from "../components/brand";
@@ -35,7 +37,7 @@ import {
 
 export const ROLE_LABELS: Record<Role, string> = {
   wordmark: "Wordmark",
-  display: "Headings",
+  display: "Marketing headings",
   sans: "Text",
   mono: "Code",
 };

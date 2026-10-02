@@ -60,6 +60,7 @@ import {
   pxRem,
   remPx,
   typeProblems,
+  TYPE_FLOOR_PX,
   type FaceChoice,
   type FaceRole,
   type ScaleName,
@@ -668,7 +669,7 @@ function TypeSection({ theme, update }: { theme: Theme; update: Update }) {
   return (
     <Section
       title="Type sizes"
-      note="Marketing sets landing pages and posts. App sets apps and every docs site. Each size is a whole number of pixels."
+      note={`Marketing sets landing pages, posts, and docs. App sets the web app and the internal tools. Each size is a whole number of pixels, ${TYPE_FLOOR_PX} or more.`}
     >
       {(["marketing", "app"] as const).map((scale) => {
         const h1 = remPx(theme.type.scales[scale].h1.size);
@@ -686,7 +687,7 @@ function TypeSection({ theme, update }: { theme: Theme; update: Update }) {
               onChange={(f) =>
                 update((t) => {
                   for (const step of STEPS) {
-                    const px = Math.max(8, Math.round(remPx(SHIPPED.type.scales[scale][step].size) * f));
+                    const px = Math.max(TYPE_FLOOR_PX, Math.round(remPx(SHIPPED.type.scales[scale][step].size) * f));
                     t.type.scales[scale][step].size = pxRem(px);
                   }
                 })
@@ -697,24 +698,41 @@ function TypeSection({ theme, update }: { theme: Theme; update: Update }) {
                 {SCALE_LABELS[scale]} steps
               </summary>
               <div className="mt-2 grid grid-cols-3 gap-2">
-                {STEPS.map((step) => (
-                  <label key={step} className="flex flex-col gap-1 text-xs text-muted-foreground">
-                    {step}
-                    <input
-                      type="number"
-                      min={8}
-                      max={160}
-                      step={1}
-                      value={Math.round(remPx(theme.type.scales[scale][step].size))}
-                      onChange={(e) => {
-                        const px = Math.round(Number(e.target.value));
-                        if (px >= 8 && px <= 160) update((t) => void (t.type.scales[scale][step].size = pxRem(px)));
-                      }}
-                      className="h-8 rounded-lg border border-input-border bg-input-bg px-2 font-mono text-xs text-input-fg"
-                    />
-                  </label>
-                ))}
+                {STEPS.map((step) => {
+                  const px = Math.round(remPx(theme.type.scales[scale][step].size));
+                  const low = px < TYPE_FLOOR_PX;
+                  return (
+                    <label key={step} className="flex flex-col gap-1 text-xs text-muted-foreground">
+                      {step}
+                      <input
+                        type="number"
+                        min={TYPE_FLOOR_PX}
+                        max={160}
+                        step={1}
+                        value={px}
+                        aria-invalid={low || undefined}
+                        aria-describedby={`theme-editor-floor-${scale}`}
+                        onChange={(e) => {
+                          const next = Math.round(Number(e.target.value));
+                          if (next >= 1 && next <= 160) update((t) => void (t.type.scales[scale][step].size = pxRem(next)));
+                        }}
+                        className="h-8 rounded-lg border border-input-border bg-input-bg px-2 font-mono text-xs text-input-fg aria-invalid:border-input-invalid-border"
+                      />
+                    </label>
+                  );
+                })}
               </div>
+              <p
+                id={`theme-editor-floor-${scale}`}
+                className={cn(
+                  "mt-2 text-xs leading-normal",
+                  STEPS.some((step) => remPx(theme.type.scales[scale][step].size) < TYPE_FLOOR_PX)
+                    ? "text-error-ink"
+                    : "text-muted-foreground",
+                )}
+              >
+                Every step is {TYPE_FLOOR_PX}px or more, the micro step too. The build refuses a smaller size.
+              </p>
             </details>
           </div>
         );

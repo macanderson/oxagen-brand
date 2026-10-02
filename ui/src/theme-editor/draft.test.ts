@@ -75,7 +75,7 @@ describe("loading and saving", () => {
     const draft = loadDraft(memoryStorage({ [STORAGE_KEY]: JSON.stringify(saved) }));
     expect(Object.keys(draft.faces)).toEqual(["display", "sans", "mono"]);
     expect(draft.faces.mono).toEqual(mono);
-    expect(previewVars(draft)["--ox-font-display"]).toBeUndefined();
+    expect(previewVars(draft)["--ox-font-wordmark"]).toBeUndefined();
 
     const onlyWordmark = { faces: { wordmark: { kind: "upload", family: "Aeonik", files: [] } } };
     expect(isShipped(loadDraft(memoryStorage({ [STORAGE_KEY]: JSON.stringify(onlyWordmark) })))).toBe(true);

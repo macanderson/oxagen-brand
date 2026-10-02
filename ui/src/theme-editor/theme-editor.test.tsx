@@ -57,7 +57,7 @@ describe("ThemeEditor", () => {
     expect(within(row).queryByRole("textbox")).toBeNull();
     expect(row.querySelector("input")).toBeNull();
     expect(screen.queryByRole("combobox", { name: "Wordmark" })).toBeNull();
-    for (const name of ["Headings", "Text", "Code"]) {
+    for (const name of ["Marketing headings", "Text", "Code"]) {
       expect(screen.getByRole("combobox", { name })).toBeInTheDocument();
     }
   });

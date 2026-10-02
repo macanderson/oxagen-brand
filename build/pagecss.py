@@ -60,12 +60,18 @@ def _shape(theme: str) -> dict[str, str]:
 
 
 def _shape_fixed() -> dict[str, str]:
-    """The corners, spacing, and type sizes, which do not flip with the theme."""
+    """The corners and spacing, which do not flip with the theme."""
     radius = THEME["radius"]
     v = {"radius-base": radius["base"]}
     v.update({f"radius-{step}": f"calc(var(--radius-base) * {mult:g})" for step, mult in radius["steps"].items()})
     v["radius-card"] = f"var(--radius-{radius['card']})"
     v["space"] = THEME["spacing"]["unit"]
+    return v
+
+
+def type_sizes() -> dict[str, str]:
+    """Each step of both scales and its leading, in the short names: `--m-body` is the marketing body."""
+    v = {}
     for scale in T.SCALES:
         for st in scale.steps:
             v[f"{scale.key}-{st.name}"] = st.size
@@ -76,21 +82,25 @@ def _shape_fixed() -> dict[str, str]:
 def page_vars(*, fonts: bool = True, shape: bool = False) -> str:
     """Dark first. Light by `data-theme="light"` or the OS preference.
 
-    `shape` adds the corners, shadows, spacing, and type sizes. The skill's
-    tokens carry them. The kit's own pages set their own.
+    `fonts` adds the faces and the two type scales, so a page sets every size
+    from a step (`font-size: var(--a-body)`) and writes none of its own.
+    `shape` adds the corners, shadows, and spacing. The skill's tokens carry
+    them. The kit's own pages set their own.
     """
     extra = ""
     if fonts:
-        # --font-display is the heading face. The wordmark face takes two
-        # names, one per job, so no heading reaches it by asking for "display".
+        # --font-heading is the face this page's h1 to h3 take: the text face,
+        # as in the app. A public page points it at --font-display, the
+        # marketing heading face. --font-wordmark is the fixed wordmark face.
         extra = (
-            f"\n  --font-display: {T.HEADING_FACE.css_stack};"
-            f"\n  --font-wordmark: {T.SPACE_GROTESK.css_stack};"
-            f"\n  --font-hero: {T.SPACE_GROTESK.css_stack};"
+            f"\n  --font-display: {T.DISPLAY_FACE.css_stack};"
+            f"\n  --font-heading: var(--font);"
+            f"\n  --font-wordmark: {T.WORDMARK_FACE.css_stack};"
             f"\n  --font: {T.TEXT_FACE.css_stack};"
             f"\n  --mono: {T.MONASPACE_NEON.css_stack};"
             f"\n  --mono-features: {T.MONASPACE_NEON.features};"
             f"\n  --radius: {rem_px(THEME['radius']['site']):g}px; --wrap: {THEME['spacing']['wrap']};"
+            "\n" + _block(type_sizes())
         )
     dark, light = _dark(), _light()
     if shape:

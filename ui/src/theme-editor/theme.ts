@@ -128,7 +128,7 @@ export function fontStack(role: FaceRole, choice: FaceChoice): string {
   return `"${family}", ${familyStack(fallback)}`;
 }
 
-/** The wordmark's CSS font stack, as `typeset.py` writes `--ox-font-display`. The wordmark face is fixed. */
+/** The wordmark's CSS font stack, as `typeset.py` writes `--ox-font-wordmark`. The wordmark face is fixed. */
 export const WORDMARK_STACK = `"${SHIPPED.faces.wordmark.family}", ${familyStack(SHIPPED.faces.wordmark.fallback)}`;
 
 /**
@@ -163,10 +163,13 @@ export function rampVars(gold: Hex): Record<string, string> {
 export function themeVars(theme: Theme, faces: Record<FaceRole, FaceChoice>): Record<string, string> {
   const vars: Record<string, string> = { ...derivePalette(theme.color).vars, ...rampVars(theme.color.gold) };
 
-  vars["--ox-font-display"] = WORDMARK_STACK;
+  // The display face sets h1 to h3 on a marketing or customer site. An app
+  // heading reads --ox-font-heading, which is the text face.
+  vars["--ox-font-display"] = fontStack("display", faces.display);
   vars["--ox-font"] = fontStack("sans", faces.sans);
   vars["--ox-font-mono"] = fontStack("mono", faces.mono);
-  vars["--ox-font-heading"] = fontStack("display", faces.display);
+  vars["--ox-font-heading"] = fontStack("sans", faces.sans);
+  vars["--ox-font-wordmark"] = WORDMARK_STACK;
 
   vars["--ox-radius-base"] = theme.radius.base;
   vars["--ox-radius-card"] = `var(--ox-radius-${theme.radius.card})`;
@@ -193,13 +196,38 @@ export function themeVars(theme: Theme, faces: Record<FaceRole, FaceChoice>): Re
 }
 
 /**
- * The type rules `build/typeset.py` checks that a size change can break, in
- * its words: each scale descends, and each h1's leading sits between 1.05
- * and 1.25.
+ * The smallest size a type step may take, on either scale, as `build/theme.py`
+ * holds it. Mac, 2026-10-02: "The minimum font size in the app has to be 14px
+ * at least! Not 13px!" No step is exempt, the micro steps included.
+ */
+export const TYPE_FLOOR_PX = 14;
+
+/** A heading step that can take the display face is set at this size or up, as `build/typeset.py` holds it. */
+export const DISPLAY_FLOOR_PX = 20;
+
+/**
+ * The type rules `build/theme.py` and `build/typeset.py` check that a size
+ * change can break, in their words: every step is 14px or more, each scale
+ * descends, h1 to h3 stay 20px or more, and each h1's leading sits between
+ * 1.05 and 1.25.
  */
 export function typeProblems(theme: Theme): string[] {
   const out: string[] = [];
   for (const scale of ["marketing", "app"] as const) {
+    for (const step of STEPS) {
+      const px = remPx(theme.type.scales[scale][step].size);
+      if (px < TYPE_FLOOR_PX) {
+        out.push(
+          `The ${scale} ${step} is ${Math.round(px)}px. Every step on both scales is ${TYPE_FLOOR_PX}px or more, so set it to ${TYPE_FLOOR_PX} or larger.`,
+        );
+      }
+    }
+    for (const step of ["h1", "h2", "h3"] as const) {
+      const px = remPx(theme.type.scales[scale][step].size);
+      if (px >= TYPE_FLOOR_PX && px < DISPLAY_FLOOR_PX) {
+        out.push(`The ${scale} ${step} is ${Math.round(px)}px. A heading that can take the display face is ${DISPLAY_FLOOR_PX}px or more.`);
+      }
+    }
     const sizes = STEPS.map((s) => Math.round(remPx(theme.type.scales[scale][s].size)));
     const sorted = [...sizes].sort((a, b) => b - a);
     if (sizes.some((s, i) => s !== sorted[i])) {

@@ -450,7 +450,7 @@ def css() -> str:
   --paper:{C.PAPER};--card:{C.PANEL};
   --shadow:0 1px 0 rgba(255,255,255,.03),0 18px 44px rgba(0,0,0,.5);
   --ox-font:{T.TEXT_FACE.css_stack};
-  --ox-font-display:{T.SPACE_GROTESK.css_stack};
+  --ox-font-display:{T.DISPLAY_FACE.css_stack};
   --ox-font-mono:{T.MONASPACE_NEON.css_stack};
   --ui-shadow:{UI_SHADOW["dark"]};--pop-shadow:{POP_SHADOW["dark"]};--scrim:{SCRIM["dark"]};
   --pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["dark"]}%,transparent);
@@ -479,8 +479,7 @@ body{{margin:0;background:var(--ink);color:var(--fg);font-family:var(--ox-font);
 section{{padding:72px 0;border-top:1px solid var(--rule)}}
 section:first-of-type{{border-top:0}}
 .eyebrow{{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}}
-h1,h2,h3{{font-family:var(--ox-font)}}
-.hero-line-1{{font-family:var(--ox-font-display)}}
+h1,h2,h3{{font-family:var(--ox-font-display)}}
 h1{{font-size:clamp(40px,6vw,64px);line-height:1.02;letter-spacing:-.02em;font-weight:700;margin:0 0 20px}}
 h2{{font-size:32px;line-height:1.1;letter-spacing:-.015em;font-weight:700;margin:0 0 14px}}
 h3{{font-size:19px;font-weight:600;margin:32px 0 10px}}
@@ -595,9 +594,8 @@ def build_html() -> str:
     a = asterisk()
 
     tokens_rows = "".join(swatch_row(n, v, note) for n, v, note in C.TOKENS)
-    hero_note = f'<br><span class="muted">marketing hero line 1: {T.family(T.HERO_ROLE_INSIDE)}</span>'
     scale_rows = "".join(
-        f"<tr><td class=\"mono\">{m.name}</td><td>{T.family(m.role)}{hero_note if m.hero else ''}</td>"
+        f"<tr><td class=\"mono\">{m.name}</td><td>{T.family(m.role)}</td><td>{T.family(a.role)}</td>"
         f"<td class=\"mono\">{m.px} · {m.leading} · {m.weight}</td><td class=\"mono\">{a.px} · {a.leading} · {a.weight}</td></tr>"
         for m, a in zip(T.MARKETING.steps, T.APP.steps)
     )
@@ -703,7 +701,7 @@ def build_html() -> str:
 
 <section class="hero">
 <p class="eyebrow">Oxagen house system v2.5</p>
-<h1><span class="hero-line-1">One house.</span><br>Two names. One gold.</h1>
+<h1>One house.<br>Two names. One gold.</h1>
 <p class="lead">Everything a customer sees from Oxagen and Stella comes from one system: obsidian and white, three faces, and a single gold that each name carries in exactly one glyph.</p>
 <div class="grid g2 plates">
 {plate(ox_d, "oxagen · on ink", cls="ink wm")}
@@ -834,12 +832,12 @@ def build_html() -> str:
 <section id="type">
 <p class="eyebrow">Typography</p>
 <h2>Typefaces</h2>
-<p><b>{T.TEXT_FACE.family}</b> sets every heading and everything read in the app and on the docs site: h1 to h6, body, labels, buttons, tables, and navigation. Its italic ships beside it. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on. <b>Space Grotesk</b> sets the two wordmarks and line 1 of a marketing hero. On the website it also sets every h1, h2, and h3. Its wide geometric letters lose their shape below {T.DISPLAY_FLOOR_PX} px, so it is never set smaller.</p>
+<p>Mac set one type rule on 2026-10-02. <b>{T.TEXT_FACE.family}</b> sets the default text on every surface: body, labels, buttons, tables, and navigation. It also sets h1 to h3 in the web app and the internal tools, and every h4 to h6 everywhere. Its italic ships beside it. <b>{T.DISPLAY_FACE.family}</b> sets h1 to h3 on the marketing and customer sites, and the docs sites count as customer sites. It also sets the two wordmarks, and that use is fixed. Its wide geometric letters lose their shape below {T.DISPLAY_FLOOR_PX} px, so no heading step that can take it is smaller. <b>{T.CODE_FACE.family}</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
 {extra_faces_note()}
 <div class="grid g3" style="margin:22px 0 10px">
 {face_card(T.TEXT_FACE, "Aa Gg 1234", "--ox-font")}
 {face_card(T.MONASPACE_NEON, "0O 1lI =&gt;", "--ox-font-mono")}
-{face_card(T.SPACE_GROTESK, "Aa Gg 1234", "--ox-font-display")}
+{face_card(T.DISPLAY_FACE, "Aa Gg 1234", "--ox-font-display")}
 </div>
 <h3>Samples</h3>
 <div class="type-row"><span class="mono">hero 700</span><span style="font-family:var(--ox-font-display);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.03em">Your agents are a workforce now.</span></div>
@@ -849,12 +847,12 @@ def build_html() -> str:
 <div class="type-row"><span class="mono">text 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
 <div class="type-row"><span class="mono">code 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:14px">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
 <h3>Scales</h3>
-<p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a landing page or a post read once. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for docs, panels, tables, and logs. Every docs site uses the app scale.</p>
-<h3>Hero line</h3>
-<p>Only the marketing h1 admits Space Grotesk. Wrap line 1 of the hero in <span class="mono">{T.HERO_CLASS}</span> inside a <span class="mono">text-m-h1</span> heading, and line 2 stays in {T.HEADING_FACE.family}. The same class anywhere else, including every app heading, draws in {T.HEADING_FACE.family}, so an app cannot reach Space Grotesk except through a wordmark. The website also sets every h1, h2, and h3 in Space Grotesk, and its own stylesheet applies that.</p>
-<pre><code>&lt;h1 class="text-m-h1"&gt;&lt;span class="{T.HERO_CLASS}"&gt;Line one&lt;/span&gt;&lt;br&gt;Line two&lt;/h1&gt;</code></pre>
+<p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a landing page or a post read once. Its body is {T.MARKETING.step('body').px}px. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for the web app, panels, tables, and logs. Its body is {T.APP.step('body').px}px. No step on either scale is below {T.TYPE_FLOOR_PX}px, and no page writes a size of its own: every size reads a step.</p>
+<h3>Headings</h3>
+<p>On the marketing scale, <span class="mono">text-m-h1</span> to <span class="mono">text-m-h3</span> set {T.DISPLAY_FACE.family} through <code>--font-display</code>. On the app scale, <span class="mono">text-a-h1</span> to <span class="mono">text-a-h3</span> and a bare h1 to h3 read <code>--font-heading</code>, which is {T.TEXT_FACE.family}. A marketing or docs site sets its h1 to h3 in {T.DISPLAY_FACE.family} with one line in its own stylesheet. Every h4 to h6 is {T.TEXT_FACE.family}.</p>
+<pre><code>:root {{ {T.MARKETING_HEADINGS}; }}</code></pre>
 <div style="overflow-x:auto"><table>
-<thead><tr><th>step</th><th>face</th><th>marketing</th><th>app</th></tr></thead>
+<thead><tr><th>step</th><th>marketing face</th><th>app face</th><th>marketing</th><th>app</th></tr></thead>
 <tbody>{scale_rows}</tbody></table></div>
 <p class="muted" style="margin-top:14px;font-size:13.5px">Sizes in px, then line height and weight.</p>
 <h3>Weights</h3>

@@ -1,17 +1,17 @@
 """The house type: three faces, five roles, and two size scales.
 
-**Aeonik** sets every heading and every line of text in the app and on the
-docs site: h1 to h6, body, labels, buttons, tables, and navigation. Its
-italic ships beside the upright as the same family. **Monaspace Neon** sets
-code, terminal output, logs, digests, paths, ids, and the numbers in a metric
-or a table. Its texture healing (`calt`) and code ligatures (`liga`) are on
-wherever it is used. **Space Grotesk** sets the oxagen and stella wordmarks,
-Stella's asterisk icon, and line 1 of a marketing hero. On the website
-(oxagen.sh) it also sets every h1, h2, and h3. Mac set that rule on
-2026-10-02, when Aeonik became the house sans. The website applies it in its own
-stylesheet: the marketing scale here still reads the heading role, and only
-the marketing h1 points `--font-hero` at Space Grotesk. Its wide geometric
-letters lose their shape below 20 px, so nothing smaller is set in it.
+Mac set this rule on 2026-10-02. It replaces every earlier face and size rule.
+
+**Aeonik** sets the default text on every surface: body, labels, buttons,
+tables, and navigation. It sets h1 to h3 in the web app and the internal
+tools, and every h4 to h6 everywhere. Its italic ships beside the upright as
+the same family. **Space Grotesk** sets h1 to h3 on the marketing and customer
+sites, and the docs sites count as customer sites. It also sets the oxagen and
+stella wordmarks and Stella's asterisk, and that use is fixed. Its wide
+geometric letters lose their shape below 20 px, so no heading step that can
+take it is smaller. **Monaspace Neon** sets code, terminal output, logs,
+digests, paths, ids, and the numbers in a metric or a table. Its texture
+healing (`calt`) and code ligatures (`liga`) are on wherever it is used.
 
 **Aeonik Mono** and **Aeonik Fono** ship too, from `extra_faces` in the
 theme. Each gets @font-face rules and a next/font loader, so a page can name
@@ -20,23 +20,23 @@ its family. No role reads them yet.
 A product's CSS names a role, `--font-<role>`, and each role resolves to one
 face:
 
-- `sans` is Aeonik, for everything read.
-- `display` is Aeonik too. It is the heading token, so every heading can be
-  retuned in one place. The name predates the 2026-09-29 rule and stays so
-  that no consumer breaks.
+- `sans` is Aeonik, for everything read, every app heading, and every h4 to h6.
+- `display` is Space Grotesk, for h1 to h3 on a marketing or customer site.
+  It is the theme's `display` face, which the theme editor offers as the
+  heading role.
+- `heading` is the face h1 to h3 take on the surface. It reads `sans`, so an
+  app heading is Aeonik. A marketing or docs site points it at `display` with
+  one line, `--font-heading: var(--font-display)`.
 - `mono` is Monaspace Neon.
 - `wordmark` is Space Grotesk, for a wordmark set as text rather than drawn.
-- `hero` is Aeonik, except inside a heading set on a step that admits a hero.
-  Only the marketing h1 admits one. It points `--font-hero` at the wordmark
-  face for its own contents, so the `hero-line-1` class reaches Space Grotesk
-  inside a marketing h1 and resolves to Aeonik everywhere else. An app heading
-  cannot reach Space Grotesk by accident.
+  It is fixed, whatever face `display` takes.
 
 Two scales, because a landing page and a dashboard do not breathe the same
-way. The **marketing** scale is large and spaced for a landing page or a post read
-once. The **app** scale is dense for docs, panels, tables, and logs. A surface
-picks one scale and uses it throughout. Both scales route the same way:
-headings to `display`, body to `sans`, and the smallest step to `mono`.
+way. The **marketing** scale is large and spaced for a landing page or a post
+read once. Its h1 to h3 read `display`. The **app** scale is dense for panels,
+tables, and logs. Its h1 to h3 read `heading`. On both scales h4 and body read
+`sans`, and micro reads `mono`. A surface picks one scale and uses it
+throughout. No step on either scale is below 14px (`theme.TYPE_FLOOR_PX`).
 
 Every value here comes from `theme/theme.json`, through `build/theme.py`, and
 `build/build.py` emits it into `tokens/`. Nothing downstream retypes a size.
@@ -50,7 +50,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from theme import ROOT, THEME, rem_px
+from theme import ROOT, THEME, TYPE_FLOOR_PX, rem_px
 
 FONTS = ROOT / "fonts"
 
@@ -64,7 +64,7 @@ _TYPE = THEME["type"]
 
 @dataclass(frozen=True)
 class Face:
-    key: str  # display | sans | mono | heading, or extra-<family> for a face no role takes
+    key: str  # the role whose face this is: wordmark | display | sans | mono, or extra-<family> for a face no role takes
     family: str
     job: str
     stack: str  # the fallbacks after the family, as CSS
@@ -103,33 +103,35 @@ def _from_spec(key: str, spec: dict, job: str) -> Face:
     )
 
 
-def _face(key: str, role: str, job: str) -> Face:
-    return _from_spec(key, _FACES[role], job)
+def _face(role: str, job: str) -> Face:
+    return _from_spec(role, _FACES[role], job)
 
 
-#: The face of each role in the theme. The face key of the wordmark stays
-#: `display` so that `--ox-font-display` and `--font-space-grotesk` keep their
-#: names in every repository that vendors the tokens. The module-level names
-#: below name the role's face whatever family the theme holds, because other
-#: modules import them. SPACE_GROTESK and MONASPACE_NEON keep the names of the
-#: faces the kit ships.
-SPACE_GROTESK = _face("display", "wordmark", "the wordmarks, Stella's icon, and line 1 of a marketing hero")
-TEXT_FACE = _face("sans", "sans", "every heading, body, labels, buttons, tables, navigation")
-MONASPACE_NEON = _face("mono", "mono", "code, terminal output, logs, digests, paths, ids, and numbers in tables")
-WORDMARK_FACE, CODE_FACE = SPACE_GROTESK, MONASPACE_NEON
+#: The face of each role in the theme. The module-level names name the role's
+#: face whatever family the theme holds, because other modules import them.
+#: SPACE_GROTESK and MONASPACE_NEON keep the names of the faces the kit ships.
+WORDMARK_FACE = _face("wordmark", "the oxagen and stella wordmarks and Stella's asterisk, set as text. It is fixed")
+DISPLAY_FACE = _face("display", "h1 to h3 on a marketing or customer site")
+TEXT_FACE = _face("sans", "body, labels, buttons, tables, navigation, every app heading, and every h4 to h6")
+CODE_FACE = _face("mono", "code, terminal output, logs, digests, paths, ids, and numbers in tables")
+SPACE_GROTESK, MONASPACE_NEON = WORDMARK_FACE, CODE_FACE
 
-#: Headings share a face with another role when the theme gives the display
-#: role that role's family, as it gives it the text face today. A theme that
-#: names a family no other role uses adds a fourth face.
-_HEADING = _face("heading", "display", "every heading, h1 to h6")
-HEADING_FACE: Face = next(
-    (f for f in (TEXT_FACE, SPACE_GROTESK, MONASPACE_NEON) if f.family == _HEADING.family), _HEADING
-)
+#: The face each role in the theme names, by role.
+FACE: dict[str, Face] = {f.key: f for f in (WORDMARK_FACE, DISPLAY_FACE, TEXT_FACE, CODE_FACE)}
 
-FACES: tuple[Face, ...] = tuple(
-    dict.fromkeys((SPACE_GROTESK, TEXT_FACE, HEADING_FACE, MONASPACE_NEON))
-)
-FACE = {f.key: f for f in FACES}
+
+def _one_per_family(faces: tuple[Face, ...]) -> tuple[Face, ...]:
+    """`faces` with each family once, the first face that names it kept."""
+    seen: dict[str, Face] = {}
+    for f in faces:
+        seen.setdefault(f.family, f)
+    return tuple(seen.values())
+
+
+#: The faces the roles load, one per family. The shipped theme gives the
+#: display role the wordmark's family, so Space Grotesk loads once and the kit
+#: loads three role faces.
+FACES: tuple[Face, ...] = _one_per_family(tuple(FACE.values()))
 
 #: Faces the kit ships and loads that no role takes, from `extra_faces` in the
 #: theme: Aeonik Mono and Aeonik Fono today. They get @font-face rules and a
@@ -156,30 +158,31 @@ LOADED_FACES: tuple[Face, ...] = FACES + EXTRA_FACES
 @dataclass(frozen=True)
 class Role:
     key: str  # the CSS variable a product reads: --font-<key>
-    face: str  # the face key the role resolves to
+    face: str  # the role whose face this one resolves to
     job: str
+    reads: str = ""  # another role this one points at, so a surface can repoint it
 
 
 ROLES: tuple[Role, ...] = (
-    Role("sans", "sans", "body, labels, buttons, tables, navigation"),
-    Role("display", HEADING_FACE.key, "every heading, h1 to h6"),
+    Role("sans", "sans", "body, labels, buttons, tables, navigation, every app heading, and every h4 to h6"),
+    Role("display", "display", "h1 to h3 on a marketing or customer site"),
+    Role(
+        "heading",
+        "sans",
+        "h1 to h3 on this surface. A marketing or docs site points it at --font-display",
+        reads="sans",
+    ),
     Role("mono", "mono", "code, logs, ids, and numbers in tables"),
-    Role("wordmark", "display", "a wordmark set as text rather than drawn"),
-    Role("hero", HEADING_FACE.key, f"line 1 of a hero, in {WORDMARK_FACE.family} only inside a step that admits a hero"),
+    Role("wordmark", "wordmark", "a wordmark set as text rather than drawn. It is fixed"),
 )
 ROLE = {r.key: r for r in ROLES}
 
-#: The class that marks line 1 of a hero. It reads `--font-hero`, which is
-#: the heading face unless an enclosing step admits a hero.
-HERO_CLASS = "hero-line-1"
-
-#: The role a hero line takes inside a step that admits one, and everywhere else.
-HERO_ROLE_INSIDE = "wordmark"
-HERO_ROLE_OUTSIDE = "display"
+#: The line a marketing or docs site writes to set its h1 to h3 in the display face.
+MARKETING_HEADINGS = "--font-heading: var(--font-display)"
 
 
 def family(role: str) -> str:
-    """The family a role resolves to outside a hero."""
+    """The family a role resolves to on an app surface."""
     return FACE[ROLE[role].face].family
 
 
@@ -212,7 +215,6 @@ class Step:
     leading: str  # unitless line-height
     weight: int
     tracking: str = "0"
-    hero: bool = False  # line 1 of a heading on this step may take Space Grotesk
 
 
 @dataclass(frozen=True)
@@ -222,15 +224,24 @@ class Scale:
     use: str
     steps: tuple[Step, ...]
 
+    def step(self, name: str) -> Step:
+        """The step named `name`: h1, h2, h3, h4, body, or micro."""
+        return next(st for st in self.steps if st.name == name)
 
-#: The role each step reads. Headings read the heading role, body the text
-#: face, and the smallest step the code face, on both scales.
-STEP_ROLES = {"h1": "display", "h2": "display", "h3": "display", "h4": "display", "body": "sans", "micro": "mono"}
+
+#: The role each step reads. A marketing h1 to h3 reads the display face. An
+#: app h1 to h3 reads the surface's heading role, which is the text face
+#: unless the surface points it at display. Every h4 and body read the text
+#: face, and micro the code face.
+STEP_ROLES = {
+    "marketing": {"h1": "display", "h2": "display", "h3": "display", "h4": "sans", "body": "sans", "micro": "mono"},
+    "app": {"h1": "heading", "h2": "heading", "h3": "heading", "h4": "sans", "body": "sans", "micro": "mono"},
+}
 
 
 def _scale(key: str, name: str, use: str) -> Scale:
     steps = []
-    for step, role in STEP_ROLES.items():
+    for step, role in STEP_ROLES[name].items():
         spec = _TYPE["scales"][name][step]
         steps.append(
             Step(
@@ -241,15 +252,13 @@ def _scale(key: str, name: str, use: str) -> Scale:
                 f"{spec['leading']:g}",
                 spec["weight"],
                 TRACKING[spec["tracking"]],
-                # Only line 1 of a marketing hero may take the wordmark face.
-                hero=(name == "marketing" and step == "h1"),
             )
         )
     return Scale(key=key, name=name, use=use, steps=tuple(steps))
 
 
 MARKETING = _scale("m", "marketing", "landing pages and posts read once: large and spaced")
-APP = _scale("a", "app", "dashboards, docs, panels, tables, terminals, logs: dense")
+APP = _scale("a", "app", "dashboards, panels, tables, terminals, logs: dense")
 
 SCALES: tuple[Scale, ...] = (MARKETING, APP)
 
@@ -262,14 +271,18 @@ class Route:
 
 
 #: Which role each element takes, whatever the scale. This is the routing.
+#: h1 to h3 read the surface's heading role, so an app gets Aeonik and a
+#: marketing site that repoints `--font-heading` gets Space Grotesk. No
+#: element reaches the display or wordmark face on its own.
 ROUTING: tuple[Route, ...] = (
-    Route("h1, h2, h3", "display", ("letter-spacing: var(--tracking-display)",)),
-    Route("h4, h5, h6", "display", (f"font-weight: {WEIGHTS['subheading']}",)),
+    Route("h1, h2, h3", "heading", ("letter-spacing: var(--tracking-display)",)),
+    Route("h4, h5, h6", "sans", (f"font-weight: {WEIGHTS['subheading']}",)),
     Route("body, button, input, select, textarea, label, nav", "sans"),
     Route("pre, code, kbd, samp, [data-mono]", "mono", (f"font-feature-settings: {MONASPACE_NEON.features}",)),
 )
 
-#: Space Grotesk is set only at these sizes and up. Below this it is a defect.
+#: A heading step that can take the display face is set at this size or up.
+#: Space Grotesk's wide letters lose their shape below it.
 DISPLAY_FLOOR_PX = 20
 
 
@@ -316,8 +329,6 @@ def step_css(step: Step, scale_key: str) -> str:
         decl.append(f"letter-spacing: {step.tracking}")
     if step.role == "mono":
         decl.append(f"font-feature-settings: {MONASPACE_NEON.features}")
-    if step.hero:
-        decl.append(f"--font-hero: var(--font-{HERO_ROLE_INSIDE})")
     return "; ".join(decl) + ";"
 
 
@@ -334,22 +345,24 @@ def _face_json(f: Face) -> dict:
 
 def as_json() -> dict:
     return {
-        "faces": {f.key: _face_json(f) for f in FACES},
+        "faces": {role: _face_json(f) for role, f in FACE.items()},
         "extra_faces": [_face_json(f) for f in EXTRA_FACES],
         "roles": {
-            r.key: {"css_var": f"--font-{r.key}", "face": r.face, "family": FACE[r.face].family, "job": r.job}
+            r.key: {
+                "css_var": f"--font-{r.key}",
+                "face": r.face,
+                "family": FACE[r.face].family,
+                "job": r.job,
+                **({"reads": f"--font-{r.reads}"} if r.reads else {}),
+            }
             for r in ROLES
         },
-        "hero": {
-            "class": HERO_CLASS,
-            "family_inside": family(HERO_ROLE_INSIDE),
-            "family_outside": family("hero"),
-            "admitted_by": [f"text-{s.key}-{st.name}" for s in SCALES for st in s.steps if st.hero],
-        },
+        "marketing_headings": MARKETING_HEADINGS,
         "weights": WEIGHTS,
         "tracking": TRACKING,
         "routing": [{"elements": r.elements, "role": r.role, "family": family(r.role)} for r in ROUTING],
         "display_floor_px": DISPLAY_FLOOR_PX,
+        "type_floor_px": TYPE_FLOOR_PX,
         "scales": {
             s.name: {
                 "utility_prefix": f"text-{s.key}-",
@@ -364,7 +377,6 @@ def as_json() -> dict:
                         "line_height": float(st.leading),
                         "weight": st.weight,
                         "tracking": st.tracking,
-                        "hero": st.hero,
                     }
                     for st in s.steps
                 ],
@@ -382,22 +394,20 @@ def as_json() -> dict:
 def verify() -> list[str]:
     """Every fact the type claims, checked. Returns the problems found."""
     problems = []
-    if family("sans") != TEXT_FACE.family or family("display") != HEADING_FACE.family:
+    if family("sans") != TEXT_FACE.family or family("display") != DISPLAY_FACE.family:
         problems.append("the sans and display roles do not resolve to the theme's faces")
-    if family("hero") != family("display") or family(HERO_ROLE_OUTSIDE) != family("display"):
-        problems.append("the hero role does not take the heading face outside a hero step")
-    if family("wordmark") != WORDMARK_FACE.family or family(HERO_ROLE_INSIDE) != WORDMARK_FACE.family:
+    if ROLE["heading"].reads != "sans" or family("heading") != TEXT_FACE.family:
+        problems.append("the heading role does not read the text face, so an app heading would not take it")
+    if family("wordmark") != WORDMARK_FACE.family:
         problems.append(f"the wordmark role is not {WORDMARK_FACE.family}")
-    if HEADING_FACE is not _HEADING and (_HEADING.files, _HEADING.stack, _HEADING.features) != (
-        HEADING_FACE.files, HEADING_FACE.stack, HEADING_FACE.features
-    ):
-        problems.append(
-            f"faces.display names {_HEADING.family}, as another role does, so it needs that role's files, fallback, and features"
-        )
-    families = {}
-    for face in FACES:
-        if families.setdefault(face.family, face) is not face:
-            problems.append(f"two roles name {face.family} with different files, fallback, or features")
+    families: dict[str, Face] = {}
+    for face in FACE.values():
+        first = families.setdefault(face.family, face)
+        if (first.files, first.stack, first.features) != (face.files, face.stack, face.features):
+            problems.append(
+                f"faces.{face.key} names {face.family}, as faces.{first.key} does, "
+                f"so it needs that face's files, fallback, and features"
+            )
     for role, spec in _FACES.items():
         files = [f["file"] for f in spec["files"]] + ([spec["outline"]["file"]] if "outline" in spec else [])
         for file in files:
@@ -414,9 +424,14 @@ def verify() -> list[str]:
         upright = {w for _, w, style in face.files if style == "normal"}
         if not upright:
             problems.append(f"{face.family} has no upright file, so a browser has nothing to set upright text in")
+    routed = {r.elements: r.role for r in ROUTING}
+    if routed.get("h1, h2, h3") != "heading":
+        problems.append("h1 to h3 do not route to the heading role, so a surface cannot choose their face")
+    if routed.get("h4, h5, h6") != "sans":
+        problems.append("h4 to h6 do not route to the text face")
     for r in ROUTING:
-        if r.role not in ("display", "sans", "mono"):
-            problems.append(f"{r.elements} route to the {r.role} role, which only a wordmark or a hero line takes")
+        if r.role in ("display", "wordmark"):
+            problems.append(f"{r.elements} route to the {r.role} role, which an app surface must not reach on its own")
     for s in SCALES:
         sizes = [st.px for st in s.steps]
         if sizes != sorted(sizes, reverse=True):
@@ -424,27 +439,22 @@ def verify() -> list[str]:
         for st in s.steps:
             if abs(rem_px(st.size) - st.px) > 1e-6:
                 problems.append(f"{s.name} {st.name}: {st.size} is {rem_px(st.size):g}px, not a whole number of pixels")
-            if st.name in ("h1", "h2", "h3", "h4") and st.role != "display":
-                problems.append(f"{s.name} {st.name} does not read the heading role")
-            if st.name == "body" and st.role != "sans":
-                problems.append(f"{s.name} body is not in the text face")
-            if st.name == "micro" and st.role != "mono":
-                problems.append(f"{s.name} micro is not in the code face")
-            if st.hero and (s is not MARKETING or st.name != "h1"):
-                problems.append(f"{s.name} {st.name} admits a hero, and only the marketing h1 may")
-            if st.hero and st.px < DISPLAY_FLOOR_PX:
-                problems.append(f"{s.name} {st.name}: a {WORDMARK_FACE.family} hero at {st.px}px, below the {DISPLAY_FLOOR_PX}px floor")
+            if st.role != STEP_ROLES[s.name][st.name]:
+                problems.append(f"{s.name} {st.name} reads the {st.role} role, not the {STEP_ROLES[s.name][st.name]} role")
+            if st.px < TYPE_FLOOR_PX:
+                problems.append(f"{s.name} {st.name} is {st.px}px, below the {TYPE_FLOOR_PX}px floor for every step")
+            if st.role in ("display", "heading") and st.px < DISPLAY_FLOOR_PX:
+                problems.append(
+                    f"{s.name} {st.name} is {st.px}px and can take {DISPLAY_FACE.family}, "
+                    f"below the {DISPLAY_FLOOR_PX}px floor for a display heading"
+                )
             if st.name == "h1" and not (1.05 <= float(st.leading) <= 1.25):
                 problems.append(f"{s.name} h1 line-height {st.leading} is outside 1.05 to 1.25")
-    if HEADING_FACE is WORDMARK_FACE:
-        for s in SCALES:
-            for st in s.steps:
-                if st.role == "display" and st.px < DISPLAY_FLOOR_PX:
-                    problems.append(
-                        f"{s.name} {st.name} sets a heading in {WORDMARK_FACE.family} at {st.px}px, below the {DISPLAY_FLOOR_PX}px floor"
-                    )
-    if not any(st.hero for st in MARKETING.steps):
-        problems.append(f"no marketing step admits a hero, so line 1 of a hero cannot take {WORDMARK_FACE.family}")
+    for scale, steps in STEP_ROLES.items():
+        if [steps[h] for h in ("h1", "h2", "h3")] != (["display"] * 3 if scale == "marketing" else ["heading"] * 3):
+            problems.append(f"the {scale} h1 to h3 do not read the {'display' if scale == 'marketing' else 'heading'} role")
+        if (steps["h4"], steps["body"], steps["micro"]) != ("sans", "sans", "mono"):
+            problems.append(f"the {scale} h4, body, and micro do not read the text, text, and code faces")
     return problems
 
 
@@ -452,6 +462,5 @@ if __name__ == "__main__":
     for s in SCALES:
         print(f"{s.name}: {s.use}")
         for st in s.steps:
-            hero = "  hero" if st.hero else ""
-            print(f"  {st.name:6} {family(st.role):15} {st.size:9} {st.px:3}px  lh {st.leading:5}  w{st.weight}  {st.tracking}{hero}")
+            print(f"  {st.name:6} {st.role:8} {family(st.role):15} {st.size:9} {st.px:3}px  lh {st.leading:5}  w{st.weight}  {st.tracking}")
     print("problems:", verify() or "none")

@@ -275,7 +275,7 @@
           }
         },
         "scales": {
-          "description": "The two size scales. marketing is large and spaced, for a page read once. app is dense, for panels, tables, and logs read all day. Each step's size must be smaller than the step above it.",
+          "description": "The two size scales. marketing is large and spaced, for a page read once. app is dense, for panels, tables, and logs read all day. No step is larger than the step above it, and every step on both scales is 14px (0.875rem) or more. build/theme.py refuses a smaller step.",
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -536,7 +536,7 @@
       "additionalProperties": false,
       "properties": {
         "size": {
-          "description": "The font size. It must be a whole number of pixels.",
+          "description": "The font size. It must be a whole number of pixels, and 14px (0.875rem) or more.",
           "$ref": "#/$defs/rem"
         },
         "leading": {
