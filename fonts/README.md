@@ -1,10 +1,10 @@
 # fonts
 
-Three faces take a role. Aeonik sets every heading and everything read in the
-app and on the docs site. Monaspace Neon sets code, logs, and data. Space
-Grotesk sets the two wordmarks and line 1 of a marketing hero, and on the
-website (oxagen.sh) it also sets every h1, h2, and h3. Mac made Aeonik the
-house sans on 2026-10-02.
+Three faces take a role. Aeonik sets the default text on every surface, h1 to
+h3 in the web app and the internal tools, and every h4 to h6. Space Grotesk
+sets h1 to h3 on the marketing and customer sites, docs included, and the two
+wordmarks. Monaspace Neon sets code, logs, digests, and data. Mac set this
+rule on 2026-10-02.
 
 Aeonik Mono and Aeonik Fono ship here too. Each loads as its own family, so a
 page can name it. No role takes either one yet.

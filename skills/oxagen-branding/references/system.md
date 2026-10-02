@@ -53,26 +53,40 @@ A state colour is a mark, and a mark needs only 3:1. A word in a state's colour 
 
 ## Type
 
-Three faces, each with one job. Mac set this rule on 2026-10-02, when Aeonik became the house sans.
+Three faces, each with its own job. Mac set this rule on 2026-10-02. It replaces every earlier face and size rule.
 
-- **Aeonik** sets every heading, h1 to h6, and everything read in the app and on the docs site: body, labels, buttons, tooltips, tables, navigation. On the website it sets everything read and every h4 to h6. Small headings take weight 500 or 600 to separate from body. Its italic ships beside it, so `em` draws the real italic.
-- **Space Grotesk** sets the oxagen and stella wordmarks and Stella's asterisk icon. On the website (oxagen.sh) it also sets every h1, h2, and h3, and line 1 of the hero. Nothing below 20px. The app and the docs site never set a heading in it. On the website, wrap line 1 of the hero in `<span class="hero-line-1">` inside a `text-m-h1` heading.
+- **Aeonik** sets the default text on every surface: body, labels, buttons, tooltips, tables, and navigation. It sets h1 to h3 in the web app (app.oxagen.sh) and the internal tools (roadmap.oxagen.cloud, gtm.oxagen.cloud). It sets every h4 to h6 on every surface. Small headings take weight 500 or 600 to stand apart from body. Its italic ships beside it, so `em` draws the real italic.
+- **Space Grotesk** sets h1 to h3 on the marketing and customer sites: oxagen.sh, docs.oxagen.sh, stella.oxagen.sh and its docs, and survey.oxagen.cloud. It also sets the oxagen and stella wordmarks and Stella's asterisk icon, and that use is fixed. Nothing in Space Grotesk is set below 20px, because its wide letters lose their shape there.
 - **Monaspace Neon** is the code face: code, commands, terminal output, logs, digests, paths, frame kinds, verdict values, ids, and the numbers in tables. Texture healing and code ligatures are on (`font-feature-settings: "calt", "liga"`).
 
-No fourth role face. In CSS a rule names a role, never a face. `--font-display` is the heading token and `--font-sans` the text token (the kit's pages call it `--font`), and both are Aeonik. `--font-mono` is Monaspace Neon. `--font-wordmark` is Space Grotesk, for a wordmark set as text and for the website's h1 to h3. `--font-hero` is Space Grotesk inside a `text-m-h1` heading and Aeonik everywhere else, and the `hero-line-1` class reads it. The kit's `text-m-*` steps read `--font-display`, so the website points its h1 to h3 at `--font-wordmark` in its own stylesheet. Aeonik Mono and Aeonik Fono ship in the kit's `fonts/` too and load as their own families, and no role takes either one yet. Headings are sentence case.
+The kit's own pages follow the same split. `playbook.html`, `brand-guide.html`, sdlc.oxagen.sh, and the Pages/Website stories are customer pages. `message-bank.html`, the theme editor, the Pages/App stories, and the page chrome of `always-on.html` are internal tools. The website sections that `always-on.html` previews are marketing.
 
-Two scales. A surface picks one and keeps it.
+No fourth role face. In CSS a rule names a role, never a face. Five roles carry the three faces:
 
-| Step | Face | Marketing (`text-m-*`) | App (`text-a-*`) |
-|---|---|---|---|
-| h1 | Aeonik (on the website: Space Grotesk) | 72px, 1.05, 700, -0.03em | 30px, 1.15, 700, -0.02em |
-| h2 | Aeonik (on the website: Space Grotesk) | 40px, 1.2, 700, -0.01em | 24px, 1.2, 600 |
-| h3 | Aeonik (on the website: Space Grotesk) | 28px, 1.3, 600 | 20px, 1.25, 600 |
-| h4 | Aeonik | 20px, 1.4, 500 | 16px, 1.4, 600 |
-| body | Aeonik | 18px, 1.65, 400 | 14px, 1.5, 400 |
-| micro | Monaspace Neon | 14px, 1.5, 400 | 12px, 1.4, 400 |
+- `--font-sans` is Aeonik, the default text.
+- `--font-display` is Space Grotesk, for h1 to h3 on a marketing or customer site. `text-m-h1` to `text-m-h3` read it.
+- `--font-heading` is the face h1 to h3 take on the surface. It reads `--font-sans`, so a bare h1 to h3 and `text-a-h1` to `text-a-h3` draw Aeonik. A marketing or docs site sets its h1 to h3 in Space Grotesk with one line in its own stylesheet: `:root { --font-heading: var(--font-display); }`.
+- `--font-mono` is Monaspace Neon.
+- `--font-wordmark` is Space Grotesk, for a wordmark set as text rather than drawn. It stays Space Grotesk whatever face `--font-display` takes.
 
-Marketing is for landing pages and posts: large and spaced. App is for docs, dashboards, panels, tables, terminals, and logs: dense. Every docs site uses the app scale (Mac, 2026-10-02). An eyebrow is 12px Aeonik, uppercase, at 0.14em tracking.
+The token files name the same roles `--ox-font`, `--ox-font-display`, `--ox-font-heading`, `--ox-font-mono`, and `--ox-font-wordmark`. A site that reads them sets its h1 to h3 in Space Grotesk with `h1, h2, h3 { font-family: var(--ox-font-display); }`. `assets/tokens.css` and the kit's pages call the text role `--font` and the code role `--mono`. Aeonik Mono and Aeonik Fono ship in the kit's `fonts/` too and load as their own families, and no role takes either one yet. Headings are sentence case.
+
+Two scales. Each cell gives the size, line height, weight, and tracking.
+
+| Step | Marketing face | Marketing (`text-m-*`) | App face | App (`text-a-*`) |
+|---|---|---|---|---|
+| h1 | Space Grotesk | 72px, 1.05, 700, -0.03em | Aeonik | 30px, 1.15, 700, -0.02em |
+| h2 | Space Grotesk | 40px, 1.2, 700, -0.01em | Aeonik | 24px, 1.2, 600 |
+| h3 | Space Grotesk | 28px, 1.3, 600 | Aeonik | 20px, 1.25, 600 |
+| h4 | Aeonik | 20px, 1.4, 500 | Aeonik | 16px, 1.4, 600 |
+| body | Aeonik | 16px, 1.625, 400 | Aeonik | 14px, 1.5, 400 |
+| micro | Monaspace Neon | 14px, 1.5, 400 | Monaspace Neon | 14px, 1.5, 400 |
+
+Marketing is for landing pages and posts: large and spaced. App is for the web app and the internal tools: dense, for dashboards, panels, tables, terminals, and logs. Body text is 16px on the marketing and customer sites and 14px in the app and the internal tools. Docs sites are customer sites, so their h1 to h3 take Space Grotesk and their body is 16px. A docs site sets both in its own stylesheet: `--font-heading: var(--font-display)` for the headings, and `--ox-m-body` for the body.
+
+No text is set below 14px, on any surface. Mac, 2026-10-02: "The minimum font size in the app has to be 14px at least! Not 13px! And we can't hard code font sizes in classes, we need to let the tokens do their job." The floor covers labels, badges, eyebrows, table headers, timestamps, and hints. An eyebrow or a badge stands apart by case, tracking, weight, or colour, never by a smaller size. An eyebrow is 14px Aeonik, uppercase, at 0.14em tracking.
+
+No class or stylesheet writes a font size of its own. Every size reads a step token (`--ox-m-*`, `--ox-a-*`) or a house utility (`text-m-*`, `text-a-*`). Tailwind's `text-xs` and `text-sm` both read the 14px app body step. In this kit, `build/theme.py` refuses a step under 14px, and `build/css_literals.py` fails on a hard-coded size.
 
 ## Layout
 

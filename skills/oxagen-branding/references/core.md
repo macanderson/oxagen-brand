@@ -79,8 +79,9 @@ A heading names the thing, a caption states one fact, and no label carries a com
 - [ ] Buyer quotes are labelled hypothetical unless an attributed customer approved them
 - [ ] No traction numbers, partner counts, or setup durations without dated evidence
 - [ ] Every claim is one the record can back
-- [ ] Aeonik for body, UI, and every heading in the app and the docs, Space Grotesk for the wordmarks and for the website's h1, h2, h3, and hero line, Monaspace Neon for code, data, digests, and commands
-- [ ] One type scale per surface: marketing (`text-m-*`) for landing pages and posts, app (`text-a-*`) for apps and every docs site
+- [ ] Aeonik for the default text on every surface, for h1 to h3 in the app and the internal tools, and for every h4 to h6. Space Grotesk for h1 to h3 on the marketing and customer sites, docs included, and for the wordmarks. Monaspace Neon for code, data, digests, and commands
+- [ ] Body at 16px on the marketing and customer sites, docs included, and at 14px in the app and the internal tools. The marketing scale (`text-m-*`) for landing pages and posts, the app scale (`text-a-*`) for the app and the internal tools
+- [ ] No text below 14px, labels, badges, eyebrows, and timestamps included, and no hard-coded font size: every size reads a step token or a house utility
 - [ ] Card radius 12px on the website and 13px in the app, 1180px wrap, dark first on obsidian with the white light theme intact
 - [ ] Gold as text on white is the `gold-deep` token, never the gold itself
 - [ ] Every text role that carries meaning clears 4.5:1 on its ground
