@@ -2,7 +2,8 @@
  * The theme the editor edits, and the CSS variables it writes for a preview.
  *
  * `SHIPPED` is `theme/theme.json` as the kit ships it. A draft is a copy of
- * it with the editor's changes, plus a face choice for each role.
+ * it with the editor's changes, plus a face choice for each role the editor
+ * may change. The wordmark face is fixed, so a draft holds no choice for it.
  * `themeVars` turns a draft into the `--ox-*` variables `build/build.py`
  * would write for it, so setting them on `<html>` previews the change on the
  * page: the semantic roles in `globals.css` read the tokens, so the buttons,
@@ -14,6 +15,15 @@ import { derivePalette, type ThemeColor } from "./palette";
 
 export const ROLES = ["wordmark", "display", "sans", "mono"] as const;
 export type Role = (typeof ROLES)[number];
+
+/**
+ * The roles the editor may change. The wordmark face is fixed: Space Grotesk,
+ * drawn at weight 600 (Mac, 2026-10-02). `build/theme.py` refuses any other,
+ * and a theme request cannot name it. A new gold still recolours the
+ * wordmarks' gold x and asterisk, which paint from `--ox-gold`.
+ */
+export const FACE_ROLES = ["display", "sans", "mono"] as const;
+export type FaceRole = (typeof FACE_ROLES)[number];
 
 export interface FontFile {
   file: string;
@@ -79,15 +89,14 @@ export interface UploadedFile {
 }
 
 /** The fallback a new family takes, as `build/request.py` gives it. */
-export const DEFAULT_FALLBACK: Record<Role, string[]> = {
-  wordmark: ["Helvetica Neue", "Arial", "sans-serif"],
+export const DEFAULT_FALLBACK: Record<FaceRole, string[]> = {
   display: ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
   sans: ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
   mono: ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
 };
 
 /** The family a choice names, or the shipped family. */
-export function choiceFamily(role: Role, choice: FaceChoice): string {
+export function choiceFamily(role: FaceRole, choice: FaceChoice): string {
   return choice.kind === "shipped" ? SHIPPED.faces[role].family : choice.family;
 }
 
@@ -102,7 +111,7 @@ function familyStack(names: string[]): string {
  * shipped family, the kit face's own for another kit face (the request names
  * that face's fallback), and the role's default for a new family.
  */
-export function fontStack(role: Role, choice: FaceChoice): string {
+export function fontStack(role: FaceRole, choice: FaceChoice): string {
   const family = choiceFamily(role, choice);
   const shipped = SHIPPED.faces[role];
   const kitFace = ROLES.map((r) => SHIPPED.faces[r]).find((f) => f.family === family);
@@ -114,6 +123,9 @@ export function fontStack(role: Role, choice: FaceChoice): string {
         : DEFAULT_FALLBACK[role];
   return `"${family}", ${familyStack(fallback)}`;
 }
+
+/** The wordmark's CSS font stack, as `typeset.py` writes `--ox-font-display`. The wordmark face is fixed. */
+export const WORDMARK_STACK = `"${SHIPPED.faces.wordmark.family}", ${familyStack(SHIPPED.faces.wordmark.fallback)}`;
 
 /**
  * The gold ramp in `ui/src/styles/globals.css`: tints typed as `oklch()` on the
@@ -144,10 +156,10 @@ export function rampVars(gold: Hex): Record<string, string> {
 }
 
 /** The `--ox-*` variables a theme and its face choices produce. */
-export function themeVars(theme: Theme, faces: Record<Role, FaceChoice>): Record<string, string> {
+export function themeVars(theme: Theme, faces: Record<FaceRole, FaceChoice>): Record<string, string> {
   const vars: Record<string, string> = { ...derivePalette(theme.color).vars, ...rampVars(theme.color.gold) };
 
-  vars["--ox-font-display"] = fontStack("wordmark", faces.wordmark);
+  vars["--ox-font-display"] = WORDMARK_STACK;
   vars["--ox-font"] = fontStack("sans", faces.sans);
   vars["--ox-font-mono"] = fontStack("mono", faces.mono);
   vars["--ox-font-heading"] = fontStack("display", faces.display);

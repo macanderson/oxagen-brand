@@ -34,7 +34,7 @@ import { cn } from "../lib/utils";
 import type { Hex } from "./color";
 import { ColorField, Ratio, RangeField, Section, SelectField, Swatch, TextField } from "./controls";
 import { applyVars, clearVars, isShipped, loadDraft, previewVars, saveDraft, shippedDraft, type Draft } from "./draft";
-import { FaceEditor, type LoadState } from "./faces-section";
+import { FaceEditor, WordmarkFace, type LoadState } from "./faces-section";
 import { isFamilyName, loadFontBytes, loadGoogleFont, readFontBytes } from "./fonts";
 import { STATE_NAMES, derivePalette, verifyPalette, type InkGrounds, type PaperGrounds } from "./palette";
 import {
@@ -52,8 +52,8 @@ import {
   uploadsNeeded,
 } from "./request";
 import {
+  FACE_ROLES,
   RADIUS_STEPS,
-  ROLES,
   SHIPPED,
   STEPS,
   clone,
@@ -61,7 +61,7 @@ import {
   remPx,
   typeProblems,
   type FaceChoice,
-  type Role,
+  type FaceRole,
   type ScaleName,
   type Theme,
 } from "./theme";
@@ -83,13 +83,13 @@ function openFromUrl(): boolean {
   }
 }
 
-const idleLoads = (): Record<Role, LoadState> => ({ wordmark: "idle", display: "idle", sans: "idle", mono: "idle" });
+const idleLoads = (): Record<FaceRole, LoadState> => ({ display: "idle", sans: "idle", mono: "idle" });
 
 export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
   const [draft, setDraft] = React.useState<Draft>(() => loadDraft());
   const [open, setOpen] = React.useState(() => defaultOpen ?? openFromUrl());
   const [publishAt, setPublishAt] = React.useState<Date | null>(null);
-  const [loads, setLoads] = React.useState<Record<Role, LoadState>>(idleLoads);
+  const [loads, setLoads] = React.useState<Record<FaceRole, LoadState>>(idleLoads);
 
   // The preview: write the draft to <html> on every change, and keep it.
   React.useEffect(() => {
@@ -103,12 +103,12 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
   const facesKey = JSON.stringify(draft.faces);
   React.useEffect(() => {
     let live = true;
-    const faces = JSON.parse(facesKey) as Record<Role, FaceChoice>;
-    const set = (role: Role, state: LoadState) => {
+    const faces = JSON.parse(facesKey) as Record<FaceRole, FaceChoice>;
+    const set = (role: FaceRole, state: LoadState) => {
       if (live) setLoads((l) => (l[role] === state ? l : { ...l, [role]: state }));
     };
     const timer = window.setTimeout(() => {
-      for (const role of ROLES) {
+      for (const role of FACE_ROLES) {
         const choice = faces[role];
         if (choice.kind === "google" && isFamilyName(choice.family)) {
           set(role, "loading");
@@ -146,7 +146,7 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
       return { ...d, theme };
     });
   }, []);
-  const setFace = React.useCallback((role: Role, choice: FaceChoice) => {
+  const setFace = React.useCallback((role: FaceRole, choice: FaceChoice) => {
     setDraft((d) => ({ ...d, faces: { ...d.faces, [role]: choice } }));
   }, []);
 
@@ -219,9 +219,10 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
                 <StateSection mode={mode} theme={draft.theme} update={update} />
                 <Section
                   title="Fonts"
-                  note="A Google family loads from fonts.google.com. Uploaded files load from your disk and stay in this browser."
+                  note="A Google family loads from fonts.google.com, and uploaded files load from your disk and stay in this browser."
                 >
-                  {ROLES.map((role) => (
+                  <WordmarkFace />
+                  {FACE_ROLES.map((role) => (
                     <FaceEditor
                       key={role}
                       role={role}
@@ -726,9 +727,9 @@ function TypeSection({ theme, update }: { theme: Theme; update: Update }) {
 // checks, changes, export
 // --------------------------------------------------------------------------
 
-function faceProblems(faces: Record<Role, FaceChoice>, loads: Record<Role, LoadState>): string[] {
+function faceProblems(faces: Record<FaceRole, FaceChoice>, loads: Record<FaceRole, LoadState>): string[] {
   const out: string[] = [];
-  for (const role of ROLES) {
+  for (const role of FACE_ROLES) {
     const choice = faces[role];
     if (choice.kind === "google" && !isFamilyName(choice.family)) out.push(`The ${role} face needs a Google family name.`);
     if (choice.kind === "google" && loads[role] === "failed") {

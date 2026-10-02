@@ -1,22 +1,23 @@
 /**
  * The editor's draft: the theme with Mac's changes, and a face choice for each
- * role. It lives in localStorage, so it survives a reload and a move to
+ * role the editor may change. The wordmark face is fixed, so the draft holds
+ * no choice for it. It lives in localStorage, so it survives a reload and a move to
  * another story, and it is written to `<html>` as CSS variables for the
  * preview.
  */
 import {
-  ROLES,
+  FACE_ROLES,
   SHIPPED,
   clone,
   themeVars,
   type FaceChoice,
-  type Role,
+  type FaceRole,
   type Theme,
 } from "./theme";
 
 export interface Draft {
   theme: Theme;
-  faces: Record<Role, FaceChoice>;
+  faces: Record<FaceRole, FaceChoice>;
 }
 
 export const STORAGE_KEY = "oxagen-theme-editor-draft-v1";
@@ -24,7 +25,7 @@ export const STORAGE_KEY = "oxagen-theme-editor-draft-v1";
 export function shippedDraft(): Draft {
   return {
     theme: clone(SHIPPED),
-    faces: Object.fromEntries(ROLES.map((r) => [r, { kind: "shipped" }])) as Record<Role, FaceChoice>,
+    faces: Object.fromEntries(FACE_ROLES.map((r) => [r, { kind: "shipped" }])) as Record<FaceRole, FaceChoice>,
   };
 }
 
@@ -64,7 +65,8 @@ function isFaceChoice(value: unknown): value is FaceChoice {
 /**
  * The saved draft, laid over the shipped theme so a field the theme gained
  * since the draft was saved takes its shipped value. A missing or unreadable
- * draft is the shipped theme.
+ * draft is the shipped theme. A draft saved before the wordmark face was
+ * fixed may hold a wordmark choice, and loading drops it.
  */
 export function loadDraft(storage: Pick<Storage, "getItem"> | undefined = safeStorage()): Draft {
   const fresh = shippedDraft();
@@ -75,7 +77,7 @@ export function loadDraft(storage: Pick<Storage, "getItem"> | undefined = safeSt
     if (!isObject(saved)) return fresh;
     const faces = { ...fresh.faces };
     if (isObject(saved.faces)) {
-      for (const role of ROLES) {
+      for (const role of FACE_ROLES) {
         const choice = saved.faces[role];
         if (isFaceChoice(choice)) faces[role] = choice;
       }
@@ -108,7 +110,7 @@ function safeStorage(): Storage | undefined {
 export function isShipped(draft: Draft): boolean {
   return (
     JSON.stringify(draft.theme) === JSON.stringify(SHIPPED) &&
-    ROLES.every((r) => draft.faces[r].kind === "shipped")
+    FACE_ROLES.every((r) => draft.faces[r].kind === "shipped")
   );
 }
 
