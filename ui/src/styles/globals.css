@@ -1126,12 +1126,22 @@
 }
 
 /*
- * Utilities — FLAT surfaces, but MOTION RETAINED. No gradients, glows, mesh, or
- * glassmorphism; depth is a 1px border, never a shadow. Motion, however, is
- * kept everywhere it existed: the helpers below (hover-lift, hover-glow ring,
- * animate-in, stream caret) plus the per-component transitions. The a11y
- * reduced-motion kill-switch still honors the OS setting. Restyle via the value
- * layer; tune feel via the motion and ease tokens.
+ * Utilities. A surface at rest is flat: a card, a panel, or a table has a 1px
+ * border and a solid fill, with no shadow, no gradient, no mesh, and no glass.
+ *
+ * Glass belongs only on chrome that floats over content: menus, selects,
+ * comboboxes, popovers, hover cards, the command menu, toasts, a dialog's
+ * scrim, and sticky navigation and header bars. Cards, panels, tables, and
+ * text never take it. Floating chrome also takes the deep `shadow-pop`. The
+ * recipes are `floatingSurface` and `glassBar` in control-styles.ts, and the
+ * GLASS section after the v3 layer holds their fallbacks.
+ *
+ * The hero helpers below (`.ox-hero-*`, `.ox-grad-*`) are the one place for a
+ * gradient or a glow. Motion is kept everywhere it existed: the helpers below
+ * (hover-lift, hover-glow ring, animate-in, stream caret) plus the
+ * per-component transitions. The a11y reduced-motion kill-switch still honors
+ * the OS setting. Restyle via the value layer; tune feel via the motion and
+ * ease tokens.
  */
 @layer utilities {
   /* Motion helpers — driven by the shared --ease-… and --motion-… tokens.
@@ -1552,6 +1562,62 @@
       --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
       --ui-shadow-pop: 0 25px 50px -12px rgb(0 0 0 / 0.6);
     }
+  }
+}
+
+/*
+ * ─────────────────────────────────────────────────────────────────────────────
+ * GLASS
+ *
+ * Glass belongs only on chrome that floats over content: menus, selects,
+ * comboboxes, popovers, hover cards, the command menu, toasts, a dialog's
+ * scrim, and sticky navigation and header bars. Cards, panels, tables, and
+ * text never take it.
+ *
+ * Two recipes in control-styles.ts draw it. `floatingSurface` is the popover
+ * ground at 70% under a 40px blur at 150% saturation, for every floating
+ * surface. `glassBar` is the page ground at 72% under a 24px blur at 150%
+ * saturation, for a sticky nav or header. Each recipe carries a hook class,
+ * `glass-pop` or `glass-bar`, and the dialog's scrim carries `glass-scrim`.
+ * The rules below read only those hooks, so no component changes when a
+ * fallback applies:
+ *
+ *   - A browser with no backdrop-filter draws each glass surface opaque on
+ *     its own ground. A scrim keeps its dim, since an opaque scrim would hide
+ *     the page the dialog belongs to.
+ *   - Under prefers-reduced-transparency: reduce (Chromium only, today), each
+ *     glass surface turns opaque and drops its blur. A scrim drops its blur
+ *     and keeps its dim.
+ *
+ * The rules sit outside every layer, so they win over the recipes' utilities.
+ * The toast draws its blur on `::before`, so the rules reach that too.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-pop {
+    background-color: var(--menu-popup-bg);
+  }
+
+  .glass-bar {
+    background-color: var(--background);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-pop {
+    background-color: var(--menu-popup-bg);
+  }
+
+  .glass-bar {
+    background-color: var(--background);
+  }
+
+  .glass-pop,
+  .glass-pop::before,
+  .glass-bar,
+  .glass-scrim {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 

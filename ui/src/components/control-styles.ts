@@ -95,9 +95,32 @@ export const textareaBase = `${fieldSkin} rounded-xl py-3`;
  * The ring and the shadow read `--pop-ring` and `--ui-shadow-pop`, which
  * every theme block in `globals.css` sets. It sets no position, since its
  * callers sit inside a positioner or add `absolute` themselves.
+ *
+ * `glass-pop` is the hook for the glass fallbacks in `globals.css`. Where a
+ * browser has no `backdrop-filter`, or the reader asks for reduced
+ * transparency, the surface turns opaque on the popover ground.
  */
 const floatingSurface =
-  "rounded-3xl bg-menu-popup-bg/70 text-menu-popup-fg ring-1 ring-pop-ring shadow-pop backdrop-blur-2xl backdrop-saturate-150";
+  "glass-pop rounded-3xl bg-menu-popup-bg/70 text-menu-popup-fg ring-1 ring-pop-ring shadow-pop backdrop-blur-2xl backdrop-saturate-150";
+
+/**
+ * A sticky bar over scrolling content: the website's nav and the app's
+ * header. It is the page ground at 72% over a 24px blur, with the same 150%
+ * saturation as the floating surface, and a hairline under it at 60%. Content
+ * that scrolls under the bar shows through as soft colour.
+ *
+ * Text set straight on the bar takes the foreground ink. At 72% the ink stays
+ * above 8:1 in both themes even when pure black or pure white scrolls under
+ * it. The muted ink does not hold 4.5:1 over a blurred dark headline, so
+ * secondary text sits on an opaque control instead: a tab track, a badge, or
+ * the command menu's trigger.
+ *
+ * `glass-bar` is the hook for the glass fallbacks in `globals.css`, which
+ * turn the bar opaque on the page ground. The recipe sets `sticky top-0` and
+ * a z-index under the floating surfaces (z-50), so an open menu covers it.
+ */
+export const glassBar =
+  "glass-bar sticky top-0 z-30 border-b border-border/60 bg-background/72 text-foreground backdrop-blur-xl backdrop-saturate-150";
 
 /**
  * A menu, listbox or picker surface. `menuPopup` adds the 4px inset a menu's
