@@ -100,14 +100,14 @@ function StateIcon({ tone, glyph }: { tone: StateTone; glyph: StateGlyph }) {
 
 /** `code { font-family:var(--mono); font-size:.9em; background:var(--hl); padding:.12em .38em; border-radius:4px }` */
 export const stateCode =
-  "rounded bg-hl px-[0.38em] py-[0.12em] font-mono text-[0.9em]";
+  "rounded bg-hl px-[0.38em] py-[0.12em] font-mono";
 
 /**
  * The trace line under an error's actions: `.mono.dim` at 11.5px, 16px below
  * them. It is a `.state-wrap p` too, so it keeps the paragraph's measure.
  */
 export const stateTrace =
-  "mx-auto mt-4 max-w-[52ch] font-mono text-[11.5px] text-dim";
+  "mx-auto mt-4 max-w-[52ch] font-mono text-sm text-dim";
 
 /**
  * The denied state's facts: `.kv` with `margin-top:20px; text-align:left;
@@ -166,12 +166,12 @@ export function StateWrap({
       <StateIcon tone={tone} glyph={glyph ?? DEFAULT_GLYPH[tone]} />
       <Heading
         id={id}
-        className="mb-[7px] text-lg font-semibold tracking-[-0.015em] text-foreground"
+        className="mb-[7px] text-(length:--ox-a-h3) font-semibold tracking-[-0.015em] text-foreground"
       >
         {title}
       </Heading>
       {children === undefined ? null : (
-        <p className="mx-auto mb-4 max-w-[52ch] text-[13px] text-muted-foreground">
+        <p className="mx-auto mb-4 max-w-[52ch] text-sm text-muted-foreground">
           {children}
         </p>
       )}

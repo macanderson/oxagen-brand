@@ -18,6 +18,9 @@ import {
   rampVars,
   remPx,
   themeVars,
+  typeProblems,
+  TYPE_FLOOR_PX,
+  clone,
   type FaceChoice,
   type FaceRole,
 } from "./theme";
@@ -80,13 +83,26 @@ describe("faces", () => {
   it("writes the shipped stacks as house-tokens.css does", () => {
     expect(fontStack("sans", { kind: "shipped" })).toBe(declared(tokensCss, "--ox-font"));
     expect(fontStack("mono", { kind: "shipped" })).toBe(declared(tokensCss, "--ox-font-mono"));
-    expect(WORDMARK_STACK).toBe(declared(tokensCss, "--ox-font-display"));
+    expect(fontStack("display", { kind: "shipped" })).toBe(declared(tokensCss, "--ox-font-display"));
+    expect(fontStack("sans", { kind: "shipped" })).toBe(declared(tokensCss, "--ox-font-heading"));
+    expect(WORDMARK_STACK).toBe(declared(tokensCss, "--ox-font-wordmark"));
   });
 
   it("keeps the wordmark in Space Grotesk, drawn at 600", () => {
     expect(SHIPPED.faces.wordmark.family).toBe("Space Grotesk");
     expect(SHIPPED.faces.wordmark.outline).toEqual({ file: "SpaceGrotesk-VariableFont_wght.ttf", weight: 600 });
-    expect(themeVars(SHIPPED, shippedFaces)["--ox-font-display"]).toBe(WORDMARK_STACK);
+    expect(themeVars(SHIPPED, shippedFaces)["--ox-font-wordmark"]).toBe(WORDMARK_STACK);
+  });
+
+  it("sets marketing headings from the display role and app headings from the text face", () => {
+    const faces = { ...shippedFaces, display: { kind: "google", family: "Example Display", weights: [700] } } as Record<
+      FaceRole,
+      FaceChoice
+    >;
+    const vars = themeVars(SHIPPED, faces);
+    expect(vars["--ox-font-display"]).toBe(fontStack("display", faces.display));
+    expect(vars["--ox-font-heading"]).toBe(vars["--ox-font"]);
+    expect(vars["--ox-font-wordmark"]).toBe(WORDMARK_STACK);
   });
 
   it("gives another kit face its own fallback, as the request names it", () => {
@@ -109,5 +125,31 @@ describe("lengths", () => {
     expect(remPx("1120px")).toBe(1120);
     expect(pxRem(72)).toBe("4.5rem");
     expect(pxRem(13)).toBe("0.8125rem");
+  });
+});
+
+describe("type sizes", () => {
+  it("accepts the shipped scales", () => {
+    expect(typeProblems(SHIPPED)).toEqual([]);
+  });
+
+  it("refuses any step below 14px, the micro steps too", () => {
+    expect(TYPE_FLOOR_PX).toBe(14);
+    const theme = clone(SHIPPED);
+    theme.type.scales.app.micro.size = pxRem(12);
+    theme.type.scales.marketing.body.size = pxRem(13);
+    const found = typeProblems(theme);
+    expect(found.some((p) => p.startsWith("The app micro is 12px."))).toBe(true);
+    expect(found.some((p) => p.startsWith("The marketing body is 13px."))).toBe(true);
+  });
+
+  it("keeps the shipped steps at or above the floor", () => {
+    for (const scale of ["marketing", "app"] as const) {
+      for (const step of Object.values(SHIPPED.type.scales[scale])) {
+        expect(remPx(step.size)).toBeGreaterThanOrEqual(TYPE_FLOOR_PX);
+      }
+    }
+    expect(remPx(SHIPPED.type.scales.marketing.body.size)).toBe(16);
+    expect(remPx(SHIPPED.type.scales.app.body.size)).toBe(14);
   });
 });

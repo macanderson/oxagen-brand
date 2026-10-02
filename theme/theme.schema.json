@@ -159,7 +159,7 @@
       }
     },
     "faces": {
-      "description": "The face each type role takes. A role's CSS variable is --font-<role>. display and sans may name the same family, and then they must list the same files, fallback, and features.",
+      "description": "The face each type role takes. A role's CSS variable is --font-<role>. Two roles may name the same family, and then they must list the same files, fallback, and features. The shipped theme gives display the wordmark's family, Space Grotesk.",
       "type": "object",
       "required": [
         "wordmark",
@@ -170,7 +170,7 @@
       "additionalProperties": false,
       "properties": {
         "wordmark": {
-          "description": "The face of both wordmarks, Stella's asterisk icon, and line 1 of a marketing hero. It is fixed: Space Grotesk, drawn from SpaceGrotesk-VariableFont_wght.ttf at weight 600. build/theme.py refuses any other family, outline file, or weight, and a theme request cannot name this role.",
+          "description": "The face of both wordmarks and Stella's asterisk icon, read as --ox-font-wordmark. It is fixed: Space Grotesk, drawn from SpaceGrotesk-VariableFont_wght.ttf at weight 600. build/theme.py refuses any other family, outline file, or weight, and a theme request cannot name this role.",
           "type": "object",
           "required": [
             "family",
@@ -223,11 +223,11 @@
           }
         },
         "display": {
-          "description": "The face of every heading, h1 to h6.",
+          "description": "The face of h1 to h3 on a marketing or customer site, read as --ox-font-display and --font-display. The theme editor offers it as Marketing headings. App headings and every h4 to h6 take the sans face. A heading step that can take this face is 20px or more.",
           "$ref": "#/$defs/face"
         },
         "sans": {
-          "description": "The face of everything read: body, labels, buttons, tables, and navigation. The build outlines the lines of text in ads, social cards, and content cards from its outline file.",
+          "description": "The face of everything read: body, labels, buttons, tables, navigation, every app heading, and every h4 to h6. The build outlines the lines of text in ads, social cards, and content cards from its outline file.",
           "type": "object",
           "required": [
             "family",
@@ -467,7 +467,7 @@
           }
         },
         "scales": {
-          "description": "The two size scales. marketing is large and spaced, for a page read once. app is dense, for panels, tables, and logs read all day. Each step's size must be smaller than the step above it.",
+          "description": "The two size scales. marketing is large and spaced, for a page read once. app is dense, for panels, tables, and logs read all day. No step is larger than the step above it, and every step on both scales is 14px (0.875rem) or more. build/theme.py refuses a smaller step.",
           "type": "object",
           "required": [
             "marketing",
@@ -778,7 +778,7 @@
       "additionalProperties": false,
       "properties": {
         "size": {
-          "description": "The font size. It must be a whole number of pixels.",
+          "description": "The font size. It must be a whole number of pixels, and 14px (0.875rem) or more.",
           "$ref": "#/$defs/rem"
         },
         "leading": {

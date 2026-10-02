@@ -151,22 +151,14 @@ def _wrap(text: str, width: int = 73) -> list[str]:
     return lines + [line]
 
 
-def _headings_and_text() -> str:
-    if T.HEADING_FACE is T.TEXT_FACE:
-        return f"Every heading and all text take {T.TEXT_FACE.family}"
-    return f"Every heading takes {T.HEADING_FACE.family}, all text takes {T.TEXT_FACE.family}"
-
-
 def _faces_note() -> list[str]:
     """The header's sentence on which face sets what."""
-    if T.HEADING_FACE is T.TEXT_FACE:
-        lead = f"{T.TEXT_FACE.family} sets every heading and everything read."
-    else:
-        lead = f"{T.HEADING_FACE.family} sets every heading. {T.TEXT_FACE.family} sets everything read."
     return _wrap(
-        f"{lead} {T.CODE_FACE.family} sets code, logs, digests, and the numbers in tables. "
-        f"{T.WORDMARK_FACE.family} sets the wordmarks and line 1 of a marketing hero. "
-        f"On the website it also sets every h1, h2, and h3, and the site's own stylesheet applies that."
+        f"{T.TEXT_FACE.family} sets the default text on every surface, h1 to h3 in the app and the internal tools, "
+        f"and every h4 to h6. {T.DISPLAY_FACE.family} sets h1 to h3 on the marketing and customer sites "
+        f"(--ox-font-display). {T.CODE_FACE.family} sets code, logs, digests, and the numbers in tables. "
+        f"{T.WORDMARK_FACE.family} sets the wordmarks (--ox-font-wordmark), and that face is fixed. "
+        f"No type step is below {T.TYPE_FLOOR_PX}px."
     )
 
 
@@ -271,13 +263,14 @@ def house_tokens_css() -> str:
         f"{C.GOLD_BRIGHT} 56%, {C.GOLD} 74%, {C.GOLD_DEEP} 100%);",
         "",
     ]
-    for face in T.FACES:
-        if face.key == "heading":
-            continue  # written below, as every theme's heading face is
-        var = "--ox-font" if face.key == "sans" else f"--ox-font-{face.key}"
-        lines.append(f"  {var}: {face.css_stack}; /* {face.job} */")
-    lines.append(f"  --ox-font-heading: {T.HEADING_FACE.css_stack}; /* every heading, h1 to h6 */")
-    lines.append(f"  --ox-font-mono-features: {T.FACE['mono'].features}; /* texture healing and code ligatures */")
+    lines += [
+        f"  --ox-font-display: {T.DISPLAY_FACE.css_stack}; /* {T.DISPLAY_FACE.job} */",
+        f"  --ox-font: {T.TEXT_FACE.css_stack}; /* {T.TEXT_FACE.job} */",
+        f"  --ox-font-mono: {T.CODE_FACE.css_stack}; /* {T.CODE_FACE.job} */",
+        f"  --ox-font-heading: {T.TEXT_FACE.css_stack}; /* app h1 to h3 and every h4 to h6: the text face */",
+        f"  --ox-font-wordmark: {T.WORDMARK_FACE.css_stack}; /* {T.WORDMARK_FACE.job} */",
+        f"  --ox-font-mono-features: {T.CODE_FACE.features}; /* texture healing and code ligatures */",
+    ]
     lines.append("")
     for job, w in T.WEIGHTS.items():
         lines.append(f"  --ox-weight-{job}: {w};")
@@ -353,25 +346,24 @@ def house_tailwind_css() -> str:
         ),
         "",
         *_wrap(
-            "Type: text-m-* is the marketing scale, text-a-* the app scale. A surface picks one. "
-            + _headings_and_text()
-            + f", and code takes {T.CODE_FACE.family} with texture healing on, whichever scale is in use."
+            "Type: text-m-* is the marketing scale, text-a-* the app scale. A surface picks one."
+            f" {T.TEXT_FACE.family} sets the default text everywhere, and {T.CODE_FACE.family} sets code"
+            " with texture healing on. No step on either scale is below"
+            f" {T.TYPE_FLOOR_PX}px, and text-xs and text-sm read the app body step, so they cannot go below it either."
         ),
         "",
-        f"{T.WORDMARK_FACE.family} reaches a page two ways. --font-wordmark sets a wordmark",
-        f"that is text rather than an SVG. The {T.HERO_CLASS} class sets line 1 of",
-        "a marketing hero, inside a text-m-h1 heading:",
+        *_wrap(
+            f"Headings: text-m-h1 to text-m-h3 set {T.DISPLAY_FACE.family} (--font-display), for a marketing"
+            f" or customer site. text-a-h1 to text-a-h3, and bare h1 to h3, read --font-heading, which is"
+            f" {T.TEXT_FACE.family} (--font-sans) for an app. A marketing or docs site sets its h1 to h3 in"
+            " the display face with one line in its own stylesheet:"
+        ),
         "",
-        f'    <h1 class="text-m-h1"><span class="{T.HERO_CLASS}">Line one</span><br>Line two</h1>',
-        "",
-        "text-m-h1 points --font-hero at the wordmark face for its own contents.",
-        f"Everywhere else --font-hero is the heading face, so {T.HERO_CLASS} in the",
-        f"app, in a text-a-h1, or on any other heading draws in {T.HEADING_FACE.family}.",
+        f"    :root {{ {T.MARKETING_HEADINGS}; }}",
         "",
         *_wrap(
-            f"On the website, {T.WORDMARK_FACE.family} also sets every h1, h2, and h3."
-            " The site's own stylesheet points those headings at --font-wordmark."
-            " The text-m-* steps here still read --font-display."
+            f"Every h4 to h6, and text-m-h4 and text-a-h4, take {T.TEXT_FACE.family}. --font-wordmark sets a"
+            f" wordmark that is text rather than an SVG, in {T.WORDMARK_FACE.family}, whatever face --font-display takes."
         ),
     )
     out = "\n".join(lines) + "\n\n"
@@ -392,10 +384,17 @@ def house_tailwind_css() -> str:
         out += f"  --color-ox-{var}-text-ink: var(--ox-{var}-text-ink);\n"
     out += "\n"
     for role in T.ROLES:
-        if role.key == "hero":
-            continue  # set in the base layer below, so a hero step can redefine it
+        if role.reads:
+            out += f"  --font-{role.key}: var(--font-{role.reads}); /* {role.job} */\n"
+            continue
         face = T.FACE[role.face]
         out += f"  --font-{role.key}: var({face.next_var}, \"{face.family}\"), {face.stack}; /* {role.job} */\n"
+    out += "\n"
+    # Tailwind's two named sizes below the floor read the floor, so a text-xs
+    # or text-sm class cannot set text under it.
+    for name in ("xs", "sm"):
+        out += f"  --text-{name}: var(--ox-a-body); /* {T.APP.step('body').px}px, the app body step */\n"
+        out += f"  --text-{name}--line-height: var(--ox-a-body-leading);\n"
     out += "\n"
     for job, t in T.TRACKING.items():
         out += f"  --tracking-{job}: {t};\n"
@@ -421,8 +420,6 @@ def house_tailwind_css() -> str:
 
     # 3. element routing: which face each element takes, whatever the scale
     out += "\n"
-    out += f"  /* {T.ROLE['hero'].job} */\n"
-    out += f"  :root {{ --font-hero: var(--font-{T.HERO_ROLE_OUTSIDE}); }}\n"
     for route in T.ROUTING:
         decl = "; ".join((f"font-family: var(--font-{route.role})", *route.extra)) + ";"
         out += f"  {route.elements} {{ {decl} }}\n"
@@ -446,9 +443,6 @@ def house_tailwind_css() -> str:
         for st in scale.steps:
             out += f"@utility text-{scale.key}-{st.name} {{ {T.step_css(st, scale.key)} }}\n"
         out += "\n"
-    admitted = " and ".join(f"text-{s.key}-{st.name}" for s in T.SCALES for st in s.steps if st.hero)
-    out += f"/* line 1 of a hero: {T.WORDMARK_FACE.family} inside {admitted}, {T.HEADING_FACE.family} everywhere else */\n"
-    out += f"@utility {T.HERO_CLASS} {{ font-family: var(--font-hero); }}\n\n"
     out += "/* the code face with texture healing, for anything not already routed */\n"
     out += f"@utility font-code {{ font-family: var(--font-mono); font-feature-settings: {T.FACE['mono'].features}; }}\n"
     return out
@@ -462,15 +456,10 @@ def _export_name(family: str) -> str:
 
 def next_fonts_ts() -> str:
     fb = lambda face: ", ".join(f'"{s.strip().strip(chr(34))}"' for s in face.stack.split(",") if "monospace" not in s and "sans-serif" not in s)  # noqa: E731
-    reads = (
-        f"reads {T.TEXT_FACE.family} into --font-sans and --font-display, "
-        if T.HEADING_FACE is T.TEXT_FACE
-        else f"reads {T.TEXT_FACE.family} into --font-sans, {T.HEADING_FACE.family} into --font-display, "
-    )
     tail = _wrap(
         "Each loader sets one CSS variable on <html>. tokens/house-tailwind.css "
-        + reads
-        + f"{T.CODE_FACE.family} into --font-mono, and {T.WORDMARK_FACE.family} into --font-wordmark and a marketing hero."
+        f"reads {T.TEXT_FACE.family} into --font-sans, {T.DISPLAY_FACE.family} into --font-display, "
+        f"{T.CODE_FACE.family} into --font-mono, and {T.WORDMARK_FACE.family} into --font-wordmark."
     )
     if T.EXTRA_FACES:
         tail += [""] + _wrap(
@@ -492,7 +481,9 @@ def next_fonts_ts() -> str:
         'import localFont from "next/font/local";\n\n'
     )
     for face in T.LOADED_FACES:
-        out += f"/** {face.family}: {face.job}. */\n"
+        jobs = [f.job for f in dict.fromkeys(T.FACE.values()) if f.family == face.family] or [face.job]
+        also = "".join(f" It also sets {j}." for j in jobs[1:])
+        out += f"/** {face.family}: {jobs[0]}.{also} */\n"
         out += f"export const {_export_name(face.family)} = localFont({{\n"
         if len(face.files) == 1 and face.files[0][2] == "normal":
             file, w, _ = face.files[0]
@@ -1096,11 +1087,12 @@ def check(drift_check: bool = True) -> int:
         print(f"check: gold {C.GOLD}, with bright {C.GOLD_BRIGHT} and deep {C.GOLD_DEEP} derived from it in OKLCH")
         print("check: every text token clears AA on its ground")
         print(f"check: {len(T.FACES)} role faces and {len(T.EXTRA_FACES)} extra faces in fonts/, {len(T.SCALES)} type scales, "
-              f"every heading in {T.HEADING_FACE.family}, {T.WORDMARK_FACE.family} on the wordmarks and a marketing hero only")
+              f"marketing h1 to h3 in {T.DISPLAY_FACE.family}, app h1 to h3 and every h4 to h6 in {T.TEXT_FACE.family}, "
+              f"code in {T.CODE_FACE.family}, every step {T.TYPE_FLOOR_PX}px or more")
         if drift_check:
             print("check: every generated file, the skill's tokens, and playbook.html match theme/theme.json")
-            print(f"check: {CL.KIT_CSS} reads every corner, shadow, font size, and heading line height from a token, "
-                  f"apart from {len(CL.KEEP)} kept literal{'s' if len(CL.KEEP) != 1 else ''}")
+            for line in CL.summary():
+                print(f"check: {line}")
     return 1 if problems else 0
 
 

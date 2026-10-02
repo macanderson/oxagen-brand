@@ -38,7 +38,7 @@ describe("Stat render", () => {
     render(<Stat label="Spend" value="$12.40" />);
     const value = screen.getByText("$12.40");
     expect(value.className).toContain("tabular-nums");
-    expect(value.className).toContain("text-[23px]");
+    expect(value.className).toContain("text-(length:--ox-a-h2)");
   });
 
   it("up trend derives a positive (success) delta with an arrow", () => {

@@ -12,7 +12,7 @@ import { Skeleton } from "./skeleton";
 
 /*
  * Stat is the shared figure tile, the mockup's `.stat`: a panel card with a
- * dim caps label, a 23px tabular figure and a muted note under it. It carries
+ * dim caps label, a 24px tabular figure and a muted note under it. It carries
  * usage meters, billing totals and run counts. The value uses tabular
  * numerals so a live figure does not jitter. `StatGroup` is the strip a page
  * lays tiles in (`.grid.g4`): tiles at least 175px wide with a 14px gap, and
@@ -130,7 +130,7 @@ const Stat = React.forwardRef<HTMLDivElement, StatProps>(
             {(delta != null || TrendIcon) && (
               <span
                 className={cn(
-                  "inline-flex items-center gap-0.5 text-[11.5px] font-medium tabular-nums",
+                  "inline-flex items-center gap-0.5 text-sm font-medium tabular-nums",
                   intentClass[resolvedIntent],
                 )}
               >

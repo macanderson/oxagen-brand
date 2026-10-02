@@ -101,7 +101,7 @@ export function SubmitButton({
 
 export type OutcomeTone = "ok" | "deny" | "neutral";
 
-const OUTCOME_TITLE = "text-lg font-semibold text-foreground";
+const OUTCOME_TITLE = "text-(length:--ox-a-h3) font-semibold text-foreground";
 
 const toneClass: Record<OutcomeTone, string> = {
   ok: "border-success/45 bg-success/10 text-success",

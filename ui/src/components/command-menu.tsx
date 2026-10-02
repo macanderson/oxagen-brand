@@ -65,7 +65,7 @@ const CommandMenuTrigger = React.forwardRef<
     ref={ref}
     aria-keyshortcuts="Meta+K Control+K"
     className={cn(
-      "inline-flex h-9 min-w-[190px] cursor-pointer items-center gap-2 rounded-4xl border border-border bg-card px-3 text-[12.5px] text-muted-foreground transition-colors outline-none hover:border-rule hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+      "inline-flex h-9 min-w-[190px] cursor-pointer items-center gap-2 rounded-4xl border border-border bg-card px-3 text-sm text-muted-foreground transition-colors outline-none hover:border-rule hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
       className,
     )}
     {...props}
@@ -86,7 +86,7 @@ const CommandMenuShortcut = ({
 }: React.HTMLAttributes<HTMLElement>) => (
   <kbd
     className={cn(
-      "rounded-sm border border-border bg-hl px-[5px] py-px font-mono text-[10.5px] leading-normal text-muted-foreground",
+      "rounded-sm border border-border bg-hl px-[5px] py-px font-mono text-sm leading-normal text-muted-foreground",
       className,
     )}
     {...props}
@@ -247,7 +247,7 @@ const CommandMenuItem = React.forwardRef<HTMLDivElement, CommandMenuItemProps>(
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-semibold">{children}</span>
         {detail ? (
-          <span className="block truncate font-mono text-[11px] text-muted-foreground">
+          <span className="block truncate font-mono text-sm text-muted-foreground">
             {detail}
           </span>
         ) : null}
@@ -269,7 +269,7 @@ const CommandMenuEmpty = React.forwardRef<
   <AutocompletePrimitive.Empty
     ref={ref}
     className={cn(
-      "text-[12.5px] text-muted-foreground [&:not(:empty)]:px-2.5 [&:not(:empty)]:py-3.5",
+      "text-sm text-muted-foreground [&:not(:empty)]:px-2.5 [&:not(:empty)]:py-3.5",
       className,
     )}
     {...props}

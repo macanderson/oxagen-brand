@@ -71,7 +71,7 @@ const REMARK_PLUGINS = [...Object.values(defaultRemarkPlugins), htmlAsText];
  * keeps its weight. Wide tables and code scroll inside themselves.
  */
 const PROSE_CLASS =
-  "max-w-none text-sm text-foreground [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_h1]:text-base [&_h2]:text-base [&_h3]:text-sm [&_h4]:text-sm [&_h5]:text-sm [&_h6]:text-sm [&_li]:py-0.5 [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto";
+  "max-w-none text-sm text-foreground [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_h1]:text-(length:--ox-a-h4) [&_h2]:text-(length:--ox-a-h4) [&_h3]:text-sm [&_h4]:text-sm [&_h5]:text-sm [&_h6]:text-sm [&_li]:py-0.5 [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto";
 
 const COMPONENTS = { img: InertImage };
 

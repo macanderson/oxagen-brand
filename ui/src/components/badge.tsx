@@ -55,8 +55,8 @@ const badgeVariants = cva(
       // coss ui adds size variants for density control. `lg` matches the fixed
       // shadcn/ui badge size.
       size: {
-        sm: "px-1.5 py-0 text-[10px]",
-        default: "px-[7px] py-0.5 text-[11px]",
+        sm: "px-1.5 py-0 text-sm",
+        default: "px-[7px] py-0.5 text-sm",
         lg: "px-2.5 py-0.5 text-xs",
       },
     },

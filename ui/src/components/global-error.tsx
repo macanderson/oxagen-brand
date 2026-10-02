@@ -50,13 +50,13 @@ export function GlobalErrorPage({
             textAlign: "center",
           }}
         >
-          <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0 }}>
+          <h1 style={{ fontSize: "var(--ox-a-h3, 1.25rem)", fontWeight: 600, margin: 0 }}>
             Something went wrong
           </h1>
           <p
             style={{
               marginTop: "0.5rem",
-              fontSize: "0.875rem",
+              fontSize: "var(--ox-a-body, 0.875rem)",
               color: "#27272A",
             }}
           >
@@ -67,7 +67,7 @@ export function GlobalErrorPage({
             <p
               style={{
                 marginTop: "0.75rem",
-                fontSize: "0.75rem",
+                fontSize: "var(--ox-a-body, 0.875rem)",
                 color: "#71717A",
                 fontFamily:
                   '"Monaspace Neon", ui-monospace, SFMono-Regular, monospace',
@@ -87,7 +87,7 @@ export function GlobalErrorPage({
               border: "none",
               background: "#D4AF37",
               color: "#09090B",
-              fontSize: "0.875rem",
+              fontSize: "var(--ox-a-body, 0.875rem)",
               fontWeight: 500,
               cursor: "pointer",
             }}

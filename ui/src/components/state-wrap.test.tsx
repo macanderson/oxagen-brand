@@ -48,14 +48,14 @@ describe("StateWrap", () => {
       level: 2,
       name: "No runs yet",
     });
-    expect(heading).toHaveClass("mb-[7px]", "text-lg", "font-semibold");
+    expect(heading).toHaveClass("mb-[7px]", "text-(length:--ox-a-h3)", "font-semibold");
     expect(state).toHaveAttribute("aria-labelledby", heading.id);
     expect(heading.id).toBe("probe-title");
     const body = within(state).getByText(
       "Nothing has reached Oxagen from this workspace.",
     );
     expect(body.tagName).toBe("P");
-    expect(body).toHaveClass("max-w-[52ch]", "text-[13px]");
+    expect(body).toHaveClass("max-w-[52ch]", "text-sm");
     expect(
       within(state).getByRole("button", { name: "Register an agent" })
         .parentElement,
@@ -172,7 +172,7 @@ describe("StateWrap", () => {
     const state = screen.getByTestId("after");
     expect(within(state).getByText("2026-09-11 09:16:04Z")).toHaveClass(
       "font-mono",
-      "text-[11.5px]",
+      "text-sm",
       "text-dim",
       "mt-4",
     );

@@ -33,13 +33,19 @@ with its own bundler. The design-system bundle below is the one compiled form.
 
 1. Composition uses the `render` prop. Radix `asChild` does not exist here.
 2. Overlay parts are named `*Popup` or `*Panel`.
-3. Reskin by editing tokens. A component class string never names a hex, a
-   Tailwind palette colour, or a house token.
+3. Reskin by editing tokens. A component class string never names a hex or a
+   Tailwind palette colour. It names a house token only to read a type step,
+   as `text-(length:--ox-a-h4)` does.
 4. Icons come from `@phosphor-icons/react`, regular weight, with the `Icon`
    suffix: `import { XIcon } from "@phosphor-icons/react"`.
 5. Overlays animate on Base UI's `data-[starting-style]` and
    `data-[ending-style]`.
 6. Every component has a story for each state it draws.
+7. Every font size reads a token. A class reads a step through a house utility
+   (`text-a-h3`), `text-sm`, or `text-(length:--ox-<step>)`, and never sets a
+   size of its own, such as `text-[13px]`. No text is below 14px, so a badge
+   or an eyebrow stands apart by case, tracking, weight, or colour.
+   `build/build.py --check` fails on a hard-coded size.
 
 ```tsx
 <Button render={<Link href="/login" />}>Log in</Button>
@@ -121,7 +127,7 @@ Import from `@oxagen/ui`.
 
 | Story | Shows |
 |---|---|
-| Typography | the app type scale, the three house faces, and their roles |
+| Typography | the app and marketing type scales, and the h1 to h3 face on each surface |
 | Icons | the Phosphor icons the kit uses, by the name it uses them under |
 
 ### Primitives

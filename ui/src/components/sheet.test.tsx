@@ -107,7 +107,7 @@ describe("Sheet drawer recipe", () => {
   it("rules the header, sets the title at 17px and pads the body", () => {
     const { getByText } = render(<OpenSheet />);
     const title = getByText("Sheet Title");
-    expect(title.className).toContain("text-[17px]");
+    expect(title.className).toContain("text-(length:--ox-a-h4)");
     const header = title.parentElement;
     expect(header?.className).toContain("border-b");
     expect(header?.className).toContain("py-[14px]");

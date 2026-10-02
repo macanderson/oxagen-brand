@@ -11,6 +11,11 @@
 // renders it. Every colour, face, radius, and shadow here comes from a kit
 // token or recipe, so a change to a token reaches the pages with no edit.
 //
+// Type follows the house rule. The website's h1 to h3 wear text-m-h1 to
+// text-m-h3, which set Space Grotesk, and its body text is 16px. The app's
+// headings wear text-a-*, which read --font-heading (Aeonik), and its body
+// text is 14px. No text is below 14px.
+//
 // Glass appears only where the kit's rule allows it: the sticky nav and
 // header take `glassBar`, and the menus, popovers, the command menu, and the
 // toast take `floatingSurface` through their own components. Cards and
@@ -113,7 +118,7 @@ function ProductMenuRow({ label, line, icon: RowIcon }: ProductPage) {
       <RowIcon className="mt-0.5 text-muted-foreground" aria-hidden />
       <span className="min-w-0">
         <span className="block font-medium text-foreground">{label}</span>
-        <span className="block text-[13px] leading-snug text-muted-foreground">
+        <span className="block text-sm leading-snug text-muted-foreground">
           {line}
         </span>
       </span>
@@ -228,7 +233,7 @@ export function SiteSection({
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-[44rem]">
             <p className={eyebrowQuiet}>{eyebrow}</p>
-            <h2 className="mt-3 text-m-h2 text-foreground max-md:text-[2rem]">
+            <h2 className="mt-3 text-m-h2 text-foreground max-md:text-(length:--ox-m-h3)">
               {title}
             </h2>
             {lead ? (
@@ -270,7 +275,7 @@ export function SiteCard({
 }) {
   return (
     <article className={cn(panel, "flex flex-col p-6")}>
-      <h3 className="text-m-h4 font-semibold text-foreground">{title}</h3>
+      <h3 className="text-m-h3 text-foreground">{title}</h3>
       {meta ? (
         <p className="mt-1 text-sm text-muted-foreground">{meta}</p>
       ) : null}
@@ -421,7 +426,7 @@ export function AppShell({
             className="flex h-10 w-full items-center gap-2.5 rounded-xl border border-border bg-card px-3 text-left text-sm text-foreground transition-colors hover:bg-hl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             <span className="min-w-0 flex-1">
-              <span className="block text-[11px] text-muted-foreground">
+              <span className="block text-sm text-muted-foreground">
                 Workspace
               </span>
               <span className="block truncate font-medium leading-tight">
@@ -507,7 +512,7 @@ export function AppHeader({
       <div className="flex min-h-16 flex-wrap items-center gap-x-4 gap-y-2 px-6 py-3">
         <div className="min-w-0 flex-1">
           {eyebrow ? (
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-foreground">
               {eyebrow}
             </p>
           ) : null}

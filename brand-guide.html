@@ -12,7 +12,10 @@
 /* Layout: one reading column on the obsidian canvas, wide tables allowed to scroll inside it.
    Colours come from the kit's tokens (tokens/house-tokens.css); the hex after each var() is the
    fallback for a viewer that cannot load that file. Gold is identity only: the two marks. State
-   is shown by border shape: double for works, dashed for pending, single for broken. */
+   is shown by border shape: double for works, dashed for pending, single for broken.
+   This is a public page, so it reads the marketing type steps (--ox-m-*): h1 to h3 in Space
+   Grotesk, all other text in Aeonik with body at 16px, code in Monaspace Neon, and no text
+   below 14px. */
 :root {
   --bg: var(--ox-ink, #09090B);
   --panel: var(--ox-panel, #18181B);
@@ -25,6 +28,7 @@
   --show-dark: inline-block;
   --show-light: none;
   --sans: var(--ox-font, "Aeonik", system-ui, -apple-system, "Segoe UI", sans-serif);
+  --display: var(--ox-font-display, "Space Grotesk", "Helvetica Neue", Arial, sans-serif);
   --mono: var(--ox-font-mono, "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace);
   --radius: var(--ox-radius, 0.75rem);
   color-scheme: dark;
@@ -64,20 +68,20 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--body);
-  font: 400 1rem/1.6 var(--sans);
+  font: 400 var(--ox-m-body, 1rem)/var(--ox-m-body-leading, 1.625) var(--sans);
   padding-inline: 16px;
 }
 .wrap { max-width: 920px; margin-inline: auto; padding-block: 40px 72px; }
-h1, h2, h3 { color: var(--fg); font-family: var(--sans); text-wrap: balance; }
-h1 { font-size: var(--ox-m-h2, 2.5rem); line-height: 1.15; font-weight: 600; letter-spacing: var(--ox-tracking-display, -0.02em); margin: 0; }
-h2 { font-size: var(--ox-m-h3, 1.75rem); line-height: 1.3; font-weight: 600; letter-spacing: var(--ox-tracking-heading, -0.01em); margin: 0; }
-h3 { font-size: var(--ox-m-h4, 1.25rem); line-height: 1.4; font-weight: 600; margin: 0; }
+h1, h2, h3 { color: var(--fg); font-family: var(--display); text-wrap: balance; }
+h1 { font-size: var(--ox-m-h2, 2.5rem); line-height: var(--ox-m-h2-leading, 1.2); font-weight: 600; letter-spacing: var(--ox-tracking-display, -0.02em); margin: 0; }
+h2 { font-size: var(--ox-m-h3, 1.75rem); line-height: var(--ox-m-h3-leading, 1.3); font-weight: 600; letter-spacing: var(--ox-tracking-heading, -0.01em); margin: 0; }
+h3 { font-size: var(--ox-m-h4, 1.25rem); line-height: var(--ox-m-h4-leading, 1.4); font-weight: 600; margin: 0; }
 p { margin: 0; max-width: 68ch; }
 a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
 a:hover { text-decoration-color: var(--fg); }
 :focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; border-radius: 4px; }
 code, kbd, pre { font-family: var(--mono); font-feature-settings: var(--ox-font-mono-features, "calt", "liga"); }
-code { font-size: 0.875em; background: var(--lift); padding: 0.1em 0.35em; border-radius: 4px; color: var(--fg); overflow-wrap: anywhere; }
+code { font-size: var(--ox-m-micro, 0.875rem); background: var(--lift); padding: 0.1em 0.35em; border-radius: 4px; color: var(--fg); overflow-wrap: anywhere; }
 ul, ol { margin: 0; padding-left: 1.25rem; display: grid; gap: 8px; }
 li { max-width: 68ch; }
 li::marker { color: var(--muted); }
@@ -87,22 +91,22 @@ li::marker { color: var(--muted); }
 .marks img { height: 22px; width: auto; }
 .mark-dark { display: var(--show-dark); }
 .mark-light { display: var(--show-light); }
-.lede { font-size: 1.125rem; color: var(--body); margin-top: 16px; }
-.meta { color: var(--muted); font-size: 0.875rem; margin-top: 12px; }
+.lede { font-size: var(--ox-m-body, 1rem); color: var(--body); margin-top: 16px; }
+.meta { color: var(--muted); font-size: var(--ox-m-micro, 0.875rem); margin-top: 12px; }
 nav.toc { margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 12px; }
 nav.toc ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 20px; }
-nav.toc a { color: var(--muted); text-decoration: none; font-size: 0.9375rem; }
+nav.toc a { color: var(--muted); text-decoration: none; font-size: var(--ox-m-body, 1rem); }
 nav.toc a:hover { color: var(--fg); }
 
 section { margin-top: 64px; display: grid; gap: 20px; }
 section > .sub { color: var(--muted); }
 
 /* state chips: shape carries the state */
-.chip { display: inline-flex; align-items: center; justify-content: center; min-width: 76px; padding: 2px 10px; border-radius: 999px; font-size: 0.8125rem; font-weight: 500; color: var(--fg); white-space: nowrap; }
+.chip { display: inline-flex; align-items: center; justify-content: center; min-width: 76px; padding: 2px 10px; border-radius: 999px; font-size: var(--ox-m-micro, 0.875rem); font-weight: 500; color: var(--fg); white-space: nowrap; }
 .chip.works { border: 3px double var(--muted); }
 .chip.pending { border: 1px dashed var(--muted); }
 .chip.broken { border: 1px solid var(--fg); }
-.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--muted); font-size: 0.875rem; align-items: center; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--muted); font-size: var(--ox-m-micro, 0.875rem); align-items: center; }
 .legend span { display: inline-flex; gap: 8px; align-items: center; }
 
 .status { display: grid; border: 1px solid var(--line); border-radius: var(--radius); }
@@ -117,16 +121,16 @@ section > .sub { color: var(--muted); }
 /* steps */
 ol.steps { counter-reset: step; list-style: none; padding: 0; gap: 18px; }
 ol.steps > li { counter-increment: step; display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 4px 12px; max-width: none; }
-ol.steps > li::before { content: counter(step); grid-row: 1 / span 3; width: 28px; height: 28px; border: 1px solid var(--rule); border-radius: 999px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.8125rem; color: var(--fg); font-variant-numeric: tabular-nums; }
+ol.steps > li::before { content: counter(step); grid-row: 1 / span 3; width: 28px; height: 28px; border: 1px solid var(--rule); border-radius: 999px; display: grid; place-items: center; font-family: var(--mono); font-size: var(--ox-m-micro, 0.875rem); color: var(--fg); font-variant-numeric: tabular-nums; }
 ol.steps > li > * { grid-column: 2; min-width: 0; }
 ol.steps strong { color: var(--fg); font-weight: 600; }
 
 /* command and prompt blocks */
 .copybox { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
-.copybox pre { margin: 0; padding: 14px 92px 14px 16px; overflow-x: auto; font-size: 0.875rem; line-height: 1.55; color: var(--fg); white-space: pre; }
-.copybox.prompt pre { white-space: pre-wrap; font-family: var(--sans); font-size: 0.9375rem; }
-.copybox .label { display: block; padding: 10px 16px 0; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.copybox button { position: absolute; top: 8px; right: 8px; font: 500 0.8125rem/1 var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 7px 10px; cursor: pointer; }
+.copybox pre { margin: 0; padding: 14px 92px 14px 16px; overflow-x: auto; font-size: var(--ox-m-micro, 0.875rem); line-height: 1.55; color: var(--fg); white-space: pre; }
+.copybox.prompt pre { white-space: pre-wrap; font-family: var(--sans); font-size: var(--ox-m-body, 1rem); }
+.copybox .label { display: block; padding: 10px 16px 0; font-size: var(--ox-m-micro, 0.875rem); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.copybox button { position: absolute; top: 8px; right: 8px; font: 500 var(--ox-m-micro, 0.875rem)/1 var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 7px 10px; cursor: pointer; }
 .copybox button:hover { border-color: var(--fg); }
 
 .note { border-left: 2px solid var(--rule); padding: 4px 0 4px 14px; color: var(--body); }
@@ -135,31 +139,30 @@ ol.steps strong { color: var(--fg); font-weight: 600; }
 /* flow diagram */
 .flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .lane { display: grid; gap: 10px; align-content: start; }
-.lane h3 { font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
 .step { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; background: var(--panel); display: grid; gap: 6px; }
 .step b { color: var(--fg); font-weight: 500; }
-.step small { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }
+.step small { color: var(--muted); font-size: var(--ox-m-micro, 0.875rem); line-height: 1.45; }
 .step.blocked { border-style: dashed; border-color: var(--rule); background: transparent; }
 @media (max-width: 720px) { .flow { grid-template-columns: minmax(0, 1fr); } }
 
 /* tables */
 .table { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
-table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+table { border-collapse: collapse; width: 100%; font-size: var(--ox-m-body, 1rem); }
 th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
 tr:last-child td { border-bottom: 0; }
-th { color: var(--muted); font-weight: 500; font-size: 0.8125rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+th { color: var(--muted); font-weight: 500; font-size: var(--ox-m-micro, 0.875rem); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
 td:first-child { color: var(--fg); }
 td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
 .repos td { min-width: 140px; }
-.repos td:first-child { min-width: 150px; font-family: var(--mono); font-size: 0.875rem; }
+.repos td:first-child { min-width: 150px; font-family: var(--mono); font-size: var(--ox-m-micro, 0.875rem); }
 
 .icons { display: flex; flex-wrap: wrap; gap: 16px; }
 .icon-card { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 14px; align-items: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; flex: 1 1 260px; }
 .icon-card img { width: 64px; height: 64px; grid-row: 1 / span 2; }
 .icon-card b { color: var(--fg); font-weight: 600; }
-.icon-card span { color: var(--muted); font-size: 0.875rem; }
+.icon-card span { color: var(--muted); font-size: var(--ox-m-micro, 0.875rem); }
 
-footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
+footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--ox-m-micro, 0.875rem); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -265,14 +268,14 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
         <tr><td><code>radius</code></td><td>The base every corner multiplies, each step's multiplier, the step a card takes, and the website's corner.</td></tr>
         <tr><td><code>shadow</code></td><td>The shadow under a control and the shadow under a floating surface, each on ink and on paper.</td></tr>
         <tr><td><code>spacing</code></td><td>The spacing unit and the page width.</td></tr>
-        <tr><td><code>type</code></td><td>The weights, the tracking, and the marketing and app scales.</td></tr>
+        <tr><td><code>type</code></td><td>The weights, the tracking, and the marketing and app scales. Body text is 16px on the marketing scale and 14px on the app scale. No step is below 14px.</td></tr>
       </tbody>
     </table>
   </div>
   <ol class="steps">
     <li><strong>Edit the theme.</strong><p>Change the field in <code>theme/theme.json</code>. <code>theme/theme.schema.json</code> describes each one.</p></li>
     <li><strong>Run the generators.</strong><p><code>.venv/bin/python build/build.py</code>, then <code>build/playbook.py</code> and <code>build/messages.py</code>.</p></li>
-    <li><strong>Run the check.</strong><p><code>.venv/bin/python build/build.py --check</code> fails when the theme does not match its schema, when a colour drops below 4.5:1 contrast, or when a generated file differs from what the theme produces.</p></li>
+    <li><strong>Run the check.</strong><p><code>.venv/bin/python build/build.py --check</code> fails when the theme does not match its schema, when a colour drops below 4.5:1 contrast, or when a generated file differs from what the theme produces. It also fails when a page or a component writes a font size as a number instead of reading a type step.</p></li>
     <li><strong>Open the pull request.</strong><p><code>CHANGING.md</code>, "Change the theme", names every field and the copies no generator writes.</p></li>
   </ol>
 </section>
@@ -282,7 +285,7 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
   <p class="sub">The example pages in the kit's Storybook carry a theme editor that previews a change on real pages and sends it to every site.</p>
   <ol class="steps">
     <li><strong>Open the editor.</strong><p>Open any story under Pages in the Storybook at <code>brand.oxagen.cloud/storybook</code>, and select Theme in the bottom-right corner. A panel opens over the page.</p></li>
-    <li><strong>Preview the change.</strong><p>Change the gold, the surfaces, the text and state colours, the faces, the corners, the shadows, the spacing, or the type sizes. The page restyles as you go. The colour fields edit the theme the toolbar shows, and each one shows its contrast. Headings, text, and code can take a Google family or files you upload. The wordmark is always Space Grotesk, and its gold x and asterisk follow the gold. The draft stays in your browser.</p></li>
+    <li><strong>Preview the change.</strong><p>Change the gold, the surfaces, the text and state colours, the faces, the corners, the shadows, the spacing, or the type sizes. The page restyles as you go. The colour fields edit the theme the toolbar shows, and each one shows its contrast. Marketing headings, text, and code can each take a Google family or files you upload. The wordmark is always Space Grotesk, and its gold x and asterisk follow the gold. The draft stays in your browser.</p></li>
     <li><strong>Select Update all sites.</strong><p>GitHub opens with the request filled in under <code>theme/requests/</code>. Commit it to a new branch with your own login, and open the pull request. A request that names uploaded fonts asks you to upload them to <code>fonts/</code> on that branch first.</p></li>
     <li><strong>Let the workflow apply it.</strong><p>The <code>apply-theme</code> workflow fetches any Google face, merges the request into <code>theme/theme.json</code>, carries a new gold into the hand copies, runs every generator, and pushes the result to the branch. It comments with what changed and any contrast warning, and the kit's checks run on its push.</p></li>
     <li><strong>Review and merge.</strong><p>Merging deploys brand.oxagen.cloud, and the fan-out opens a sync pull request in every site. <code>CHANGING.md</code>, "Theme editor", has the details.</p></li>
@@ -309,21 +312,22 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
       <thead><tr><th>Use</th><th>Face</th><th>Field in theme/theme.json</th></tr></thead>
       <tbody>
         <tr><td>Both wordmarks and Stella's icon</td><td>Space Grotesk 600</td><td><code>faces.wordmark.outline</code></td></tr>
-        <tr><td>Line 1 of a marketing hero, and every h1, h2, and h3 on the website</td><td>Space Grotesk</td><td><code>faces.wordmark</code></td></tr>
-        <tr><td>Every heading and all text in the app and on the docs site, and all other text on the website</td><td>Aeonik</td><td><code>faces.display</code> and <code>faces.sans</code></td></tr>
-        <tr><td>Code, logs, paths, and numbers in tables</td><td>Monaspace Neon</td><td><code>faces.mono</code></td></tr>
+        <tr><td>h1 to h3 on marketing and customer sites</td><td>Space Grotesk</td><td><code>faces.display</code></td></tr>
+        <tr><td>Default text on every surface, h1 to h3 in the app and the internal tools, and every h4 to h6</td><td>Aeonik</td><td><code>faces.sans</code></td></tr>
+        <tr><td>Code, data, digests, and commands</td><td>Monaspace Neon</td><td><code>faces.mono</code></td></tr>
         <tr><td>No role yet</td><td>Aeonik Mono and Aeonik Fono</td><td><code>extra_faces</code></td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note"><strong>Two heading rules.</strong> The app and the docs site set every heading in Aeonik. The website (oxagen.sh) sets every h1, h2, and h3 in Space Grotesk, in its own stylesheet. The <code>hero-line-1</code> class sets line 1 of a hero in Space Grotesk inside a <code>text-m-h1</code> heading. Outside that heading the class draws in Aeonik, so the app can't reach Space Grotesk by accident.</p>
+  <p class="note"><strong>Heading faces.</strong> Marketing and customer sites set h1 to h3 in Space Grotesk. They are oxagen.sh, the docs sites, stella.oxagen.sh, survey.oxagen.cloud, and the kit's public pages, this guide among them. The web app and the internal tools set h1 to h3 in Aeonik. Every h4 to h6 is Aeonik on every surface. In Tailwind, <code>text-m-h1</code> to <code>text-m-h3</code> set Space Grotesk. <code>text-a-h1</code> to <code>text-a-h3</code> and a bare h1 to h3 read <code>--font-heading</code>, which stays Aeonik until a marketing page sets it to <code>var(--font-display)</code>.</p>
+  <p class="note"><strong>Type sizes.</strong> Body text is 16px on marketing and customer sites and 14px in the app. No text is below 14px on any surface. That includes badges, eyebrows, labels, table headers, timestamps, and hints. An eyebrow or a badge stands apart by case, tracking, weight, or colour. Space Grotesk is never set below 20px. Every font size reads a type step token: <code>--ox-m-*</code> on the marketing scale and <code>--ox-a-*</code> on the app scale.</p>
   <ol class="steps">
     <li><strong>Check the licence.</strong><p>On 2026-10-01 you decided that a licensed face may be committed to this public repo like the open faces. Its licence must still allow web embedding on Oxagen's sites.</p></li>
     <li><strong>Add the files.</strong><p>Put the <code>.woff2</code> files under <code>fonts/</code>, and add their rows to <code>fonts/README.md</code>.</p></li>
     <li><strong>Point the role at the face.</strong><p>Edit the role's entry in <code>faces</code> in <code>theme/theme.json</code>, then run <code>build/build.py</code>. It rewrites <code>house-fonts.css</code>, <code>house-tailwind.css</code>, and <code>next-fonts.ts</code>, which every site imports.</p></li>
     <li><strong>Leave the wordmark face as it is.</strong><p>Both wordmarks and Stella's icon are always Space Grotesk, drawn at weight 600. The build refuses any other wordmark face, and the theme editor shows it read-only. A new gold still recolours the gold x and asterisk.</p></li>
   </ol>
-  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-font">In oxageninc/brand, make ______ the house face for ______ (headings and text, or code). The wordmark face is fixed, so never change it. Check its licence allows web embedding on Oxagen's sites first, and stop if it doesn't. Follow CHANGING.md, "Change a font family", and open a pull request with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-font">Copy</button></div>
+  <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-font">In oxageninc/brand, make ______ the house face for ______ (marketing headings, text, or code). The wordmark face is fixed, so never change it. Check its licence allows web embedding on Oxagen's sites first, and stop if it doesn't. Follow CHANGING.md, "Change a font family", and open a pull request with --label agent-monitored-pr.</pre><button type="button" data-copy="prompt-font">Copy</button></div>
 </section>
 
 <section id="icon" aria-labelledby="icon-h">

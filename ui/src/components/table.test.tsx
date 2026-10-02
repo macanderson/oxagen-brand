@@ -59,11 +59,11 @@ describe("Table", () => {
     expect(table.parentElement?.className).toContain("overflow-x-auto");
   });
 
-  it("marks the table for the kit's cell rules and sets 13px rows", () => {
+  it("marks the table for the kit's cell rules and sets 14px rows", () => {
     renderTable();
     const table = screen.getByRole("table");
     expect(table).toHaveAttribute("data-slot", "table");
-    expect(table.className).toContain("text-[13px]");
+    expect(table.className).toContain("text-sm");
     expect(table.className).toContain("border-collapse");
   });
 
@@ -101,7 +101,7 @@ describe("Table", () => {
     expect(th.tagName).toBe("TH");
     for (const token of [
       "uppercase",
-      "text-[10.5px]",
+      "text-sm",
       "tracking-[0.09em]",
       "font-semibold",
       "text-dim",

@@ -3,7 +3,9 @@
  * The faces part of the theme editor. The wordmark role is read-only: its
  * face is fixed, Space Grotesk drawn at weight 600 (Mac, 2026-10-02). Each
  * other role takes the shipped face, a face the kit already ships, a Google
- * family, or uploaded files.
+ * family, or uploaded files. Marketing headings is the display role: h1 to h3
+ * on a marketing or customer site. App headings and every h4 to h6 take the
+ * text face.
  */
 import * as React from "react";
 import { OxagenWordmark, StellaWordmark } from "../components/brand";
@@ -35,7 +37,7 @@ import {
 
 export const ROLE_LABELS: Record<Role, string> = {
   wordmark: "Wordmark",
-  display: "Headings",
+  display: "Marketing headings",
   sans: "Text",
   mono: "Code",
 };
@@ -83,7 +85,7 @@ export function WordmarkFace() {
         <span className="text-xs text-muted-foreground">{face.family}</span>
       </div>
       <p
-        className="truncate rounded-lg bg-muted/60 px-2.5 py-2 text-xl font-semibold text-foreground"
+        className="truncate rounded-lg bg-muted/60 px-2.5 py-2 text-(length:--ox-a-h3) font-semibold text-foreground"
         style={{ fontFamily: WORDMARK_STACK }}
       >
         {ROLE_SAMPLES.wordmark}
@@ -150,7 +152,7 @@ export function FaceEditor({
       <p
         className={cn(
           "truncate rounded-lg bg-muted/60 px-2.5 py-2 text-foreground",
-          role === "display" ? "text-lg font-semibold" : "text-sm",
+          role === "display" ? "text-(length:--ox-a-h3) font-semibold" : "text-sm",
         )}
         style={{ fontFamily: family ? fontStack(role, choice) : undefined }}
       >
@@ -209,7 +211,7 @@ function GoogleFields({
               <label
                 key={w}
                 className={cn(
-                  "inline-flex cursor-pointer items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[11px]",
+                  "inline-flex cursor-pointer items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-sm",
                   on ? "border-foreground/40 bg-foreground/10 text-foreground" : "border-border text-muted-foreground",
                 )}
               >

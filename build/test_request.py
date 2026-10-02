@@ -129,6 +129,15 @@ class MergeTest(unittest.TestCase):
         after = R.merge(theme(), {"summary": "x", "radius": {"base": "0.5rem", "card": "xl"}, "spacing": {"unit": "0.25rem"}})
         self.assertEqual(TH.problems(after), [])
 
+    def test_a_step_below_the_floor_fails(self) -> None:
+        import theme as TH
+
+        after = R.merge(theme(), {"summary": "x", "type": {"scales": {"app": {"micro": {"size": "0.75rem"}}}}})
+        found = TH.problems(after)
+        self.assertEqual(len(found), 1)
+        self.assertIn("type.scales.app.micro.size is 0.75rem, which is 12px", found[0])
+        self.assertIn("14px or more", found[0])
+
     def test_resolved_faces_replace_the_role(self) -> None:
         before = theme()
         face = R.face_entry(

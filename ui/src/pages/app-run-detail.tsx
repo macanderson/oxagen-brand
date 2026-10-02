@@ -148,7 +148,7 @@ function Timeline() {
               <KindIcon />
             </span>
             <div className="min-w-0">
-              <p className="text-[13px] text-foreground">
+              <p className="text-sm text-foreground">
                 <span className="text-muted-foreground">{event.kind}</span>{" "}
                 <span
                   className={cn(
@@ -186,7 +186,7 @@ function Timeline() {
   );
 }
 
-const mono = "font-mono text-[13px]";
+const mono = "font-mono text-sm";
 
 /**
  * The app's Run detail page, for the run the Runs page lists second. The

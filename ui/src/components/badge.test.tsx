@@ -93,12 +93,12 @@ describe("badgeVariants — class map", () => {
     expect(cls).toContain("[&_svg]:size-3");
   });
 
-  it("sm size includes text-[10px]", () => {
-    expect(badgeVariants({ size: "sm" })).toContain("text-[10px]");
+  it("sm size includes text-sm", () => {
+    expect(badgeVariants({ size: "sm" })).toContain("text-sm");
   });
-  it("default size is 11px with 7px sides", () => {
+  it("default size is 14px with 7px sides", () => {
     const cls = badgeVariants({ size: "default" });
-    expect(cls).toContain("text-[11px]");
+    expect(cls).toContain("text-sm");
     expect(cls).toContain("px-[7px]");
   });
   it("lg size includes text-xs with px-2.5", () => {
@@ -125,7 +125,7 @@ describe("Badge — render", () => {
   it("applies size class", () => {
     render(<Badge size="sm">Sm</Badge>);
     const el = screen.getByText("Sm");
-    expect(el.className).toContain("text-[10px]");
+    expect(el.className).toContain("text-sm");
   });
 
   it("merges custom className", () => {

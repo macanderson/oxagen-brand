@@ -52,7 +52,7 @@ function Repositories({ items }: { items: readonly Repository[] }) {
         filters={FILTERS}
         allLabel={(column) => `All ${column.toLowerCase()}s`}
       />
-      <ul className="divide-y divide-border text-[13px]">
+      <ul className="divide-y divide-border text-sm">
         {list.shown.map((repository) => (
           <li
             key={repository.name}

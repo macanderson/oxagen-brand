@@ -36,7 +36,8 @@ declaration — if a custom property has no marker it is Tailwind engine plumbin
 Utility classes that DO exist, if you prefer them: `bg-background` `bg-card`
 `bg-muted` `bg-primary` `bg-destructive` `text-foreground` `text-muted-foreground`
 `text-primary` `border-border` `border-input` `rounded-sm|md|lg|xl|full`
-`shadow-sm|md|lg` `font-sans|display|mono|medium|semibold` `text-xs|sm|lg|xl|2xl`
+`shadow-sm|md|lg` `font-sans|display|heading|mono|medium|semibold` `text-xs|sm` (both 14px)
+`text-a-h1|h2|h3|h4|body|micro` `text-m-h1|h2|h3|h4|body|micro`
 `gap-1|2|3|4|6`. Anything outside that list: use `var(--token)` instead.
 
 ### Theme
@@ -48,19 +49,22 @@ tokens through CSS, so nothing else is needed — never hand-pick a hex.
 ### Type and the gold rule
 
 Three families, each with its own job. **Aeonik** (`--ox-font`, read through
-`--font-display` and `--font-sans`) sets every heading, h1 to h6, and everything else a
-person reads in the app and the docs: body, labels, buttons, tables, navigation.
-**Space Grotesk** (`--ox-font-display`, read through `--font-wordmark`) sets the
-wordmarks and line 1 of a marketing hero, through the `hero-line-1` class inside a
-`text-m-h1` heading. **Monaspace Neon** (`--ox-font-mono`) sets code, terminal output,
-logs, digests, paths, ids, and numbers in tables, with `calt` and `liga` on for texture
+`--font-sans`) sets the default text on every surface: body, labels, buttons, tables,
+navigation. It also sets h1 to h3 in the app and the internal tools, through
+`--font-heading`, and every h4 to h6 everywhere. **Space Grotesk** (`--ox-font-display`,
+read through `--font-display`) sets h1 to h3 on the marketing and customer sites, docs
+included. `--font-wordmark` sets a wordmark in it as text. **Monaspace Neon**
+(`--ox-font-mono`, read through `--font-mono`) sets code, terminal output, logs,
+digests, paths, ids, and numbers in tables, with `calt` and `liga` on for texture
 healing. A figure in a table is mono so columns of digits align.
 
-Mac set this rule on 2026-10-02, when Aeonik became the house sans. Space Grotesk also sets
-every h1, h2, and h3 on the website (oxagen.sh), and the website's own stylesheet does
-that. A component in this kit is app or docs UI, so it never sets a heading in Space
-Grotesk. Aeonik Mono and Aeonik Fono load as their own families, and no role takes
-either one yet.
+Mac set this rule on 2026-10-02. A component's h1 to h3 read `--font-heading`, which is
+Aeonik. A marketing or docs design sets `--font-heading: var(--font-display)` on its
+root, so its h1 to h3 draw Space Grotesk. No text is set below 14px, labels, badges,
+and eyebrows included. No style writes a font size of its own: read a step token, such
+as `var(--ox-a-body)` (14px, app body) or `var(--ox-m-body)` (16px, marketing body).
+`text-xs` and `text-sm` both set 14px. Aeonik Mono and Aeonik Fono load as their own
+families, and no role takes either one yet.
 
 **Glass belongs only on chrome that floats over content:** menus, selects, comboboxes,
 popovers, hover cards, the command menu, toasts, a dialog's scrim, and sticky navigation
@@ -84,7 +88,7 @@ const { Panel, Button, Badge } = window.OxagenUI;
 
 <Panel style={{ display: "flex", flexDirection: "column", gap: 16, padding: 24 }}>
   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-    <h2 style={{ font: "600 18px/1.12 var(--font-display)", margin: 0 }}>Fleet</h2>
+    <h2 style={{ font: "600 var(--ox-a-h2)/var(--ox-a-h2-leading) var(--font-heading)", margin: 0 }}>Fleet</h2>
     <Badge variant="secondary">12 agents</Badge>
   </div>
   <p style={{ color: "var(--muted-foreground)", margin: 0 }}>

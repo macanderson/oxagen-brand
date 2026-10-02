@@ -50,14 +50,14 @@ export function PageHeader({
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           {leading}
           <h1
-            className={`min-w-0 text-2xl font-bold leading-tight text-foreground ${mono ? "break-all font-mono tracking-normal" : "tracking-[-0.015em]"}`}
+            className={`min-w-0 text-(length:--ox-a-h2) font-bold leading-tight text-foreground ${mono ? "break-all font-mono tracking-normal" : "tracking-[-0.015em]"}`}
           >
             {title}
           </h1>
           {figure}
         </div>
         {description ? (
-          <p className="max-w-[70ch] text-[13px] text-muted-foreground">
+          <p className="max-w-[70ch] text-sm text-muted-foreground">
             {description}
           </p>
         ) : null}

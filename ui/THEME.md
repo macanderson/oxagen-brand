@@ -15,6 +15,7 @@ drift and no sync step.
 | What is every token worth? | `../tokens/house-tokens.css`, and `house-tokens.json` for the same values as data |
 | Which corner, shadow, and spacing unit? | `--ox-radius-base` and its steps `--ox-radius-*`, `--ox-shadow-ui` and `--ox-shadow-pop` (each with an `-ink` twin for paper), and `--ox-space`, all in `../tokens/house-tokens.css` |
 | What type scale and utilities exist? | `../tokens/house-tailwind.css`, with the `text-m-*` marketing and `text-a-*` app scales |
+| Which face and size does each surface take? | The Type section of `../skills/oxagen-branding/references/system.md` |
 | Which font files load, and how? | `../tokens/house-fonts.css` and `../fonts/` |
 | How do tokens map to semantic roles, per theme? | `src/styles/globals.css`: the `:root`, `.dark`, and `prefers-color-scheme` blocks, then the v3 layer at the end of the file |
 | Where do the values come from? | `../theme/theme.json`, which `../build/color.py` and `../build/typeset.py` read |
@@ -28,8 +29,8 @@ generated file by hand.
 
 `globals.css` is the one stylesheet the kit authors by hand, and it is the whole
 reskin surface. It maps the house values onto the semantic roles components
-use. A component never names a house token, a Tailwind palette colour, or a
-hex.
+use. A component never names a Tailwind palette colour or a hex. It names a
+house token only to read a type step, as `text-(length:--ox-a-h4)` does.
 
 The v3 layer at the end of `globals.css` came from the oxagen app with the
 components in `src/components/`. It sets the gold primary, the panel and rule
@@ -45,10 +46,37 @@ twin on paper. `h1`, `h2`, and `h3` read `--ox-a-h1-leading`,
 `--ox-a-h2-leading`, and `--ox-a-h3-leading`, as product's `packages/ui` does.
 `h4` to `h6` read `--ox-a-h4-leading`.
 
-One literal stays, and `KEEP` in `build/css_literals.py` names it with its
-reason. A phone's text fields set 16px, so iOS does not zoom on focus.
-`build/build.py --check` fails on any other literal corner, shadow, font size,
-or heading line height in `globals.css`.
+`h1` to `h3` take `--font-heading`, which is Aeonik in the kit, as in the app.
+A Pages/Website story points it at `--font-display`, Space Grotesk, as a
+marketing or docs site does in its own stylesheet. `h4` to `h6` take
+`--font-sans`, Aeonik, on every surface. No text is set below 14px: `text-xs`
+and `text-sm` both read the 14px app body step.
+
+## Literal guard
+
+`build/css_literals.py` is the literal guard, and `build/build.py --check` runs
+it. It reads two scopes.
+
+- **`globals.css`.** It fails on a literal corner, shadow, font size, or
+  heading line height. One literal stays, and `KEEP` in `build/css_literals.py`
+  names it with its reason: a phone's text fields set 16px, so iOS does not
+  zoom on focus.
+- **Every font size the kit sets.** It fails on any hard-coded font size in
+  `ui/src`, `sdlc/public`, and `pwa/`, and in the kit's pages (`playbook.html`,
+  `message-bank.html`, `always-on.html`, and `brand-guide.html`). That covers a
+  Tailwind class such as `text-[13px]`, a `fontSize` value, and CSS in a style
+  block, a `style` attribute, or a string. It fails on Tailwind's own fixed
+  sizes, `text-base`, `text-lg`, and up, apart from a text field's 16px on a
+  phone, which `KEEP` names for each file that sets it. It also fails on a
+  size under 1em or under 100%, because `.9em` of a 14px body is 12.6px. Tests
+  are not read, because they name classes to assert them.
+
+A size passes when it reads a token: `var(--ox-a-body)`,
+`text-(length:--ox-a-h2)`, a house utility (`text-m-*`, `text-a-*`), or
+Tailwind's `text-xs` and `text-sm`, which read a step. A size of 1em or 100% or
+more passes too, since it never sets text below its parent.
+`sdlc/public/sdlc.css` names the type steps once, because that site cannot
+import `tokens/`, and the guard holds those names to the theme's values.
 
 ## Three rules a value cannot state
 

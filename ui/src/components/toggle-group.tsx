@@ -32,7 +32,7 @@ const toggleGroupItemClass = cn(
 
 /** The count beside an item's label. It darkens with the pressed item. */
 const toggleGroupCountClass =
-  "font-mono text-[10.5px] font-medium tabular-nums text-dim group-data-[pressed]/toggle:text-muted-foreground";
+  "font-mono text-sm font-medium tabular-nums text-dim group-data-[pressed]/toggle:text-muted-foreground";
 
 interface ToggleGroupProps
   extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive> {

@@ -10,7 +10,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Clipped: Story = {
   render: () => (
-    <div className="w-60 rounded-lg border border-border bg-card p-3 text-[13px] text-foreground">
+    <div className="w-60 rounded-lg border border-border bg-card p-3 text-sm text-foreground">
       <TruncatedCell>
         Watches the release branch and cuts a tag when every required check
         passes
@@ -34,7 +34,7 @@ export const ClippedWithValue: Story = {
 
 export const NotClipped: Story = {
   render: () => (
-    <div className="w-60 rounded-lg border border-border bg-card p-3 text-[13px] text-foreground">
+    <div className="w-60 rounded-lg border border-border bg-card p-3 text-sm text-foreground">
       <TruncatedCell>release-bot</TruncatedCell>
       <p className="mt-2 text-xs text-muted-foreground">
         The text fits, so no card opens.

@@ -242,7 +242,7 @@ const TruncatedCell = React.forwardRef<HTMLElement, TruncatedCellProps>(
             collisionPadding={8}
             role="tooltip"
             data-slot="truncated-cell-card"
-            className="pointer-events-none w-auto max-w-[min(420px,calc(100vw-16px))] p-1 text-[13px] leading-[1.45] [overflow-wrap:anywhere]"
+            className="pointer-events-none w-auto max-w-[min(420px,calc(100vw-16px))] p-1 text-sm leading-[1.45] [overflow-wrap:anywhere]"
           >
             <div
               className="px-3 py-2 whitespace-pre-line"

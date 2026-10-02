@@ -15,6 +15,10 @@ a theme that arrives in a pull request, so the schema is strict: a colour is a
 six-digit hex, a font file is a bare file name, and no string may carry the
 characters that would end a CSS declaration or an HTML tag.
 
+Two rules sit beside the schema, because a schema cannot say them: the
+wordmark face is fixed (`wordmark_problems`), and no type step on either scale
+is set below 14px (`type_problems`).
+
 The validator covers the keywords the schema uses, with the standard library
 alone, because `build/conformance.py` imports `color.py` and runs with no
 packages installed. It rejects a schema keyword it does not know, so the
@@ -124,6 +128,15 @@ def validate(value: object, schema: dict, root: dict, where: str = "") -> list[s
     return problems
 
 
+def rem_px(length: str) -> float:
+    """A `rem` or `px` length from the theme, in CSS pixels at a 16px root."""
+    if length.endswith("rem"):
+        return float(length[:-3]) * 16
+    if length.endswith("px"):
+        return float(length[:-2])
+    raise ValueError(f"{length} is not a rem or px length")
+
+
 #: The wordmark face, which never changes. Mac, 2026-10-02: "i would never
 #: change the wordmark font - that is always going to be space grotesk for the
 #: forseeable future". The build draws both wordmarks and Stella's asterisk
@@ -150,6 +163,29 @@ def wordmark_problems(theme: dict) -> list[str]:
     return found
 
 
+#: The smallest size a type step may take, on either scale. Mac, 2026-10-02:
+#: "The minimum font size in the app has to be 14px at least! Not 13px! And we
+#: can't hard code font sizes in classes, we need to let the tokens do their
+#: job." No step is exempt, the micro steps included. An eyebrow or a badge
+#: stands apart by case, tracking, weight, or colour, never by a smaller size.
+TYPE_FLOOR_PX = 14
+
+
+def type_problems(theme: dict) -> list[str]:
+    """Each step of `theme`'s two scales set below the floor. Expects a theme that validates."""
+    found = []
+    for scale, steps in theme["type"]["scales"].items():
+        for step, spec in steps.items():
+            px = rem_px(spec["size"])
+            if px < TYPE_FLOOR_PX:
+                found.append(
+                    f"type.scales.{scale}.{step}.size is {spec['size']}, which is {px:g}px. "
+                    f"Every step on both scales is {TYPE_FLOOR_PX}px or more, so set it to "
+                    f"{TYPE_FLOOR_PX / 16:g}rem or larger"
+                )
+    return found
+
+
 def problems(theme: object | None = None) -> list[str]:
     """What is wrong with the theme on disk, or with `theme` when given."""
     try:
@@ -164,7 +200,7 @@ def problems(theme: object | None = None) -> list[str]:
     found = validate(theme, schema, schema)
     if found or not isinstance(theme, dict):
         return found
-    return wordmark_problems(theme)
+    return wordmark_problems(theme) + type_problems(theme)
 
 
 def load() -> dict:
@@ -177,15 +213,6 @@ def load() -> dict:
 
 
 THEME: dict = load()
-
-
-def rem_px(length: str) -> float:
-    """A `rem` or `px` length from the theme, in CSS pixels at a 16px root."""
-    if length.endswith("rem"):
-        return float(length[:-3]) * 16
-    if length.endswith("px"):
-        return float(length[:-2])
-    raise ValueError(f"{length} is not a rem or px length")
 
 
 if __name__ == "__main__":

@@ -130,7 +130,7 @@ export function RowsField({
       <span
         id={id}
         data-slot="field-label"
-        className="flex w-fit text-[13px] leading-snug font-medium whitespace-nowrap text-foreground max-sm:sr-only"
+        className="flex w-fit text-sm leading-snug font-medium whitespace-nowrap text-foreground max-sm:sr-only"
       >
         {label}
       </span>
