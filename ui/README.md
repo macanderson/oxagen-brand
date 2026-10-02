@@ -61,7 +61,16 @@ pnpm build-storybook   # static build in storybook-static/
 
 Stories sit beside their component as `src/components/<name>.stories.tsx`. The
 sidebar groups them by `title`: Foundations, Primitives, Forms, Surfaces,
-Navigation, Overlays, Feedback, and Brand.
+Navigation, Overlays, Feedback, Brand, and Pages.
+
+The `Pages/` stories show the kit at page scale: two website pages (Home and
+Security) and two app pages (Runs and Run detail), each in light and dark, with
+its menus, popover, command menu, or toast open over real content. They live in
+`src/pages/`. Each page's body is `<page>.tsx`, its stories are
+`<page>.stories.tsx`, and the website's nav and the app's shell and header are
+in `page-chrome.tsx`. They are fixtures, so the barrel, the bundle, and the
+bundle's types leave them out. A story that sets `parameters: { page: true }`
+renders without the 24px frame, so its sticky bar meets the top of the frame.
 
 A push to `main` deploys the static build to
 [brand.oxagen.cloud/storybook](https://brand.oxagen.cloud/storybook/).
@@ -138,7 +147,7 @@ Import from `@oxagen/ui`.
 | Combobox | `combobox.tsx` | `Combobox` and its parts, for more than 20 options. The empty message shows only when nothing matches. |
 | SearchInput | `search-input.tsx` | `SearchInput`: an input with a leading glyph and a clear button. |
 | FormAlert, SubmitButton, OutcomePanel | `form-feedback.tsx` | A form's error, its pending submit, and the result it lands on. |
-| Control styles | `control-styles.ts` | The shared class strings for buttons, fields, and menu surfaces. |
+| Control styles | `control-styles.ts` | The shared class strings for buttons, fields, menu surfaces, and the sticky glass bar (`glassBar`). |
 
 ### Surfaces
 
@@ -180,11 +189,7 @@ Import from `@oxagen/ui`.
 | CommandMenu | `command-menu.tsx` | `CommandMenu` takes `groups` of commands and opens on Cmd+K or Ctrl+K: a search field over the grouped commands, with an empty line when nothing matches. `CommandMenuRoot`, `CommandMenuPopup`, `CommandMenuInput`, `CommandMenuList`, `CommandMenuItem`, and the other parts build a custom one. |
 
 Menus, selects, comboboxes, popovers, hover cards, the command menu, and
-toasts share one translucent surface. It has the popover ground at 70% over a
-blur, a faint ring in place of a border, a deep shadow, and a 16px corner.
-Its rows are 8px by 12px with 14px text. The ring and the shadow are the
-`--pop-ring` and `--ui-shadow-pop` tokens in `globals.css`. The tooltip stays
-opaque.
+toasts share one translucent surface. [Glass](#glass) below sets the rule.
 
 ### Feedback
 
@@ -198,7 +203,7 @@ opaque.
 
 | Component | File | Parts and API |
 |---|---|---|
-| Logo | `brand.tsx` | `OxagenLogo`, `OxagenLogomark`, `OxagenWordmark`, `OxagenLockup`, and `BrandMark`. |
+| Logo | `brand.tsx` | `OxagenWordmark`, `OxagenIcon`, `StellaWordmark`, `StellaIcon`, and `BrandMark`, with the graph's `NodeChip` and `ConfidenceBar`. There is no lockup export: the wordmark is Oxagen's logo. |
 | Brand marks | `brand-marks.generated.ts` | The mark paths and gold, generated from the house marks. |
 | HexField | `hex-field.tsx` | The hexagon backdrop. It is not in the barrel. |
 
@@ -213,6 +218,39 @@ opaque.
 | `FocusedHeading` | `focused-heading.tsx` | The heading of a result that replaced a form. It takes focus once, on mount. |
 | `GlobalErrorPage`, `NotFoundPage` | `global-error.tsx`, `not-found.tsx` | Full-page templates. |
 | `cn` | `lib/utils.ts` | `clsx` with `tailwind-merge`. |
+
+## Glass
+
+Glass belongs only on chrome that floats over content: menus, selects,
+comboboxes, popovers, hover cards, the command menu, toasts, a dialog's scrim,
+and sticky navigation and header bars. Cards, panels, tables, and text never
+take it.
+
+- **Floating surface.** `floatingSurface` in `control-styles.ts` draws every
+  menu, select, combobox, popover, and hover card, the command menu, and the
+  toast. It is the popover ground at 70% over a 40px blur at 150% saturation,
+  with a faint ring in place of a border, a deep shadow, and a 16px corner.
+  Its rows are 8px by 12px with 14px text. The ring and the shadow are the
+  `--pop-ring` and `--ui-shadow-pop` tokens in `globals.css`. The tooltip
+  stays opaque.
+- **Sticky bar.** `glassBar` draws the website's nav and the app's header. It
+  is the page ground at 72% over a 24px blur at 150% saturation, with a
+  hairline under it. Text set straight on the bar takes the foreground ink,
+  which stays above 8:1 in both themes whatever scrolls under it. Secondary
+  text sits on an opaque control, such as a tab track or a badge.
+- **Scrim.** A dialog's scrim dims the page and blurs it by 3px. The command
+  menu's scrim dims without a blur, so the menu's own blur has the page to
+  work on.
+- **Fallbacks.** Each recipe carries a hook class: `glass-pop`, `glass-bar`,
+  and `glass-scrim` on the dialog's scrim. The GLASS section of `globals.css`
+  reads only those hooks, so no component changes when a fallback applies. A
+  browser with no `backdrop-filter` draws each glass surface opaque on its own
+  ground. Under `prefers-reduced-transparency: reduce`, which only Chromium
+  supports today, each glass surface turns opaque and drops its blur. A scrim
+  keeps its dim either way, since an opaque scrim would hide the page behind
+  the dialog.
+
+The `Pages/` stories show the rule at page scale.
 
 ## Styling
 

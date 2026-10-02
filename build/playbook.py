@@ -367,6 +367,8 @@ SCRIM_BLUR_PX = 3
 POPUP_FILL_PCT = 70
 POPUP_BLUR_PX = 40  # backdrop-blur-2xl
 POPUP_SATURATE_PCT = 150
+BAR_FILL_PCT = 72  # glassBar: the page ground on a sticky nav or header
+BAR_BLUR_PX = 24  # backdrop-blur-xl
 WASH_PCT = 10  # a hovered or highlighted row: the text colour at 10%
 
 
@@ -894,9 +896,11 @@ def build_html() -> str:
 <p style="margin-top:18px">Never add a glow, a coloured shadow, or a text shadow, and never put a shadow on the mark.</p>
 
 <h3>Translucency</h3>
-<p>A translucent surface lets you partly see what is behind it. In the house system, only floating surfaces and the layer behind a dialog are translucent. Cards, panels, tables, buttons, and fields are opaque, and nothing at rest uses a blurred, see-through fill.</p>
+<p>A translucent surface lets you partly see what is behind it. Glass belongs only on chrome that floats over content: menus, selects, comboboxes, popovers, hover cards, the command menu, toasts, a dialog's scrim, and sticky navigation and header bars. Cards, panels, tables, and text never take it.</p>
 <ul class="rules">
 <li><b>A floating surface fills at {POPUP_FILL_PCT}% of its panel colour.</b> The browser blurs whatever is behind it by {POPUP_BLUR_PX}px and raises its saturation to {POPUP_SATURATE_PCT}%. The page shows through as soft colour, never as text you could read.</li>
+<li><b>A sticky bar fills at {BAR_FILL_PCT}% of the page colour.</b> The website's nav and the app's header blur what scrolls under them by {BAR_BLUR_PX}px at {POPUP_SATURATE_PCT}% saturation. Text set on the bar takes the primary text colour, which stays above 8:1 whatever passes under it.</li>
+<li><b>Every glass surface has an opaque fallback.</b> A browser with no backdrop-filter, or a reader who asks for reduced transparency, gets the same surface opaque on its own ground. A scrim keeps its dim and drops its blur.</li>
 <li><b>A dialog sits on a scrim.</b> The scrim is the dark layer that covers the page behind a dialog: near-black at 50% on paper and black at 60% on ink, with a {SCRIM_BLUR_PX}px blur.</li>
 <li><b>A wash marks a row.</b> A hovered or highlighted row is the text colour at {WASH_PCT}%. A state badge or alert sits on its state colour at 10 to 12%.</li>
 <li><b>Secondary text on ink may use opacity.</b> White at 60% takes the tone of the surface under it. It must still clear 4.5:1.</li>

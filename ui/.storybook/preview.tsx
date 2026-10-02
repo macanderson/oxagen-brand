@@ -25,11 +25,16 @@ const withTheme: Decorator = (Story, context) => {
     root.classList.toggle("light", theme !== "dark");
     return () => root.classList.remove("dark", "light");
   }, [theme]);
+  // A page story (`parameters: { page: true }`, the `Pages/` stories) draws
+  // its own edges, so its sticky bar meets the top of the frame. Every other
+  // story sits 24px in.
+  const page = context.parameters.page === true;
   return (
     <div
       className={[
         theme === "dark" ? "dark" : "light",
-        "min-h-screen bg-background p-6 text-foreground",
+        "min-h-screen bg-background text-foreground",
+        page ? "" : "p-6",
       ]
         .filter(Boolean)
         .join(" ")}

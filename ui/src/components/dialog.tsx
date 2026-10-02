@@ -26,7 +26,9 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Backdrop
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-overlay-scrim backdrop-blur-[3px] transition-opacity duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
+      // `glass-scrim` hooks the scrim to the glass fallbacks in globals.css:
+      // under reduced transparency it keeps its dim and drops its blur.
+      "glass-scrim fixed inset-0 z-50 bg-overlay-scrim backdrop-blur-[3px] transition-opacity duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
       className,
     )}
     {...props}

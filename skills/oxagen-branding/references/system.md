@@ -8,6 +8,18 @@ Dark first. Obsidian ground `#09090B`, panel `#18181B`, highlight and border `#2
 
 The greys are neutral zinc and carry no hue, so the gold is the only warm value on a screen.
 
+## Glass
+
+Glass belongs only on chrome that floats over content: menus, selects, comboboxes, popovers, hover cards, the command menu, toasts, a dialog's scrim, and sticky navigation and header bars. Cards, panels, tables, and text never take it.
+
+- **A floating surface** is the popover ground at 70% over a 40px blur at 150% saturation, with a faint ring in place of a border and a deep shadow. In the kit it is `floatingSurface`.
+- **A sticky bar** is the page ground at 72% over a 24px blur at 150% saturation, with a hairline under it. In the kit it is `glassBar`. Text set straight on the bar takes the primary text colour, which stays above 8:1 whatever scrolls under it. Secondary text sits on an opaque control, such as a tab track or a badge.
+- **A dialog's scrim** dims the page and blurs it by 3px.
+- **Fallbacks.** Where a browser has no `backdrop-filter`, each glass surface is opaque on its own ground. Under `prefers-reduced-transparency: reduce`, each glass surface turns opaque and drops its blur. A scrim keeps its dim either way, since an opaque scrim would hide the page behind the dialog.
+- **The blur reads as frosted, never milky.** No white haze on obsidian, no rainbow, no gradient border, and no glow. Glass needs something behind it worth blurring: content scrolling under a bar, the hero's hex field, or a table under an open menu. Gold is never translucent.
+
+`ui/README.md` in the kit carries the recipes, and its `Pages/` stories show the rule at page scale.
+
 ## Text
 
 | Role | On obsidian | On white |
