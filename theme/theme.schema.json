@@ -1,0 +1,822 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://brand.oxagen.cloud/theme/theme.schema.json",
+  "title": "Oxagen house theme",
+  "description": "Every value of the house design a person may change. build/build.py reads theme/theme.json and writes the tokens, the marks, the icons, and every image from it. build/build.py --check fails when theme/theme.json does not match this schema.",
+  "type": "object",
+  "required": [
+    "color",
+    "faces",
+    "radius",
+    "shadow",
+    "spacing",
+    "type"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "color": {
+      "description": "The palette. Primary text on ink is the paper colour, and primary text on paper is the ink colour.",
+      "type": "object",
+      "required": [
+        "gold",
+        "gold_bright",
+        "gold_deep",
+        "ink",
+        "paper",
+        "text_on_ink",
+        "text_on_paper",
+        "states",
+        "state_text_lightness_on_ink",
+        "destructive_lift_on_ink"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "gold": {
+          "description": "The primary brand colour. It fills the gold glyph of each wordmark, the hive's lit cells, Stella's asterisk, the primary button, and the focus ring. It must clear 4.5:1 on ink.",
+          "$ref": "#/$defs/hex"
+        },
+        "gold_bright": {
+          "description": "The gold's lighter neighbour, for hover on ink and the shimmer. The build sets it at this OKLCH lightness and chroma, on the gold's own hue rounded to a whole degree.",
+          "$ref": "#/$defs/neighbour"
+        },
+        "gold_deep": {
+          "description": "The gold's darker neighbour, for gold set as text on paper. The build derives it like gold_bright. It must clear 4.5:1 on paper, and the gold's lightness must sit between the two neighbours.",
+          "$ref": "#/$defs/neighbour"
+        },
+        "ink": {
+          "description": "The dark theme's surfaces, from the canvas up.",
+          "$ref": "#/$defs/ink_grounds"
+        },
+        "paper": {
+          "description": "The light theme's surfaces, from the canvas up.",
+          "$ref": "#/$defs/paper_grounds"
+        },
+        "text_on_ink": {
+          "description": "Text colours in the dark theme, below primary text. body and muted must clear 4.5:1 on ink.",
+          "type": "object",
+          "required": [
+            "body",
+            "muted",
+            "dim"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "body": {
+              "description": "Body text.",
+              "$ref": "#/$defs/hex"
+            },
+            "muted": {
+              "description": "Secondary text. It must also clear 4.5:1 on a lifted row.",
+              "$ref": "#/$defs/hex"
+            },
+            "dim": {
+              "description": "The quietest text. Never a word that carries meaning.",
+              "$ref": "#/$defs/hex"
+            }
+          }
+        },
+        "text_on_paper": {
+          "description": "Text colours in the light theme, below primary text. body and muted must clear 4.5:1 on paper.",
+          "type": "object",
+          "required": [
+            "body",
+            "muted",
+            "dim",
+            "muted_text_lightness"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "body": {
+              "description": "Body text.",
+              "$ref": "#/$defs/hex"
+            },
+            "muted": {
+              "description": "Secondary text on paper.",
+              "$ref": "#/$defs/hex"
+            },
+            "dim": {
+              "description": "The quietest text. Never a word that carries meaning.",
+              "$ref": "#/$defs/hex"
+            },
+            "muted_text_lightness": {
+              "description": "The OKLCH lightness of muted-text-ink: muted moved darker on its own hue and chroma, so secondary text also clears 4.5:1 on a lifted row.",
+              "$ref": "#/$defs/lightness"
+            }
+          }
+        },
+        "states": {
+          "description": "The six governance states. Each has a mark on ink and a mark on paper: a badge, a dot, or a border, which needs 3:1. The build derives each state's text stop from its mark.",
+          "type": "object",
+          "required": [
+            "allowed",
+            "approval",
+            "denied",
+            "proven",
+            "failed",
+            "critical"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "allowed": {
+              "description": "A request a rule allowed.",
+              "$ref": "#/$defs/state"
+            },
+            "approval": {
+              "description": "A request routed to a person.",
+              "$ref": "#/$defs/state"
+            },
+            "denied": {
+              "description": "A request a rule denied.",
+              "$ref": "#/$defs/state"
+            },
+            "proven": {
+              "description": "The witness's word, beside a witness flip.",
+              "$ref": "#/$defs/state"
+            },
+            "failed": {
+              "description": "A check that did not hold. The destructive red on paper is this mark.",
+              "$ref": "#/$defs/state"
+            },
+            "critical": {
+              "description": "A run that needs a person now.",
+              "$ref": "#/$defs/state"
+            }
+          }
+        },
+        "state_text_lightness_on_ink": {
+          "description": "The OKLCH lightness of every state's text stop on ink. A text stop keeps its mark's hue and chroma. On paper it keeps its mark's lightness too. Each text stop must clear 4.5:1 on every surface of its theme.",
+          "$ref": "#/$defs/lightness"
+        },
+        "destructive_lift_on_ink": {
+          "description": "How far the destructive red on ink sits above the failed mark in OKLCH lightness, so it clears 4.5:1 as text on ink and under ink text.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.5
+        }
+      }
+    },
+    "faces": {
+      "description": "The face each type role takes. A role's CSS variable is --font-<role>. display and sans may name the same family, and then they must list the same files, fallback, and features.",
+      "type": "object",
+      "required": [
+        "wordmark",
+        "display",
+        "sans",
+        "mono"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "wordmark": {
+          "description": "The face of both wordmarks, Stella's asterisk icon, and line 1 of a marketing hero. The build outlines the marks from its outline file, so a change here redraws every logo and icon.",
+          "type": "object",
+          "required": [
+            "family",
+            "source",
+            "files",
+            "fallback",
+            "features",
+            "outline"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "family": {
+              "$ref": "#/$defs/family"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            },
+            "files": {
+              "$ref": "#/$defs/files"
+            },
+            "fallback": {
+              "$ref": "#/$defs/fallback"
+            },
+            "features": {
+              "$ref": "#/$defs/features"
+            },
+            "outline": {
+              "description": "The variable font file in fonts/ the marks are outlined from, and the weight they are set at.",
+              "type": "object",
+              "required": [
+                "file",
+                "weight"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "file": {
+                  "$ref": "#/$defs/file"
+                },
+                "weight": {
+                  "type": "integer",
+                  "enum": [
+                    400,
+                    500,
+                    600,
+                    700
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "display": {
+          "description": "The face of every heading, h1 to h6.",
+          "$ref": "#/$defs/face"
+        },
+        "sans": {
+          "description": "The face of everything read: body, labels, buttons, tables, and navigation. The build outlines the lines of text in ads, social cards, and content cards from its outline file.",
+          "type": "object",
+          "required": [
+            "family",
+            "source",
+            "files",
+            "fallback",
+            "features",
+            "outline"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "family": {
+              "$ref": "#/$defs/family"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            },
+            "files": {
+              "$ref": "#/$defs/files"
+            },
+            "fallback": {
+              "$ref": "#/$defs/fallback"
+            },
+            "features": {
+              "$ref": "#/$defs/features"
+            },
+            "outline": {
+              "description": "The variable font file in fonts/, with a wght axis that covers 400 to 700, that the art's lines of text are outlined from.",
+              "type": "object",
+              "required": [
+                "file"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "file": {
+                  "$ref": "#/$defs/file"
+                }
+              }
+            }
+          }
+        },
+        "mono": {
+          "description": "The face of code, logs, digests, paths, ids, and the numbers in tables.",
+          "$ref": "#/$defs/face"
+        }
+      }
+    },
+    "radius": {
+      "description": "Corners. Every step of the scale is the base times its multiplier.",
+      "type": "object",
+      "required": [
+        "base",
+        "steps",
+        "card",
+        "site"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "base": {
+          "description": "The corner every step multiplies, as --ox-radius-base. The kit's UI reads it as --ui-radius.",
+          "$ref": "#/$defs/rem"
+        },
+        "steps": {
+          "description": "The multiplier for each step of the scale, as --ox-radius-<step>. The kit's rounded-<step> classes read these.",
+          "type": "object",
+          "required": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "xs": {
+              "$ref": "#/$defs/multiplier"
+            },
+            "sm": {
+              "$ref": "#/$defs/multiplier"
+            },
+            "md": {
+              "$ref": "#/$defs/multiplier"
+            },
+            "lg": {
+              "$ref": "#/$defs/multiplier"
+            },
+            "xl": {
+              "$ref": "#/$defs/multiplier"
+            },
+            "2xl": {
+              "$ref": "#/$defs/multiplier"
+            },
+            "3xl": {
+              "$ref": "#/$defs/multiplier"
+            },
+            "4xl": {
+              "$ref": "#/$defs/multiplier"
+            }
+          }
+        },
+        "card": {
+          "description": "The step a card and a panel take, as --ox-radius-card.",
+          "type": "string",
+          "enum": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl"
+          ]
+        },
+        "site": {
+          "description": "The website's corner for cards, panels, and inputs, as --ox-radius. The sites read it through house-tailwind.css as --radius. It does not follow the base yet. Phase 3 of oxageninc/brand#63 moves the sites onto --ox-radius-card and retires it.",
+          "$ref": "#/$defs/rem"
+        }
+      }
+    },
+    "shadow": {
+      "description": "Shadows, on ink and on paper. Each value is a CSS box-shadow. It may name a house colour as var(--ox-<token>).",
+      "type": "object",
+      "required": [
+        "ui",
+        "pop"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ui": {
+          "description": "The quiet shadow under a control, as --ox-shadow-ui on ink and --ox-shadow-ui-ink on paper. Hairline borders do most of the work.",
+          "$ref": "#/$defs/themed_shadow"
+        },
+        "pop": {
+          "description": "The shadow under a floating surface: a menu, a popover, a dialog, or a toast. As --ox-shadow-pop on ink and --ox-shadow-pop-ink on paper.",
+          "$ref": "#/$defs/themed_shadow"
+        }
+      }
+    },
+    "spacing": {
+      "description": "Space and measure.",
+      "type": "object",
+      "required": [
+        "unit",
+        "wrap"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "unit": {
+          "description": "The spacing unit, as --ox-space. Tailwind's --spacing reads it, so p-4 is four units.",
+          "$ref": "#/$defs/rem"
+        },
+        "wrap": {
+          "description": "The widest a page's content runs, as --ox-wrap.",
+          "$ref": "#/$defs/length"
+        }
+      }
+    },
+    "type": {
+      "description": "Weights, tracking, and the two type scales.",
+      "type": "object",
+      "required": [
+        "weights",
+        "tracking",
+        "scales"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "weights": {
+          "description": "The weight for each job, as --ox-weight-<job>. The wordmarks take faces.wordmark.outline.weight.",
+          "type": "object",
+          "required": [
+            "display",
+            "heading",
+            "subheading",
+            "ui",
+            "body"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "display": {
+              "description": "A page title.",
+              "$ref": "#/$defs/weight"
+            },
+            "heading": {
+              "description": "A section heading.",
+              "$ref": "#/$defs/weight"
+            },
+            "subheading": {
+              "description": "h4 to h6.",
+              "$ref": "#/$defs/weight"
+            },
+            "ui": {
+              "description": "Buttons, labels, and navigation.",
+              "$ref": "#/$defs/weight"
+            },
+            "body": {
+              "description": "Paragraphs and table cells.",
+              "$ref": "#/$defs/weight"
+            }
+          }
+        },
+        "tracking": {
+          "description": "Letter spacing, as --ox-tracking-<name>. Headings track tighter as they grow.",
+          "type": "object",
+          "required": [
+            "hero",
+            "display",
+            "heading",
+            "none"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "hero": {
+              "$ref": "#/$defs/tracking"
+            },
+            "display": {
+              "$ref": "#/$defs/tracking"
+            },
+            "heading": {
+              "$ref": "#/$defs/tracking"
+            },
+            "none": {
+              "$ref": "#/$defs/tracking"
+            }
+          }
+        },
+        "scales": {
+          "description": "The two size scales. marketing is large and spaced, for a page read once. app is dense, for panels, tables, and logs read all day. Each step's size must be smaller than the step above it.",
+          "type": "object",
+          "required": [
+            "marketing",
+            "app"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "marketing": {
+              "description": "The text-m-* utilities and the --ox-m-* sizes.",
+              "$ref": "#/$defs/scale"
+            },
+            "app": {
+              "description": "The text-a-* utilities and the --ox-a-* sizes.",
+              "$ref": "#/$defs/scale"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hex": {
+      "description": "A colour as six uppercase hex digits, such as #D4AF37.",
+      "type": "string",
+      "pattern": "^#[0-9A-F]{6}$"
+    },
+    "lightness": {
+      "description": "An OKLCH lightness, from 0 (black) to 1 (white).",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "exclusiveMaximum": 1
+    },
+    "neighbour": {
+      "type": "object",
+      "required": [
+        "lightness",
+        "chroma"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "lightness": {
+          "$ref": "#/$defs/lightness"
+        },
+        "chroma": {
+          "description": "An OKLCH chroma: 0 is grey, and the gold sits near 0.14.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.4
+        }
+      }
+    },
+    "ink_grounds": {
+      "type": "object",
+      "required": [
+        "ink",
+        "void",
+        "panel",
+        "hl",
+        "border",
+        "rule"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ink": {
+          "description": "The dark canvas.",
+          "$ref": "#/$defs/hex"
+        },
+        "void": {
+          "description": "Below the canvas: full-bleed backdrops.",
+          "$ref": "#/$defs/hex"
+        },
+        "panel": {
+          "description": "Panels, cards, and code blocks.",
+          "$ref": "#/$defs/hex"
+        },
+        "hl": {
+          "description": "A row or line lifted off a panel, and the hover surface.",
+          "$ref": "#/$defs/hex"
+        },
+        "border": {
+          "description": "Hairlines.",
+          "$ref": "#/$defs/hex"
+        },
+        "rule": {
+          "description": "A heavier rule.",
+          "$ref": "#/$defs/hex"
+        }
+      }
+    },
+    "paper_grounds": {
+      "type": "object",
+      "required": [
+        "paper",
+        "void",
+        "panel",
+        "hl",
+        "border",
+        "rule"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "paper": {
+          "description": "The light canvas.",
+          "$ref": "#/$defs/hex"
+        },
+        "void": {
+          "description": "Below the canvas: full-bleed backdrops.",
+          "$ref": "#/$defs/hex"
+        },
+        "panel": {
+          "description": "Panels, cards, and code blocks.",
+          "$ref": "#/$defs/hex"
+        },
+        "hl": {
+          "description": "A row or line lifted off a panel, and the hover surface.",
+          "$ref": "#/$defs/hex"
+        },
+        "border": {
+          "description": "Hairlines.",
+          "$ref": "#/$defs/hex"
+        },
+        "rule": {
+          "description": "A heavier rule.",
+          "$ref": "#/$defs/hex"
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "required": [
+        "ink",
+        "paper"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ink": {
+          "description": "The mark on ink. It must clear 3:1 on ink.",
+          "$ref": "#/$defs/hex"
+        },
+        "paper": {
+          "description": "The mark on paper. It must clear 3:1 on paper.",
+          "$ref": "#/$defs/hex"
+        }
+      }
+    },
+    "family": {
+      "description": "The family name the CSS asks for, as the font file names itself.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9 -]{0,62}$"
+    },
+    "source": {
+      "description": "Where the files come from. kit means the files are already in fonts/. google means the apply workflow fetches the family from Google Fonts into fonts/ before the build runs.",
+      "type": "string",
+      "enum": [
+        "kit",
+        "google"
+      ]
+    },
+    "file": {
+      "description": "A font file name in fonts/, with no directory.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,120}\\.(woff2|woff|ttf|otf)$"
+    },
+    "files": {
+      "description": "The webfont files the CSS loads, one @font-face rule each.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 18,
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "weight"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "$ref": "#/$defs/file"
+          },
+          "weight": {
+            "description": "One weight, such as 400, or the range a variable file covers, such as 100 900.",
+            "type": "string",
+            "pattern": "^[1-9]00( [1-9]00)?$"
+          }
+        }
+      }
+    },
+    "fallback": {
+      "description": "The families a browser tries when the face has not loaded, in order. End with a generic family such as sans-serif or monospace.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "pattern": "^-?[A-Za-z0-9][A-Za-z0-9 -]{0,62}$"
+      }
+    },
+    "features": {
+      "description": "OpenType feature tags to turn on, such as calt and liga. Leave it empty for the face's defaults.",
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]{4}$"
+      }
+    },
+    "face": {
+      "type": "object",
+      "required": [
+        "family",
+        "source",
+        "files",
+        "fallback",
+        "features"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "family": {
+          "$ref": "#/$defs/family"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "files": {
+          "$ref": "#/$defs/files"
+        },
+        "fallback": {
+          "$ref": "#/$defs/fallback"
+        },
+        "features": {
+          "$ref": "#/$defs/features"
+        }
+      }
+    },
+    "rem": {
+      "description": "A length in rem, such as 0.45rem. 1rem is 16px.",
+      "type": "string",
+      "pattern": "^[0-9]{0,2}\\.?[0-9]{1,4}rem$"
+    },
+    "length": {
+      "description": "A length in rem or px, such as 1120px.",
+      "type": "string",
+      "pattern": "^[0-9]{0,4}\\.?[0-9]{1,4}(rem|px)$"
+    },
+    "multiplier": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "shadow": {
+      "description": "A CSS box-shadow, such as 0 1px 2px oklch(0.15 0 0 / 0.07), or none.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9 .,%()/#+-]{1,200}$"
+    },
+    "themed_shadow": {
+      "type": "object",
+      "required": [
+        "ink",
+        "paper"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ink": {
+          "description": "On ink.",
+          "$ref": "#/$defs/shadow"
+        },
+        "paper": {
+          "description": "On paper.",
+          "$ref": "#/$defs/shadow"
+        }
+      }
+    },
+    "weight": {
+      "type": "integer",
+      "enum": [
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "tracking": {
+      "description": "Letter spacing in em, such as -0.02em, or 0.",
+      "type": "string",
+      "pattern": "^(0|-?0?\\.[0-9]{1,4}em)$"
+    },
+    "step": {
+      "type": "object",
+      "required": [
+        "size",
+        "leading",
+        "weight",
+        "tracking"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "size": {
+          "description": "The font size. It must be a whole number of pixels.",
+          "$ref": "#/$defs/rem"
+        },
+        "leading": {
+          "description": "The line height, as a multiple of the size.",
+          "type": "number",
+          "minimum": 0.8,
+          "maximum": 2.5
+        },
+        "weight": {
+          "$ref": "#/$defs/weight"
+        },
+        "tracking": {
+          "description": "The name of a type.tracking value.",
+          "type": "string",
+          "enum": [
+            "hero",
+            "display",
+            "heading",
+            "none"
+          ]
+        }
+      }
+    },
+    "scale": {
+      "type": "object",
+      "required": [
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "body",
+        "micro"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "h1": {
+          "$ref": "#/$defs/step"
+        },
+        "h2": {
+          "$ref": "#/$defs/step"
+        },
+        "h3": {
+          "$ref": "#/$defs/step"
+        },
+        "h4": {
+          "$ref": "#/$defs/step"
+        },
+        "body": {
+          "$ref": "#/$defs/step"
+        },
+        "micro": {
+          "$ref": "#/$defs/step"
+        }
+      }
+    }
+  }
+}

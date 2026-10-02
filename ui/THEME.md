@@ -13,16 +13,18 @@ drift and no sync step.
 | Question | Read |
 |---|---|
 | What is every token worth? | `../tokens/house-tokens.css`, and `house-tokens.json` for the same values as data |
+| Which corner, shadow, and spacing unit? | `--ox-radius-base` and its steps `--ox-radius-*`, `--ox-shadow-ui` and `--ox-shadow-pop` (each with an `-ink` twin for paper), and `--ox-space`, all in `../tokens/house-tokens.css` |
 | What type scale and utilities exist? | `../tokens/house-tailwind.css`, with the `text-m-*` marketing and `text-a-*` app scales |
 | Which font files load, and how? | `../tokens/house-fonts.css` and `../fonts/` |
 | How do tokens map to semantic roles, per theme? | `src/styles/globals.css`: the `:root`, `.dark`, and `prefers-color-scheme` blocks, then the v3 layer at the end of the file |
-| Where do the values come from? | `../build/color.py` for colour and `../build/typeset.py` for type |
+| Where do the values come from? | `../theme/theme.json`, which `../build/color.py` and `../build/typeset.py` read |
 | What may a surface say? | `../skills/oxagen-branding/`, whose `references/positioning.md` carries the live and retired lines |
 
-The first three are generated. `build/build.py` writes them from `color.py` and
-`typeset.py`, and `build/build.py --check` fails when a token drops below AA on
-its ground. Change a value in `build/`, run the build, and commit what it
-writes. Never edit a generated file by hand.
+The token files are generated. `build/build.py` writes them from
+`theme/theme.json`, and `build/build.py --check` fails when a token drops below
+AA on its ground or a generated file differs from the theme. Change a value in
+`theme/theme.json`, run the build, and commit what it writes. Never edit a
+generated file by hand.
 
 `globals.css` is the one stylesheet the kit authors by hand, and it is the whole
 reskin surface. It maps the house values onto the semantic roles components
@@ -31,8 +33,9 @@ hex.
 
 The v3 layer at the end of `globals.css` came from the oxagen app with the
 components in `src/components/`. It sets the gold primary, the radius scale on
-`--ui-radius`, the panel and rule tokens, table truncation, the phone rules, and
-the shimmer and spinner motion. It comes last, so it wins on cascade order.
+`--ui-radius` (which reads `--ox-radius-base`), the panel and rule tokens, table
+truncation, the phone rules, and the shimmer and spinner motion. It comes last,
+so it wins on cascade order.
 
 ## Three rules a value cannot state
 

@@ -73,7 +73,8 @@ playbook.html      the document. Read this first.
 message-bank.html  generated from messages/: every line, pitch, card, ad, and rule, with its status.
 brand-guide.html   how to change a colour, a font, or an app icon, and which repos receive the change. Written by hand. CHANGING.md is the reference.
 messages/          the message registry: one YAML file per line, schema.json, findings.yaml, index.json (generated)
-build/             color.py · typeset.py · fonts.py · pagecss.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
+theme/             theme.json, the one editable source for colours, faces, radius, shadows, spacing, and type, and its schema
+build/             theme.py · color.py · typeset.py · fonts.py · pagecss.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against
 fonts/             Space Grotesk, Geist and Monaspace Neon webfonts, each with its licence
 tokens/            house-tokens.css · house-tokens.json · house-tailwind.css · house-fonts.css · next-fonts.ts
@@ -93,15 +94,17 @@ skills/            the oxagen-branding and clear-prose Claude Code skills, the b
 ## Every pixel here is generated
 
 No file in this kit is drawn by hand. Every PNG is a render of the SVG beside
-it. Every SVG is emitted from `build/`. The colours live in one file,
-`build/color.py`, and the type in another, `build/typeset.py`, so a change
-there moves every asset, token file, and the branding skill's own tokens on
-the next run.
+it. Every SVG is emitted from `build/`. Every value a person may change lives
+in one file, `theme/theme.json`: the colours, the faces, the radius, the
+shadows, the spacing, and the type scales. `build/color.py` and
+`build/typeset.py` read it, so a change there moves every asset, token file,
+and the branding skill's own tokens on the next run. `CHANGING.md` names every
+field.
 
 ```sh
 python3 -m venv .venv && .venv/bin/pip install fonttools brotli pyyaml
 brew install harfbuzz librsvg          # hb-shape and rsvg-convert
-.venv/bin/python build/build.py --check   # verify the face, the palette, and the registry, write nothing
+.venv/bin/python build/build.py --check   # validate the theme, check the palette, the type, and every generated file, write nothing
 .venv/bin/python build/build.py           # every asset
 .venv/bin/python build/build.py --svg     # skip the raster pass
 .venv/bin/python build/build.py --only ads social   # only these steps

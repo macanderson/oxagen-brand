@@ -1,6 +1,6 @@
 # Visual system
 
-Source of truth: `build/color.py` and `build/typeset.py` in `oxageninc/brand`, which generate every token file, mark, and asset. `assets/tokens.css` is generated from them, and the build fails if it drifts. Use it; do not retype a value. A Next.js product imports `tokens/house-tailwind.css` and `tokens/next-fonts.ts` from the kit instead.
+Source of truth: `theme/theme.json` in `oxageninc/brand`. `build/color.py` and `build/typeset.py` read it and generate every token file, mark, and asset. `assets/tokens.css` is generated from it, and the build fails if it drifts. Use it; do not retype a value. A Next.js product imports `tokens/house-tailwind.css` and `tokens/next-fonts.ts` from the kit instead.
 
 ## Ground and surfaces
 

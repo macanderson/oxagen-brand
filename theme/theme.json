@@ -1,0 +1,144 @@
+{
+  "$schema": "./theme.schema.json",
+  "color": {
+    "gold": "#D4AF37",
+    "gold_bright": { "lightness": 0.86, "chroma": 0.13 },
+    "gold_deep": { "lightness": 0.56, "chroma": 0.1 },
+    "ink": {
+      "ink": "#09090B",
+      "void": "#000000",
+      "panel": "#18181B",
+      "hl": "#27272A",
+      "border": "#27272A",
+      "rule": "#3F3F46"
+    },
+    "paper": {
+      "paper": "#FFFFFF",
+      "void": "#F4F4F5",
+      "panel": "#FFFFFF",
+      "hl": "#F4F4F5",
+      "border": "#E4E4E7",
+      "rule": "#D4D4D8"
+    },
+    "text_on_ink": {
+      "body": "#E4E4E7",
+      "muted": "#A1A1AA",
+      "dim": "#71717A"
+    },
+    "text_on_paper": {
+      "body": "#27272A",
+      "muted": "#71717A",
+      "dim": "#A1A1AA",
+      "muted_text_lightness": 0.54
+    },
+    "states": {
+      "allowed": { "ink": "#57A97C", "paper": "#2F7D52" },
+      "approval": { "ink": "#5B93D6", "paper": "#2E6BA8" },
+      "denied": { "ink": "#C66A4A", "paper": "#9B4526" },
+      "proven": { "ink": "#3FA2A2", "paper": "#1F7676" },
+      "failed": { "ink": "#C0453C", "paper": "#992F28" },
+      "critical": { "ink": "#D6455E", "paper": "#AE2540" }
+    },
+    "state_text_lightness_on_ink": 0.67,
+    "destructive_lift_on_ink": 0.06
+  },
+  "faces": {
+    "wordmark": {
+      "family": "Space Grotesk",
+      "source": "kit",
+      "files": [
+        { "file": "space-grotesk-latin-400.woff2", "weight": "400" },
+        { "file": "space-grotesk-latin-500.woff2", "weight": "500" },
+        { "file": "space-grotesk-latin-600.woff2", "weight": "600" },
+        { "file": "space-grotesk-latin-700.woff2", "weight": "700" }
+      ],
+      "fallback": ["Helvetica Neue", "Arial", "sans-serif"],
+      "features": [],
+      "outline": { "file": "SpaceGrotesk-VariableFont_wght.ttf", "weight": 600 }
+    },
+    "display": {
+      "family": "Geist",
+      "source": "kit",
+      "files": [{ "file": "geist-latin-wght.woff2", "weight": "100 900" }],
+      "fallback": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+      "features": []
+    },
+    "sans": {
+      "family": "Geist",
+      "source": "kit",
+      "files": [{ "file": "geist-latin-wght.woff2", "weight": "100 900" }],
+      "fallback": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+      "features": [],
+      "outline": { "file": "geist-latin-wght.woff2" }
+    },
+    "mono": {
+      "family": "Monaspace Neon",
+      "source": "kit",
+      "files": [{ "file": "monaspace-neon-latin-wght.woff2", "weight": "200 800" }],
+      "fallback": ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
+      "features": ["calt", "liga"]
+    }
+  },
+  "radius": {
+    "base": "0.45rem",
+    "steps": {
+      "xs": 0.4,
+      "sm": 0.6,
+      "md": 0.8,
+      "lg": 1,
+      "xl": 1.4,
+      "2xl": 1.8,
+      "3xl": 2.2,
+      "4xl": 2.6
+    },
+    "card": "2xl",
+    "site": "0.75rem"
+  },
+  "shadow": {
+    "ui": {
+      "ink": "0 1px 2px oklch(0.15 0 0 / 0.07)",
+      "paper": "0 1px 2px oklch(0.15 0 0 / 0.07)"
+    },
+    "pop": {
+      "ink": "0 25px 50px -12px rgb(0 0 0 / 0.6)",
+      "paper": "0 25px 50px -12px color-mix(in srgb, var(--ox-ink) 25%, transparent)"
+    }
+  },
+  "spacing": {
+    "unit": "0.25rem",
+    "wrap": "1120px"
+  },
+  "type": {
+    "weights": {
+      "display": 700,
+      "heading": 600,
+      "subheading": 500,
+      "ui": 500,
+      "body": 400
+    },
+    "tracking": {
+      "hero": "-0.03em",
+      "display": "-0.02em",
+      "heading": "-0.01em",
+      "none": "0"
+    },
+    "scales": {
+      "marketing": {
+        "h1": { "size": "4.5rem", "leading": 1.05, "weight": 700, "tracking": "hero" },
+        "h2": { "size": "2.5rem", "leading": 1.2, "weight": 700, "tracking": "heading" },
+        "h3": { "size": "1.75rem", "leading": 1.3, "weight": 600, "tracking": "none" },
+        "h4": { "size": "1.25rem", "leading": 1.4, "weight": 500, "tracking": "none" },
+        "body": { "size": "1.125rem", "leading": 1.65, "weight": 400, "tracking": "none" },
+        "micro": { "size": "0.875rem", "leading": 1.5, "weight": 400, "tracking": "none" }
+      },
+      "app": {
+        "h1": { "size": "1.875rem", "leading": 1.15, "weight": 700, "tracking": "display" },
+        "h2": { "size": "1.5rem", "leading": 1.2, "weight": 600, "tracking": "none" },
+        "h3": { "size": "1.25rem", "leading": 1.25, "weight": 600, "tracking": "none" },
+        "h4": { "size": "1rem", "leading": 1.4, "weight": 600, "tracking": "none" },
+        "body": { "size": "0.875rem", "leading": 1.5, "weight": 400, "tracking": "none" },
+        "micro": { "size": "0.75rem", "leading": 1.4, "weight": 400, "tracking": "none" }
+      }
+    }
+  }
+}
