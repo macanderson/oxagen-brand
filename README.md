@@ -38,8 +38,8 @@ the one value, so the two marks cannot drift apart.
 Three faces set the type. Geist sets every heading and everything read, in
 the app and on the website. Monaspace Neon sets code, logs, and data. Space
 Grotesk sets the two wordmarks and line 1 of a marketing hero, and nothing
-else. Two size scales sit on top: marketing for pages read once, app for
-dashboards read all day. Only the marketing h1 lets its first line take Space
+else. Two size scales sit on top: marketing for landing pages and posts, app
+for dashboards and docs. Only the marketing h1 lets its first line take Space
 Grotesk, so an app heading never can.
 
 Where a square is required, Stella uses its asterisk and Oxagen uses **the

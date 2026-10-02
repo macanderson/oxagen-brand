@@ -26,8 +26,8 @@ face:
   cannot reach Space Grotesk by accident.
 
 Two scales, because a landing page and a dashboard do not breathe the same
-way. The **marketing** scale is large and spaced for a page read once. The
-**app** scale is dense for panels, tables, and logs read all day. A surface
+way. The **marketing** scale is large and spaced for a landing page or a post read
+once. The **app** scale is dense for docs, panels, tables, and logs. A surface
 picks one scale and uses it throughout. Both scales route the same way:
 headings to `display`, body to `sans`, and the smallest step to `mono`.
 
@@ -221,8 +221,8 @@ def _scale(key: str, name: str, use: str) -> Scale:
     return Scale(key=key, name=name, use=use, steps=tuple(steps))
 
 
-MARKETING = _scale("m", "marketing", "landing pages, posts, docs read once: large and spaced")
-APP = _scale("a", "app", "dashboards, panels, tables, terminals, logs read all day: dense")
+MARKETING = _scale("m", "marketing", "landing pages and posts read once: large and spaced")
+APP = _scale("a", "app", "dashboards, docs, panels, tables, terminals, logs: dense")
 
 SCALES: tuple[Scale, ...] = (MARKETING, APP)
 

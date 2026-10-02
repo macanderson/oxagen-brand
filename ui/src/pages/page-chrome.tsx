@@ -69,8 +69,8 @@ import { cn } from "../lib/utils";
 
 /* ── Website ──────────────────────────────────────────────────────────────── */
 
-/** The website's measure: 1120px with 24px at each side. */
-export const siteWrap = "mx-auto w-full max-w-[1120px] px-6";
+/** The website's measure: the theme's wrap (`--ox-wrap`) with 24px at each side. */
+export const siteWrap = "mx-auto w-full max-w-[var(--ox-wrap)] px-6";
 
 /**
  * A link set straight on the glass bar. It takes the foreground ink, which

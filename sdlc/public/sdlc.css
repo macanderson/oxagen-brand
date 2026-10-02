@@ -35,7 +35,7 @@
   --mono: "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   --r: 12px;
-  --wrap: 1120px;
+  --wrap: 1180px;
   --pad: 24px;
   color-scheme: dark;
 }

@@ -222,7 +222,7 @@ export const AppScale: Story = {
   render: () => <Scale samples={APP_SCALE} />,
 };
 
-/** The large scale for pages read once, such as the site and the docs. */
+/** The large scale for landing pages and posts. Docs use the app scale. */
 export const MarketingScale: Story = {
   name: "Marketing scale",
   render: () => <Scale samples={MARKETING_SCALE} />,

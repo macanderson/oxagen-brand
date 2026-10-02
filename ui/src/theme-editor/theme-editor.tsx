@@ -668,7 +668,7 @@ function TypeSection({ theme, update }: { theme: Theme; update: Update }) {
   return (
     <Section
       title="Type sizes"
-      note="Marketing sets pages read once. App sets dashboards read all day. Each size is a whole number of pixels."
+      note="Marketing sets landing pages and posts. App sets apps and every docs site. Each size is a whole number of pixels."
     >
       {(["marketing", "app"] as const).map((scale) => {
         const h1 = remPx(theme.type.scales[scale].h1.size);
