@@ -47,16 +47,23 @@ tokens through CSS, so nothing else is needed — never hand-pick a hex.
 
 ### Type and the gold rule
 
-Three families, each with its own job. **Space Grotesk** (`--ox-font-display`) sets the
-wordmarks and h1 to h3. **Geist** (`--ox-font`) sets h4 to h6 and everything else a
-person reads: body, labels, buttons, tables, navigation. **Monaspace Neon**
-(`--ox-font-mono`) sets code, terminal output, logs, digests, paths, ids, and numbers
-in tables, with `calt` and `liga` on for texture healing. A figure in a table is mono
-so columns of digits align.
+Three families, each with its own job. **Geist** (`--ox-font`, read through
+`--font-display` and `--font-sans`) sets every heading, h1 to h6, and everything else a
+person reads: body, labels, buttons, tables, navigation. **Space Grotesk**
+(`--ox-font-display`, read through `--font-wordmark`) sets only the wordmarks and line 1
+of a marketing hero, through the `hero-line-1` class inside a `text-m-h1` heading.
+**Monaspace Neon** (`--ox-font-mono`) sets code, terminal output, logs, digests, paths,
+ids, and numbers in tables, with `calt` and `liga` on for texture healing. A figure in a
+table is mono so columns of digits align.
 
-This paragraph said Space Grotesk was the only family and that mono was the system
-stack. That was true of the skin before the house kit, and a generator reading it
-would set body copy in the display face and identifiers in whatever the host had.
+This paragraph said Space Grotesk set h1 to h3. Mac moved every heading to Geist on
+2026-09-29, and a generator reading the old rule would set app headings in the
+wordmark face.
+
+**Glass belongs only on chrome that floats over content:** menus, selects, comboboxes,
+popovers, hover cards, the command menu, toasts, a dialog's scrim, and sticky navigation
+and header bars. Cards, panels, tables, and text never take it. Use the kit's
+components for floating chrome, and its `glassBar` class string for a sticky bar.
 
 **Gold (`--ox-gold` / `--primary`) is identity, not state: at most one gold action per
 screen, and it never encodes success/failure.** State colors are `--success`
