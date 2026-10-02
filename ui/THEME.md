@@ -32,10 +32,17 @@ use. A component never names a house token, a Tailwind palette colour, or a
 hex.
 
 The v3 layer at the end of `globals.css` came from the oxagen app with the
-components in `src/components/`. It sets the gold primary, the radius scale on
-`--ui-radius` (which reads `--ox-radius-base`), the panel and rule tokens, table
-truncation, the phone rules, and the shimmer and spinner motion. It comes last,
-so it wins on cascade order.
+components in `src/components/`. It sets the gold primary, the panel and rule
+tokens, table truncation, the phone rules, and the shimmer and spinner motion.
+It comes last, so it wins on cascade order.
+
+Corners, shadows, and type sizes are declared once, in the layers above it, and
+each reads an `--ox-*` token. The radius scale reads `--ox-radius-xs` to
+`--ox-radius-4xl`, which multiply `--ox-radius-base`. The shadow scale reads
+`--ox-shadow-ui` and `shadow-pop` reads `--ox-shadow-pop`, each with its `-ink`
+twin on paper. Heading line heights read the app scale's `--ox-a-*-leading`
+steps. `build/build.py --check` fails on a literal corner, shadow, font size,
+or heading line height in `globals.css` that its allowlist does not name.
 
 ## Three rules a value cannot state
 

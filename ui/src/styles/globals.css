@@ -232,7 +232,8 @@
      * CONTROLS — single global knobs (rounding + elevation). Flip in one place.
      * ════════════════════════════════════════════════════════════════════════ */
     --ui-radius: var(--ox-radius-base); /* the theme's corner base, radius.base in theme/theme.json */
-    --ui-shadow: var(--ox-shadow-ui-ink); /* subtle neutral shadow — hairline borders do the real work. */
+    --ui-shadow: var(--ox-shadow-ui-ink); /* the faint shadow under a control, on paper. Hairline borders do the real work. */
+    --ui-shadow-pop: var(--ox-shadow-pop-ink); /* under a menu, popover, dialog, drawer, or toast, on paper */
     --radius: var(--ui-radius);
 
     /* Absolute ink semantics (theme-independent). */
@@ -506,6 +507,10 @@
   .dark {
     color-scheme: dark;
 
+    /* The control and floating-surface shadows on ink. */
+    --ui-shadow: var(--ox-shadow-ui);
+    --ui-shadow-pop: var(--ox-shadow-pop);
+
     --background: var(--_stone-950);
     --foreground: var(--_ink-white);
     --card: var(--_stone-900);
@@ -649,6 +654,9 @@
   @media (prefers-color-scheme: dark) {
     :root:not(.light):not(.dark) {
       color-scheme: dark;
+
+      --ui-shadow: var(--ox-shadow-ui);
+      --ui-shadow-pop: var(--ox-shadow-pop);
 
       --background: var(--_stone-950);
       --foreground: var(--_ink-white);
@@ -973,17 +981,20 @@
   --color-badge-border: var(--badge-border);
 
   /*
-   * Radius scale — derives entirely from the --ui-radius master knob. At
-   * --ui-radius:0 every step clamps to 0 (square). This is why ~480 rounded-*
-   * sites needed no edits.
+   * Radius scale. Each step reads its --ox-radius-<step> token, which is the
+   * theme's corner base (--ox-radius-base) times the step's multiplier in
+   * theme/theme.json (oxagen #4696). A theme change moves every rounded-*
+   * site with no edit here. `rounded-2xl` is a card, a popover, and a menu,
+   * and `rounded-4xl` is the pill a button and an input wear.
    */
-  --radius-xs: max(0px, calc(var(--radius) - 4px));
-  --radius-sm: max(0px, calc(var(--radius) - 3px));
-  --radius-md: max(0px, calc(var(--radius) - 2px));
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 16px);
+  --radius-xs: var(--ox-radius-xs);
+  --radius-sm: var(--ox-radius-sm);
+  --radius-md: var(--ox-radius-md);
+  --radius-lg: var(--ox-radius-lg);
+  --radius-xl: var(--ox-radius-xl);
+  --radius-2xl: var(--ox-radius-2xl);
+  --radius-3xl: var(--ox-radius-3xl);
+  --radius-4xl: var(--ox-radius-4xl);
 
   /*
    * Shadow scale — every step reads the --ui-shadow master knob. At
@@ -1000,6 +1011,10 @@
   --inset-shadow-2xs: var(--ui-shadow);
   --inset-shadow-xs: var(--ui-shadow);
   --inset-shadow-sm: var(--ui-shadow);
+  /* The deep shadow under floating chrome: a menu, popover, dialog, drawer,
+     or toast. Each theme block sets --ui-shadow-pop, so a dark theme from the
+     system setting gets it too, where a `dark:` class would not. */
+  --shadow-pop: var(--ui-shadow-pop);
 }
 
 /*
@@ -1056,7 +1071,7 @@
   h6 {
     font-family: var(--font-display);
     font-weight: 600;
-    line-height: 1.4;
+    line-height: var(--ox-a-h4-leading);
   }
 
   h1,
@@ -1068,8 +1083,19 @@
        text-a-h1 utilities carry. */
     font-weight: var(--ox-weight-heading);
     letter-spacing: var(--ox-tracking-heading);
-    line-height: 1.12;
     text-wrap: balance;
+  }
+
+  /* Each heading takes its step's leading from the app scale. A heading that
+     carries a text-* utility takes that utility's leading instead. */
+  h1 {
+    line-height: var(--ox-a-h1-leading);
+  }
+  h2 {
+    line-height: var(--ox-a-h2-leading);
+  }
+  h3 {
+    line-height: var(--ox-a-h3-leading);
   }
 
   code,
@@ -1195,7 +1221,7 @@
   /* Wide-tracked uppercase eyebrow label (sans). */
   .ox-eyebrow {
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-size: var(--ox-a-micro);
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -1419,12 +1445,11 @@
  * app keeps its shell frame, its record-kind and frame-kind hues, its code and
  * chart colours, and its sidebar.
  *
- * Three things change from the layer above:
- *   - Corners follow shadcn's base-maia preset: --ui-radius reads the theme's
- *     --ox-radius-base, and each step reads its --ox-radius-<step> token, the
- *     base times the step's multiplier in theme/theme.json (oxagen #4696).
- *     `rounded-4xl` is the pill a button and an input wear, and `rounded-2xl`
- *     is a card, a popover, and a menu.
+ * The corners and the shadows stay in the layer above, which reads them from
+ * the tokens. The app reads them the same way, through packages/ui (product
+ * #5111).
+ *
+ * Two things change from the layer above:
  *   - The primary button is gold in both themes, and the default button sits on
  *     the panel with the wash on hover.
  *   - `--muted` is an ink, as the mockup names it, and `bg-muted` reads
@@ -1448,19 +1473,10 @@
   --color-void: var(--void);
   --color-proven: var(--proven);
   --color-critical: var(--critical);
-  --radius-xs: var(--ox-radius-xs);
-  --radius-sm: var(--ox-radius-sm);
-  --radius-md: var(--ox-radius-md);
-  --radius-lg: var(--ox-radius-lg);
-  --radius-xl: var(--ox-radius-xl);
-  --radius-2xl: var(--ox-radius-2xl);
-  --radius-3xl: var(--ox-radius-3xl);
-  --radius-4xl: var(--ox-radius-4xl);
-  /* The floating surface's edge and shadow (#244). Each theme block sets
-     both, so a dark theme from the system setting gets them too, where a
-     `dark:` class would not. */
+  /* The floating surface's edge (#244). Each theme block sets --pop-ring, so
+     a dark theme from the system setting gets it too, where a `dark:` class
+     would not. */
   --color-pop-ring: var(--pop-ring);
-  --shadow-pop: var(--ui-shadow-pop);
 }
 
 @layer base {
@@ -1491,7 +1507,6 @@
     --st-observe: var(--muted-foreground);
     --mono: var(--ox-font-mono);
     --font: var(--ox-font);
-    --ui-radius: var(--ox-radius-base);
     --muted-surface: var(--_stone-100);
     /* A panel header is a light grey band over the white panel. */
     --panel-head: var(--ox-paper-hl);
@@ -1515,10 +1530,8 @@
     --tab-fg: var(--body);
     --tab-on: var(--card);
     /* Menus, popovers, the command menu, dialogs, and toasts float on a faint
-       ring and a deep shadow in place of a border (#244). */
+       ring in place of a border, over the deep --ui-shadow-pop (#244). */
     --pop-ring: color-mix(in srgb, var(--foreground) 5%, transparent);
-    --ui-shadow: var(--ox-shadow-ui-ink);
-    --ui-shadow-pop: var(--ox-shadow-pop-ink);
   }
 
   .dark {
@@ -1541,8 +1554,6 @@
     --tab-fg: var(--muted);
     --tab-on: color-mix(in srgb, var(--hl), var(--rule));
     --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
-    --ui-shadow: var(--ox-shadow-ui);
-    --ui-shadow-pop: var(--ox-shadow-pop);
   }
 
   /* Match explicit dark mode before a theme script runs. */
@@ -1563,8 +1574,6 @@
       --tab-fg: var(--muted);
       --tab-on: color-mix(in srgb, var(--hl), var(--rule));
       --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
-      --ui-shadow: var(--ox-shadow-ui);
-      --ui-shadow-pop: var(--ox-shadow-pop);
     }
   }
 }
