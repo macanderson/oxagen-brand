@@ -5,9 +5,14 @@ code, logs, and data. Space Grotesk sets the two wordmarks and line 1 of a
 marketing hero, and nothing else. All three are under the SIL Open Font
 License, so all three live in this repo, each with its licence beside it.
 
+The wordmark face is fixed: Space Grotesk, drawn from
+`SpaceGrotesk-VariableFont_wght.ttf` at weight 600. `build/theme.py` refuses
+any other wordmark family, outline file, or weight, and a theme request cannot
+name the wordmark.
+
 | File | Face | Licence |
 |---|---|---|
-| `SpaceGrotesk-VariableFont_wght.ttf` | Space Grotesk, the source the wordmarks are outlined from at build time | `LICENSE-OFL.txt` |
+| `SpaceGrotesk-VariableFont_wght.ttf` | Space Grotesk, the fixed source the wordmarks are outlined from at weight 600 at build time | `LICENSE-OFL.txt` |
 | `space-grotesk-latin-{400,500,600,700}.woff2` | Space Grotesk, four static weights for the web | `LICENSE-OFL.txt` |
 | `geist-latin-wght.woff2` | Geist, variable weight 100 to 900, and the source the art's lines of text are outlined from at build time | `LICENSE-OFL-geist.txt` |
 | `monaspace-neon-latin-wght.woff2` | Monaspace Neon, variable weight 200 to 800, upright, normal width | `LICENSE-OFL-monaspace.txt` |
@@ -28,8 +33,8 @@ To load the faces, a Next.js app uses `tokens/next-fonts.ts`, and any other
 page imports `tokens/house-fonts.css`.
 
 The `apply-theme` workflow adds files here when a theme request names a new
-face: a Google face's latin WOFF2 files, the TTF the marks or the art's text
-are drawn from, and the family's licence as `LICENSE-<KIND>-<family>.txt`,
+face: a Google face's latin WOFF2 files, the TTF the art's text is drawn
+from, and the family's licence as `LICENSE-<KIND>-<family>.txt`,
 and a WOFF2 copy of an uploaded TTF, OTF, or WOFF. It never deletes a file.
 It does not edit the table above, so add the new face's row in the request's
 pull request. See `CHANGING.md`, "Theme editor".
