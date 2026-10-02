@@ -493,7 +493,7 @@ def report(state: dict, pushed: bool = True, run_url: str = "") -> str:
         lines += ["", f"The quietest text sits below 4.5:1, which the build allows because it never carries meaning: {', '.join(low)}."]
 
     if state.get("fonts"):
-        lines += ["", "### Fonts", ""]
+        lines += ["", "### Fonts", "", "`fonts/README.md` lists the faces and their licences by hand. Add a row for a new face in this PR.", ""]
         for f in state["fonts"]:
             files = ", ".join(f"`fonts/{n}`" for n in f["files"])
             extra = f" Converted for the web: {', '.join('`fonts/' + n + '`' for n in f.get('converted', []))}." if f.get("converted") else ""

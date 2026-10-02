@@ -96,11 +96,22 @@ function familyStack(names: string[]): string {
   return names.map((n) => (n.includes(" ") ? `"${n}"` : n)).join(", ");
 }
 
-/** The CSS font stack a role takes under a choice, as `typeset.py` writes it. */
+/**
+ * The CSS font stack a role takes under a choice, as `typeset.py` writes it.
+ * The fallback is the one the applied theme will hold: the role's own for its
+ * shipped family, the kit face's own for another kit face (the request names
+ * that face's fallback), and the role's default for a new family.
+ */
 export function fontStack(role: Role, choice: FaceChoice): string {
   const family = choiceFamily(role, choice);
   const shipped = SHIPPED.faces[role];
-  const fallback = family === shipped.family ? shipped.fallback : DEFAULT_FALLBACK[role];
+  const kitFace = ROLES.map((r) => SHIPPED.faces[r]).find((f) => f.family === family);
+  const fallback =
+    family === shipped.family
+      ? shipped.fallback
+      : choice.kind === "kit" && kitFace
+        ? kitFace.fallback
+        : DEFAULT_FALLBACK[role];
   return `"${family}", ${familyStack(fallback)}`;
 }
 

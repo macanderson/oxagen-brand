@@ -10,7 +10,7 @@ Oxagen and Stella share one house system: the palette, the three faces, the comp
 
 1. Edit the source file. For a colour, a face, a corner, a shadow, the spacing, or a type size, that is `theme/theme.json`. Run its generator. Commit the source and everything the generator writes, in one PR.
 2. Never edit a generated file by hand: `tokens/`, `logo/`, `icons/`, `spinners/`, `wallpapers/`, `splash/`, `social/`, `ads/`, `content/`, `github-badges/`, `messages/index.json`, `message-bank.html`, `always-on.html`, `playbook.html`, `skills/oxagen-branding/assets/`, and `skills/oxagen-branding/references/always-on-lines.md`.
-3. Open a pull request. On every PR, CI runs `build/build.py --check`, `build/messages.py --check`, `build/fonts.py --check`, `build/skill.py --check`, and an install of the skill stub, and the kit's typecheck, tests, Storybook, and bundle beside them. The deploy to brand.oxagen.cloud waits for all of them.
+3. Open a pull request. On every PR, CI runs `build/build.py --check`, the unit tests in `build/` (`python -m unittest discover -s build -p "test_*.py"`), `build/editor_fixture.py --check`, `build/messages.py --check`, `build/fonts.py --check`, `build/skill.py --check`, and an install of the skill stub, and the kit's typecheck, tests, Storybook, and bundle beside them. The deploy to brand.oxagen.cloud waits for all of them.
 4. The generators run on your machine. The checks run in CI. `build/build.py` checks its sources before it writes, and it prints a `problem:` line and writes nothing when one fails.
 
 Set up the generators once:
@@ -82,7 +82,7 @@ The kit's Storybook has a theme editor on every example page, the `Pages/` stori
    - carries a new gold into the hand copies (see "Change a colour token", step 6),
    - and deletes the request.
    Then the workflow runs `build/build.py`, `build/playbook.py`, `build/messages.py`, `build/editor_fixture.py`, and `build/build.py --check`. It commits the result to the branch with `BRAND_SYNC_TOKEN`, because a push made with `GITHUB_TOKEN` starts no workflow, and the kit's checks must run on the result. It comments on the pull request with the changed fields, the new gold and its neighbours, and any contrast warning. When a step fails, it pushes nothing and comments with the problem.
-5. **Review the pull request.** Read the comment and the checks. A request that changes the wordmark face changes the logo, and the comment lists the copies to update by hand.
+5. **Review the pull request.** Read the comment and the checks. A request that changes the wordmark face changes the logo, and the comment lists the copies to update by hand. A request that adds a face also needs a row in `fonts/README.md`, which lists the faces and their licences by hand. Two quick pushes, such as the request and then its fonts, can start two runs: the first pushes the result, and the second fails at its push and comments so. The branch holds the first run's result, and its checks decide.
 6. **Merge it.** `ui.yml` deploys brand.oxagen.cloud, and the `fan-out` workflow opens a sync pull request in every repo `consumers.json` lists. See "How a change reaches each surface".
 
 The editor's colour maths is a port of `build/color.py`. `build/editor_fixture.py` writes what `color.py` derives for the shipped colours and six changed ones, the editor's tests hold the port to it, and CI fails when the fixture is stale.

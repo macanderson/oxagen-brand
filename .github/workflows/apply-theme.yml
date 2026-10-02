@@ -24,6 +24,11 @@ name: apply-theme
 # inside fonts/. These guard against a request that reaches outside the theme
 # by mistake. They do not stop someone with write access, who can change any
 # workflow on a branch.
+#
+# Two quick pushes, such as the request and then its fonts, can start two
+# runs. When the first one pushes before the second checks out, the second
+# fails at its push, because the branch moved, and comments that it pushed
+# nothing. The branch holds the first run's result, and its checks decide.
 
 on:
   pull_request:

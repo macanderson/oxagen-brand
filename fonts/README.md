@@ -26,3 +26,10 @@ v1.400), keeping texture healing (`calt`) and the code ligatures (`liga`):
 
 To load the faces, a Next.js app uses `tokens/next-fonts.ts`, and any other
 page imports `tokens/house-fonts.css`.
+
+The `apply-theme` workflow adds files here when a theme request names a new
+face: a Google face's latin WOFF2 files, the TTF the marks or the art's text
+are drawn from, and the family's licence as `LICENSE-<KIND>-<family>.txt`,
+and a WOFF2 copy of an uploaded TTF, OTF, or WOFF. It never deletes a file.
+It does not edit the table above, so add the new face's row in the request's
+pull request. See `CHANGING.md`, "Theme editor".

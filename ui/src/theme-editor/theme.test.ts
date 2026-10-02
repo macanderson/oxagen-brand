@@ -73,6 +73,13 @@ describe("faces", () => {
     expect(fontStack("wordmark", { kind: "shipped" })).toBe(declared(tokensCss, "--ox-font-display"));
   });
 
+  it("gives another kit face its own fallback, as the request names it", () => {
+    const mono = SHIPPED.faces.mono;
+    const stack = fontStack("display", { kind: "kit", family: mono.family });
+    expect(stack.startsWith(`"${mono.family}", `)).toBe(true);
+    expect(stack).toContain(mono.fallback[mono.fallback.length - 1] ?? "monospace");
+  });
+
   it("gives a new family the role's default fallback", () => {
     expect(fontStack("display", { kind: "google", family: "Example Sans", weights: [400] })).toBe(
       '"Example Sans", system-ui, -apple-system, "Segoe UI", sans-serif',
