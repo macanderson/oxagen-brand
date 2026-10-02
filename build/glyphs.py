@@ -6,10 +6,10 @@ drift apart from each other. The logo face is the variable Space Grotesk
 vendored in `fonts/`, instanced to a fixed weight at build time.
 
 The art's lines of text (headlines, answer lines, kickers, calls to action,
-taglines) are outlined the same way, from Geist, because Geist sets every line
-of text and Space Grotesk sets only the wordmarks and line 1 of the oxagen.sh
-hero (Mac, 2026-09-29). `set_line`, `font`, and `shape` default to the wordmark
-face. `text_width` and `text_path` default to the text face.
+taglines) are outlined the same way, from the text face (`faces.sans.outline`,
+Aeonik since 2026-10-02), because the text face sets every line of text and
+Space Grotesk sets the wordmarks. `set_line`, `font`, and `shape` default to
+the wordmark face. `text_width` and `text_path` default to the text face.
 
 Two things are borrowed from the Oxagen brand kit this system is built to
 match, and `verify()` checks both against the kit's own `wordmark-color-light`:
@@ -134,8 +134,8 @@ def shape(
             f"--variations=wght={weight}",
             f"--text={text}",
             "--output-format=json",
-            # Glyph ids, not names: the Geist webfont carries no glyph names,
-            # so HarfBuzz would print `gidN`, which fontTools does not know.
+            # Glyph ids, not names: a webfont may carry no glyph names, and
+            # then HarfBuzz prints `gidN`, which fontTools does not know.
             "--no-glyph-names",
         ],
         check=True,
@@ -225,7 +225,7 @@ def text_width(s: str, size: float, weight: int = 400, face: str = "text") -> fl
 def text_path(
     s: str, size: float, x: float, y: float, weight: int = 400, *, anchor: str = "start", face: str = "text"
 ) -> str:
-    """A line of text as one outlined SVG path, `y` on the baseline, in Geist unless `face` says otherwise.
+    """A line of text as one outlined SVG path, `y` on the baseline, in the text face unless `face` says otherwise.
 
     Outlined rather than set as `<text>`, because these surfaces are rasterised
     by whatever renderer is to hand, and a `<text>` element that cannot find

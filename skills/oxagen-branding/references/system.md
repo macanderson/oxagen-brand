@@ -53,26 +53,26 @@ A state colour is a mark, and a mark needs only 3:1. A word in a state's colour 
 
 ## Type
 
-Three faces, each with one job. Mac set this rule on 2026-09-29.
+Three faces, each with one job. Mac set this rule on 2026-10-02, when Aeonik became the house sans.
 
-- **Geist** sets every heading, h1 to h6, and everything read: body, labels, buttons, tooltips, tables, navigation. This holds in the app and on the website. Small headings take weight 500 or 600 to separate from body.
-- **Space Grotesk** sets the oxagen and stella wordmarks, Stella's asterisk icon, and line 1 of a marketing hero. Nothing else, and nothing below 20px. An app never sets a heading in it. A website sets only the first line of its hero in it: wrap that line in `<span class="hero-line-1">` inside a `text-m-h1` heading, and line 2 stays in Geist. A blog post title or any other h1 is Geist.
+- **Aeonik** sets every heading, h1 to h6, and everything read in the app and on the docs site: body, labels, buttons, tooltips, tables, navigation. On the website it sets everything read and every h4 to h6. Small headings take weight 500 or 600 to separate from body. Its italic ships beside it, so `em` draws the real italic.
+- **Space Grotesk** sets the oxagen and stella wordmarks and Stella's asterisk icon. On the website (oxagen.sh) it also sets every h1, h2, and h3, and line 1 of the hero. Nothing below 20px. The app and the docs site never set a heading in it. On the website, wrap line 1 of the hero in `<span class="hero-line-1">` inside a `text-m-h1` heading.
 - **Monaspace Neon** is the code face: code, commands, terminal output, logs, digests, paths, frame kinds, verdict values, ids, and the numbers in tables. Texture healing and code ligatures are on (`font-feature-settings: "calt", "liga"`).
 
-No fourth typeface, ever. In CSS a rule names a role, never a face. `--font-display` is the heading token and `--font-sans` the text token (the kit's pages call it `--font`), and both are Geist. `--font-mono` is Monaspace Neon. `--font-wordmark` is Space Grotesk, for a wordmark set as text. `--font-hero` is Space Grotesk inside a `text-m-h1` heading and Geist everywhere else, and the `hero-line-1` class reads it. All three faces ship in the kit's `fonts/` under the SIL Open Font License. Headings are sentence case.
+No fourth role face. In CSS a rule names a role, never a face. `--font-display` is the heading token and `--font-sans` the text token (the kit's pages call it `--font`), and both are Aeonik. `--font-mono` is Monaspace Neon. `--font-wordmark` is Space Grotesk, for a wordmark set as text and for the website's h1 to h3. `--font-hero` is Space Grotesk inside a `text-m-h1` heading and Aeonik everywhere else, and the `hero-line-1` class reads it. The kit's `text-m-*` steps read `--font-display`, so the website points its h1 to h3 at `--font-wordmark` in its own stylesheet. Aeonik Mono and Aeonik Fono ship in the kit's `fonts/` too and load as their own families, and no role takes either one yet. Headings are sentence case.
 
 Two scales. A surface picks one and keeps it.
 
 | Step | Face | Marketing (`text-m-*`) | App (`text-a-*`) |
 |---|---|---|---|
-| h1 | Geist (marketing hero line 1: Space Grotesk) | 72px, 1.05, 700, -0.03em | 30px, 1.15, 700, -0.02em |
-| h2 | Geist | 40px, 1.2, 700, -0.01em | 24px, 1.2, 600 |
-| h3 | Geist | 28px, 1.3, 600 | 20px, 1.25, 600 |
-| h4 | Geist | 20px, 1.4, 500 | 16px, 1.4, 600 |
-| body | Geist | 18px, 1.65, 400 | 14px, 1.5, 400 |
+| h1 | Aeonik (on the website: Space Grotesk) | 72px, 1.05, 700, -0.03em | 30px, 1.15, 700, -0.02em |
+| h2 | Aeonik (on the website: Space Grotesk) | 40px, 1.2, 700, -0.01em | 24px, 1.2, 600 |
+| h3 | Aeonik (on the website: Space Grotesk) | 28px, 1.3, 600 | 20px, 1.25, 600 |
+| h4 | Aeonik | 20px, 1.4, 500 | 16px, 1.4, 600 |
+| body | Aeonik | 18px, 1.65, 400 | 14px, 1.5, 400 |
 | micro | Monaspace Neon | 14px, 1.5, 400 | 12px, 1.4, 400 |
 
-Marketing is for landing pages and posts: large and spaced. App is for docs, dashboards, panels, tables, terminals, and logs: dense. Every docs site uses the app scale (Mac, 2026-10-02). An eyebrow is 12px Geist, uppercase, at 0.14em tracking.
+Marketing is for landing pages and posts: large and spaced. App is for docs, dashboards, panels, tables, terminals, and logs: dense. Every docs site uses the app scale (Mac, 2026-10-02). An eyebrow is 12px Aeonik, uppercase, at 0.14em tracking.
 
 ## Layout
 

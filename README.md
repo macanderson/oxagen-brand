@@ -35,12 +35,15 @@ picked: `#F1CE65` is the highlight the shimmer passes through, and `#8A7223`
 is gold as text on white, where the metal itself is 2.1:1. Both names carry
 the one value, so the two marks cannot drift apart.
 
-Three faces set the type. Geist sets every heading and everything read, in
-the app and on the website. Monaspace Neon sets code, logs, and data. Space
-Grotesk sets the two wordmarks and line 1 of a marketing hero, and nothing
-else. Two size scales sit on top: marketing for landing pages and posts, app
-for dashboards and docs. Only the marketing h1 lets its first line take Space
-Grotesk, so an app heading never can.
+Three faces set the type. Aeonik sets every heading and everything read in
+the app and on the docs site. Monaspace Neon sets code, logs, and data. Space
+Grotesk sets the two wordmarks and line 1 of a marketing hero. On the website
+(oxagen.sh), Space Grotesk also sets every h1, h2, and h3. Mac set this rule on
+2026-10-02, when Aeonik became the house sans. Two size scales sit on top: marketing
+for landing pages and posts, app for dashboards and docs. Only the marketing h1
+lets its first line take Space Grotesk, so an app heading never can. Aeonik
+Mono and Aeonik Fono load too, so a page can name them, and no role takes
+either one yet.
 
 Where a square is required, Stella uses its asterisk and Oxagen uses **the
 hive**: six hexagonal cells on a honeycomb grid, four drawn as an outline and
@@ -76,7 +79,7 @@ messages/          the message registry: one YAML file per line, schema.json, fi
 theme/             theme.json, the one editable source for colours, faces, radius, shadows, spacing, and type, and its schema
 build/             theme.py · color.py · typeset.py · fonts.py · pagecss.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against
-fonts/             Space Grotesk, Geist and Monaspace Neon webfonts, each with its licence
+fonts/             Space Grotesk, Aeonik, Aeonik Mono, Aeonik Fono and Monaspace Neon webfonts
 tokens/            house-tokens.css · house-tokens.json · house-tailwind.css · house-fonts.css · next-fonts.ts
 ui/                @oxagen/ui: the component kit, its Storybook, and the design-system bundle. Reads tokens/ and fonts/.
 logo/svg,png/      wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles
@@ -144,7 +147,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 `house-tailwind.css` sets the semantic tokens shadcn components bind to
 (`--background`, `--primary`, `--ring`, `--sidebar-*`) for light, `.dark`, and
 the OS preference, adds the palette as `bg-ox-*` and `text-ox-*` utilities,
-routes every heading and body to Geist and code to Monaspace Neon, and defines
+routes every heading and body to Aeonik and code to Monaspace Neon, and defines
 the two scales as `text-m-h1` to `text-m-micro` and `text-a-h1` to
 `text-a-micro`. Each state colour comes as a mark for badges and dots and as a
 text stop for words, `--ox-st-*-text` on ink and `--ox-st-*-text-ink` on paper.
@@ -160,9 +163,17 @@ marketing hero, and it works only inside a `text-m-h1` heading:
 ```
 
 `text-m-h1` points `--font-hero` at Space Grotesk for its own contents.
-Everywhere else `--font-hero` is Geist, so the same class inside a `text-a-h1`,
-or on any app heading, draws in Geist. An app needs no rule of its own to keep
+Everywhere else `--font-hero` is Aeonik, so the same class inside a `text-a-h1`,
+or on any app heading, draws in Aeonik. An app needs no rule of its own to keep
 Space Grotesk off its headings.
+
+The website sets every h1, h2, and h3 in Space Grotesk. The kit's `text-m-*`
+steps still read `--font-display`, which is Aeonik, so the website points those
+headings at `--font-wordmark` in its own stylesheet.
+
+Aeonik Mono and Aeonik Fono load from `house-fonts.css` and `next-fonts.ts` as
+their own families. A page names one with `font-family: "Aeonik Mono"`, or
+with `var(--font-aeonik-mono)` under next/font. No role token reads either.
 
 The oxagen monorepo, `oxageninc/product`, vendors these files with
 `tools/scripts/sync-brand-assets.mjs`, and CI runs it with `--check`, so a
@@ -315,8 +326,8 @@ weight, same em, HarfBuzz spacing including kerning) and fails if the geometry
 has moved. It also fails if a gold neighbour stops matching its OKLCH
 derivation, if any text token drops below AA on its ground, if a state text
 stop drops below AA on a surface of its theme or leaves its mark's hue, if a heading
-leaves Geist, if any step but the marketing h1 admits a Space Grotesk hero
-line, if a webfont loses a face or a feature, or if the skill's tokens or logo
+leaves the heading face, if any step but the marketing h1 admits a Space Grotesk hero
+line, if a webfont loses a face, its italic, or a feature, or if the skill's tokens or logo
 drift from the build.
 
 ## Rules worth knowing before you use it
@@ -346,8 +357,9 @@ drift from the build.
   take one ad. The short forms keep the scope of the long ones:
   governed, recorded, mediated. Ad copy comes only from approved,
   launch-released entries in `messages/ads/`.
-- **Space Grotesk sets the wordmarks and line 1 of a marketing hero.** Every
-  heading is Geist, h1 to h6, in the app and on the website. Nothing in Space
+- **Space Grotesk sets the wordmarks and the website's large headings.** On
+  the website it sets every h1, h2, and h3 and line 1 of a hero. In the app
+  and on the docs site, every heading is Aeonik, h1 to h6. Nothing in Space
   Grotesk is below 20 px. Code, terminal output, and data are Monaspace Neon.
 - **A status word takes its text stop.** A badge or a dot takes the state's
   mark. A word in that colour takes `--ox-st-*-text` on ink or

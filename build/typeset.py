@@ -1,28 +1,35 @@
 """The house type: three faces, five roles, and two size scales.
 
-**Geist** sets every heading and every line of text: h1 to h6, body, labels,
-buttons, tables, and navigation, in the app and on the website alike.
-**Monaspace Neon** sets code, terminal output, logs, digests, paths, ids, and
-the numbers in a metric or a table. Its texture healing (`calt`) and code
-ligatures (`liga`) are on wherever it is used. **Space Grotesk** sets the
-oxagen and stella wordmarks, Stella's asterisk icon, and line 1 of a
-marketing hero, and nothing else. Mac set that rule on 2026-09-29. Its wide
-geometric letters lose their shape below 20 px, so nothing smaller is set in
-it.
+**Aeonik** sets every heading and every line of text in the app and on the
+docs site: h1 to h6, body, labels, buttons, tables, and navigation. Its
+italic ships beside the upright as the same family. **Monaspace Neon** sets
+code, terminal output, logs, digests, paths, ids, and the numbers in a metric
+or a table. Its texture healing (`calt`) and code ligatures (`liga`) are on
+wherever it is used. **Space Grotesk** sets the oxagen and stella wordmarks,
+Stella's asterisk icon, and line 1 of a marketing hero. On the website
+(oxagen.sh) it also sets every h1, h2, and h3. Mac set that rule on
+2026-10-02, when Aeonik became the house sans. The website applies it in its own
+stylesheet: the marketing scale here still reads the heading role, and only
+the marketing h1 points `--font-hero` at Space Grotesk. Its wide geometric
+letters lose their shape below 20 px, so nothing smaller is set in it.
+
+**Aeonik Mono** and **Aeonik Fono** ship too, from `extra_faces` in the
+theme. Each gets @font-face rules and a next/font loader, so a page can name
+its family. No role reads them yet.
 
 A product's CSS names a role, `--font-<role>`, and each role resolves to one
 face:
 
-- `sans` is Geist, for everything read.
-- `display` is Geist too. It is the heading token, so every heading can be
+- `sans` is Aeonik, for everything read.
+- `display` is Aeonik too. It is the heading token, so every heading can be
   retuned in one place. The name predates the 2026-09-29 rule and stays so
   that no consumer breaks.
 - `mono` is Monaspace Neon.
 - `wordmark` is Space Grotesk, for a wordmark set as text rather than drawn.
-- `hero` is Geist, except inside a heading set on a step that admits a hero.
+- `hero` is Aeonik, except inside a heading set on a step that admits a hero.
   Only the marketing h1 admits one. It points `--font-hero` at the wordmark
   face for its own contents, so the `hero-line-1` class reaches Space Grotesk
-  inside a marketing h1 and resolves to Geist everywhere else. An app heading
+  inside a marketing h1 and resolves to Aeonik everywhere else. An app heading
   cannot reach Space Grotesk by accident.
 
 Two scales, because a landing page and a dashboard do not breathe the same
@@ -57,12 +64,12 @@ _TYPE = THEME["type"]
 
 @dataclass(frozen=True)
 class Face:
-    key: str  # display | sans | mono
+    key: str  # display | sans | mono | heading, or extra-<family> for a face no role takes
     family: str
     job: str
     stack: str  # the fallbacks after the family, as CSS
     next_var: str  # the CSS variable next/font/local sets on <html>
-    files: tuple[tuple[str, str], ...]  # (file, weight or weight range)
+    files: tuple[tuple[str, str, str], ...]  # (file, weight or weight range, normal or italic)
     features: str = "normal"  # font-feature-settings
 
     @property
@@ -84,41 +91,61 @@ def _next_var(family: str) -> str:
     return "--font-" + re.sub(r"[^a-z0-9]+", "-", family.lower()).strip("-")
 
 
-def _face(key: str, role: str, job: str) -> Face:
-    spec = _FACES[role]
+def _from_spec(key: str, spec: dict, job: str) -> Face:
     return Face(
         key=key,
         family=spec["family"],
         job=job,
         stack=_family_stack(spec["fallback"]),
         next_var=_next_var(spec["family"]),
-        files=tuple((f["file"], f["weight"]) for f in spec["files"]),
+        files=tuple((f["file"], f["weight"], f.get("style", "normal")) for f in spec["files"]),
         features=_features(spec["features"]),
     )
+
+
+def _face(key: str, role: str, job: str) -> Face:
+    return _from_spec(key, _FACES[role], job)
 
 
 #: The face of each role in the theme. The face key of the wordmark stays
 #: `display` so that `--ox-font-display` and `--font-space-grotesk` keep their
 #: names in every repository that vendors the tokens. The module-level names
-#: below are the faces the kit ships. They name the role's face whatever
-#: family the theme holds, because other modules import them.
+#: below name the role's face whatever family the theme holds, because other
+#: modules import them. SPACE_GROTESK and MONASPACE_NEON keep the names of the
+#: faces the kit ships.
 SPACE_GROTESK = _face("display", "wordmark", "the wordmarks, Stella's icon, and line 1 of a marketing hero")
-GEIST = _face("sans", "sans", "every heading, body, labels, buttons, tables, navigation")
+TEXT_FACE = _face("sans", "sans", "every heading, body, labels, buttons, tables, navigation")
 MONASPACE_NEON = _face("mono", "mono", "code, terminal output, logs, digests, paths, ids, and numbers in tables")
-WORDMARK_FACE, TEXT_FACE, CODE_FACE = SPACE_GROTESK, GEIST, MONASPACE_NEON
+WORDMARK_FACE, CODE_FACE = SPACE_GROTESK, MONASPACE_NEON
 
 #: Headings share a face with another role when the theme gives the display
 #: role that role's family, as it gives it the text face today. A theme that
 #: names a family no other role uses adds a fourth face.
 _HEADING = _face("heading", "display", "every heading, h1 to h6")
 HEADING_FACE: Face = next(
-    (f for f in (GEIST, SPACE_GROTESK, MONASPACE_NEON) if f.family == _HEADING.family), _HEADING
+    (f for f in (TEXT_FACE, SPACE_GROTESK, MONASPACE_NEON) if f.family == _HEADING.family), _HEADING
 )
 
 FACES: tuple[Face, ...] = tuple(
-    dict.fromkeys((SPACE_GROTESK, GEIST, HEADING_FACE, MONASPACE_NEON))
+    dict.fromkeys((SPACE_GROTESK, TEXT_FACE, HEADING_FACE, MONASPACE_NEON))
 )
 FACE = {f.key: f for f in FACES}
+
+#: Faces the kit ships and loads that no role takes, from `extra_faces` in the
+#: theme: Aeonik Mono and Aeonik Fono today. They get @font-face rules and a
+#: next/font loader, so a page can name the family, and no `--font-*` or
+#: `--ox-font-*` token. Their keys stay out of FACE, so no role can resolve to one.
+EXTRA_FACES: tuple[Face, ...] = tuple(
+    _from_spec(
+        "extra-" + re.sub(r"[^a-z0-9]+", "-", spec["family"].lower()).strip("-"),
+        spec,
+        "loads for a page that names it. No role reads it yet",
+    )
+    for spec in THEME.get("extra_faces", [])
+)
+
+#: Every face the kit loads: the role faces, then the extra faces.
+LOADED_FACES: tuple[Face, ...] = FACES + EXTRA_FACES
 
 
 # --------------------------------------------------------------------------
@@ -256,13 +283,17 @@ FONT_FORMATS = {".woff2": "woff2", ".woff": "woff", ".ttf": "truetype", ".otf": 
 
 
 def font_faces(prefix: str = "../fonts/") -> str:
-    """The @font-face rules for the faces, one per file."""
+    """The @font-face rules for every face the kit loads, one per file.
+
+    An italic file is the same family with `font-style: italic`, so a browser
+    picks it for `em` and `font-style: italic` instead of slanting the upright.
+    """
     out = []
-    for face in FACES:
-        for file, weight in face.files:
+    for face in LOADED_FACES:
+        for file, weight, style in face.files:
             kind = FONT_FORMATS[file[file.rindex(".") :].lower()]
             out.append(
-                f'@font-face{{font-family:"{face.family}";font-style:normal;font-weight:{weight};'
+                f'@font-face{{font-family:"{face.family}";font-style:{style};font-weight:{weight};'
                 f'font-display:swap;src:url({prefix}{file}) format("{kind}")}}'
             )
     return "\n".join(out)
@@ -290,19 +321,21 @@ def step_css(step: Step, scale_key: str) -> str:
     return "; ".join(decl) + ";"
 
 
+def _face_json(f: Face) -> dict:
+    return {
+        "family": f.family,
+        "job": f.job,
+        "stack": f.css_stack,
+        "next_var": f.next_var,
+        "files": [{"file": file, "weight": w, "style": style} for file, w, style in f.files],
+        "features": f.features,
+    }
+
+
 def as_json() -> dict:
     return {
-        "faces": {
-            f.key: {
-                "family": f.family,
-                "job": f.job,
-                "stack": f.css_stack,
-                "next_var": f.next_var,
-                "files": [{"file": file, "weight": w} for file, w in f.files],
-                "features": f.features,
-            }
-            for f in FACES
-        },
+        "faces": {f.key: _face_json(f) for f in FACES},
+        "extra_faces": [_face_json(f) for f in EXTRA_FACES],
         "roles": {
             r.key: {"css_var": f"--font-{r.key}", "face": r.face, "family": FACE[r.face].family, "job": r.job}
             for r in ROLES
@@ -370,6 +403,17 @@ def verify() -> list[str]:
         for file in files:
             if not (FONTS / file).is_file():
                 problems.append(f"faces.{role} names fonts/{file}, which does not exist")
+    for face in EXTRA_FACES:
+        if face.family in families:
+            problems.append(f"extra_faces names {face.family}, which a role already takes")
+        families.setdefault(face.family, face)
+        for file, _, _ in face.files:
+            if not (FONTS / file).is_file():
+                problems.append(f"extra_faces names fonts/{file} for {face.family}, which does not exist")
+    for face in LOADED_FACES:
+        upright = {w for _, w, style in face.files if style == "normal"}
+        if not upright:
+            problems.append(f"{face.family} has no upright file, so a browser has nothing to set upright text in")
     for r in ROUTING:
         if r.role not in ("display", "sans", "mono"):
             problems.append(f"{r.elements} route to the {r.role} role, which only a wordmark or a hero line takes")

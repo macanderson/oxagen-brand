@@ -12,10 +12,12 @@ headline, the rule, the subline, and the action stacked above the wordmark. It
 does not import `surfaces.py`, so the page needs PyYAML and nothing else. The
 builder on the page carries a JavaScript port of `ad()`; change both together.
 
-The website sections follow the house type rule. Every heading is Geist, and
-line 1 of the hero (`.m-h1`) reads `--font-hero`, which is Space Grotesk. The
-ad art sets all of its text in Geist, as the files in `ads/` do, and `WIDTHS`
-measures it. Only the wordmark is Space Grotesk, and it is a drawn path.
+The website sections set every heading in Aeonik, and line 1 of the hero
+(`.m-h1`) reads `--font-hero`, which is Space Grotesk. They predate the
+2026-10-02 rule that sets every h1, h2, and h3 on the website in Space
+Grotesk. The ad art sets all of its text in Aeonik, as the files in `ads/` do,
+and `WIDTHS` measures it. Only the wordmark is Space Grotesk, and it is a
+drawn path.
 """
 
 from __future__ import annotations
@@ -31,21 +33,21 @@ import pwa
 PAGE = MS.ROOT / "always-on.html"
 TITLE = "Oxagen always-on campaign"
 T, A = MS.T, MS.A
-DISPLAY = "'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif"
+DISPLAY = "'Aeonik', system-ui, -apple-system, 'Segoe UI', sans-serif"
 
-#: Geist 700 advances in em, read from fonts/geist-latin-wght.woff2 instanced at
+#: Aeonik 700 advances in em, read from fonts/aeonik-wght.woff2 instanced at
 #: wght 700 (`glyphs.font(700, "text")`). Line breaks and fits measure with
 #: these, so the art wraps where the font does. A change of text face needs a
 #: new table, and the JavaScript port reads this one.
 CHARS = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~’·"
 WIDTHS = (
-    0.228, 0.257, 0.39, 0.589, 0.67, 0.825, 0.706, 0.203, 0.323, 0.323, 0.422, 0.57, 0.236, 0.417, 0.236, 0.522,
-    0.693, 0.449, 0.653, 0.65, 0.656, 0.671, 0.627, 0.544, 0.664, 0.631, 0.311, 0.311, 0.55, 0.552, 0.55, 0.591,
-    0.962, 0.73, 0.703, 0.734, 0.716, 0.622, 0.604, 0.738, 0.721, 0.3, 0.627, 0.689, 0.589, 0.915, 0.75, 0.776,
-    0.672, 0.769, 0.697, 0.681, 0.599, 0.703, 0.73, 1.015, 0.688, 0.631, 0.594, 0.39, 0.501, 0.39, 0.461, 0.561,
-    0.278, 0.594, 0.634, 0.598, 0.634, 0.605, 0.447, 0.634, 0.611, 0.281, 0.331, 0.647, 0.313, 0.9, 0.611, 0.618,
-    0.634, 0.634, 0.425, 0.57, 0.445, 0.607, 0.609, 0.849, 0.65, 0.586, 0.583, 0.408, 0.294, 0.408, 0.523, 0.247,
-    0.236,
+    0.238, 0.253, 0.411, 0.645, 0.62, 0.919, 0.804, 0.217, 0.344, 0.344, 0.434, 0.515, 0.248, 0.43, 0.248, 0.383,
+    0.647, 0.367, 0.567, 0.588, 0.615, 0.59, 0.612, 0.54, 0.6, 0.612, 0.248, 0.248, 0.515, 0.515, 0.515, 0.534,
+    0.981, 0.703, 0.634, 0.699, 0.704, 0.564, 0.546, 0.739, 0.691, 0.263, 0.394, 0.68, 0.507, 0.886, 0.694, 0.753,
+    0.619, 0.76, 0.635, 0.62, 0.6, 0.683, 0.657, 0.996, 0.656, 0.666, 0.628, 0.333, 0.442, 0.333, 0.526, 0.504,
+    0.4, 0.561, 0.615, 0.569, 0.615, 0.581, 0.37, 0.615, 0.599, 0.244, 0.252, 0.559, 0.244, 0.904, 0.599, 0.6,
+    0.615, 0.615, 0.379, 0.53, 0.377, 0.592, 0.548, 0.825, 0.54, 0.552, 0.507, 0.348, 0.254, 0.348, 0.515, 0.248,
+    0.248,
 )
 assert len(CHARS) == len(WIDTHS), "one advance per character"
 ADVANCE = dict(zip(CHARS, WIDTHS))

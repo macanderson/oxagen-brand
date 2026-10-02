@@ -282,14 +282,15 @@ def face_entry(role: str, current: dict, request_face: dict, files: list[dict], 
 
 
 def nearest(files: list[dict], weight: int) -> dict:
-    """The file that draws closest to `weight`: a variable file that covers it, else the nearest static one."""
+    """The file that draws closest to `weight`: an upright file before an italic one, then a
+    variable file that covers it, else the nearest static one."""
 
     def distance(f: dict) -> float:
         parts = [int(w) for w in f["weight"].split()]
         lo, hi = parts[0], parts[-1]
         return 0 if lo <= weight <= hi else min(abs(weight - lo), abs(weight - hi))
 
-    return min(files, key=lambda f: (distance(f), len(f["weight"].split()) == 1))
+    return min(files, key=lambda f: (f.get("style") == "italic", distance(f), len(f["weight"].split()) == 1))
 
 
 # --------------------------------------------------------------------------

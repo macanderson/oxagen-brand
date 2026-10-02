@@ -68,7 +68,7 @@ const MARKETING_SCALE: Sample[] = [
 
 /*
  * The hero line, in both scales. The marketing h1 lets line 1 reach Space
- * Grotesk. The app h1 wears the same markup and stays in Geist.
+ * Grotesk. The app h1 wears the same markup and stays in Aeonik.
  */
 const HERO_SAMPLES: Sample[] = [
   {
@@ -86,7 +86,7 @@ const HERO_SAMPLES: Sample[] = [
 ];
 
 /*
- * The face tokens. Headings and text share Geist, so a Geist sample matches
+ * The face tokens. Headings and text share Aeonik, so an Aeonik sample matches
  * both --font-display and --font-sans, and the caption names every match.
  */
 const FACE_TOKENS = [
@@ -228,7 +228,7 @@ export const MarketingScale: Story = {
   render: () => <Scale samples={MARKETING_SCALE} />,
 };
 
-/** Line 1 of a hero: Space Grotesk in a marketing h1, Geist in an app h1. */
+/** Line 1 of a hero: Space Grotesk in a marketing h1, Aeonik in an app h1. */
 export const HeroLine: Story = {
   name: "Hero line",
   render: () => <Scale samples={HERO_SAMPLES} />,

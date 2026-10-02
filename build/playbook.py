@@ -304,8 +304,19 @@ def state_rows() -> str:
     return "".join(out)
 
 
+def extra_faces_note() -> str:
+    """The paragraph on the faces that load and take no role, or nothing when the theme has none."""
+    if not T.EXTRA_FACES:
+        return ""
+    names = [f"<b>{esc(f.family)}</b>" for f in T.EXTRA_FACES]
+    listed = names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+    return f"<p>{listed} load too, so a page can name them. No role reads them yet.</p>"
+
+
 def face_card(face: T.Face, sample: str, var: str) -> str:
-    weights = ", ".join(w.replace(" ", " to ") for _, w in face.files)
+    weights = ", ".join(
+        dict.fromkeys(w.replace(" ", " to ") + (" italic" if style == "italic" else "") for _, w, style in face.files)
+    )
     return (
         f'<div class="face-card"><span class="sample" style="font-family:{esc(face.css_stack)};'
         f'font-feature-settings:{face.features}">{sample}</span>'
@@ -438,7 +449,7 @@ def css() -> str:
   --gold:{C.GOLD};--gold-bright:{C.GOLD_BRIGHT};--gold-deep:{C.GOLD_DEEP};--accent-text:{C.GOLD};
   --paper:{C.PAPER};--card:{C.PANEL};
   --shadow:0 1px 0 rgba(255,255,255,.03),0 18px 44px rgba(0,0,0,.5);
-  --ox-font:{T.GEIST.css_stack};
+  --ox-font:{T.TEXT_FACE.css_stack};
   --ox-font-display:{T.SPACE_GROTESK.css_stack};
   --ox-font-mono:{T.MONASPACE_NEON.css_stack};
   --ui-shadow:{UI_SHADOW["dark"]};--pop-shadow:{POP_SHADOW["dark"]};--scrim:{SCRIM["dark"]};
@@ -661,7 +672,7 @@ def build_html() -> str:
         ("messages/", "the message registry: one YAML file per line, with its status, scope, evidence, and owner"),
         ("build/", "color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py"),
         ("build/reference/", "the kit wordmark and logomark this system is checked against"),
-        ("fonts/", "Space Grotesk, Geist, and Monaspace Neon, each with its licence"),
+        ("fonts/", "Space Grotesk, Aeonik, Aeonik Mono, Aeonik Fono, and Monaspace Neon"),
         ("tokens/", "house-tokens.css · house-tokens.json"),
         ("logo/svg, logo/png", "wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles"),
         ("icons/", "favicons and app icons, 16 to 512"),
@@ -823,9 +834,10 @@ def build_html() -> str:
 <section id="type">
 <p class="eyebrow">Typography</p>
 <h2>Typefaces</h2>
-<p><b>Geist</b> sets every heading and everything read: h1 to h6, body, labels, buttons, tables, and navigation, in the app and on the website. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on. <b>Space Grotesk</b> sets the two wordmarks and line 1 of a marketing hero, and nothing else. Its wide geometric letters lose their shape below {T.DISPLAY_FLOOR_PX} px, so it is never set smaller.</p>
+<p><b>{T.TEXT_FACE.family}</b> sets every heading and everything read in the app and on the docs site: h1 to h6, body, labels, buttons, tables, and navigation. Its italic ships beside it. <b>Monaspace Neon</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on. <b>Space Grotesk</b> sets the two wordmarks and line 1 of a marketing hero. On the website it also sets every h1, h2, and h3. Its wide geometric letters lose their shape below {T.DISPLAY_FLOOR_PX} px, so it is never set smaller.</p>
+{extra_faces_note()}
 <div class="grid g3" style="margin:22px 0 10px">
-{face_card(T.GEIST, "Aa Gg 1234", "--ox-font")}
+{face_card(T.TEXT_FACE, "Aa Gg 1234", "--ox-font")}
 {face_card(T.MONASPACE_NEON, "0O 1lI =&gt;", "--ox-font-mono")}
 {face_card(T.SPACE_GROTESK, "Aa Gg 1234", "--ox-font-display")}
 </div>
@@ -839,7 +851,7 @@ def build_html() -> str:
 <h3>Scales</h3>
 <p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a landing page or a post read once. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for docs, panels, tables, and logs. Every docs site uses the app scale.</p>
 <h3>Hero line</h3>
-<p>Only the marketing h1 admits Space Grotesk. Wrap line 1 of the hero in <span class="mono">{T.HERO_CLASS}</span> inside a <span class="mono">text-m-h1</span> heading, and line 2 stays in Geist. The same class anywhere else, including every app heading, draws in Geist, so an app cannot reach Space Grotesk except through a wordmark.</p>
+<p>Only the marketing h1 admits Space Grotesk. Wrap line 1 of the hero in <span class="mono">{T.HERO_CLASS}</span> inside a <span class="mono">text-m-h1</span> heading, and line 2 stays in {T.HEADING_FACE.family}. The same class anywhere else, including every app heading, draws in {T.HEADING_FACE.family}, so an app cannot reach Space Grotesk except through a wordmark. The website also sets every h1, h2, and h3 in Space Grotesk, and its own stylesheet applies that.</p>
 <pre><code>&lt;h1 class="text-m-h1"&gt;&lt;span class="{T.HERO_CLASS}"&gt;Line one&lt;/span&gt;&lt;br&gt;Line two&lt;/h1&gt;</code></pre>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>step</th><th>face</th><th>marketing</th><th>app</th></tr></thead>
@@ -858,13 +870,13 @@ def build_html() -> str:
 <h3>Type rules</h3>
 <ul class="rules">
 <li><b>Headings use sentence case.</b> Capitalise the first word and proper names only.</li>
-<li><b>No fourth typeface.</b> A CSS rule names a role, such as <code>--font-display</code> or <code>--font-mono</code>, never a face, so a face can change in one place.</li>
-<li><b>An eyebrow is 12px Geist, uppercase, at 0.14em tracking.</b> An eyebrow is the small label above a heading, like the word above each heading on this page.</li>
+<li><b>No fourth role face.</b> A CSS rule names a role, such as <code>--font-display</code> or <code>--font-mono</code>, never a face, so a face can change in one place.</li>
+<li><b>An eyebrow is 12px {T.TEXT_FACE.family}, uppercase, at 0.14em tracking.</b> An eyebrow is the small label above a heading, like the word above each heading on this page.</li>
 <li><b>Numbers in tables use Monaspace Neon.</b> Every digit is the same width, so columns of figures line up.</li>
 <li><b>Monaspace Neon keeps texture healing and code ligatures on</b> (<code>font-feature-settings: {T.MONASPACE_NEON.features}</code>). Texture healing evens out the space around narrow and wide letters. Ligatures join pairs such as <code>=&gt;</code> into one glyph.</li>
 </ul>
 <h3>Font files</h3>
-<p><span class="mono">tokens/house-fonts.css</span> carries the <code>@font-face</code> rules for all three faces. <span class="mono">tokens/next-fonts.ts</span> loads them with next/font in a Next.js app. <span class="mono">tokens/house-tailwind.css</span> carries both scales as Tailwind v4 utilities. The font files live in <span class="mono">fonts/</span>, each under the SIL Open Font License.</p>
+<p><span class="mono">tokens/house-fonts.css</span> carries the <code>@font-face</code> rules for every face in <span class="mono">fonts/</span>. <span class="mono">tokens/next-fonts.ts</span> loads them with next/font in a Next.js app. <span class="mono">tokens/house-tailwind.css</span> carries both scales as Tailwind v4 utilities. <span class="mono">fonts/README.md</span> lists every font file.</p>
 </section>
 
 <section id="elements">
@@ -967,7 +979,7 @@ brew install harfbuzz librsvg
 </section>
 
 </main>
-<footer><div class="wrap">Oxagen house system · built from the Oxagen brand kit · Space Grotesk, Geist and Monaspace Neon under the SIL Open Font License</div></footer>
+<footer><div class="wrap">Oxagen house system · built from the Oxagen brand kit · Aeonik by CoType Foundry · Space Grotesk and Monaspace Neon under the SIL Open Font License</div></footer>
 <script>
 (function(){{var b=document.getElementById('theme'),r=document.documentElement;
 b.addEventListener('click',function(){{var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',dark?'light':'dark');}});}})();

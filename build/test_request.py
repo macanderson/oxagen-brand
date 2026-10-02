@@ -172,6 +172,38 @@ class FaceEntryTest(unittest.TestCase):
         self.assertEqual(R.nearest(files, 600)["file"], "a-wght.woff2")
         self.assertEqual(R.nearest(files[:1] + files[2:], 600)["file"], "a-700.woff2")
 
+    def test_nearest_prefers_an_upright_file(self) -> None:
+        files = [
+            {"file": "a-italic-wght.woff2", "weight": "100 900", "style": "italic"},
+            {"file": "a-700.woff2", "weight": "700"},
+        ]
+        self.assertEqual(R.nearest(files, 400)["file"], "a-700.woff2")
+
+
+class StyleTest(unittest.TestCase):
+    def test_a_file_may_be_italic(self) -> None:
+        files = [
+            {"file": "aeonik-wght.woff2", "weight": "100 900"},
+            {"file": "aeonik-italic-wght.woff2", "weight": "100 900", "style": "italic"},
+        ]
+        req = {"summary": "Aeonik", "faces": {"display": {"family": "Aeonik", "source": "kit", "files": files}}}
+        self.assertEqual(R.problems(req), [])
+
+    def test_a_style_other_than_normal_or_italic_fails(self) -> None:
+        files = [{"file": "aeonik-wght.woff2", "weight": "100 900", "style": "oblique"}]
+        req = {"summary": "Aeonik", "faces": {"display": {"family": "Aeonik", "source": "kit", "files": files}}}
+        self.assertTrue(any("oblique" in p for p in R.problems(req)))
+
+    def test_the_shipped_theme_loads_an_italic_and_two_extra_faces(self) -> None:
+        import theme as TH
+
+        shipped = theme()
+        self.assertEqual(TH.problems(), [])
+        styles = [f.get("style", "normal") for f in shipped["faces"]["sans"]["files"]]
+        self.assertEqual(sorted(styles), ["italic", "normal"])
+        self.assertEqual([f["family"] for f in shipped["extra_faces"]], ["Aeonik Mono", "Aeonik Fono"])
+        self.assertNotIn("extra_faces", R.request_schema()["properties"], "a request cannot change the extra faces")
+
 
 class WordmarkTest(unittest.TestCase):
     """The wordmark face is fixed: Space Grotesk, drawn at 600 (Mac, 2026-10-02)."""
@@ -179,7 +211,7 @@ class WordmarkTest(unittest.TestCase):
     FACES = (
         {"family": "Inter", "source": "google", "weights": [600]},
         {"family": "Aeonik", "source": "upload", "files": [{"file": "Aeonik-Bold.otf", "weight": "600"}]},
-        {"family": "Geist", "source": "kit", "files": [{"file": "geist-latin-wght.woff2", "weight": "100 900"}]},
+        {"family": "Aeonik", "source": "kit", "files": [{"file": "aeonik-wght.woff2", "weight": "100 900"}]},
     )
 
     def test_the_schema_has_no_wordmark_face(self) -> None:
@@ -215,7 +247,7 @@ class WordmarkTest(unittest.TestCase):
     def test_the_theme_refuses_another_wordmark_face(self) -> None:
         import theme as TH
 
-        for field, value in (("family", "Inter"), ("file", "geist-latin-wght.woff2"), ("weight", 700)):
+        for field, value in (("family", "Inter"), ("file", "aeonik-wght.woff2"), ("weight", 700)):
             t = theme()
             if field == "family":
                 t["faces"]["wordmark"]["family"] = value

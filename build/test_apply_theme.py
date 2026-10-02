@@ -138,6 +138,19 @@ class UploadTest(Scratch):
         self.assertTrue((self.fonts / "Brand-Variable.woff2").is_file())
         self.assertEqual(log["fonts"][0]["converted"], ["Brand-Variable.woff2"])
 
+    def test_an_italic_file_keeps_its_style_and_is_never_the_outline(self) -> None:
+        for name in ("aeonik-wght.woff2", "aeonik-italic-wght.woff2"):
+            shutil.copy(ROOT / "fonts" / name, self.fonts / name)
+        files = [
+            {"file": "aeonik-italic-wght.woff2", "weight": "100 900", "style": "italic"},
+            {"file": "aeonik-wght.woff2", "weight": "100 900"},
+        ]
+        req = {"summary": "Kit face", "faces": {"sans": {"family": "Brand Sans", "source": "kit", "files": files}}}
+        self.assertEqual(R.problems(req), [])
+        face = A.resolve_faces(theme(), req, self.fonts, {"fonts": []})["sans"]
+        self.assertEqual(face["files"], files)
+        self.assertEqual(face["outline"], {"file": "aeonik-wght.woff2"})
+
     def test_resolving_a_wordmark_face_is_refused(self) -> None:
         shutil.copy(ROOT / "fonts" / "SpaceGrotesk-VariableFont_wght.ttf", self.fonts / "Brand-Variable.ttf")
         req = {

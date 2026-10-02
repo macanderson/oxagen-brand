@@ -1022,20 +1022,20 @@
  * :root for both the Tailwind font-* utilities and the raw var(--font-*) refs
  * below.
  *
- * Geist sets every heading and everything read, so --font-sans and
- * --font-display resolve to the same family. The pair is kept so headings can
- * be retuned (weight, tracking) in one place without touching body copy.
- * Space Grotesk takes one name, --font-wordmark, so no heading reaches it by
- * asking for "display". The kit's text-m-h1 step points --font-hero at it for
- * line 1 of a marketing hero (the hero-line-1 class). Everywhere else,
- * including every app heading, --font-hero is Geist.
+ * Aeonik sets every heading and everything read in the app and the docs, so
+ * --font-sans and --font-display resolve to the same family. The pair is kept
+ * so headings can be retuned (weight, tracking) in one place without touching
+ * body copy. Space Grotesk takes one name, --font-wordmark, so no heading
+ * reaches it by asking for "display". The kit's text-m-h1 step points
+ * --font-hero at it for line 1 of a marketing hero (the hero-line-1 class).
+ * Everywhere else, including every app heading, --font-hero is Aeonik.
  *
  * Each value comes straight from the kit's token file, so the fallback stacks
  * are the kit's too.
  */
 @theme {
-  --font-sans: var(--ox-font); /* Geist: body, UI, every heading */
-  --font-display: var(--ox-font-heading); /* Geist too: the heading token, faces.display in the theme */
+  --font-sans: var(--ox-font); /* Aeonik: body, UI, every heading */
+  --font-display: var(--ox-font-heading); /* Aeonik too: the heading token, faces.display in the theme */
   /* Monaspace Neon: code, logs, ids, and numbers in tables. */
   --font-mono: var(--ox-font-mono);
   /* Space Grotesk: the wordmark, and line 1 of a marketing hero. */
@@ -1060,11 +1060,13 @@
   }
 
   /*
-   * TYPE RULE: Geist (--font-display for headings, --font-sans for text) sets
-   * every heading and everything read. Monaspace Neon (--font-mono) sets code
-   * and identifiers, with texture healing on. Space Grotesk (--font-wordmark)
-   * sets the wordmark, and line 1 of a marketing hero through text-m-h1 and
-   * hero-line-1. Mac set this rule on 2026-09-29.
+   * TYPE RULE: Aeonik (--font-display for headings, --font-sans for text) sets
+   * every heading and everything read in the app and the docs. Monaspace Neon
+   * (--font-mono) sets code and identifiers, with texture healing on. Space
+   * Grotesk (--font-wordmark) sets the wordmark, and line 1 of a marketing
+   * hero through text-m-h1 and hero-line-1. On the website it also sets every
+   * h1, h2, and h3, in the website's own stylesheet. Mac set the rule on
+   * 2026-09-29 and made Aeonik the house sans on 2026-10-02.
    */
   h4,
   h5,
@@ -1078,7 +1080,7 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    /* The kit's own heading weight and tracking, drawn in Geist.
+    /* The kit's own heading weight and tracking, drawn in Aeonik.
        --ox-weight-display (700) is for a page title, which the text-m-h1 and
        text-a-h1 utilities carry. */
     font-weight: var(--ox-weight-heading);

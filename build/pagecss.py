@@ -87,7 +87,7 @@ def page_vars(*, fonts: bool = True, shape: bool = False) -> str:
             f"\n  --font-display: {T.HEADING_FACE.css_stack};"
             f"\n  --font-wordmark: {T.SPACE_GROTESK.css_stack};"
             f"\n  --font-hero: {T.SPACE_GROTESK.css_stack};"
-            f"\n  --font: {T.GEIST.css_stack};"
+            f"\n  --font: {T.TEXT_FACE.css_stack};"
             f"\n  --mono: {T.MONASPACE_NEON.css_stack};"
             f"\n  --mono-features: {T.MONASPACE_NEON.features};"
             f"\n  --radius: {rem_px(THEME['radius']['site']):g}px; --wrap: {THEME['spacing']['wrap']};"

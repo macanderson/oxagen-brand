@@ -10,7 +10,8 @@
 @font-face{font-family:"Space Grotesk";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/space-grotesk-latin-500.woff2) format("woff2")}
 @font-face{font-family:"Space Grotesk";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/space-grotesk-latin-600.woff2) format("woff2")}
 @font-face{font-family:"Space Grotesk";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/space-grotesk-latin-700.woff2) format("woff2")}
-@font-face{font-family:"Geist";font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/geist-latin-wght.woff2) format("woff2")}
+@font-face{font-family:"Aeonik";font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/aeonik-wght.woff2) format("woff2")}
+@font-face{font-family:"Aeonik";font-style:italic;font-weight:100 900;font-display:swap;src:url(fonts/aeonik-italic-wght.woff2) format("woff2")}
 @font-face{font-family:"Monaspace Neon";font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/monaspace-neon-latin-wght.woff2) format("woff2")}
 
 :root {
@@ -31,7 +32,7 @@
   --dot: #52525B;
 
   --display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sans: "Aeonik", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   --r: 12px;

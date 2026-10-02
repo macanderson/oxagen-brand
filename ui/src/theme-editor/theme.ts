@@ -28,6 +28,8 @@ export type FaceRole = (typeof FACE_ROLES)[number];
 export interface FontFile {
   file: string;
   weight: string;
+  /** Left out for an upright file. An italic file loads as the same family with `font-style: italic`. */
+  style?: "normal" | "italic";
 }
 
 export interface ThemeFace {
@@ -56,6 +58,8 @@ export const RADIUS_STEPS = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"] 
 export interface Theme {
   color: ThemeColor;
   faces: Record<Role, ThemeFace>;
+  /** Faces the kit loads that no role takes, such as Aeonik Mono. The editor does not change them. */
+  extra_faces?: ThemeFace[];
   radius: { base: string; steps: Record<string, number>; card: string; site: string };
   shadow: Record<"ui" | "pop", { ink: string; paper: string }>;
   spacing: { unit: string; wrap: string };
