@@ -183,6 +183,7 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
       <li><a href="#setup">Sync token</a></li>
       <li><a href="#flow">Change path</a></li>
       <li><a href="#theme">Theme file</a></li>
+      <li><a href="#editor">Theme editor</a></li>
       <li><a href="#colour">Brand colour</a></li>
       <li><a href="#font">Typefaces</a></li>
       <li><a href="#icon">App icons</a></li>
@@ -275,13 +276,25 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
   </ol>
 </section>
 
+<section id="editor" aria-labelledby="editor-h">
+  <h2 id="editor-h">Theme editor</h2>
+  <p class="sub">The example pages in the kit's Storybook carry a theme editor that previews a change on real pages and sends it to every site.</p>
+  <ol class="steps">
+    <li><strong>Open the editor.</strong><p>Open any story under Pages in the Storybook at <code>brand.oxagen.cloud/storybook</code>, and select Theme in the bottom-right corner. A panel opens over the page.</p></li>
+    <li><strong>Preview the change.</strong><p>Change the gold, the surfaces, the text and state colours, the faces, the corners, the shadows, the spacing, or the type sizes. The page restyles as you go. The colour fields edit the theme the toolbar shows, and each one shows its contrast. A face can be a Google family or files you upload. The draft stays in your browser.</p></li>
+    <li><strong>Select Update all sites.</strong><p>GitHub opens with the request filled in under <code>theme/requests/</code>. Commit it to a new branch with your own login, and open the pull request. A request that names uploaded fonts asks you to upload them to <code>fonts/</code> on that branch first.</p></li>
+    <li><strong>Let the workflow apply it.</strong><p>The <code>apply-theme</code> workflow fetches any Google face, merges the request into <code>theme/theme.json</code>, carries a new gold into the hand copies, runs every generator, and pushes the result to the branch. It comments with what changed and any contrast warning, and the kit's checks run on its push.</p></li>
+    <li><strong>Review and merge.</strong><p>Merging deploys brand.oxagen.cloud, and the fan-out opens a sync pull request in every site. <code>CHANGING.md</code>, "Theme editor", has the details.</p></li>
+  </ol>
+</section>
+
 <section id="colour" aria-labelledby="colour-h">
   <h2 id="colour-h">Brand colour</h2>
   <p class="sub">One generator run recolours the token files, every logo and icon, the favicons, splash screens, wallpapers, social cards, ads, content cards, and spinners. Both brands change together.</p>
   <ol class="steps">
     <li><strong>Change the gold.</strong><p>In <code>theme/theme.json</code>, change <code>color.gold</code>. Its two neighbours, gold-bright and gold-deep, are derived from it on the gold's own hue. <code>color.gold_bright</code> and <code>color.gold_deep</code> set their lightness and chroma.</p></li>
     <li><strong>Run the generators.</strong><p><code>.venv/bin/python build/build.py</code>, then <code>build/playbook.py</code> and <code>build/messages.py</code>.</p></li>
-    <li><strong>Update the hand copies.</strong><p>A few copies sit outside the generators: the gold ramp in <code>ui/src/styles/globals.css</code>, <code>BRAND_GOLD</code> and its test, the skill's <code>system.md</code>, the install prompt, and <code>sdlc/</code>. <code>CHANGING.md</code> lists each one.</p></li>
+    <li><strong>Update the hand copies.</strong><p>A few copies sit outside the generators: the gold ramp in <code>ui/src/styles/globals.css</code>, <code>BRAND_GOLD</code>, the skill's <code>system.md</code>, the install prompt, and <code>sdlc/</code>. <code>CHANGING.md</code> lists each one. For a request from the theme editor, the <code>apply-theme</code> workflow updates them.</p></li>
     <li><strong>Open the pull request.</strong><p>The check fails if any text colour drops below 4.5:1 contrast on its ground.</p></li>
   </ol>
   <div class="copybox prompt"><span class="label">Prompt for an agent</span><pre id="prompt-colour">In oxageninc/brand, change the house gold to #______. Follow CHANGING.md, "Change a colour token": edit color.gold in theme/theme.json, run the generators, update every hand copy it lists, and open a pull request with --label agent-monitored-pr. Put the new 512px icons and the light and dark wordmarks in the PR body so I can compare them.</pre><button type="button" data-copy="prompt-colour">Copy</button></div>

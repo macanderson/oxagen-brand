@@ -38,6 +38,7 @@ import marks as MK
 import messages as MS
 import surfaces as SF
 import pagecss as PG
+import request as RQ
 import typeset as T
 from theme import THEME, rem_px
 from marks import (
@@ -420,7 +421,7 @@ def house_tailwind_css() -> str:
     for scale in T.SCALES:
         out += f"/* {scale.name} scale: {scale.use} */\n"
         for st in scale.steps:
-            out += f"@utility text-{scale.key}-{st.name} {{ {T.step_css(st)} }}\n"
+            out += f"@utility text-{scale.key}-{st.name} {{ {T.step_css(st, scale.key)} }}\n"
         out += "\n"
     admitted = " and ".join(f"text-{s.key}-{st.name}" for s in T.SCALES for st in s.steps if st.hero)
     out += f"/* line 1 of a hero: Space Grotesk inside {admitted}, Geist everywhere else */\n"
@@ -1038,7 +1039,7 @@ def drift() -> list[str]:
 
 
 def check(drift_check: bool = True) -> int:
-    problems = C.verify() + G.verify() + T.verify() + [f"fonts: {p}" for p in FT.check()]
+    problems = C.verify() + G.verify() + T.verify() + [f"fonts: {p}" for p in FT.check()] + RQ.check_schema()
     logo, lockup = ROOT / SKILL_LOGO, ROOT / "logo/svg/oxagen-lockup-adaptive.svg"
     if drift_check and (not logo.exists() or not lockup.exists() or logo.read_bytes() != lockup.read_bytes()):
         problems.append(f"{SKILL_LOGO} is not the adaptive lockup; run build/build.py --only logos")
@@ -1053,7 +1054,11 @@ def check(drift_check: bool = True) -> int:
         print("check: theme/theme.json matches theme/theme.schema.json")
         print(f"check: {ads} ads and {len(TAGLINES)} taglines come from approved, launch-released registry entries")
         m = G.wordmark("oxagen")
-        print(f"check: oxagen reproduces the kit wordmark ({m['width']:g} x {m['height']:g}, em {G.EM:.2f})")
+        if G.reference_applies():
+            print(f"check: oxagen reproduces the kit wordmark ({m['width']:g} x {m['height']:g}, em {G.EM:.2f})")
+        else:
+            print(f"check: the marks are drawn from fonts/{G.FONT.name} at {G.LOGO_WEIGHT}, so the reference "
+                  f"wordmark check is skipped: this theme changes the logo ({m['width']:g} x {m['height']:g})")
         print(f"check: gold {C.GOLD}, with bright {C.GOLD_BRIGHT} and deep {C.GOLD_DEEP} derived from it in OKLCH")
         print("check: every text token clears AA on its ground")
         print(f"check: {len(T.FACES)} faces in fonts/, {len(T.SCALES)} type scales, every heading in {T.HEADING_FACE.family}, "

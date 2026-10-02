@@ -251,23 +251,33 @@ DISPLAY_FLOOR_PX = 20
 # --------------------------------------------------------------------------
 
 
+#: The `format()` hint each font file type takes in an @font-face rule.
+FONT_FORMATS = {".woff2": "woff2", ".woff": "woff", ".ttf": "truetype", ".otf": "opentype"}
+
+
 def font_faces(prefix: str = "../fonts/") -> str:
-    """The @font-face rules for the three faces, one per file."""
+    """The @font-face rules for the faces, one per file."""
     out = []
     for face in FACES:
         for file, weight in face.files:
+            kind = FONT_FORMATS[file[file.rindex(".") :].lower()]
             out.append(
                 f'@font-face{{font-family:"{face.family}";font-style:normal;font-weight:{weight};'
-                f"font-display:swap;src:url({prefix}{file}) format(\"woff2\")}}"
+                f'font-display:swap;src:url({prefix}{file}) format("{kind}")}}'
             )
     return "\n".join(out)
 
 
-def step_css(step: Step) -> str:
-    """The declarations for one step, reading the `--font-<role>` variables."""
+def step_css(step: Step, scale_key: str) -> str:
+    """The declarations for one step, reading the `--font-<role>` variables.
+
+    The size and the leading read the step's tokens, `--ox-m-h1` and
+    `--ox-m-h1-leading`, so a page that sets a token restyles every heading
+    on that step. The theme editor on the example pages does that.
+    """
     decl = [
-        f"font-size: {step.size}",
-        f"line-height: {step.leading}",
+        f"font-size: var(--ox-{scale_key}-{step.name})",
+        f"line-height: var(--ox-{scale_key}-{step.name}-leading)",
         f"font-family: var(--font-{step.role})",
         f"font-weight: {step.weight}",
     ]

@@ -1,0 +1,182 @@
+name: apply-theme
+
+# Apply a theme request to the kit. The theme editor on the kit's example pages
+# (the Pages/ stories in Storybook) writes a request into theme/requests/ when
+# Mac selects Update all sites, and GitHub opens a pull request for it. This
+# workflow runs on that pull request. It:
+#
+# 1. validates the request against theme/request.schema.json,
+# 2. merges it into theme/theme.json and fetches any Google face into fonts/,
+# 3. runs every generator: build/build.py, build/playbook.py, build/messages.py,
+#    and build/editor_fixture.py, which the editor's colour tests read,
+# 4. deletes the request, commits the result, and pushes it to the same branch,
+# 5. comments on the pull request with what changed.
+#
+# The push uses BRAND_SYNC_TOKEN, because a push made with GITHUB_TOKEN starts
+# no workflow, and the kit's checks in ui.yml must run on the result. Once the
+# request is deleted, the pull request no longer changes theme/requests/, so the
+# bot's push does not start this workflow again. Merging the pull request then
+# deploys brand.oxagen.cloud and runs fan-out.yml, which syncs every site.
+#
+# Guards. The job never runs on a fork's pull request. Every commit on the
+# branch that this workflow did not write may change only theme/requests/ and
+# fonts/, and build/apply_theme.py checks that every file a request names stays
+# inside fonts/. These guard against a request that reaches outside the theme
+# by mistake. They do not stop someone with write access, who can change any
+# workflow on a branch.
+#
+# Two quick pushes, such as the request and then its fonts, can start two
+# runs. When the first one pushes before the second checks out, the second
+# fails at its push, because the branch moved, and comments that it pushed
+# nothing. The branch holds the first run's result, and its checks decide.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "theme/requests/**"
+
+concurrency:
+  group: apply-theme-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  apply:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PR: ${{ github.event.pull_request.number }}
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_REF: ${{ github.event.pull_request.head.ref }}
+      BOT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      # A run with no token would apply the request and then fail at the push.
+      # This step names the missing secret before any work.
+      - name: Check the token
+        env:
+          TOKEN: ${{ secrets.BRAND_SYNC_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Add the repository secret BRAND_SYNC_TOKEN: a token that can push to this repo. See CHANGING.md."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check the branch changes only the theme
+        run: |
+          outside=""
+          for sha in $(git rev-list --no-merges "$BASE_SHA..HEAD"); do
+            if [ "$(git log -1 --format=%ae "$sha")" = "$BOT_EMAIL" ]; then
+              continue
+            fi
+            for file in $(git diff-tree --no-commit-id --name-only -r "$sha"); do
+              case "$file" in
+                theme/requests/*|fonts/*) ;;
+                *) outside="$outside $file" ;;
+              esac
+            done
+          done
+          if [ -n "$outside" ]; then
+            echo "::error::A theme request branch changes only theme/requests/ and fonts/. This branch also changes:$outside"
+            exit 1
+          fi
+
+      - name: Find the requests
+        id: find
+        run: |
+          requests=$(ls theme/requests/*.json 2>/dev/null | tr '\n' ' ')
+          echo "requests=$requests" >> "$GITHUB_OUTPUT"
+          if [ -z "$requests" ]; then
+            echo "No request in theme/requests/, so there is nothing to apply."
+          fi
+
+      - uses: actions/setup-python@v6
+        if: steps.find.outputs.requests != ''
+        with:
+          python-version: "3.13"
+
+      # The same tools as the check job in ui.yml: hb-shape reproduces the
+      # wordmark, and rsvg-convert renders the marks.
+      - name: Install the build tools
+        if: steps.find.outputs.requests != ''
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libharfbuzz-bin librsvg2-bin
+          python -m pip install --quiet fonttools brotli pyyaml
+
+      - name: Apply the request
+        id: apply
+        if: steps.find.outputs.requests != ''
+        env:
+          REQUESTS: ${{ steps.find.outputs.requests }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          # One argument per request file name. The names were checked by ls
+          # and are checked again by the script.
+          # shellcheck disable=SC2086
+          python build/apply_theme.py apply --state "$RUNNER_TEMP/apply-theme" $REQUESTS
+
+      - name: Run the generators
+        id: build
+        if: steps.apply.outcome == 'success'
+        run: |
+          python build/build.py
+          python build/playbook.py
+          python build/messages.py
+          python build/editor_fixture.py
+          python build/build.py --check
+
+      - name: Commit and push
+        id: push
+        if: steps.build.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.BRAND_SYNC_TOKEN }}
+        run: |
+          python - "$RUNNER_TEMP/apply-theme/state.json" > "$RUNNER_TEMP/message.txt" <<'EOF'
+          import json, sys
+          state = json.load(open(sys.argv[1]))
+          summaries = [r["summary"] for r in state["requests"]]
+          print("Apply the theme request: " + "; ".join(summaries))
+          print()
+          for r in state["requests"]:
+              print(f"- {r['path']}: {r['summary']}")
+          print()
+          print("Written by the apply-theme workflow from the request, which it deleted.")
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "$BOT_EMAIL"
+          git add -A
+          git commit -q -F "$RUNNER_TEMP/message.txt"
+          # The checkout kept no credential, so git takes the token from gh in
+          # this step alone. A push to a branch that moved since this run began
+          # is rejected, and the newer run applies the request instead.
+          gh auth setup-git
+          git push -q origin "HEAD:refs/heads/$HEAD_REF"
+
+      - name: Comment on the pull request
+        if: always() && steps.apply.outcome != 'skipped'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PUSHED: ${{ steps.push.outcome }}
+        run: |
+          flag=""
+          if [ "$PUSHED" != "success" ]; then flag="--failed"; fi
+          if [ -f "$RUNNER_TEMP/apply-theme/state.json" ]; then
+            # shellcheck disable=SC2086
+            python build/apply_theme.py report --state "$RUNNER_TEMP/apply-theme" $flag --run-url "$RUN_URL" > "$RUNNER_TEMP/comment.md" \
+              || printf '<!-- apply-theme -->\nThe apply-theme workflow could not write its report. Read the log: %s\n' "$RUN_URL" > "$RUNNER_TEMP/comment.md"
+          else
+            printf '<!-- apply-theme -->\nThe apply-theme workflow stopped before it read the request. Read the log: %s\n' "$RUN_URL" > "$RUNNER_TEMP/comment.md"
+          fi
+          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/comment.md"

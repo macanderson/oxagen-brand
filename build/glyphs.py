@@ -66,18 +66,19 @@ _FONTS: dict[tuple[str, int], TTFont] = {}
 def font_file(face: str = "wordmark") -> Path:
     """The font file HarfBuzz shapes `face` with.
 
-    HarfBuzz cannot read WOFF2, so the text face is unpacked once to a TTF in
-    the temp directory, named by the webfont's hash so a new webfont never
-    reuses a stale unpack.
+    HarfBuzz cannot read WOFF or WOFF2, so an outline in either format is
+    unpacked once to a TTF in the temp directory, named by the file's hash so
+    a new file never reuses a stale unpack. The text face ships as WOFF2.
     """
-    if face == "wordmark":
-        return FONT
-    if face != "text":
+    if face not in FACES:
         raise ValueError(f"face {face!r} is not one of {FACES}")
-    digest = hashlib.sha256(TEXT_FONT.read_bytes()).hexdigest()[:16]
-    out = Path(tempfile.gettempdir()) / f"oxagen-kit-geist-{digest}.ttf"
+    src = FONT if face == "wordmark" else TEXT_FONT
+    if src.suffix.lower() not in (".woff", ".woff2"):
+        return src
+    digest = hashlib.sha256(src.read_bytes()).hexdigest()[:16]
+    out = Path(tempfile.gettempdir()) / f"oxagen-kit-{src.stem}-{digest}.ttf"
     if not out.exists():
-        f = TTFont(TEXT_FONT)
+        f = TTFont(src)
         f.flavor = None
         tmp = out.with_suffix(".tmp")
         f.save(tmp)
@@ -86,12 +87,18 @@ def font_file(face: str = "wordmark") -> Path:
 
 
 def font(weight: int = LOGO_WEIGHT, face: str = "wordmark") -> TTFont:
-    """One static instance of the face's variable font per weight, cached."""
+    """One static instance of the face's variable font per weight, cached.
+
+    A static outline has one weight, so every weight draws from it as it is.
+    A face uploaded as static files outlines at the weight of the file the
+    theme names.
+    """
     if (face, weight) not in _FONTS:
         if weight not in WEIGHTS:
             raise ValueError(f"weight {weight} is not one of {WEIGHTS}")
-        _FONTS[(face, weight)] = instancer.instantiateVariableFont(
-            TTFont(font_file(face)), {"wght": weight}, inplace=False
+        f = TTFont(font_file(face))
+        _FONTS[(face, weight)] = (
+            instancer.instantiateVariableFont(f, {"wght": weight}, inplace=False) if "fvar" in f else f
         )
     return _FONTS[(face, weight)]
 
@@ -269,6 +276,21 @@ def glyph_paths(m: dict[str, object], accent: set[str]) -> tuple[str, str]:
 # --------------------------------------------------------------------------
 
 
+#: The face and weight the reference wordmark was drawn in.
+REFERENCE_OUTLINE = ("SpaceGrotesk-VariableFont_wght.ttf", 600)
+
+
+def reference_applies() -> bool:
+    """Whether the theme draws the marks from the reference wordmark's face and weight.
+
+    The reference check holds the drawn `oxagen` to the kit it was built to
+    match. A theme that draws the marks from another face or weight changes
+    the logo on purpose, so the comparison does not apply to it, and
+    `build/build.py --check` says the check was skipped.
+    """
+    return (FONT.name, LOGO_WEIGHT) == REFERENCE_OUTLINE
+
+
 def verify() -> list[str]:
     """Reproduce the kit's `oxagen` wordmark, or say exactly how it differs.
 
@@ -280,6 +302,8 @@ def verify() -> list[str]:
     import re
 
     problems: list[str] = []
+    if not reference_applies():
+        return problems
     if not REFERENCE.exists():
         return [f"reference wordmark missing: {REFERENCE}"]
     src = REFERENCE.read_text()
