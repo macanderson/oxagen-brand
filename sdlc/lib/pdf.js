@@ -1,4 +1,4 @@
-// Render the template (lib/content.js) as a PDF with pdfkit. Geist, the house
+// Render the template (lib/content.js) as a PDF with pdfkit. Aeonik, the house
 // text face, is embedded from fonts/. Blanks are set in deep gold and
 // underlined, which survives printing in black and white.
 
@@ -7,7 +7,7 @@ import PDFDocument from "pdfkit";
 import { runs } from "./content.js";
 
 const fontFile = (weight) =>
-  readFileSync(new URL(`../fonts/geist-latin-${weight}.ttf`, import.meta.url));
+  readFileSync(new URL(`../fonts/aeonik-${weight}.ttf`, import.meta.url));
 
 const INK = "#09090B";
 const BODY = "#27272A";

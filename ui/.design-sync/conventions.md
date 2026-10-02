@@ -47,18 +47,20 @@ tokens through CSS, so nothing else is needed — never hand-pick a hex.
 
 ### Type and the gold rule
 
-Three families, each with its own job. **Geist** (`--ox-font`, read through
+Three families, each with its own job. **Aeonik** (`--ox-font`, read through
 `--font-display` and `--font-sans`) sets every heading, h1 to h6, and everything else a
-person reads: body, labels, buttons, tables, navigation. **Space Grotesk**
-(`--ox-font-display`, read through `--font-wordmark`) sets only the wordmarks and line 1
-of a marketing hero, through the `hero-line-1` class inside a `text-m-h1` heading.
-**Monaspace Neon** (`--ox-font-mono`) sets code, terminal output, logs, digests, paths,
-ids, and numbers in tables, with `calt` and `liga` on for texture healing. A figure in a
-table is mono so columns of digits align.
+person reads in the app and the docs: body, labels, buttons, tables, navigation.
+**Space Grotesk** (`--ox-font-display`, read through `--font-wordmark`) sets the
+wordmarks and line 1 of a marketing hero, through the `hero-line-1` class inside a
+`text-m-h1` heading. **Monaspace Neon** (`--ox-font-mono`) sets code, terminal output,
+logs, digests, paths, ids, and numbers in tables, with `calt` and `liga` on for texture
+healing. A figure in a table is mono so columns of digits align.
 
-This paragraph said Space Grotesk set h1 to h3. Mac moved every heading to Geist on
-2026-09-29, and a generator reading the old rule would set app headings in the
-wordmark face.
+Mac set this rule on 2026-10-02, when Aeonik became the house sans. Space Grotesk also sets
+every h1, h2, and h3 on the website (oxagen.sh), and the website's own stylesheet does
+that. A component in this kit is app or docs UI, so it never sets a heading in Space
+Grotesk. Aeonik Mono and Aeonik Fono load as their own families, and no role takes
+either one yet.
 
 **Glass belongs only on chrome that floats over content:** menus, selects, comboboxes,
 popovers, hover cards, the command menu, toasts, a dialog's scrim, and sticky navigation

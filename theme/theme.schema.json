@@ -275,6 +275,14 @@
         }
       }
     },
+    "extra_faces": {
+      "description": "Faces the kit ships and loads that no role takes. Each gets @font-face rules and a next/font loader, so a page can name its family, and no --font-* or --ox-font-* token reads it.",
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "$ref": "#/$defs/face"
+      }
+    },
     "radius": {
       "description": "Corners. Every step of the scale is the base times its multiplier.",
       "type": "object",
@@ -643,6 +651,14 @@
             "description": "One weight, such as 400, or the range a variable file covers, such as 100 900.",
             "type": "string",
             "pattern": "^[1-9]00( [1-9]00)?$"
+          },
+          "style": {
+            "description": "The style the file draws. Leave it out for an upright file. An italic file is loaded as the same family with font-style: italic.",
+            "type": "string",
+            "enum": [
+              "normal",
+              "italic"
+            ]
           }
         }
       }

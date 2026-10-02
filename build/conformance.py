@@ -70,12 +70,13 @@ UA = "oxagen-brand-conformance/1 (+https://github.com/oxageninc/brand)"
 MAX_BYTES = 5 * 1024 * 1024
 MAX_SHEETS = 12
 
-#: Substrings that mark a house face: each family `theme/theme.json` names, as
-#: written, joined, and hyphenated, so the names next/font generates from the
-#: loaders in tokens/next-fonts.ts match too (for example `__spaceGrotesk_1a2b3c`).
+#: Substrings that mark a house face: each family `theme/theme.json` names, in
+#: a role or in `extra_faces`, as written, joined, and hyphenated, so the names
+#: next/font generates from the loaders in tokens/next-fonts.ts match too (for
+#: example `__spaceGrotesk_1a2b3c`).
 HOUSE_FACES = tuple(dict.fromkeys(
     form
-    for face in THEME["faces"].values()
+    for face in (*THEME["faces"].values(), *THEME.get("extra_faces", []))
     for form in (face["family"].lower(), face["family"].lower().replace(" ", ""), face["family"].lower().replace(" ", "-"))
 ))
 #: Generic families and the system stacks Tailwind and the kit fall back to.

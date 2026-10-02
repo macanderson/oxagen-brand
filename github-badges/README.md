@@ -2,7 +2,7 @@
 
 These files are the status pills, the shields, and the commit tombstone. Every
 word is outlined to paths, so GitHub needs no font to draw one. A wordmark label
-(`oxagen`, `stella*`) is set in the wordmark face. Every other word is Geist.
+(`oxagen`, `stella*`) is set in the wordmark face. Every other word is Aeonik.
 The colours are the house colours.
 
 Gold never encodes a state. The state is the shape: a filled square is

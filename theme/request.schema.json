@@ -447,6 +447,14 @@
             "description": "One weight, such as 400, or the range a variable file covers, such as 100 900.",
             "type": "string",
             "pattern": "^[1-9]00( [1-9]00)?$"
+          },
+          "style": {
+            "description": "The style the file draws. Leave it out for an upright file. An italic file is loaded as the same family with font-style: italic.",
+            "type": "string",
+            "enum": [
+              "normal",
+              "italic"
+            ]
           }
         }
       }

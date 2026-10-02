@@ -24,7 +24,7 @@
   --muted: var(--ox-muted, #A1A1AA);
   --show-dark: inline-block;
   --show-light: none;
-  --sans: var(--ox-font, "Geist", system-ui, -apple-system, "Segoe UI", sans-serif);
+  --sans: var(--ox-font, "Aeonik", system-ui, -apple-system, "Segoe UI", sans-serif);
   --mono: var(--ox-font-mono, "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace);
   --radius: var(--ox-radius, 0.75rem);
   color-scheme: dark;
@@ -260,7 +260,8 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
       <thead><tr><th>Field</th><th>What it sets</th></tr></thead>
       <tbody>
         <tr><td><code>color</code></td><td>The gold, the lightness and chroma of its two neighbours, the ink and paper surfaces, the text colours, the six state marks, the lightness of their text stops on ink, and the destructive lift.</td></tr>
-        <tr><td><code>faces</code></td><td>The face of each role: <code>wordmark</code>, <code>display</code>, <code>sans</code>, and <code>mono</code>. Each lists its family, source, files and weights, fallback families, and features. The wordmark face is fixed: Space Grotesk at weight 600.</td></tr>
+        <tr><td><code>faces</code></td><td>The face of each role: <code>wordmark</code>, <code>display</code>, <code>sans</code>, and <code>mono</code>. Each lists its family, source, files with their weights and styles, fallback families, and features. The wordmark face is fixed: Space Grotesk at weight 600.</td></tr>
+        <tr><td><code>extra_faces</code></td><td>Faces that load and take no role: Aeonik Mono and Aeonik Fono. A page can name either family.</td></tr>
         <tr><td><code>radius</code></td><td>The base every corner multiplies, each step's multiplier, the step a card takes, and the website's corner.</td></tr>
         <tr><td><code>shadow</code></td><td>The shadow under a control and the shadow under a floating surface, each on ink and on paper.</td></tr>
         <tr><td><code>spacing</code></td><td>The spacing unit and the page width.</td></tr>
@@ -302,22 +303,23 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
 
 <section id="font" aria-labelledby="font-h">
   <h2 id="font-h">Typefaces</h2>
-  <p class="sub">The house uses three faces, all under the SIL Open Font License today. Both brands use the same three.</p>
+  <p class="sub">The house uses three faces in its roles. Both brands use the same three.</p>
   <div class="table">
     <table>
       <thead><tr><th>Use</th><th>Face</th><th>Field in theme/theme.json</th></tr></thead>
       <tbody>
         <tr><td>Both wordmarks and Stella's icon</td><td>Space Grotesk 600</td><td><code>faces.wordmark.outline</code></td></tr>
-        <tr><td>Line 1 of a marketing hero</td><td>Space Grotesk</td><td><code>faces.wordmark</code></td></tr>
-        <tr><td>Every heading and all text, in the app and on the website</td><td>Geist</td><td><code>faces.display</code> and <code>faces.sans</code></td></tr>
+        <tr><td>Line 1 of a marketing hero, and every h1, h2, and h3 on the website</td><td>Space Grotesk</td><td><code>faces.wordmark</code></td></tr>
+        <tr><td>Every heading and all text in the app and on the docs site, and all other text on the website</td><td>Aeonik</td><td><code>faces.display</code> and <code>faces.sans</code></td></tr>
         <tr><td>Code, logs, paths, and numbers in tables</td><td>Monaspace Neon</td><td><code>faces.mono</code></td></tr>
+        <tr><td>No role yet</td><td>Aeonik Mono and Aeonik Fono</td><td><code>extra_faces</code></td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note"><strong>One system, two h1 rules.</strong> The app sets every heading in Geist. A website sets line 1 of its hero in Space Grotesk by wrapping it in the <code>hero-line-1</code> class inside a <code>text-m-h1</code> heading. Outside that heading the class draws in Geist, so the app can't reach Space Grotesk by accident.</p>
+  <p class="note"><strong>Two heading rules.</strong> The app and the docs site set every heading in Aeonik. The website (oxagen.sh) sets every h1, h2, and h3 in Space Grotesk, in its own stylesheet. The <code>hero-line-1</code> class sets line 1 of a hero in Space Grotesk inside a <code>text-m-h1</code> heading. Outside that heading the class draws in Aeonik, so the app can't reach Space Grotesk by accident.</p>
   <ol class="steps">
-    <li><strong>Check the licence.</strong><p>On 2026-10-01 you decided that a licensed face, such as Aeonik, may be committed to this public repo like the open faces. Its licence must still allow web embedding on Oxagen's sites.</p></li>
-    <li><strong>Add the files.</strong><p>Put the <code>.woff2</code> files and the licence under <code>fonts/</code>.</p></li>
+    <li><strong>Check the licence.</strong><p>On 2026-10-01 you decided that a licensed face may be committed to this public repo like the open faces. Its licence must still allow web embedding on Oxagen's sites.</p></li>
+    <li><strong>Add the files.</strong><p>Put the <code>.woff2</code> files under <code>fonts/</code>, and add their rows to <code>fonts/README.md</code>.</p></li>
     <li><strong>Point the role at the face.</strong><p>Edit the role's entry in <code>faces</code> in <code>theme/theme.json</code>, then run <code>build/build.py</code>. It rewrites <code>house-fonts.css</code>, <code>house-tailwind.css</code>, and <code>next-fonts.ts</code>, which every site imports.</p></li>
     <li><strong>Leave the wordmark face as it is.</strong><p>Both wordmarks and Stella's icon are always Space Grotesk, drawn at weight 600. The build refuses any other wordmark face, and the theme editor shows it read-only. A new gold still recolours the gold x and asterisk.</p></li>
   </ol>
@@ -374,7 +376,7 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
       <thead><tr><th>Part</th><th>Oxagen</th><th>Stella</th></tr></thead>
       <tbody>
         <tr><td>Colours</td><td colspan="2">Shared: obsidian, white, the greys, and one gold</td></tr>
-        <tr><td>Typefaces</td><td colspan="2">Shared: Space Grotesk, Geist, and Monaspace Neon</td></tr>
+        <tr><td>Typefaces</td><td colspan="2">Shared: Space Grotesk, Aeonik, and Monaspace Neon</td></tr>
         <tr><td>Components</td><td colspan="2">Shared: <code>@oxagen/ui</code>, shown in the Storybook</td></tr>
         <tr><td>Layout</td><td colspan="2">Shared: 12px card radius and a 1180px page width</td></tr>
         <tr><td>Voice and lines</td><td colspan="2">Shared: the message registry under <code>messages/</code></td></tr>

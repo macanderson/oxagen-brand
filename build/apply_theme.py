@@ -296,7 +296,8 @@ def local_files(role: str, face: dict, fonts_dir: Path) -> tuple[list[dict], lis
         web = webfont(f["file"], fonts_dir)
         if web != f["file"]:
             wrote.append(web)
-        files.append({"file": web, "weight": f["weight"]})
+        # An italic file keeps its style, so it loads as the italic of the family.
+        files.append({"file": web, "weight": f["weight"], **({"style": f["style"]} if "style" in f else {})})
     return files, read, wrote
 
 

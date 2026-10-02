@@ -57,19 +57,25 @@
       "outline": { "file": "SpaceGrotesk-VariableFont_wght.ttf", "weight": 600 }
     },
     "display": {
-      "family": "Geist",
+      "family": "Aeonik",
       "source": "kit",
-      "files": [{ "file": "geist-latin-wght.woff2", "weight": "100 900" }],
+      "files": [
+        { "file": "aeonik-wght.woff2", "weight": "100 900" },
+        { "file": "aeonik-italic-wght.woff2", "weight": "100 900", "style": "italic" }
+      ],
       "fallback": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       "features": []
     },
     "sans": {
-      "family": "Geist",
+      "family": "Aeonik",
       "source": "kit",
-      "files": [{ "file": "geist-latin-wght.woff2", "weight": "100 900" }],
+      "files": [
+        { "file": "aeonik-wght.woff2", "weight": "100 900" },
+        { "file": "aeonik-italic-wght.woff2", "weight": "100 900", "style": "italic" }
+      ],
       "fallback": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       "features": [],
-      "outline": { "file": "geist-latin-wght.woff2" }
+      "outline": { "file": "aeonik-wght.woff2" }
     },
     "mono": {
       "family": "Monaspace Neon",
@@ -79,6 +85,22 @@
       "features": ["calt", "liga"]
     }
   },
+  "extra_faces": [
+    {
+      "family": "Aeonik Mono",
+      "source": "kit",
+      "files": [{ "file": "aeonik-mono-wght.woff2", "weight": "100 900" }],
+      "fallback": ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
+      "features": []
+    },
+    {
+      "family": "Aeonik Fono",
+      "source": "kit",
+      "files": [{ "file": "aeonik-fono-wght.woff2", "weight": "100 900" }],
+      "fallback": ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
+      "features": []
+    }
+  ],
   "radius": {
     "base": "0.45rem",
     "steps": {
