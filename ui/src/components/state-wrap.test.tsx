@@ -48,7 +48,7 @@ describe("StateWrap", () => {
       level: 2,
       name: "No runs yet",
     });
-    expect(heading).toHaveClass("mb-[7px]", "text-lg", "font-semibold");
+    expect(heading).toHaveClass("mb-[7px]", "text-(length:--ox-a-h3)", "font-semibold");
     expect(state).toHaveAttribute("aria-labelledby", heading.id);
     expect(heading.id).toBe("probe-title");
     const body = within(state).getByText(

@@ -31,8 +31,10 @@ What passes without an entry in KEEP:
 - a value that reads a token (`var(--...)`) and writes no length of its own,
   a fallback inside the `var()` included;
 - a Tailwind size that reads a token, `text-(length:--ox-a-h2)` or
-  `text-[length:var(--ox-a-h2)]`, and Tailwind's named sizes, since
-  `tokens/house-tailwind.css` points `text-xs` and `text-sm` at a step;
+  `text-[length:var(--ox-a-h2)]`, and `text-xs` and `text-sm`, which
+  `tokens/house-tailwind.css` points at the app body step. Tailwind's other
+  named sizes (`text-base`, `text-lg` and up) are its own fixed sizes, so
+  they fail;
 - a corner of 0, a circle (50%), or a pill (999px or 9999px);
 - a ring, which is a shadow with no offset and no blur, such as a focus or
   hover ring, and an inset bar;
@@ -84,9 +86,16 @@ class Keep:
     path: str = KIT_CSS
 
 
+#: Why a text field keeps Tailwind's 16px `text-base` on a phone.
+_IOS_ZOOM = "Safari's floor for a text field on a phone, below which iOS zooms the page on focus"
+
 #: The literals the guard excuses, by file, group, and value.
 KEEP: tuple[Keep, ...] = (
-    Keep("font-size", "16px", "Safari's floor for a text field on a phone, below which iOS zooms the page on focus"),
+    Keep("font-size", "16px", _IOS_ZOOM),
+    *(
+        Keep("font-size", "text-base", _IOS_ZOOM, f"ui/src/components/{name}")
+        for name in ("command-menu.tsx", "composer.tsx", "control-styles.ts", "input.tsx", "list-controls.tsx", "textarea.tsx")
+    ),
 )
 
 
@@ -383,6 +392,9 @@ def strip_script_comments(code: str) -> str:
 
 
 _TW_SIZE = re.compile(r"(?<![\w-])text-\[([^\]\s]+)\]")
+#: Tailwind's own fixed sizes. `text-xs` and `text-sm` are not here, because
+#: `tokens/house-tailwind.css` points both at the app body step.
+_TW_NAMED = re.compile(r"(?<![\w-])text-(base|lg|xl|[2-9]xl)(?![\w-])")
 _FONT_SIZE_PROP = re.compile(r"\bfontSize\s*[:=]\s*\{?\s*(?:([\"'`])([^\"'`]*)\1|(-?\d*\.?\d+))")
 _CSS_IN_STRING = re.compile(r"(?<![\w-])(font-size|font)\s*:\s*([^;\"'`}\n]+)")
 
@@ -404,6 +416,9 @@ def script_font_sizes(code: str, path: str) -> list[Hit]:
             else f"a text-a-* or text-m-* step, or text-(length:{size_suggestion(px).split(' ')[0][4:-1]})"
         )
         out.append(Hit(_line(text, m.start()), "font-size", "class", f"text-[{value}]", use, path))
+    for m in _TW_NAMED.finditer(text):
+        out.append(Hit(_line(text, m.start()), "font-size", "class", m.group(0),
+                       "a text-a-* or text-m-* step, or text-(length:--ox-<step>), in place of Tailwind's own size", path))
     for m in _FONT_SIZE_PROP.finditer(text):
         value = m.group(2) if m.group(2) is not None else m.group(3)
         if m.group(3) is not None or small_or_fixed(value):
@@ -493,12 +508,23 @@ def check(path: Path = ROOT / KIT_CSS, root: Path = ROOT) -> list[str]:
     return problems + sdlc_step_problems(root)
 
 
+def summary() -> list[str]:
+    """What a clean pass of the guard holds, one line per scope."""
+    kit = sum(1 for k in KEEP if k.path == KIT_CSS)
+    other = len(KEEP) - kit
+    return [
+        f"{KIT_CSS} reads every corner, shadow, font size, and heading line height from a token, "
+        f"apart from {kit} kept literal{'s' if kit != 1 else ''}",
+        f"{len(scanned_files())} files in ui/src, sdlc/public, pwa/, and the kit's pages set every font size "
+        f"from a token, apart from {other} kept text field size{'s' if other != 1 else ''}",
+    ]
+
+
 if __name__ == "__main__":
     found = check()
     for p in found:
         print("problem:", p)
     if not found:
-        print(f"check: {KIT_CSS} reads every corner, shadow, font size, and heading line height from a token, "
-              f"apart from {len(KEEP)} kept literal{'s' if len(KEEP) != 1 else ''}")
-        print(f"check: {len(scanned_files())} files in ui/src, sdlc/public, pwa/, and the kit's pages set every font size from a token")
+        for line in summary():
+            print(f"check: {line}")
     sys.exit(1 if found else 0)

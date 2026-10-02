@@ -65,9 +65,11 @@ it. It reads two scopes.
   `ui/src`, `sdlc/public`, and `pwa/`, and in the kit's pages (`playbook.html`,
   `message-bank.html`, `always-on.html`, and `brand-guide.html`). That covers a
   Tailwind class such as `text-[13px]`, a `fontSize` value, and CSS in a style
-  block, a `style` attribute, or a string. It also fails on a size under 1em or
-  under 100%, because `.9em` of a 14px body is 12.6px. Tests are not read,
-  because they name classes to assert them.
+  block, a `style` attribute, or a string. It fails on Tailwind's own fixed
+  sizes, `text-base`, `text-lg`, and up, apart from a text field's 16px on a
+  phone, which `KEEP` names for each file that sets it. It also fails on a
+  size under 1em or under 100%, because `.9em` of a 14px body is 12.6px. Tests
+  are not read, because they name classes to assert them.
 
 A size passes when it reads a token: `var(--ox-a-body)`,
 `text-(length:--ox-a-h2)`, a house utility (`text-m-*`, `text-a-*`), or

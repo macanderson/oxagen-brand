@@ -95,6 +95,10 @@ class FontSizesEverywhere(unittest.TestCase):
         hits = L.script_font_sizes('const a = "px-2 text-[13px] font-medium";\nconst b = "text-[0.75rem]";', "x.tsx")
         self.assertEqual([(h.line, h.value) for h in hits], [(1, "text-[13px]"), (2, "text-[0.75rem]")])
 
+    def test_a_tailwind_fixed_size_fails(self) -> None:
+        hits = L.script_font_sizes('const a = "text-lg max-md:text-base text-2xl";', "x.tsx")
+        self.assertEqual([h.value for h in hits], ["text-lg", "text-base", "text-2xl"])
+
     def test_a_tailwind_size_that_reads_a_token_passes(self) -> None:
         code = 'const a = "text-(length:--ox-a-h2) text-[length:var(--ox-m-h2)] text-[var(--body)] text-sm text-a-body";'
         self.assertEqual(L.script_font_sizes(code, "x.tsx"), [])

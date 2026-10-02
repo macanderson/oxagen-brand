@@ -146,7 +146,7 @@ describe("Dialog recipe", () => {
 
   it("sets the title at 16px and the description at 14px", () => {
     const { getByText } = render(<OpenDialog />);
-    expect(getByText("Edit agent").className).toContain("text-base");
+    expect(getByText("Edit agent").className).toContain("text-(length:--ox-a-h4)");
     expect(getByText("Changes apply to the next run.").className).toContain(
       "text-sm",
     );

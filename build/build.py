@@ -1091,8 +1091,8 @@ def check(drift_check: bool = True) -> int:
               f"code in {T.CODE_FACE.family}, every step {T.TYPE_FLOOR_PX}px or more")
         if drift_check:
             print("check: every generated file, the skill's tokens, and playbook.html match theme/theme.json")
-            print(f"check: {CL.KIT_CSS} reads every corner, shadow, font size, and heading line height from a token, "
-                  f"apart from {len(CL.KEEP)} kept literal{'s' if len(CL.KEEP) != 1 else ''}")
+            for line in CL.summary():
+                print(f"check: {line}")
     return 1 if problems else 0
 
 

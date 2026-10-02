@@ -36,7 +36,8 @@ declaration — if a custom property has no marker it is Tailwind engine plumbin
 Utility classes that DO exist, if you prefer them: `bg-background` `bg-card`
 `bg-muted` `bg-primary` `bg-destructive` `text-foreground` `text-muted-foreground`
 `text-primary` `border-border` `border-input` `rounded-sm|md|lg|xl|full`
-`shadow-sm|md|lg` `font-sans|display|mono|medium|semibold` `text-xs|sm|lg|xl|2xl`
+`shadow-sm|md|lg` `font-sans|display|heading|mono|medium|semibold` `text-xs|sm` (both 14px)
+`text-a-h1|h2|h3|h4|body|micro` `text-m-h1|h2|h3|h4|body|micro`
 `gap-1|2|3|4|6`. Anything outside that list: use `var(--token)` instead.
 
 ### Theme

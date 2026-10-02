@@ -206,7 +206,7 @@ export const AppScale: Story = {
   render: () => <Scale samples={APP_SCALE} />,
 };
 
-/** The large scale for landing pages and posts. Docs use the app scale. */
+/** The large scale for landing pages and posts, with Space Grotesk h1 to h3 and 16px body. */
 export const MarketingScale: Story = {
   name: "Marketing scale",
   render: () => <Scale samples={MARKETING_SCALE} />,
