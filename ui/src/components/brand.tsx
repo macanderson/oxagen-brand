@@ -29,9 +29,13 @@
  * the wordmark IS the Stella lockup and nothing is ever placed to its left.
  *
  * ONE GLYPH IS GOLD. The `x` of oxagen, the asterisk of stella — never a second
- * one, never the whole word. The gold stays #D4AF37 in BOTH themes: the kit's
+ * one, never the whole word. The gold stays the same in BOTH themes: the kit's
  * "gold becomes its deep shade on white" rule governs gold WORDS, not the mark,
  * and the kit's own light and dark files both fill the accent with the metal.
+ * The accent reads `--ox-gold`, which is one value in both themes, with the
+ * kit's pinned gold as the fallback where the tokens are not loaded. The fill
+ * attribute keeps the pinned gold for a copy of the SVG that carries no CSS.
+ * The theme editor on the example pages sets `--ox-gold` to preview a new gold.
  *
  * THE HIVE IS TWO COLOURS. Its outlines take the colour of whatever it sits on;
  * its two lit cells take the gold. `tone="mono"` paints all of it one colour.
@@ -65,6 +69,12 @@ import {
  */
 export type LogoTone = "adaptive" | "mono";
 
+/**
+ * The accent's paint: the house gold token, falling back to the pinned gold.
+ * `--ox-gold` does not flip with the theme, so the mark keeps one metal.
+ */
+const GOLD_PAINT = `var(--ox-gold, ${BRAND_GOLD})`;
+
 /** A wordmark: two paths, one of which is the single gold glyph. */
 function Wordmark({
   geometry,
@@ -93,7 +103,11 @@ function Wordmark({
       style={style}
     >
       <path d={letters} fill="currentColor" />
-      <path d={accent} fill={tone === "mono" ? "currentColor" : BRAND_GOLD} />
+      {tone === "mono" ? (
+        <path d={accent} fill="currentColor" />
+      ) : (
+        <path d={accent} fill={BRAND_GOLD} style={{ fill: GOLD_PAINT }} />
+      )}
     </svg>
   );
 }
@@ -129,15 +143,14 @@ function Icon({
     >
       <g transform={transform}>
         {parts.map((part) => {
-          const colour =
-            part.role === "accent" && tone !== "mono"
-              ? BRAND_GOLD
-              : "currentColor";
+          const gold = part.role === "accent" && tone !== "mono";
+          const colour = gold ? BRAND_GOLD : "currentColor";
           return part.strokeWidth === undefined ? (
             <path
               key={part.d}
               d={part.d}
               fill={colour}
+              style={gold ? { fill: GOLD_PAINT } : undefined}
               opacity={part.opacity}
             />
           ) : (
@@ -146,6 +159,7 @@ function Icon({
               d={part.d}
               fill="none"
               stroke={colour}
+              style={gold ? { stroke: GOLD_PAINT } : undefined}
               strokeWidth={part.strokeWidth}
               strokeLinejoin="miter"
               opacity={part.opacity}

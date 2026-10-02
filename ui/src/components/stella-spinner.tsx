@@ -16,6 +16,15 @@ const STELLA_MARK = STELLA.icon.parts[0]?.d ?? "";
 export const STELLA_SHIMMER = "#F1CE65";
 
 /**
+ * The asterisk and its sweep read the house gold tokens, with the pinned
+ * values as the fallback, so a page that sets `--ox-gold` and
+ * `--ox-gold-bright` recolours the spinner. The attributes keep the pinned
+ * values for a copy of the SVG that carries no CSS.
+ */
+const GOLD_PAINT = { fill: `var(--ox-gold, ${BRAND_GOLD})` };
+const SHIMMER_PAINT = { stopColor: `var(--ox-gold-bright, ${STELLA_SHIMMER})` };
+
+/**
  * The placement `spinners/stella-spinner.svg` gives the asterisk, a little
  * larger than the icon's so the turning points stay inside the square.
  *
@@ -62,14 +71,14 @@ export function StellaSpinner({ title, ...props }: SpinnerProps) {
           <path d={STELLA_MARK} />
         </clipPath>
         <linearGradient id={sweep} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor={STELLA_SHIMMER} stopOpacity="0" />
-          <stop offset="0.5" stopColor={STELLA_SHIMMER} stopOpacity="0.95" />
-          <stop offset="1" stopColor={STELLA_SHIMMER} stopOpacity="0" />
+          <stop offset="0" stopColor={STELLA_SHIMMER} stopOpacity="0" style={SHIMMER_PAINT} />
+          <stop offset="0.5" stopColor={STELLA_SHIMMER} stopOpacity="0.95" style={SHIMMER_PAINT} />
+          <stop offset="1" stopColor={STELLA_SHIMMER} stopOpacity="0" style={SHIMMER_PAINT} />
         </linearGradient>
       </defs>
       <g transform={STELLA_SPINNER_TRANSFORM}>
         <g className="ox-stella-turn">
-          <path d={STELLA_MARK} fill={BRAND_GOLD} />
+          <path d={STELLA_MARK} fill={BRAND_GOLD} style={GOLD_PAINT} />
           <g clipPath={`url(#${clip})`}>
             <rect
               className="ox-stella-sweep"

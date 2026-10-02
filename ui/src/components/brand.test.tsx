@@ -28,15 +28,18 @@ import houseTokens from "../../../tokens/house-tokens.json";
 afterEach(cleanup);
 
 /**
- * The kit's pinned gold. If this ever changes the kit changed, and every asset
- * in the repo has to be re-synced with it — the generated module and the CSS
- * token file must not disagree.
+ * The kit's pinned gold. The generated module and the token file must not
+ * disagree: the apply-theme workflow carries a new gold into both, and this
+ * fails if one of them is left behind.
  */
 describe("the metal", () => {
   it("is the house gold", () => {
-    expect(BRAND_GOLD).toBe("#D4AF37");
+    expect(BRAND_GOLD).toBe(houseTokens.tokens.gold);
   });
 });
+
+/** The paint every gold part reads: the house token, with the pinned gold behind it. */
+const GOLD_PAINT = `var(--ox-gold, ${BRAND_GOLD})`;
 
 describe("OxagenWordmark — THE Oxagen logo", () => {
   it("renders an SVG labelled with the word", () => {
@@ -59,10 +62,18 @@ describe("OxagenWordmark — THE Oxagen logo", () => {
     expect(paths[1]?.getAttribute("fill")).toBe(BRAND_GOLD);
   });
 
-  it("keeps the metal on the x in BOTH themes — the accent is never theme-flipped", () => {
+  it("keeps the metal on the x in BOTH themes — the accent reads the gold token, never a theme role", () => {
     const { container } = render(<OxagenWordmark />);
     const accent = container.querySelectorAll("path")[1];
-    expect(accent?.getAttribute("fill")).not.toContain("var(");
+    // --ox-gold is one value in both themes. A semantic role such as --brand
+    // or --gold-text flips with the theme, so the mark must never read one.
+    expect(accent?.style.fill).toBe(GOLD_PAINT);
+    expect(accent?.getAttribute("fill")).toBe(BRAND_GOLD);
+  });
+
+  it("leaves the gold token off a mono mark", () => {
+    const { container } = render(<OxagenWordmark tone="mono" />);
+    expect(container.innerHTML).not.toContain("--ox-gold");
   });
 
   it("flattens the gold to currentColor for a mono tone", () => {
@@ -107,6 +118,7 @@ describe("OxagenIcon — the hive, two colours", () => {
     );
     expect(lit).toHaveLength(2);
     expect(lit.map((p) => p.getAttribute("opacity"))).toContain("0.55");
+    for (const p of lit) expect(p.style.fill).toBe(GOLD_PAINT);
   });
 
   it("paints every cell one colour for a mono tone", () => {
@@ -195,9 +207,9 @@ describe("StellaIcon — the asterisk IS the metal", () => {
 
   it("ships gold", () => {
     const { container } = render(<StellaIcon />);
-    expect(container.querySelector("path")?.getAttribute("fill")).toBe(
-      BRAND_GOLD,
-    );
+    const path = container.querySelector("path");
+    expect(path?.getAttribute("fill")).toBe(BRAND_GOLD);
+    expect(path?.style.fill).toBe(GOLD_PAINT);
   });
 
   it("flattens for a mono tone", () => {
