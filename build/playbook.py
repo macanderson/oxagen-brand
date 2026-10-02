@@ -837,7 +837,7 @@ def build_html() -> str:
 <div class="type-row"><span class="mono">text 400</span><span style="font-weight:400;font-size:16px;color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
 <div class="type-row"><span class="mono">code 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:14px">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
 <h3>Scales</h3>
-<p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a page read once. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for panels, tables, and logs read all day.</p>
+<p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a landing page or a post read once. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for docs, panels, tables, and logs. Every docs site uses the app scale.</p>
 <h3>Hero line</h3>
 <p>Only the marketing h1 admits Space Grotesk. Wrap line 1 of the hero in <span class="mono">{T.HERO_CLASS}</span> inside a <span class="mono">text-m-h1</span> heading, and line 2 stays in Geist. The same class anywhere else, including every app heading, draws in Geist, so an app cannot reach Space Grotesk except through a wordmark.</p>
 <pre><code>&lt;h1 class="text-m-h1"&gt;&lt;span class="{T.HERO_CLASS}"&gt;Line one&lt;/span&gt;&lt;br&gt;Line two&lt;/h1&gt;</code></pre>

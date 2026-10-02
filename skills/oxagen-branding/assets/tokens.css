@@ -38,7 +38,7 @@
   --font: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --mono-features: "calt", "liga";
-  --radius: 12px; --wrap: 1120px;
+  --radius: 12px; --wrap: 1180px;
   --radius-base: 0.45rem;
   --radius-xs: calc(var(--radius-base) * 0.4);
   --radius-sm: calc(var(--radius-base) * 0.6);

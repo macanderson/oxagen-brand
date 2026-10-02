@@ -72,11 +72,11 @@ Two scales. A surface picks one and keeps it.
 | body | Geist | 18px, 1.65, 400 | 14px, 1.5, 400 |
 | micro | Monaspace Neon | 14px, 1.5, 400 | 12px, 1.4, 400 |
 
-Marketing is for landing pages, posts, and anything read once: large and spaced. App is for dashboards, panels, tables, terminals, and logs read all day: dense. An eyebrow is 12px Geist, uppercase, at 0.14em tracking.
+Marketing is for landing pages and posts: large and spaced. App is for docs, dashboards, panels, tables, terminals, and logs: dense. Every docs site uses the app scale (Mac, 2026-10-02). An eyebrow is 12px Geist, uppercase, at 0.14em tracking.
 
 ## Layout
 
-Wrap 1120px, 24px side padding. Card radius 12px on the website. The app's card is `rounded-2xl` on the shadcn preset scale: 1.8 times a 0.45rem base, about 13px (oxagen ADR-221). Section rhythm: 44px vertical, 1px border on top. Grid gaps 16px. Tables sit inside a rounded, bordered, horizontally scrolling container with a highlight header row.
+Wrap 1180px (`--ox-wrap`), 24px side padding. Every site uses the same wrap (Mac, 2026-10-02). Card radius 12px on the website. The app's card is `rounded-2xl` on the shadcn preset scale: 1.8 times a 0.45rem base, about 13px (oxagen ADR-221). Section rhythm: 44px vertical, 1px border on top. Grid gaps 16px. Tables sit inside a rounded, bordered, horizontally scrolling container with a highlight header row.
 
 The eyebrow above an h2 is muted, except the first one on a page, which is gold and counts as the identity, not as the action.
 
