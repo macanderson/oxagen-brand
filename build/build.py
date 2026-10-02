@@ -1077,7 +1077,7 @@ def check(drift_check: bool = True) -> int:
         if drift_check:
             print("check: every generated file, the skill's tokens, and playbook.html match theme/theme.json")
             print(f"check: {CL.KIT_CSS} reads every corner, shadow, font size, and heading line height from a token, "
-                  f"apart from {len(CL.KEEP)} kept literals")
+                  f"apart from {len(CL.KEEP)} kept literal{'s' if len(CL.KEEP) != 1 else ''}")
     return 1 if problems else 0
 
 

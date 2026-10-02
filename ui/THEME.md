@@ -41,11 +41,12 @@ declared once and reads an `--ox-*` token. The radius and shadow scales sit in
 the mapping layer, above the v3 layer. The radius scale reads `--ox-radius-xs`
 to `--ox-radius-4xl`, which multiply `--ox-radius-base`. The shadow scale reads
 `--ox-shadow-ui` and `shadow-pop` reads `--ox-shadow-pop`, each with its `-ink`
-twin on paper. `h4` to `h6` read `--ox-a-h4-leading`.
+twin on paper. `h1`, `h2`, and `h3` read `--ox-a-h1-leading`,
+`--ox-a-h2-leading`, and `--ox-a-h3-leading`, as product's `packages/ui` does.
+`h4` to `h6` read `--ox-a-h4-leading`.
 
-Two literals stay, and `KEEP` in `build/css_literals.py` names each with its
-reason. A phone's text fields set 16px, so iOS does not zoom on focus. `h1` to
-`h3` keep a 1.12 leading, which no token holds, until Mac decides on #76.
+One literal stays, and `KEEP` in `build/css_literals.py` names it with its
+reason. A phone's text fields set 16px, so iOS does not zoom on focus.
 `build/build.py --check` fails on any other literal corner, shadow, font size,
 or heading line height in `globals.css`.
 

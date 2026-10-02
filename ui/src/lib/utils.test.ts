@@ -5,6 +5,7 @@
 // in isolation.
 
 import { describe, expect, it } from "vitest";
+import theme from "../../../theme/theme.json";
 import { cn } from "./utils";
 
 describe("cn", () => {
@@ -48,5 +49,68 @@ describe("cn", () => {
     expect(result).toContain("items-center");
     expect(result).toContain("gap-2");
     expect(result).toContain("text-sm");
+  });
+});
+
+// The house type utilities, `text-a-<step>` and `text-m-<step>`, set a font
+// size. tailwind-merge's default config read them as a text colour, so a
+// colour class in the same list dropped them (oxageninc/brand#75).
+describe("cn with the house type utilities", () => {
+  const SCALES = { a: theme.type.scales.app, m: theme.type.scales.marketing };
+  const UTILITIES = Object.entries(SCALES).flatMap(([prefix, steps]) =>
+    Object.keys(steps).map((step) => `text-${prefix}-${step}`),
+  );
+
+  it("reads every step of both scales from theme/theme.json", () => {
+    // The cases below run once per step the theme lists. A step added to the
+    // theme fails them until TYPE_STEPS in utils.ts names it too.
+    expect(UTILITIES).toContain("text-a-h1");
+    expect(UTILITIES).toContain("text-m-micro");
+  });
+
+  it("keeps the Runs title's size beside its colour", () => {
+    expect(cn("truncate text-a-h3 text-foreground")).toBe("truncate text-a-h3 text-foreground");
+  });
+
+  it.each(UTILITIES)("keeps %s beside a later text colour", (size) => {
+    expect(cn(size, "text-foreground")).toBe(`${size} text-foreground`);
+  });
+
+  it.each(UTILITIES)("keeps %s after a text colour", (size) => {
+    expect(cn("text-muted-foreground", size)).toBe(`text-muted-foreground ${size}`);
+  });
+
+  it.each(UTILITIES)("keeps %s beside an arbitrary text colour", (size) => {
+    expect(cn(size, "text-[var(--body)]")).toBe(`${size} text-[var(--body)]`);
+  });
+
+  it.each(UTILITIES)("keeps %s on its own", (size) => {
+    expect(cn(size)).toBe(size);
+  });
+
+  it("lets a later house size override an earlier one in the same scale", () => {
+    expect(cn("text-a-h3", "text-a-h1")).toBe("text-a-h1");
+    expect(cn("text-m-body text-foreground", "text-m-h2")).toBe("text-foreground text-m-h2");
+  });
+
+  it("lets a later house size override one from the other scale", () => {
+    expect(cn("text-m-body", "text-a-body")).toBe("text-a-body");
+    expect(cn("text-a-micro", "text-m-micro")).toBe("text-m-micro");
+  });
+
+  it("treats a stock size and a house size as the same property", () => {
+    expect(cn("text-sm", "text-a-h3")).toBe("text-a-h3");
+    expect(cn("text-a-h3", "text-sm")).toBe("text-sm");
+    expect(cn("text-a-h3", "text-[1.5rem]")).toBe("text-[1.5rem]");
+  });
+
+  it("keeps house sizes under different variants", () => {
+    expect(cn("text-a-h3", "md:text-a-h1")).toBe("text-a-h3 md:text-a-h1");
+  });
+
+  it("still lets a later colour override an earlier one", () => {
+    expect(cn("text-a-h3 text-muted-foreground", "text-foreground")).toBe(
+      "text-a-h3 text-foreground",
+    );
   });
 });
