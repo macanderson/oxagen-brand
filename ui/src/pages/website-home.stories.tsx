@@ -4,6 +4,8 @@ import { HomePage } from "./website-home";
 const meta = {
   title: "Pages/Website/Home",
   component: HomePage,
+  // A page fixture is not a component, so it gets no Docs page.
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen", page: true },
   args: { productMenuOpen: true },
 } satisfies Meta<typeof HomePage>;

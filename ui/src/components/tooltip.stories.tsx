@@ -10,6 +10,9 @@ import { Button } from "./button";
 const meta = {
   title: "Overlays/Tooltip",
   component: Tooltip,
+  // An open overlay portals to <body>, outside its story. On the Docs page
+  // each story draws in its own frame, so the overlay stays with its story.
+  parameters: { docs: { story: { inline: false, height: "200px" } } },
 } satisfies Meta<typeof Tooltip>;
 export default meta;
 type Story = StoryObj<typeof meta>;

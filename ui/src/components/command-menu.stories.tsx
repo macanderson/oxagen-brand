@@ -24,6 +24,9 @@ import {
 const meta = {
   title: "Overlays/CommandMenu",
   component: CommandMenu,
+  // An open overlay portals to <body>, outside its story. On the Docs page
+  // each story draws in its own frame, so the overlay stays with its story.
+  parameters: { docs: { story: { inline: false, height: "520px" } } },
   args: { groups: [] },
 } satisfies Meta<typeof CommandMenu>;
 export default meta;

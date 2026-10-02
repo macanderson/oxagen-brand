@@ -11,6 +11,9 @@ import {
 const meta = {
   title: "Forms/Combobox",
   component: Combobox,
+  // An open overlay portals to <body>, outside its story. On the Docs page
+  // each story draws in its own frame, so the overlay stays with its story.
+  parameters: { docs: { story: { inline: false, height: "420px" } } },
 } satisfies Meta<typeof Combobox>;
 export default meta;
 // Combobox's root requires `children`; base the story on the component so

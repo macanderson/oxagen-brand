@@ -4,6 +4,8 @@ import { RunsPage } from "./app-runs";
 const meta = {
   title: "Pages/App/Runs",
   component: RunsPage,
+  // A page fixture is not a component, so it gets no Docs page.
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen", page: true },
   args: { rowMenuOpen: true, toast: true },
 } satisfies Meta<typeof RunsPage>;

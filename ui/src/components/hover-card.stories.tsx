@@ -5,7 +5,12 @@ import { HoverCard, HoverCardContent } from "./hover-card";
 const meta = {
   title: "Overlays/HoverCard",
   component: HoverCard,
-  parameters: { layout: "centered" },
+  // An open overlay portals to <body>, outside its story. On the Docs page
+  // each story draws in its own frame, so the overlay stays with its story.
+  parameters: {
+    layout: "centered",
+    docs: { story: { inline: false, height: "320px" } },
+  },
 } satisfies Meta<typeof HoverCard>;
 export default meta;
 type Story = StoryObj<typeof meta>;

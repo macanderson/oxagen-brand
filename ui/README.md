@@ -61,7 +61,17 @@ pnpm build-storybook   # static build in storybook-static/
 
 Stories sit beside their component as `src/components/<name>.stories.tsx`. The
 sidebar groups them by `title`: Foundations, Primitives, Forms, Surfaces,
-Navigation, Overlays, Feedback, Brand, and Pages.
+Navigation, Overlays, Brand, and Pages. Toast sits under Overlays, and
+Attachment and Composer sit under Forms.
+
+The Overview page at the top of the sidebar is `src/overview.mdx`. Every
+component also gets a Docs page, because `preview.tsx` sets the `autodocs` tag.
+Storybook builds that page from the component's stories, its props, and the
+JSDoc comments on the component and each story, so no one writes it by hand.
+The `Pages/` stories opt out with `tags: ["!autodocs"]`. A story file whose
+overlays open on load sets `parameters.docs.story` so each of its stories draws
+in its own frame on the Docs page. Without it, every open menu or dialog would
+float over the whole page.
 
 The `Pages/` stories show the kit at page scale: two website pages (Home and
 Security) and two app pages (Runs and Run detail), each in light and dark, with

@@ -30,11 +30,15 @@ const withTheme: Decorator = (Story, context) => {
   // its own edges, so its sticky bar meets the top of the frame. Every other
   // story sits 24px in.
   const page = context.parameters.page === true;
+  // A docs page draws every story of a component one after another, so a
+  // story there takes its own height. In the canvas it fills the frame.
+  const docs = context.viewMode === "docs";
   return (
     <div
       className={[
         theme === "dark" ? "dark" : "light",
-        "min-h-screen bg-background text-foreground",
+        "bg-background text-foreground",
+        docs ? "" : "min-h-screen",
         page ? "" : "p-6",
       ]
         .filter(Boolean)
@@ -64,6 +68,10 @@ const withThemeEditor: Decorator = (Story, context) => {
 };
 
 const preview: Preview = {
+  // Every component gets a Docs page built from its stories: the description,
+  // the first story with its controls, the props table, then the rest of the
+  // stories. The `Pages/` stories opt out with `!autodocs`.
+  tags: ["autodocs"],
   // The last decorator wraps the others, so the editor sits inside the theme.
   decorators: [withThemeEditor, withTheme],
   globalTypes: {
@@ -84,6 +92,23 @@ const preview: Preview = {
   parameters: {
     layout: "fullscreen",
     controls: { expanded: true },
+    // The Overview page first, then the groups in the order the README lists
+    // them. Storybook reads this object as source, so it must stay a literal.
+    options: {
+      storySort: {
+        order: [
+          "Overview",
+          "Foundations",
+          "Primitives",
+          "Forms",
+          "Surfaces",
+          "Navigation",
+          "Overlays",
+          "Brand",
+          "Pages",
+        ],
+      },
+    },
   },
 };
 

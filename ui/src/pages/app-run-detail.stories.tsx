@@ -4,6 +4,8 @@ import { RunDetailPage } from "./app-run-detail";
 const meta = {
   title: "Pages/App/Run detail",
   component: RunDetailPage,
+  // A page fixture is not a component, so it gets no Docs page.
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen", page: true },
   args: { commandMenuOpen: true },
 } satisfies Meta<typeof RunDetailPage>;
