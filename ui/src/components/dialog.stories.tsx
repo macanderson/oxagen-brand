@@ -18,6 +18,9 @@ import { Label } from "./label";
 const meta = {
   title: "Overlays/Dialog",
   component: Dialog,
+  // An open overlay portals to <body>, outside its story. On the Docs page
+  // each story draws in its own frame, so the overlay stays with its story.
+  parameters: { docs: { story: { inline: false, height: "520px" } } },
 } satisfies Meta<typeof Dialog>;
 export default meta;
 type Story = StoryObj<typeof meta>;

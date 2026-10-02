@@ -35,7 +35,12 @@ import { Button } from "./button";
 const meta = {
   title: "Overlays/Menu",
   component: Menu,
-  parameters: { layout: "centered" },
+  // An open overlay portals to <body>, outside its story. On the Docs page
+  // each story draws in its own frame, so the overlay stays with its story.
+  parameters: {
+    layout: "centered",
+    docs: { story: { inline: false, height: "400px" } },
+  },
   decorators: [
     (Story) => (
       <div className="flex min-h-80 items-start justify-center">

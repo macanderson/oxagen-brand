@@ -1,0 +1,88 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Overview" />
+
+# @oxagen/ui
+
+`@oxagen/ui` is the component kit for Oxagen's websites and apps. It's built on
+[Base UI](https://base-ui.com/) and Tailwind v4. Every colour, corner, and face
+comes from the house tokens in `tokens/`, one directory above the kit.
+
+This Storybook shows each component in every state it draws. The Theme menu in
+the toolbar switches every story between light and dark.
+
+## Setup
+
+The package ships TypeScript source with no build step. Your app compiles it
+with its own bundler. In Next.js, add `@oxagen/ui` to `transpilePackages`.
+
+1. Import the stylesheet once, at the root of your app:
+
+   ```ts
+   import "@oxagen/ui/styles/globals.css";
+   ```
+
+2. Import components from the package:
+
+   ```tsx
+   import { Button } from "@oxagen/ui";
+
+   export function Approve() {
+     return <Button variant="primary">Approve run</Button>;
+   }
+   ```
+
+Your app installs `react`, `react-dom`, and `tailwindcss`. The kit lists them
+as peer dependencies.
+
+## Sidebar groups
+
+- **Foundations:** the type scale and the icons.
+- **Primitives:** buttons, badges, tables, and other small parts.
+- **Forms:** inputs, selects, switches, sliders, and the composer.
+- **Surfaces:** cards and panels.
+- **Navigation:** tabs, pagination, and list controls.
+- **Overlays:** menus, dialogs, sheets, popovers, tooltips, and toasts.
+- **Brand:** the Oxagen and Stella marks.
+- **Pages:** two website pages and two app pages, built from the kit.
+
+## Docs pages
+
+Each component opens on a Docs page that Storybook builds from its stories. The
+page shows, in order:
+
+1. The component's description.
+2. Its first story, with controls you can change.
+3. The props Storybook reads from the component's TypeScript types.
+4. Every other story, each with its own description.
+
+The Pages group has no Docs pages. Each page there is a fixture made of many
+components, so it has no props of its own to list.
+
+## Rules
+
+1. Compose with the `render` prop. Base UI has no `asChild`.
+2. Overlay parts are named `*Popup` or `*Panel`.
+3. Change the look by editing tokens. A component's class string never names a
+   hex value, a Tailwind palette colour, or a house token.
+4. Icons come from `@phosphor-icons/react`, in the regular weight, with the
+   `Icon` suffix.
+5. Every component has a story for each state it draws.
+
+## New components
+
+1. Put the component in `src/components/<name>.tsx`.
+2. Put its stories beside it in `src/components/<name>.stories.tsx`. Set
+   `title` to its group, such as `Forms/Input`, and set `component` to the
+   component.
+3. Write a JSDoc comment (a `/** */` block) above the component and above each
+   story. The Docs page shows each one as a description.
+
+Storybook builds the Docs page from those stories, so you don't write one.
+
+## References
+
+- The kit's [README](https://github.com/oxageninc/brand/blob/main/ui/README.md)
+  lists every component and its parts.
+- [THEME.md](https://github.com/oxageninc/brand/blob/main/ui/THEME.md) says
+  which file sets which value.

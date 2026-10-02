@@ -4,6 +4,8 @@ import { SecurityPage } from "./website-security";
 const meta = {
   title: "Pages/Website/Security",
   component: SecurityPage,
+  // A page fixture is not a component, so it gets no Docs page.
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen", page: true },
   args: { scopeOpen: true },
 } satisfies Meta<typeof SecurityPage>;
