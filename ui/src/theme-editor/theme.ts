@@ -165,6 +165,25 @@ export function themeVars(theme: Theme, faces: Record<Role, FaceChoice>): Record
   return vars;
 }
 
+/**
+ * The type rules `build/typeset.py` checks that a size change can break, in
+ * its words: each scale descends, and each h1's leading sits between 1.05
+ * and 1.25.
+ */
+export function typeProblems(theme: Theme): string[] {
+  const out: string[] = [];
+  for (const scale of ["marketing", "app"] as const) {
+    const sizes = STEPS.map((s) => Math.round(remPx(theme.type.scales[scale][s].size)));
+    const sorted = [...sizes].sort((a, b) => b - a);
+    if (sizes.some((s, i) => s !== sorted[i])) {
+      out.push(`${scale} scale does not descend: [${sizes.join(", ")}]`);
+    }
+    const lead = theme.type.scales[scale].h1.leading;
+    if (!(lead >= 1.05 && lead <= 1.25)) out.push(`${scale} h1 line-height ${lead} is outside 1.05 to 1.25`);
+  }
+  return out;
+}
+
 /** A rem or px length in CSS pixels at a 16px root, as `build/theme.py` reads one. */
 export function remPx(length: string): number {
   if (length.endsWith("rem")) return Number(length.slice(0, -3)) * 16;

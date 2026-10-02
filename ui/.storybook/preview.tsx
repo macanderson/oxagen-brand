@@ -1,6 +1,7 @@
 import * as React from "react";
 import "../src/styles/globals.css";
 import type { Decorator, Preview } from "@storybook/react-vite";
+import { ThemeEditor } from "../src/theme-editor/theme-editor";
 
 /**
  * Theme toolbar — coss ui is fully token-driven: the `.dark` class on an
@@ -44,8 +45,27 @@ const withTheme: Decorator = (Story, context) => {
   );
 };
 
+/**
+ * The theme editor (#63): a Theme button on every page story (`page: true`,
+ * the `Pages/` stories) opens a panel that previews a theme change on the
+ * page and sends it to every site. It edits the colours of the theme the
+ * toolbar shows. Add `theme-editor=open` to the iframe's query string to open
+ * the panel on load.
+ */
+const withThemeEditor: Decorator = (Story, context) => {
+  if (context.parameters.page !== true) return <Story />;
+  const mode = context.globals.theme === "dark" ? "dark" : "light";
+  return (
+    <>
+      <Story />
+      <ThemeEditor mode={mode} />
+    </>
+  );
+};
+
 const preview: Preview = {
-  decorators: [withTheme],
+  // The last decorator wraps the others, so the editor sits inside the theme.
+  decorators: [withThemeEditor, withTheme],
   globalTypes: {
     theme: {
       description: "Light / dark token theme",
