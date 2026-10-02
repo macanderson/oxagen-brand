@@ -1083,19 +1083,12 @@
        text-a-h1 utilities carry. */
     font-weight: var(--ox-weight-heading);
     letter-spacing: var(--ox-tracking-heading);
+    /* The one literal leading in the kit. No token holds 1.12, and the app
+       scale's steps (1.15, 1.2, 1.25) would move every heading with no size
+       class, such as a toast title. build/css_literals.py keeps it until Mac
+       decides (#76). A heading with a text-* class takes that class's leading. */
+    line-height: 1.12;
     text-wrap: balance;
-  }
-
-  /* Each heading takes its step's leading from the app scale. A heading that
-     carries a text-* utility takes that utility's leading instead. */
-  h1 {
-    line-height: var(--ox-a-h1-leading);
-  }
-  h2 {
-    line-height: var(--ox-a-h2-leading);
-  }
-  h3 {
-    line-height: var(--ox-a-h3-leading);
   }
 
   code,

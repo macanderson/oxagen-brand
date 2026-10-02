@@ -1076,7 +1076,8 @@ def check(drift_check: bool = True) -> int:
               f"{T.WORDMARK_FACE.family} on the wordmarks and a marketing hero only")
         if drift_check:
             print("check: every generated file, the skill's tokens, and playbook.html match theme/theme.json")
-            print(f"check: {CL.KIT_CSS} reads every corner, shadow, font size, and heading line height from a token")
+            print(f"check: {CL.KIT_CSS} reads every corner, shadow, font size, and heading line height from a token, "
+                  f"apart from {len(CL.KEEP)} kept literals")
     return 1 if problems else 0
 
 

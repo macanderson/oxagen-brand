@@ -49,6 +49,8 @@ class Keep:
 #: The literals `globals.css` keeps, by group and value.
 KEEP: tuple[Keep, ...] = (
     Keep("font-size", "16px", "Safari's floor for a text field on a phone, below which iOS zooms the page on focus"),
+    Keep("line-height", "1.12", "the h1 to h3 leading. No token holds 1.12, and the app scale's steps would move "
+         "every heading with no size class, such as a toast title. It waits on Mac's decision in #76"),
 )
 
 
