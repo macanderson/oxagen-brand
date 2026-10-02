@@ -1,7 +1,7 @@
 {
   "$schema": "./theme.schema.json",
   "color": {
-    "gold": "#D4AF37",
+    "gold": "#C99B2E",
     "gold_bright": { "lightness": 0.86, "chroma": 0.13 },
     "gold_deep": { "lightness": 0.56, "chroma": 0.1 },
     "ink": {
@@ -57,9 +57,9 @@
       "outline": { "file": "SpaceGrotesk-VariableFont_wght.ttf", "weight": 600 }
     },
     "display": {
-      "family": "Geist",
-      "source": "kit",
-      "files": [{ "file": "geist-latin-wght.woff2", "weight": "100 900" }],
+      "family": "Inter",
+      "source": "google",
+      "files": [{ "file": "inter-latin-wght.woff2", "weight": "400 700" }],
       "fallback": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       "features": []
     },
@@ -80,7 +80,7 @@
     }
   },
   "radius": {
-    "base": "0.45rem",
+    "base": "0.5rem",
     "steps": {
       "xs": 0.4,
       "sm": 0.6,

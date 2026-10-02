@@ -18,7 +18,7 @@
  */
 
 /** The kit's gold, pinned. Identity only — never a surface, never a state. */
-export const BRAND_GOLD = "#D4AF37";
+export const BRAND_GOLD = "#C99B2E";
 
 export interface WordmarkGeometry {
   /** The kit's own viewBox — never re-fit it. */

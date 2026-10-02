@@ -14,7 +14,7 @@ const BODY = "#27272A";
 const MUTED = "#71717A";
 const HAIRLINE = "#D4D4D8";
 const HEAD_FILL = "#F4F4F5";
-const BLANK = "#8A7223";
+const BLANK = "#906F23";
 
 const MARGIN = 64;
 const FOOTER_GAP = 28;

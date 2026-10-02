@@ -13,7 +13,7 @@ const STELLA_MARK = STELLA.icon.parts[0]?.d ?? "";
  *
  * @internal Exported for its unit test; nothing outside this module imports it.
  */
-export const STELLA_SHIMMER = "#F1CE65";
+export const STELLA_SHIMMER = "#F9C965";
 
 /**
  * The asterisk and its sweep read the house gold tokens, with the pinned

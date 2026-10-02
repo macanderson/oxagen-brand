@@ -58,31 +58,31 @@
     }
   },
   "gold": {
-    "hex": "#D4AF37",
+    "hex": "#C99B2E",
     "oklch": {
-      "L": 0.7665,
-      "C": 0.1387,
-      "H": 91.06
+      "L": 0.7143,
+      "C": 0.1315,
+      "H": 84.37
     },
     "bright_oklch": {
       "L": 0.86,
       "C": 0.13,
-      "H": 91.0
+      "H": 84.0
     },
     "deep_oklch": {
       "L": 0.56,
       "C": 0.1,
-      "H": 91.0
+      "H": 84.0
     },
-    "bright": "#F1CE65",
-    "deep": "#8A7223",
-    "on_ink": 9.46,
-    "deep_on_paper": 4.65
+    "bright": "#F9C965",
+    "deep": "#906F23",
+    "on_ink": 7.78,
+    "deep_on_paper": 4.68
   },
   "tokens": {
-    "gold": "#D4AF37",
-    "gold-bright": "#F1CE65",
-    "gold-deep": "#8A7223",
+    "gold": "#C99B2E",
+    "gold-bright": "#F9C965",
+    "gold-deep": "#906F23",
     "ink": "#09090B",
     "void": "#000000",
     "panel": "#18181B",
@@ -376,6 +376,19 @@
         ],
         "features": "normal"
       },
+      "heading": {
+        "family": "Inter",
+        "job": "every heading, h1 to h6",
+        "stack": "\"Inter\", system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "next_var": "--font-inter",
+        "files": [
+          {
+            "file": "inter-latin-wght.woff2",
+            "weight": "400 700"
+          }
+        ],
+        "features": "normal"
+      },
       "mono": {
         "family": "Monaspace Neon",
         "job": "code, terminal output, logs, digests, paths, ids, and numbers in tables",
@@ -399,8 +412,8 @@
       },
       "display": {
         "css_var": "--font-display",
-        "face": "sans",
-        "family": "Geist",
+        "face": "heading",
+        "family": "Inter",
         "job": "every heading, h1 to h6"
       },
       "mono": {
@@ -417,15 +430,15 @@
       },
       "hero": {
         "css_var": "--font-hero",
-        "face": "sans",
-        "family": "Geist",
+        "face": "heading",
+        "family": "Inter",
         "job": "line 1 of a hero, in Space Grotesk only inside a step that admits a hero"
       }
     },
     "hero": {
       "class": "hero-line-1",
       "family_inside": "Space Grotesk",
-      "family_outside": "Geist",
+      "family_outside": "Inter",
       "admitted_by": [
         "text-m-h1"
       ]
@@ -440,12 +453,12 @@
       {
         "elements": "h1, h2, h3",
         "role": "display",
-        "family": "Geist"
+        "family": "Inter"
       },
       {
         "elements": "h4, h5, h6",
         "role": "display",
-        "family": "Geist"
+        "family": "Inter"
       },
       {
         "elements": "body, button, input, select, textarea, label, nav",
@@ -467,7 +480,7 @@
           {
             "step": "h1",
             "role": "display",
-            "family": "Geist",
+            "family": "Inter",
             "size": "4.5rem",
             "px": 72,
             "line_height": 1.05,
@@ -478,7 +491,7 @@
           {
             "step": "h2",
             "role": "display",
-            "family": "Geist",
+            "family": "Inter",
             "size": "2.5rem",
             "px": 40,
             "line_height": 1.2,
@@ -489,7 +502,7 @@
           {
             "step": "h3",
             "role": "display",
-            "family": "Geist",
+            "family": "Inter",
             "size": "1.75rem",
             "px": 28,
             "line_height": 1.3,
@@ -500,7 +513,7 @@
           {
             "step": "h4",
             "role": "display",
-            "family": "Geist",
+            "family": "Inter",
             "size": "1.25rem",
             "px": 20,
             "line_height": 1.4,
@@ -539,7 +552,7 @@
           {
             "step": "h1",
             "role": "display",
-            "family": "Geist",
+            "family": "Inter",
             "size": "1.875rem",
             "px": 30,
             "line_height": 1.15,
@@ -550,7 +563,7 @@
           {
             "step": "h2",
             "role": "display",
-            "family": "Geist",
+            "family": "Inter",
             "size": "1.5rem",
             "px": 24,
             "line_height": 1.2,
@@ -561,7 +574,7 @@
           {
             "step": "h3",
             "role": "display",
-            "family": "Geist",
+            "family": "Inter",
             "size": "1.25rem",
             "px": 20,
             "line_height": 1.25,
@@ -572,7 +585,7 @@
           {
             "step": "h4",
             "role": "display",
-            "family": "Geist",
+            "family": "Inter",
             "size": "1rem",
             "px": 16,
             "line_height": 1.4,
@@ -607,7 +620,7 @@
     }
   },
   "radius": {
-    "base": "0.45rem",
+    "base": "0.5rem",
     "steps": {
       "xs": 0.4,
       "sm": 0.6,

@@ -85,7 +85,7 @@ export function GlobalErrorPage({
               padding: "0 1.25rem",
               borderRadius: "0",
               border: "none",
-              background: "#D4AF37",
+              background: "#C99B2E",
               color: "#09090B",
               fontSize: "0.875rem",
               fontWeight: 500,
