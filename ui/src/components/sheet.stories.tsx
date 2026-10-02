@@ -12,9 +12,16 @@ import {
 } from "./sheet";
 import { Button } from "./button";
 
+/**
+ * A panel that slides in from the edge of the screen. `side` on `SheetPopup`
+ * sets the edge. Like the dialog, its box has no padding.
+ */
 const meta = {
   title: "Overlays/Sheet",
   component: Sheet,
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: { docs: { story: { inline: false, height: "560px" } } },
 } satisfies Meta<typeof Sheet>;
 export default meta;
 type Story = StoryObj<typeof meta>;

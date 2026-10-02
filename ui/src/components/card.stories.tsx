@@ -9,6 +9,10 @@ import {
 } from "./card";
 import { Button } from "./button";
 
+/**
+ * A surface that groups related content, with `CardHeader`, `CardTitle`,
+ * `CardDescription`, `CardPanel`, and `CardFooter`.
+ */
 const meta = {
   title: "Surfaces/Card",
   component: Card,

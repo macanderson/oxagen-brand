@@ -2,6 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PlusIcon, RocketLaunchIcon } from "@phosphor-icons/react";
 import { Button } from "./button";
 
+/**
+ * A button that runs an action. Pass `render` to draw it as another element,
+ * such as a link. A screen has at most one gold action.
+ */
 const meta = {
   title: "Primitives/Button",
   component: Button,

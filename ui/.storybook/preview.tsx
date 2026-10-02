@@ -1,6 +1,7 @@
 import * as React from "react";
 import "../src/styles/globals.css";
 import type { Decorator, Preview } from "@storybook/react-vite";
+import { create } from "storybook/theming";
 import { ThemeEditor } from "../src/theme-editor/theme-editor";
 
 /**
@@ -30,11 +31,15 @@ const withTheme: Decorator = (Story, context) => {
   // its own edges, so its sticky bar meets the top of the frame. Every other
   // story sits 24px in.
   const page = context.parameters.page === true;
+  // A docs page draws many stories one after another. A screen-high wrapper
+  // there would leave a screen of empty canvas under each one.
+  const docs = context.viewMode === "docs";
   return (
     <div
       className={[
         theme === "dark" ? "dark" : "light",
-        "min-h-screen bg-background text-foreground",
+        "bg-background text-foreground",
+        docs ? "" : "min-h-screen",
         page ? "" : "p-6",
       ]
         .filter(Boolean)
@@ -63,7 +68,20 @@ const withThemeEditor: Decorator = (Story, context) => {
   );
 };
 
+/**
+ * Docs pages set their text in the house faces. The variables come from
+ * globals.css, which the preview loads, so the theme names no font itself.
+ */
+const docsTheme = create({
+  base: "light",
+  fontBase: "var(--font-sans)",
+  fontCode: "var(--font-mono)",
+});
+
 const preview: Preview = {
+  // Every stories file gets a generated docs page. A stories file opts out
+  // with `tags: ["!autodocs"]`, as the `Pages/` fixtures do.
+  tags: ["autodocs"],
   // The last decorator wraps the others, so the editor sits inside the theme.
   decorators: [withThemeEditor, withTheme],
   globalTypes: {
@@ -84,6 +102,27 @@ const preview: Preview = {
   parameters: {
     layout: "fullscreen",
     controls: { expanded: true },
+    docs: {
+      theme: docsTheme,
+      // The overview's sections are h2 and a generated page's stories are h3.
+      toc: { headingSelector: "h2, h3" },
+    },
+    options: {
+      // The sidebar follows the README's groups, with the overview first.
+      storySort: {
+        order: [
+          "Overview",
+          "Foundations",
+          "Primitives",
+          "Forms",
+          "Surfaces",
+          "Navigation",
+          "Overlays",
+          "Brand",
+          "Pages",
+        ],
+      },
+    },
   },
 };
 

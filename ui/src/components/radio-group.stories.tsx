@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RadioGroup, Radio } from "./radio-group";
 import { Label } from "./label";
 
+/**
+ * A set of options where the reader picks exactly one.
+ */
 const meta = {
   title: "Forms/RadioGroup",
   component: RadioGroup,

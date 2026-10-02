@@ -4,6 +4,9 @@ import { CopyButton } from "./copy-button";
 
 // Explicit annotation (not `satisfies`) — the decorator return type otherwise
 // infers a non-portable reference into storybook internals under tsc.
+/**
+ * A button that copies a value to the clipboard.
+ */
 const meta: Meta<typeof CopyButton> = {
   title: "Primitives/CopyButton",
   component: CopyButton,

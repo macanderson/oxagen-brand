@@ -3,6 +3,9 @@ import { DatabaseIcon, SparkleIcon } from "@phosphor-icons/react";
 import { Button } from "./button";
 import { EmptyState } from "./empty-state";
 
+/**
+ * What a list or page shows when it has nothing in it yet.
+ */
 const meta = {
   title: "Primitives/EmptyState",
   component: EmptyState,

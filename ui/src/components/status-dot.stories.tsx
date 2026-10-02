@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StatusDot } from "./status-dot";
 
+/**
+ * A dot for a status, with an optional pulse and label.
+ */
 const meta = {
   title: "Primitives/StatusDot",
   component: StatusDot,

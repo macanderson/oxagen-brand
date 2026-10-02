@@ -8,9 +8,16 @@ import {
   ComboboxItem,
 } from "./combobox";
 
+/**
+ * A select with a search field, for more than 20 options. The empty message
+ * shows only when nothing matches.
+ */
 const meta = {
   title: "Forms/Combobox",
   component: Combobox,
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: { docs: { story: { inline: false, height: "400px" } } },
 } satisfies Meta<typeof Combobox>;
 export default meta;
 // Combobox's root requires `children`; base the story on the component so

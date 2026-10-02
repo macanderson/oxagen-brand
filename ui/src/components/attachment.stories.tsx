@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AttachmentCard, type AttachmentFile } from "./attachment";
 
+/**
+ * One file in the composer: a media tile, the file's name, kind, and size, and
+ * a remove button. It shimmers while the file uploads.
+ */
 const meta = {
   title: "Forms/Attachment",
   component: AttachmentCard,

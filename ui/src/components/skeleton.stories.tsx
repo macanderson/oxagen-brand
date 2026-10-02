@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Skeleton } from "./skeleton";
 
+/**
+ * A placeholder block that stands in for content while it loads.
+ */
 const meta = {
   title: "Primitives/Skeleton",
   component: Skeleton,

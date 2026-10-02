@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TONE_BADGE_TONES, ToneBadge, type ToneBadgeTone } from "./tone-badge";
 
+/**
+ * A badge for a record's state. It draws each state with a shape as well as a
+ * colour.
+ */
 const meta = {
   title: "Primitives/ToneBadge",
   component: ToneBadge,

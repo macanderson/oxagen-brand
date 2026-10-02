@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Separator } from "./separator";
 
+/**
+ * A thin line between groups of content, set across or down with `orientation`.
+ */
 const meta = {
   title: "Primitives/Separator",
   component: Separator,

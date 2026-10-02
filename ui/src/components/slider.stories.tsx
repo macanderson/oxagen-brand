@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Slider } from "./slider";
 
+/**
+ * A handle the reader drags to pick a number in a range.
+ */
 const meta = {
   title: "Forms/Slider",
   component: Slider,

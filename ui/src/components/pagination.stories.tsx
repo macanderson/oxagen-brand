@@ -47,6 +47,10 @@ function RunsPager({ total, start = 1 }: { total: number; start?: number }) {
   );
 }
 
+/**
+ * Page controls for a table: rows per page on the left, and Previous and Next
+ * on the right.
+ */
 const meta = {
   title: "Navigation/Pagination",
   component: RowsPager,

@@ -7,6 +7,9 @@ import {
 } from "@phosphor-icons/react";
 import { Stat, StatGroup } from "./stat";
 
+/**
+ * A tile with one figure and its label. `StatGroup` sets tiles in a row.
+ */
 const meta = {
   title: "Primitives/Stat",
   component: Stat,

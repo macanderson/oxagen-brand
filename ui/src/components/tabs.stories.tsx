@@ -9,6 +9,10 @@ import {
   TabsIndicator,
 } from "./tabs";
 
+/**
+ * Tabs switch between panels in one place. `TabsTab` takes a `count` for its
+ * badge. Use `variant="underline"` for tabs inside a dialog.
+ */
 const meta = {
   title: "Navigation/Tabs",
   component: Tabs,

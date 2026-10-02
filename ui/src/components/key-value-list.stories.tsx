@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge } from "./badge";
 import { KeyValueList } from "./key-value-list";
 
+/**
+ * A list of labels and values for dense metadata.
+ */
 const meta = {
   title: "Primitives/KeyValueList",
   component: KeyValueList,

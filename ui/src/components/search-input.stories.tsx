@@ -2,6 +2,9 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SearchInput } from "./search-input";
 
+/**
+ * A search field with a search icon in front and a clear button.
+ */
 const meta = {
   title: "Primitives/SearchInput",
   component: SearchInput,

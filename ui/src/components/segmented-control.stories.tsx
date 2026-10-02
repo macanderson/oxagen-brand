@@ -2,6 +2,9 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SegmentedControl, SegmentedControlItem } from "./segmented-control";
 
+/**
+ * A row of buttons where the reader picks one of a few short options.
+ */
 const meta = {
   title: "Forms/SegmentedControl",
   component: SegmentedControl,

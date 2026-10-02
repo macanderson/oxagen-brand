@@ -15,9 +15,17 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
 
+/**
+ * A box over the page that asks for input or a decision. The box has no
+ * padding, so content goes in `DialogHeader`, `DialogPanel`, and
+ * `DialogFooter`. `size="wide"` makes it 820px wide in place of 600px.
+ */
 const meta = {
   title: "Overlays/Dialog",
   component: Dialog,
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: { docs: { story: { inline: false, height: "520px" } } },
 } satisfies Meta<typeof Dialog>;
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -20,6 +20,10 @@ const MD_UPLOADING: AttachmentFile = {
   state: "uploading",
 };
 
+/**
+ * The assistant's message box, with an attach button and its attachment cards.
+ * The root is a `<form>`, so do not put it inside another form.
+ */
 const meta = {
   title: "Forms/Composer",
   component: Composer,

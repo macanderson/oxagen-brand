@@ -1,6 +1,9 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+/**
+ * The app and marketing type scales, set in the house faces.
+ */
 const meta = {
   title: "Foundations/Typography",
   parameters: { layout: "padded" },

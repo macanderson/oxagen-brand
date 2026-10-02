@@ -2,6 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GitBranchIcon } from "@phosphor-icons/react";
 import { Badge } from "./badge";
 
+/**
+ * A small label for a count, a filter, a field name, or a state. Use
+ * `ToneBadge` for a record's state.
+ */
 const meta = {
   title: "Primitives/Badge",
   component: Badge,

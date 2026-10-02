@@ -10,10 +10,18 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
 
+/**
+ * A small panel that opens from a button and holds a control or a short form.
+ */
 const meta = {
   title: "Overlays/Popover",
   component: Popover,
-  parameters: { layout: "centered" },
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: {
+    layout: "centered",
+    docs: { story: { inline: false, height: "320px" } },
+  },
 } satisfies Meta<typeof Popover>;
 export default meta;
 type Story = StoryObj<typeof meta>;

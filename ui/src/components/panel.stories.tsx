@@ -3,6 +3,9 @@ import { Panel } from "./panel";
 import { Button } from "./button";
 import { Badge } from "./badge";
 
+/**
+ * A titled surface with an optional eyebrow, actions, and footer.
+ */
 const meta = {
   title: "Surfaces/Panel",
   component: Panel,

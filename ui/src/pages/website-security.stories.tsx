@@ -5,6 +5,9 @@ const meta = {
   title: "Pages/Website/Security",
   component: SecurityPage,
   parameters: { layout: "fullscreen", page: true },
+  // A page story fills the screen, so a docs page would stack whole pages.
+  // Each story stays in the sidebar.
+  tags: ["!autodocs"],
   args: { scopeOpen: true },
 } satisfies Meta<typeof SecurityPage>;
 export default meta;

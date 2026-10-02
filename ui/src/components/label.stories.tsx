@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Label } from "./label";
 import { Input } from "./input";
 
+/**
+ * The name of a form control. Link it to the control with `htmlFor`.
+ */
 const meta = {
   title: "Forms/Label",
   component: Label,

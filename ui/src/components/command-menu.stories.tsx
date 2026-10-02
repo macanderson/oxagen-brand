@@ -21,9 +21,15 @@ import {
   type CommandMenuCommandGroup,
 } from "./command-menu";
 
+/**
+ * A search field over grouped commands. It opens on Cmd+K or Ctrl+K.
+ */
 const meta = {
   title: "Overlays/CommandMenu",
   component: CommandMenu,
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: { docs: { story: { inline: false, height: "520px" } } },
   args: { groups: [] },
 } satisfies Meta<typeof CommandMenu>;
 export default meta;

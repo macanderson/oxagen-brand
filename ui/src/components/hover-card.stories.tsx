@@ -2,10 +2,19 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { HoverCard, HoverCardContent } from "./hover-card";
 
+/**
+ * A card that shows the full text when the pointer rests on text a surface cuts
+ * off. `TruncatedCell` uses it.
+ */
 const meta = {
   title: "Overlays/HoverCard",
   component: HoverCard,
-  parameters: { layout: "centered" },
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: {
+    layout: "centered",
+    docs: { story: { inline: false, height: "320px" } },
+  },
 } satisfies Meta<typeof HoverCard>;
 export default meta;
 type Story = StoryObj<typeof meta>;

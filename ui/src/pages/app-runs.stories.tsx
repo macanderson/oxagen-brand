@@ -5,6 +5,9 @@ const meta = {
   title: "Pages/App/Runs",
   component: RunsPage,
   parameters: { layout: "fullscreen", page: true },
+  // A page story fills the screen, so a docs page would stack whole pages.
+  // Each story stays in the sidebar.
+  tags: ["!autodocs"],
   args: { rowMenuOpen: true, toast: true },
 } satisfies Meta<typeof RunsPage>;
 export default meta;

@@ -13,6 +13,11 @@ import {
 import { ToneBadge, type ToneBadgeTone } from "./tone-badge";
 import { TruncatedCell } from "./truncated-cell";
 
+/**
+ * A table for rows of records. `TableHead` and `TableCell` take `numeric`. From
+ * 768px up the table is at least 560px wide and scrolls in its own box, and
+ * `narrow` drops that floor.
+ */
 const meta = {
   title: "Primitives/Table",
   component: Table,

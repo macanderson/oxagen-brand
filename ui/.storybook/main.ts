@@ -9,7 +9,10 @@ import type { StorybookConfig } from "@storybook/react-vite";
  * plugin), and the token-driven `globals.css` is imported once in `preview.tsx`.
  */
 const config: StorybookConfig = {
-  stories: ["../src/**/*.stories.@(ts|tsx)"],
+  // The MDX pages in src/docs/ are written by hand. Every other docs page is
+  // generated from a stories file by the `autodocs` tag set in preview.tsx.
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(ts|tsx)"],
+  addons: ["@storybook/addon-docs"],
   framework: { name: "@storybook/react-vite", options: {} },
   core: { disableTelemetry: true },
   // tokens/house-fonts.css names each face as `url(../fonts/<file>)`, which the

@@ -29,13 +29,18 @@ import {
 import { Button } from "./button";
 
 /**
- * Every story opens by default, so the surface, rows and marks show in the
- * catalog without a click.
+ * A list of actions that opens from a button. Every story opens on load, so
+ * the surface, rows, and marks show without a click.
  */
 const meta = {
   title: "Overlays/Menu",
   component: Menu,
-  parameters: { layout: "centered" },
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: {
+    layout: "centered",
+    docs: { story: { inline: false, height: "420px" } },
+  },
   decorators: [
     (Story) => (
       <div className="flex min-h-80 items-start justify-center">

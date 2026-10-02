@@ -86,6 +86,10 @@ function Repositories({ items }: { items: readonly Repository[] }) {
   );
 }
 
+/**
+ * Sort, filter, and page controls for a list, built from `useList`, `ListBar`,
+ * and `ListPager`.
+ */
 const meta = {
   title: "Navigation/ListControls",
   component: Repositories,

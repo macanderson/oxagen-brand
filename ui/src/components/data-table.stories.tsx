@@ -83,6 +83,10 @@ function Runs({
   );
 }
 
+/**
+ * A table drawn with the shared `cell`, `numericCell`, and `headCell` class
+ * strings.
+ */
 const meta = {
   title: "Primitives/DataTable",
   component: Runs,

@@ -3,6 +3,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Textarea } from "./textarea";
 import { Label } from "./label";
 
+/**
+ * A text field for several lines, with `size`.
+ */
 const meta = {
   title: "Forms/Textarea",
   component: Textarea,

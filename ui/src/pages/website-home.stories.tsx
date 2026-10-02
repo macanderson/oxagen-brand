@@ -5,6 +5,9 @@ const meta = {
   title: "Pages/Website/Home",
   component: HomePage,
   parameters: { layout: "fullscreen", page: true },
+  // A page story fills the screen, so a docs page would stack whole pages.
+  // Each story stays in the sidebar.
+  tags: ["!autodocs"],
   args: { productMenuOpen: true },
 } satisfies Meta<typeof HomePage>;
 export default meta;

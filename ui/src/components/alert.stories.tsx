@@ -8,6 +8,9 @@ import {
 } from "@phosphor-icons/react";
 import { Alert, AlertTitle, AlertDescription } from "./alert";
 
+/**
+ * A message that sits in the page, with `AlertTitle` and `AlertDescription`.
+ */
 const meta = {
   title: "Primitives/Alert",
   component: Alert,

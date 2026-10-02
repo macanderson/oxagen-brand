@@ -3,6 +3,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkbox } from "./checkbox";
 import { Label } from "./label";
 
+/**
+ * A box that turns one option on or off. It has an indeterminate state for a
+ * group that is partly on.
+ */
 const meta = {
   title: "Forms/Checkbox",
   component: Checkbox,

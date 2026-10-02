@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TruncatedCell } from "./truncated-cell";
 
+/**
+ * A table cell that clips long text. When the text is clipped, a hover card
+ * shows the full value after 500 ms.
+ */
 const meta = {
   title: "Primitives/TruncatedCell",
   component: TruncatedCell,

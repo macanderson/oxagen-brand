@@ -2,6 +2,10 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 
+/**
+ * A row of toggles for filters that show or hide rows by state. An item can
+ * carry a count.
+ */
 const meta = {
   title: "Forms/ToggleGroup",
   component: ToggleGroup,

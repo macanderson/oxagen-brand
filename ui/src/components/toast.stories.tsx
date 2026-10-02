@@ -8,9 +8,18 @@ import {
 } from "./toast";
 import { Button } from "./button";
 
+/**
+ * A short message in the corner of the screen. It lasts 4200 ms and pauses
+ * while the pointer is over it. Wrap the app in `ToastProvider` and call
+ * `useToast`.
+ */
 const meta = {
   title: "Overlays/Toast",
   component: ToastProvider,
+  // Some stories here show toasts on load, pinned to the corner of the
+  // screen. On the docs page each story draws in its own frame, so the
+  // toasts stay beside their story.
+  parameters: { docs: { story: { inline: false, height: "360px" } } },
 } satisfies Meta<typeof ToastProvider>;
 export default meta;
 type Story = StoryObj<typeof meta>;

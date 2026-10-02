@@ -87,6 +87,9 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 
+/**
+ * The Phosphor icons the kit uses, under the names it imports them by.
+ */
 const meta = {
   title: "Foundations/Icons",
   parameters: { layout: "padded" },

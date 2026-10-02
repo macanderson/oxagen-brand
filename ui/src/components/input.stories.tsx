@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Input } from "./input";
 import { Label } from "./label";
 
+/**
+ * A one-line text field, with `size`.
+ */
 const meta = {
   title: "Forms/Input",
   component: Input,

@@ -9,10 +9,19 @@ import {
   SelectLabel,
 } from "./select";
 
+/**
+ * A list of options that opens from a button. Use it for 20 options or fewer,
+ * and use `Combobox` for more.
+ */
 const meta = {
   title: "Forms/Select",
   component: Select,
-  parameters: { layout: "centered" },
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: {
+    layout: "centered",
+    docs: { story: { inline: false, height: "400px" } },
+  },
 } satisfies Meta<typeof Select>;
 export default meta;
 type Story = StoryObj<typeof meta>;

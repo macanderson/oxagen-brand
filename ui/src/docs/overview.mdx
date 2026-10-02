@@ -1,0 +1,90 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+import * as ButtonStories from "../components/button.stories";
+
+<Meta title="Overview" />
+
+# Oxagen UI
+
+This Storybook shows every component in `@oxagen/ui`, the component kit for
+Oxagen's frontends. The kit is built on [Base UI](https://base-ui.com/) and
+Tailwind v4. Every colour, corner, and font comes from the house tokens.
+
+A story is one example of a component in one state. Each component has a story
+for every state it draws, and a docs page that gathers them.
+
+## Sidebar groups
+
+- **Foundations:** the type scales and the icons.
+- **Primitives:** buttons, badges, tables, spinners, and other small parts.
+- **Forms:** inputs, selects, checkboxes, the composer, and other controls.
+- **Surfaces:** cards and panels.
+- **Navigation:** tabs, pagination, and list controls.
+- **Overlays:** dialogs, sheets, menus, popovers, tooltips, and toasts.
+- **Brand:** the Oxagen and Stella marks.
+- **Pages:** two website pages and two app pages built from the kit.
+
+## Docs pages
+
+Storybook builds a docs page from each stories file. The page opens with the
+component's description and its first story, with controls to change its
+props. A table lists the props, and every other story follows with its source.
+
+- The description is the `/** ... */` comment above the file's `meta`.
+- A story's description is the `/** ... */` comment above that story.
+- A story that opens a menu, dialog, or toast on load draws in its own frame,
+  so the popup stays inside its story.
+- The `Pages/` stories have no docs page, because each one fills the screen.
+  Open them from the sidebar.
+
+## Theme
+
+The Theme menu in the toolbar switches every story between light and dark.
+Menus and dialogs follow it too.
+
+On a `Pages/` story, the Theme button in the lower right corner opens the theme
+editor. The editor restyles the page as you change the theme. Its Update all
+sites button opens a theme request on GitHub.
+
+## Component rules
+
+1. Composition uses the `render` prop. Radix `asChild` does not exist here.
+2. Overlay parts are named `*Popup` or `*Panel`.
+3. Restyle a component by changing tokens. A component's classes never name a
+   hex value, a Tailwind palette colour, or a house token.
+4. Icons come from `@phosphor-icons/react`, in the regular weight, with the
+   `Icon` suffix, such as `XIcon`.
+5. Overlays animate on Base UI's `data-[starting-style]` and
+   `data-[ending-style]` attributes.
+6. Every component has a story for each state it draws.
+
+```tsx
+<Button render={<Link href="/login" />}>Log in</Button>
+<DialogPopup>…</DialogPopup>
+```
+
+Gold marks identity and action. A screen has at most one gold action, and gold
+never shows a state such as running or passed.
+
+<Canvas of={ButtonStories.Primary} />
+
+## Tokens
+
+The components read every value from the token files in `tokens/` at the root
+of the brand repo. `ui/THEME.md` says which file answers which question. To
+change a value, edit `theme/theme.json`, run `python build/build.py`, and
+commit the files it writes.
+
+## New components
+
+1. Put the component in `src/components/<name>.tsx`.
+2. Put its stories beside it in `<name>.stories.tsx`. Set `title` to
+   `<Group>/<Name>` and `component` to the component.
+3. Write a `/** ... */` comment above `meta` and above each story. The docs
+   page uses them as descriptions.
+4. If a story opens a popup on load, set
+   `parameters.docs.story` to `{ inline: false, height: "400px" }` in `meta`.
+5. Add a test beside it in `<name>.test.tsx`.
+
+The [Button docs page](?path=/docs/primitives-button--docs) is a full example.
+A push to `main` publishes this Storybook at
+[brand.oxagen.cloud/storybook](https://brand.oxagen.cloud/storybook/).

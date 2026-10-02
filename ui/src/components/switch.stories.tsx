@@ -3,6 +3,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Switch } from "./switch";
 import { Label } from "./label";
 
+/**
+ * A toggle that turns one setting on or off.
+ */
 const meta = {
   title: "Forms/Switch",
   component: Switch,

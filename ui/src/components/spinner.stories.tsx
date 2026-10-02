@@ -2,6 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "./button";
 import { Spinner } from "./spinner";
 
+/**
+ * A turning mark that shows work in progress. It carries a label for screen
+ * readers.
+ */
 const meta = {
   title: "Primitives/Spinner",
   component: Spinner,

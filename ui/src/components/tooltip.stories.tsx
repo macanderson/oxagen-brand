@@ -7,9 +7,16 @@ import {
 } from "./tooltip";
 import { Button } from "./button";
 
+/**
+ * A short hint that shows when the pointer rests on a control. Wrap the app in
+ * `TooltipProvider`.
+ */
 const meta = {
   title: "Overlays/Tooltip",
   component: Tooltip,
+  // Some stories here open a portalled popup on load. On the docs page each
+  // story draws in its own frame, so the popups do not cover the page.
+  parameters: { docs: { story: { inline: false, height: "200px" } } },
 } satisfies Meta<typeof Tooltip>;
 export default meta;
 type Story = StoryObj<typeof meta>;
