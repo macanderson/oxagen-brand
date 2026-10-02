@@ -46,6 +46,9 @@ jobs:
       - run: python build/build.py --check
       - name: Test the theme request and apply scripts
         run: python -m unittest discover -s build -p "test_*.py" -v
+      # The theme editor's colour maths is a port of build/color.py, and its
+      # tests compare against this fixture. It must match color.py.
+      - run: python build/editor_fixture.py --check
       - run: python build/messages.py --check
       - run: python build/fonts.py --check
       - run: python build/skill.py --check
