@@ -32,10 +32,22 @@ use. A component never names a house token, a Tailwind palette colour, or a
 hex.
 
 The v3 layer at the end of `globals.css` came from the oxagen app with the
-components in `src/components/`. It sets the gold primary, the radius scale on
-`--ui-radius` (which reads `--ox-radius-base`), the panel and rule tokens, table
-truncation, the phone rules, and the shimmer and spinner motion. It comes last,
-so it wins on cascade order.
+components in `src/components/`. It sets the gold primary, the panel and rule
+tokens, table truncation, the phone rules, and the shimmer and spinner motion.
+It comes last, so it wins on cascade order.
+
+Each corner, shadow, font size, and heading line height in `globals.css` is
+declared once and reads an `--ox-*` token. The radius and shadow scales sit in
+the mapping layer, above the v3 layer. The radius scale reads `--ox-radius-xs`
+to `--ox-radius-4xl`, which multiply `--ox-radius-base`. The shadow scale reads
+`--ox-shadow-ui` and `shadow-pop` reads `--ox-shadow-pop`, each with its `-ink`
+twin on paper. `h4` to `h6` read `--ox-a-h4-leading`.
+
+Two literals stay, and `KEEP` in `build/css_literals.py` names each with its
+reason. A phone's text fields set 16px, so iOS does not zoom on focus. `h1` to
+`h3` keep a 1.12 leading, which no token holds, until Mac decides on #76.
+`build/build.py --check` fails on any other literal corner, shadow, font size,
+or heading line height in `globals.css`.
 
 ## Three rules a value cannot state
 

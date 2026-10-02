@@ -16,7 +16,9 @@ beside it, so a colour can only be changed in one place -- `theme/theme.json`
 `--check` writes nothing. It fails when `theme/theme.json` does not match
 `theme/theme.schema.json`, when the wordmark face is not Space Grotesk drawn at
 weight 600, when the drawn `oxagen` differs from the reference in
-`build/reference/`, when the palette or the type breaks a rule, or when a
+`build/reference/`, when the palette or the type breaks a rule, when
+`ui/src/styles/globals.css` writes a corner, a shadow, a font size, or a
+heading's line height as a literal (`build/css_literals.py`), or when a
 generated file differs from what the theme produces: every token file, mark,
 icon, and image the build writes as text, and `playbook.html`. A PNG is checked
 for presence, because a render differs byte for byte between versions of
@@ -35,6 +37,7 @@ from pathlib import Path
 
 import badges as BD
 import color as C
+import css_literals as CL
 import fonts as FT
 import glyphs as G
 import marks as MK
@@ -1050,6 +1053,8 @@ def drift() -> list[str]:
 
 def check(drift_check: bool = True) -> int:
     problems = C.verify() + G.verify() + T.verify() + [f"fonts: {p}" for p in FT.check()] + RQ.check_schema()
+    if drift_check:
+        problems += CL.check()  # a literal in the kit's stylesheet; it never blocks a build from writing
     logo, lockup = ROOT / SKILL_LOGO, ROOT / "logo/svg/oxagen-lockup-adaptive.svg"
     if drift_check and (not logo.exists() or not lockup.exists() or logo.read_bytes() != lockup.read_bytes()):
         problems.append(f"{SKILL_LOGO} is not the adaptive lockup; run build/build.py --only logos")
@@ -1071,6 +1076,8 @@ def check(drift_check: bool = True) -> int:
               f"{T.WORDMARK_FACE.family} on the wordmarks and a marketing hero only")
         if drift_check:
             print("check: every generated file, the skill's tokens, and playbook.html match theme/theme.json")
+            print(f"check: {CL.KIT_CSS} reads every corner, shadow, font size, and heading line height from a token, "
+                  f"apart from {len(CL.KEEP)} kept literals")
     return 1 if problems else 0
 
 
