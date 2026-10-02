@@ -31,6 +31,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import badges as BD
 import color as C
 import fonts as FT
 import glyphs as G
@@ -68,8 +69,9 @@ STEPS: dict[str, tuple[str, ...]] = {
     "social": ("social",),
     "ads": ("ads",),
     "content": ("content",),
+    "badges": ("github-badges",),
 }
-GENERATED = tuple(d for dirs in STEPS.values() for d in dirs)
+GENERATED =tuple(d for dirs in STEPS.values() for d in dirs)
 GENERATED_SUFFIXES = {".svg", ".png", ".ico", ".webmanifest", ".css", ".json", ".ts"}
 
 #: The social and manifest taglines, from approved, launch-released registry
@@ -634,6 +636,12 @@ def build_spinners() -> None:
         write(f"spinners/{b}-spinner-wordmark.svg", spinner_wordmark_svg(b, uid=f"{b}-spw"))
 
 
+def build_badges() -> None:
+    """The GitHub badges: status pills, shields, and the commit tombstone (`badges.py`)."""
+    for name, text in BD.files().items():
+        write(f"github-badges/{name}", text)
+
+
 DESKTOP = [(3840, 2160, "4k"), (5120, 2880, "5k"), (6016, 3384, "6k")]
 PHONE = [(1290, 2796, "iphone-pro"), (1179, 2556, "iphone"), (1320, 2868, "iphone-pro-max")]
 
@@ -1080,6 +1088,7 @@ def run_steps(steps: set[str], raster: bool) -> None:
         "social": lambda: build_social(raster),
         "ads": lambda: build_ads(raster),
         "content": lambda: build_content(raster),
+        "badges": build_badges,
     }
     for step in STEPS:
         if step in steps:

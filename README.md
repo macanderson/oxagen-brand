@@ -111,7 +111,7 @@ brew install harfbuzz librsvg          # hb-shape and rsvg-convert
 .venv/bin/python build/build.py --only splash       # the launch screens and their table
 .venv/bin/python build/playbook.py        # rebuild the document
 .venv/bin/python build/messages.py       # rebuild the message bank
-.venv/bin/python github-badges/build.py  # rebuild the GitHub badges
+.venv/bin/python build/build.py --only badges --svg   # the GitHub badges
 ```
 
 ## Use it in a product
