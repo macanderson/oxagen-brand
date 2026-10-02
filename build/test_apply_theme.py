@@ -56,6 +56,11 @@ def theme() -> dict:
     return json.loads(THEME_FILE.read_text())
 
 
+def other(value: str, *choices: str) -> str:
+    """The first of `choices` that differs from `value`, so a test changes the theme whatever it holds."""
+    return next(c for c in choices if c != value)
+
+
 class Scratch(unittest.TestCase):
     def setUp(self) -> None:
         self.root = Path(tempfile.mkdtemp())
@@ -117,11 +122,13 @@ class UploadTest(Scratch):
             "faces": {"wordmark": {"family": "Brand", "source": "upload", "files": [{"file": "Brand-Variable.ttf", "weight": "300 700"}]}},
         }
         log: dict = {"fonts": []}
-        faces = A.resolve_faces(theme(), req, self.fonts, log)
+        current = theme()
+        faces = A.resolve_faces(current, req, self.fonts, log)
         face = faces["wordmark"]
         self.assertEqual(face["source"], "kit")
         self.assertEqual(face["files"], [{"file": "Brand-Variable.woff2", "weight": "300 700"}])
-        self.assertEqual(face["outline"], {"file": "Brand-Variable.ttf", "weight": 600})
+        weight = current["faces"]["wordmark"]["outline"]["weight"]
+        self.assertEqual(face["outline"], {"file": "Brand-Variable.ttf", "weight": weight})
         self.assertTrue((self.fonts / "Brand-Variable.woff2").is_file())
         self.assertEqual(log["fonts"][0]["converted"], ["Brand-Variable.woff2"])
 
@@ -167,12 +174,15 @@ class GoldTest(Scratch):
     def test_carry_gold_rewrites_the_copies(self) -> None:
         before = theme()
         after = json.loads(json.dumps(before))
-        after["color"]["gold"] = "#C99B2E"
+        after["color"]["gold"] = other(before["color"]["gold"], "#C99B2E", "#D9B13B")
+        old = A.golds(before)
         (self.root / "pwa").mkdir()
-        (self.root / "pwa" / "install-prompt.js").write_text("--gold:#D4AF37;--hi:#F1CE65;--deep:#8A7223;")
+        (self.root / "pwa" / "install-prompt.js").write_text(
+            f"--gold:{old['gold']};--hi:{old['gold-bright']};--deep:{old['gold-deep']};"
+        )
         css = self.root / "ui" / "src" / "styles"
         css.mkdir(parents=True)
-        (css / "globals.css").write_text("--ox-ember-soft: oklch(0.25 0.035 88);\n--x: #D4AF37;\n")
+        (css / "globals.css").write_text(f"--ox-ember-soft: oklch(0.25 0.035 88);\n--x: {old['gold']};\n")
         changed = A.carry_gold(before, after, self.root)
         new = A.golds(after)
         self.assertEqual(sorted(changed), ["pwa/install-prompt.js", "ui/src/styles/globals.css"])
@@ -192,11 +202,14 @@ class ReportTest(unittest.TestCase):
     def test_changes_lists_each_changed_field(self) -> None:
         before = theme()
         after = json.loads(json.dumps(before))
-        after["color"]["gold"] = "#C99B2E"
-        after["radius"]["base"] = "0.5rem"
+        after["color"]["gold"] = other(before["color"]["gold"], "#C99B2E", "#D9B13B")
+        after["radius"]["base"] = other(before["radius"]["base"], "0.5rem", "0.45rem")
         self.assertEqual(
             A.changes(before, after),
-            [("color.gold", "#D4AF37", "#C99B2E"), ("radius.base", "0.45rem", "0.5rem")],
+            [
+                ("color.gold", before["color"]["gold"], after["color"]["gold"]),
+                ("radius.base", before["radius"]["base"], after["radius"]["base"]),
+            ],
         )
 
     def test_a_failed_request_reports_its_problems(self) -> None:

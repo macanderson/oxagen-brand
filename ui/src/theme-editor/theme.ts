@@ -106,26 +106,27 @@ export function fontStack(role: Role, choice: FaceChoice): string {
 
 /**
  * The gold ramp in `ui/src/styles/globals.css`: tints typed as `oklch()` on the
- * gold's hue. `build/apply_theme.py` turns them by the degrees the gold's hue
- * moves, and so does the preview. `theme.test.ts` checks this table against
- * the file.
+ * gold's hue. Each tint keeps its lightness and chroma and sits `offset`
+ * degrees from the gold's whole-degree hue. `build/apply_theme.py` turns the
+ * tints in the file by the degrees a new gold's hue moves, so the offsets
+ * hold for any gold, and `theme.test.ts` checks them against the file.
  */
-export const GOLD_RAMP: readonly { name: string; l: number; c: number; h: number }[] = [
-  { name: "--ox-ember-soft", l: 0.25, c: 0.035, h: 88 },
-  { name: "--_amber-50", l: 0.985, c: 0.02, h: 95 },
-  { name: "--_amber-100", l: 0.965, c: 0.04, h: 95 },
-  { name: "--_amber-200", l: 0.925, c: 0.08, h: 93 },
-  { name: "--_amber-500", l: 0.66, c: 0.125, h: 88 },
-  { name: "--_amber-700", l: 0.47, c: 0.09, h: 80 },
-  { name: "--_amber-800", l: 0.38, c: 0.07, h: 80 },
-  { name: "--_amber-900", l: 0.3, c: 0.05, h: 80 },
+export const GOLD_RAMP: readonly { name: string; l: number; c: number; offset: number }[] = [
+  { name: "--ox-ember-soft", l: 0.25, c: 0.035, offset: -3 },
+  { name: "--_amber-50", l: 0.985, c: 0.02, offset: 4 },
+  { name: "--_amber-100", l: 0.965, c: 0.04, offset: 4 },
+  { name: "--_amber-200", l: 0.925, c: 0.08, offset: 2 },
+  { name: "--_amber-500", l: 0.66, c: 0.125, offset: -3 },
+  { name: "--_amber-700", l: 0.47, c: 0.09, offset: -11 },
+  { name: "--_amber-800", l: 0.38, c: 0.07, offset: -11 },
+  { name: "--_amber-900", l: 0.3, c: 0.05, offset: -11 },
 ];
 
 export function rampVars(gold: Hex): Record<string, string> {
-  const degrees = goldHue(gold) - goldHue(SHIPPED.color.gold);
+  const hue = goldHue(gold);
   const out: Record<string, string> = {};
   for (const tint of GOLD_RAMP) {
-    const h = (((tint.h + degrees) % 360) + 360) % 360;
+    const h = (((hue + tint.offset) % 360) + 360) % 360;
     out[tint.name] = `oklch(${tint.l} ${tint.c} ${h})`;
   }
   return out;

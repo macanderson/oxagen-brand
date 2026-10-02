@@ -23,6 +23,9 @@ import { SHIPPED, clone, type FaceChoice, type Role } from "./theme";
 
 const NOW = new Date("2026-10-01T23:05:42Z");
 
+/** The first of `choices` that differs from `value`, so a test changes the theme whatever it ships. */
+const other = <T,>(value: T, ...choices: T[]): T => choices.find((c) => c !== value) as T;
+
 const shippedFaces = (): Record<Role, FaceChoice> => ({
   wordmark: { kind: "shipped" },
   display: { kind: "shipped" },
@@ -51,18 +54,22 @@ describe("the JSON diff", () => {
 describe("the request", () => {
   it("holds only the fields the draft changes", () => {
     const theme = clone(SHIPPED);
-    theme.color.gold = "#C99B2E";
-    theme.color.ink.panel = "#1C1C1F";
-    theme.radius.base = "0.5rem";
-    theme.type.scales.app.body.size = "0.9375rem";
+    const gold = other(SHIPPED.color.gold, "#C99B2E", "#D9B13B");
+    const panel = other(SHIPPED.color.ink.panel, "#1C1C1F", "#1A1A1D");
+    const base = other(SHIPPED.radius.base, "0.5rem", "0.45rem");
+    const size = other(SHIPPED.type.scales.app.body.size, "0.9375rem", "0.875rem");
+    theme.color.gold = gold;
+    theme.color.ink.panel = panel;
+    theme.radius.base = base;
+    theme.type.scales.app.body.size = size;
     const request = buildRequest(theme, shippedFaces(), "A deeper gold", NOW);
     expect(request).toEqual({
       $schema: "../request.schema.json",
       summary: "A deeper gold",
       requested_at: "2026-10-01T23:05Z",
-      color: { gold: "#C99B2E", ink: { panel: "#1C1C1F" } },
-      radius: { base: "0.5rem" },
-      type: { scales: { app: { body: { size: "0.9375rem" } } } },
+      color: { gold, ink: { panel } },
+      radius: { base },
+      type: { scales: { app: { body: { size } } } },
     });
     expect(requestChanges(request)).toBe(true);
   });
@@ -106,11 +113,13 @@ describe("the request", () => {
 
   it("names a kit face with its files, and leaves out a role that keeps its face", () => {
     const faces = shippedFaces();
-    faces.display = { kind: "kit", family: "Space Grotesk" };
-    faces.sans = { kind: "kit", family: "Geist" };
+    // The code face's family for headings, and the text face's own family for text.
+    faces.display = { kind: "kit", family: SHIPPED.faces.mono.family };
+    faces.sans = { kind: "kit", family: SHIPPED.faces.sans.family };
     const request = buildRequest(clone(SHIPPED), faces, "", NOW);
-    expect(Object.keys(request.faces as object)).toEqual(["display"]);
-    expect((request.faces as Record<string, { files: unknown }>).display.files).toEqual(SHIPPED.faces.wordmark.files);
+    const named = request.faces as Record<string, { files: unknown } | undefined>;
+    expect(Object.keys(named)).toEqual(["display"]);
+    expect(named.display?.files).toEqual(SHIPPED.faces.mono.files);
   });
 
   it("lists face changes in the diff view", () => {
@@ -128,10 +137,10 @@ describe("the summary", () => {
 
   it("is written from the changes when Mac writes none", () => {
     const theme = clone(SHIPPED);
-    theme.color.gold = "#C99B2E";
-    theme.color.paper.panel = "#FAFAFA";
-    theme.spacing.unit = "0.3125rem";
-    expect(autoSummary(theme, shippedFaces())).toBe("Gold #C99B2E, 1 colour, spacing");
+    theme.color.gold = other(SHIPPED.color.gold, "#C99B2E", "#D9B13B");
+    theme.color.paper.panel = other(SHIPPED.color.paper.panel, "#FAFAFA", "#FCFCFC");
+    theme.spacing.unit = other(SHIPPED.spacing.unit, "0.3125rem", "0.25rem");
+    expect(autoSummary(theme, shippedFaces())).toBe(`Gold ${theme.color.gold}, 1 colour, spacing`);
   });
 });
 
@@ -158,7 +167,7 @@ describe("names and links", () => {
 
   it("guards the link's length", () => {
     const theme = clone(SHIPPED);
-    theme.color.gold = "#C99B2E";
+    theme.color.gold = other(SHIPPED.color.gold, "#C99B2E", "#D9B13B");
     const small = newFileUrl(buildRequest(theme, shippedFaces(), "x", NOW), "f.json");
     expect(fitsInUrl(small)).toBe(true);
     for (const step of ["h1", "h2", "h3", "h4", "body", "micro"] as const) {

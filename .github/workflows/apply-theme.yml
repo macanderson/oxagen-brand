@@ -8,6 +8,7 @@ name: apply-theme
 # 1. validates the request against theme/request.schema.json,
 # 2. merges it into theme/theme.json and fetches any Google face into fonts/,
 # 3. runs every generator: build/build.py, build/playbook.py, build/messages.py,
+#    and build/editor_fixture.py, which the editor's colour tests read,
 # 4. deletes the request, commits the result, and pushes it to the same branch,
 # 5. comments on the pull request with what changed.
 #
@@ -128,6 +129,7 @@ jobs:
           python build/build.py
           python build/playbook.py
           python build/messages.py
+          python build/editor_fixture.py
           python build/build.py --check
 
       - name: Commit and push

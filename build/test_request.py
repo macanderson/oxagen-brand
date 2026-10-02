@@ -18,6 +18,11 @@ def theme() -> dict:
     return json.loads(THEME_FILE.read_text())
 
 
+def other(value: str, *choices: str) -> str:
+    """The first of `choices` that differs from `value`, so a test changes the theme whatever it holds."""
+    return next(c for c in choices if c != value)
+
+
 class SchemaTest(unittest.TestCase):
     def test_committed_schema_matches_the_theme_schema(self) -> None:
         self.assertEqual(R.check_schema(), [])
@@ -101,18 +106,22 @@ class ProblemsTest(unittest.TestCase):
 class MergeTest(unittest.TestCase):
     def test_a_partial_change_keeps_every_other_value(self) -> None:
         before = theme()
-        after = R.merge(before, {"summary": "x", "color": {"gold": "#C9A227", "ink": {"panel": "#1C1C1F"}}})
-        self.assertEqual(after["color"]["gold"], "#C9A227")
-        self.assertEqual(after["color"]["ink"]["panel"], "#1C1C1F")
+        gold = other(before["color"]["gold"], "#C9A227", "#D9B13B")
+        panel = other(before["color"]["ink"]["panel"], "#1C1C1F", "#1A1A1D")
+        after = R.merge(before, {"summary": "x", "color": {"gold": gold, "ink": {"panel": panel}}})
+        self.assertEqual(after["color"]["gold"], gold)
+        self.assertEqual(after["color"]["ink"]["panel"], panel)
         self.assertEqual(after["color"]["ink"]["ink"], before["color"]["ink"]["ink"])
         self.assertEqual(after["faces"], before["faces"])
-        self.assertEqual(before["color"]["gold"], "#D4AF37", "merge must not change its input")
+        self.assertEqual(before, theme(), "merge must not change its input")
 
     def test_a_type_step_changes_one_field(self) -> None:
-        after = R.merge(theme(), {"summary": "x", "type": {"scales": {"app": {"body": {"size": "0.9375rem"}}}}})
+        before = theme()
+        size = other(before["type"]["scales"]["app"]["body"]["size"], "0.9375rem", "0.875rem")
+        after = R.merge(before, {"summary": "x", "type": {"scales": {"app": {"body": {"size": size}}}}})
         body = after["type"]["scales"]["app"]["body"]
-        self.assertEqual(body["size"], "0.9375rem")
-        self.assertEqual(body["leading"], 1.5)
+        self.assertEqual(body["size"], size)
+        self.assertEqual(body["leading"], before["type"]["scales"]["app"]["body"]["leading"])
 
     def test_the_merged_theme_validates(self) -> None:
         import theme as TH
@@ -140,7 +149,7 @@ class FaceEntryTest(unittest.TestCase):
     def test_the_same_family_keeps_its_fallback_and_features(self) -> None:
         mono = theme()["faces"]["mono"]
         face = R.face_entry("mono", mono, {"family": mono["family"], "source": "kit", "files": mono["files"]}, mono["files"], None)
-        self.assertEqual(face["features"], ["calt", "liga"])
+        self.assertEqual(face["features"], mono["features"])
         self.assertEqual(face["fallback"], mono["fallback"])
 
     def test_an_upload_becomes_a_kit_face(self) -> None:

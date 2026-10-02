@@ -3,7 +3,11 @@
  */
 import { describe, expect, it } from "vitest";
 import { STORAGE_KEY, applyVars, clearVars, isShipped, loadDraft, previewVars, saveDraft, shippedDraft } from "./draft";
-import { SHIPPED } from "./theme";
+import { derivePalette } from "./palette";
+import { SHIPPED, rampVars } from "./theme";
+
+/** A gold that differs from the shipped one, whatever the kit ships. */
+const NEW_GOLD = SHIPPED.color.gold === "#C99B2E" ? "#D9B13B" : "#C99B2E";
 
 function memoryStorage(initial: Record<string, string> = {}) {
   const data = new Map(Object.entries(initial));
@@ -44,8 +48,8 @@ describe("loading and saving", () => {
   it("round-trips a draft", () => {
     const storage = memoryStorage();
     const draft = shippedDraft();
-    draft.theme.color.gold = "#C99B2E";
-    draft.faces.display = { kind: "google", family: "Inter", weights: [400, 700] };
+    draft.theme.color.gold = NEW_GOLD;
+    draft.faces.display = { kind: "google", family: "Example Sans", weights: [400, 700] };
     saveDraft(draft, storage);
     expect(loadDraft(storage)).toEqual(draft);
   });
@@ -77,20 +81,21 @@ describe("the preview", () => {
 
   it("sets the gold, its neighbours, and the ramp for a new gold", () => {
     const draft = shippedDraft();
-    draft.theme.color.gold = "#C99B2E";
+    draft.theme.color.gold = NEW_GOLD;
     const vars = previewVars(draft);
-    expect(vars["--ox-gold"]).toBe("#C99B2E");
-    expect(vars["--ox-gold-bright"]).toBe("#F9C965");
-    expect(vars["--ox-gold-deep"]).toBe("#906F23");
-    expect(vars["--ox-ember-soft"]).toBe("oklch(0.25 0.035 81)");
+    const palette = derivePalette(draft.theme.color);
+    expect(vars["--ox-gold"]).toBe(NEW_GOLD);
+    expect(vars["--ox-gold-bright"]).toBe(palette.goldBright);
+    expect(vars["--ox-gold-deep"]).toBe(palette.goldDeep);
+    expect(vars["--ox-ember-soft"]).toBe(rampVars(NEW_GOLD)["--ox-ember-soft"]);
     expect(vars["--ox-ink"]).toBeUndefined();
   });
 
   it("sets a face's stack", () => {
     const draft = shippedDraft();
-    draft.faces.mono = { kind: "google", family: "JetBrains Mono", weights: [400] };
+    draft.faces.mono = { kind: "google", family: "Example Mono", weights: [400] };
     expect(previewVars(draft)).toEqual({
-      "--ox-font-mono": '"JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace',
+      "--ox-font-mono": '"Example Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace',
     });
   });
 
