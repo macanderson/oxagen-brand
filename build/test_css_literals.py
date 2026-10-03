@@ -248,6 +248,10 @@ class StyleLiterals(unittest.TestCase):
         self.assertEqual(groups, ["border-radius", "border-radius", "box-shadow", "color", "color", "color", "color",
                                   "color", "color", "color", "spacing", "spacing", "spacing"])
 
+    def test_tailwinds_bare_rounded_fails(self) -> None:
+        hits = L.script_style_hits('const a = "rounded border";\nconst b = "hover:rounded-t px-1";\nconst c = "rounded-sm rounded-full";', "x.tsx")
+        self.assertEqual([(h.line, h.value) for h in hits], [(1, "rounded"), (2, "hover:rounded-t")])
+
     def test_a_script_token_passes(self) -> None:
         code = (
             'const a = "gap-1.75 rounded-xl shadow-pop bg-card text-muted-foreground p-(--pad) gap-[var(--x)]";\n'

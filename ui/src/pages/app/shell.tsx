@@ -261,7 +261,7 @@ function Topbar({ crumbs }: { crumbs: readonly Crumb[] }) {
         <span className="hidden lg:inline">Search or run an action</span>
         <kbd
           aria-hidden="true"
-          className="ml-auto hidden rounded border border-border bg-hl px-1.25 font-mono text-xs text-muted-foreground sm:inline"
+          className="ml-auto hidden rounded-sm border border-border bg-hl px-1.25 font-mono text-xs text-muted-foreground sm:inline"
         >
           ⌘K
         </kbd>

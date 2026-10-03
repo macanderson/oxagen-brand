@@ -658,6 +658,9 @@ _TW_RAW_OX = re.compile(
     r"(?<![\w-])(?:bg|text|border(?:-[trblxyse])?|ring|outline|fill|stroke|from|via|to|decoration|divide|caret"
     r"|accent|placeholder)-ox-[\w-]+"
 )
+#: Tailwind's bare `rounded` (and `rounded-t`, `rounded-tl`, and the rest) is
+#: its own fixed 0.25rem, which no theme step moves. A class names a step.
+_TW_BARE_ROUNDED = re.compile(r"(?<![\w-])(?:[\w-]+:)*rounded(?:-(?:t|r|b|l|tl|tr|br|bl|s|e|ss|se|es|ee))?(?=[\s\"'`]|$)")
 _TW_ARB = re.compile(r"(?<![\w-])(-?[a-z][a-z0-9-]*)-\[([^\]\s]+)\]")
 _TW_ARB_PROP = re.compile(r"\[([a-z-]+):([^\]\s]+)\]")
 _TW_COLOR_UTIL = {"bg", "text", "border", "border-t", "border-r", "border-b", "border-l", "border-x", "border-y",
@@ -699,6 +702,8 @@ def script_style_hits(code: str, path: str) -> list[Hit]:
     def hit(index: int, group: str, prop: str, value: str, use: str) -> None:
         out.append(Hit(_line(text, index), group, prop, value, use, path))
 
+    for m in _TW_BARE_ROUNDED.finditer(text):
+        hit(m.start(), "border-radius", "class", m.group(0), "a rounded-* step such as rounded-sm, which reads --ox-radius-sm")
     for m in _TW_PALETTE.finditer(text):
         hit(m.start(), "color", "class", m.group(0), "a semantic colour utility, such as bg-card or text-muted-foreground")
     for m in _TW_RAW_OX.finditer(text):
