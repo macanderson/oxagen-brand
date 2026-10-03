@@ -68,7 +68,7 @@ export function ToneBadge({
       className={cn(
         badgeBase,
         TONE[tone],
-        mono && "font-mono text-sm font-medium lowercase",
+        mono && "font-mono text-xs font-medium lowercase",
         className,
       )}
     >

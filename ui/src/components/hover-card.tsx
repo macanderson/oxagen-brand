@@ -54,7 +54,7 @@ function HoverCardContent({
             popoverSurface,
             // Prose sits 12px by 16px in: the surface's 4px inset plus the
             // 8px by 12px a menu row keeps.
-            "z-50 w-72 px-4 py-3 text-sm outline-hidden",
+            "z-50 w-72 px-4 py-3 text-base outline-hidden",
             "origin-(--transform-origin) transition-[opacity,transform,translate,scale] duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[starting-style]:scale-[0.97] data-[ending-style]:opacity-0 data-[ending-style]:scale-[0.97]",
             className,
           )}

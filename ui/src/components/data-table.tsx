@@ -36,7 +36,7 @@ export const numericCell = `${cell} whitespace-nowrap text-right font-mono tabul
 
 /** `th { font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--dim) }` */
 export const headCell =
-  "whitespace-nowrap bg-card px-3 py-[9px] text-sm font-semibold uppercase tracking-[0.09em] text-dim";
+  "whitespace-nowrap bg-card px-3 py-[9px] text-xs font-semibold uppercase tracking-[0.09em] text-dim";
 
 export function DataTable({
   label,
@@ -60,7 +60,7 @@ export function DataTable({
       <table
         data-slot="table"
         aria-label={label}
-        className="w-full min-w-[560px] border-collapse text-sm"
+        className="w-full min-w-[560px] border-collapse text-base"
       >
         <thead>
           <tr className="border-b border-border">
@@ -87,7 +87,7 @@ export function DataTable({
             <tr data-slot="table-empty">
               <td
                 colSpan={columns.length}
-                className="px-3 py-8 text-center text-sm text-muted-foreground"
+                className="px-3 py-8 text-center text-base text-muted-foreground"
               >
                 {empty}
               </td>

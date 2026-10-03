@@ -80,6 +80,25 @@ describe("ThemeEditor", () => {
     }
   });
 
+  it("moves the app base on <html> alone, and warns without blocking below 14px", () => {
+    render(<ThemeEditor mode="light" defaultOpen />);
+    const base = screen.getByRole("slider", { name: "App base" });
+    act(() => {
+      fireEvent.change(base, { target: { value: "12" } });
+    });
+    const root = document.documentElement.style;
+    // Every app step is calc() over --ox-a-base in house-tokens.css, so the
+    // editor writes the base and nothing else for the steps to follow it.
+    expect(root.getPropertyValue("--ox-a-base")).toBe("0.75rem");
+    expect(root.getPropertyValue("--ox-a-h1")).toBe("");
+    expect(root.getPropertyValue("--ox-a-micro")).toBe("");
+    expect(screen.getByText(/This base is under 14px/)).toBeInTheDocument();
+    const warnings = screen.getByRole("list", { name: "Warnings" });
+    expect(within(warnings).getByText(/The app base is 12px/)).toBeInTheDocument();
+    expect(screen.queryByText(/The build will refuse/)).toBeNull();
+    expect(screen.getByRole("button", { name: "Update all sites" })).toBeEnabled();
+  });
+
   it("restores the shipped theme on Reset and on unmount", () => {
     const { unmount } = render(<ThemeEditor mode="light" defaultOpen />);
     act(() => {

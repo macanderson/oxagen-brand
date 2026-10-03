@@ -10,12 +10,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Clipped: Story = {
   render: () => (
-    <div className="w-60 rounded-lg border border-border bg-card p-3 text-sm text-foreground">
+    <div className="w-60 rounded-lg border border-border bg-card p-3 text-base text-foreground">
       <TruncatedCell>
         Watches the release branch and cuts a tag when every required check
         passes
       </TruncatedCell>
-      <p className="mt-2 text-xs text-muted-foreground">
+      <p className="mt-2 text-sm text-muted-foreground">
         Rest the pointer on the text, or press Tab to focus it.
       </p>
     </div>
@@ -24,7 +24,7 @@ export const Clipped: Story = {
 
 export const ClippedWithValue: Story = {
   render: () => (
-    <div className="w-60 rounded-lg border border-border bg-card p-3 font-mono text-xs text-foreground">
+    <div className="w-60 rounded-lg border border-border bg-card p-3 font-mono text-sm text-foreground">
       <TruncatedCell value="run_01J9Z3K4Q2W8XYV5T6R7S8P9M0">
         run_01J9Z3K4Q2W8XYV5T6R7S8P9M0 in oxagen/runtime
       </TruncatedCell>
@@ -34,9 +34,9 @@ export const ClippedWithValue: Story = {
 
 export const NotClipped: Story = {
   render: () => (
-    <div className="w-60 rounded-lg border border-border bg-card p-3 text-sm text-foreground">
+    <div className="w-60 rounded-lg border border-border bg-card p-3 text-base text-foreground">
       <TruncatedCell>release-bot</TruncatedCell>
-      <p className="mt-2 text-xs text-muted-foreground">
+      <p className="mt-2 text-sm text-muted-foreground">
         The text fits, so no card opens.
       </p>
     </div>

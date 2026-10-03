@@ -152,7 +152,7 @@ describe("MenuItem", () => {
       </Menu>,
     );
     const item = await findByText("Rename");
-    for (const cls of ["rounded-2xl", "px-3", "py-2", "gap-2.5", "text-sm"]) {
+    for (const cls of ["rounded-2xl", "px-3", "py-2", "gap-2.5", "text-base"]) {
       expect(item.className).toContain(cls);
     }
     expect(item.className).toContain("data-[highlighted]:bg-foreground/10");

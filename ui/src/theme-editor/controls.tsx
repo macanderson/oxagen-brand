@@ -22,10 +22,10 @@ export function Section({
   const id = React.useId();
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3 border-b border-border/70 pb-5 last:border-b-0">
-      <h3 id={id} className="text-sm font-semibold text-foreground">
+      <h3 id={id} className="text-base font-semibold text-foreground">
         {title}
       </h3>
-      {note ? <p className="-mt-1.5 text-xs leading-normal text-muted-foreground">{note}</p> : null}
+      {note ? <p className="-mt-1.5 text-sm leading-normal text-muted-foreground">{note}</p> : null}
       {children}
     </section>
   );
@@ -100,7 +100,7 @@ export function ColorField({
           }}
           className="size-8 shrink-0 cursor-pointer rounded-lg border border-border bg-transparent p-0.5"
         />
-        <label htmlFor={id} className="min-w-0 flex-1 text-sm text-foreground">
+        <label htmlFor={id} className="min-w-0 flex-1 text-base text-foreground">
           {label}
         </label>
         <input
@@ -114,7 +114,7 @@ export function ColorField({
             if (hex) onChange(hex);
           }}
           onBlur={() => setText(value)}
-          className={cn(inputBase, "min-h-8 w-[6.5rem] py-1 font-mono text-xs uppercase")}
+          className={cn(inputBase, "min-h-8 w-[6.5rem] py-1 font-mono uppercase")}
         />
       </div>
       {children ? <div className="flex flex-wrap gap-1.5 pl-10">{children}</div> : null}
@@ -144,10 +144,10 @@ export function RangeField({
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-baseline justify-between gap-2">
-        <label htmlFor={id} className="text-sm text-foreground">
+        <label htmlFor={id} className="text-base text-foreground">
           {label}
         </label>
-        <span className="font-mono text-xs tabular-nums text-muted-foreground">{shown}</span>
+        <span className="font-mono text-sm tabular-nums text-muted-foreground">{shown}</span>
       </div>
       <input
         id={id}
@@ -179,14 +179,14 @@ export function SelectField<T extends string>({
   const id = React.useId();
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <label htmlFor={id} className="min-w-0 flex-1 text-sm text-foreground">
+      <label htmlFor={id} className="min-w-0 flex-1 text-base text-foreground">
         {label}
       </label>
       <select
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
-        className={cn(inputBase, "min-h-8 w-auto max-w-[13rem] py-1 pr-8 text-xs")}
+        className={cn(inputBase, "min-h-8 w-auto max-w-[13rem] py-1 pr-8")}
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -219,7 +219,7 @@ export function TextField({
   const id = React.useId();
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm text-foreground">
+      <label htmlFor={id} className="text-base text-foreground">
         {label}
       </label>
       <input
@@ -230,9 +230,9 @@ export function TextField({
         spellCheck={false}
         aria-invalid={invalid || undefined}
         onChange={(e) => onChange(e.target.value)}
-        className={cn(inputBase, "min-h-8 py-1 text-xs")}
+        className={cn(inputBase, "min-h-8 py-1")}
       />
-      {hint ? <p className={cn("text-xs leading-normal", invalid ? "text-error-ink" : "text-muted-foreground")}>{hint}</p> : null}
+      {hint ? <p className={cn("text-sm leading-normal", invalid ? "text-error-ink" : "text-muted-foreground")}>{hint}</p> : null}
     </div>
   );
 }

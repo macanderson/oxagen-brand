@@ -59,7 +59,7 @@ function Runs({
       <DataTable label="Runs" columns={COLUMNS} empty="No runs yet">
         {runs.map((run) => (
           <tr key={run.id}>
-            <td className={`${cell} font-mono text-xs text-muted-foreground`}>
+            <td className={`${cell} font-mono text-sm text-muted-foreground`}>
               {run.id}
             </td>
             <td className={`${cell} font-medium text-foreground`}>

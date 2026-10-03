@@ -277,7 +277,7 @@ export function RunsPage({
               {rows.map((run, index) => (
                 <tr key={run.id}>
                   <td
-                    className={cn(cell, "font-mono text-xs text-muted-foreground")}
+                    className={cn(cell, "font-mono text-sm text-muted-foreground")}
                   >
                     {run.id}
                   </td>
@@ -306,7 +306,7 @@ export function RunsPage({
               ))}
             </DataTable>
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground">
             Showing {rows.length} of {RUNS.length} runs from today.
           </p>
         </main>

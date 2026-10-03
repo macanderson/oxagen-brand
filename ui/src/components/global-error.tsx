@@ -67,7 +67,7 @@ export function GlobalErrorPage({
             <p
               style={{
                 marginTop: "0.75rem",
-                fontSize: "var(--ox-a-body, 0.875rem)",
+                fontSize: "var(--ox-a-micro, 0.75rem)",
                 color: "#71717A",
                 fontFamily:
                   '"Monaspace Neon", ui-monospace, SFMono-Regular, monospace',

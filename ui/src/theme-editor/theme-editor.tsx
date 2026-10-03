@@ -23,6 +23,7 @@ import {
   ArrowSquareOutIcon,
   CopyIcon,
   DownloadSimpleIcon,
+  InfoIcon,
   PaletteIcon,
   WarningIcon,
   XIcon,
@@ -55,12 +56,19 @@ import {
   FACE_ROLES,
   RADIUS_STEPS,
   SHIPPED,
-  STEPS,
+  BASE_ADVICE_PX,
+  BASE_ADVICE_QUOTE,
+  BASE_STEP,
+  SCALE_KEYS,
+  SCALE_STEPS,
   clone,
   pxRem,
   remPx,
+  round2,
+  stepPx,
   typeProblems,
-  TYPE_FLOOR_PX,
+  typeStep,
+  typeWarnings,
   type FaceChoice,
   type FaceRole,
   type ScaleName,
@@ -157,6 +165,9 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
     ...typeProblems(draft.theme),
     ...faceProblems(draft.faces, loads),
   ];
+  // Advice the build does not enforce. It never joins `problems`, which the
+  // publish view reads as what the build refuses.
+  const warnings = typeWarnings(draft.theme);
 
   return (
     <DialogPrimitive.Root
@@ -171,7 +182,7 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
       <DialogPrimitive.Trigger
         className={cn(
           popoverSurface,
-          "fixed right-4 bottom-4 z-40 inline-flex h-10 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "fixed right-4 bottom-4 z-40 inline-flex h-10 cursor-pointer items-center gap-2 rounded-full px-4 text-base font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring",
         )}
       >
         <PaletteIcon className="size-4" aria-hidden />
@@ -192,7 +203,7 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
         >
           <header className="flex shrink-0 flex-col gap-1 border-b border-border/70 px-5 pt-4 pb-3 pr-12">
             <DialogPrimitive.Title className="text-a-h4 text-foreground">Theme</DialogPrimitive.Title>
-            <DialogPrimitive.Description className="text-xs leading-normal text-muted-foreground">
+            <DialogPrimitive.Description className="text-sm leading-normal text-muted-foreground">
               Changes preview on this page. Nothing reaches a site until you update all sites.
             </DialogPrimitive.Description>
             <DialogPrimitive.Close
@@ -207,6 +218,7 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
             <PublishView
               draft={draft}
               problems={problems}
+              warnings={warnings}
               changes={changes.length}
               now={publishAt}
               onBack={() => setPublishAt(null)}
@@ -237,7 +249,7 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
                 <ShadowSection mode={mode} theme={draft.theme} update={update} />
                 <SpacingSection theme={draft.theme} update={update} />
                 <TypeSection theme={draft.theme} update={update} />
-                <ChecksSection problems={problems} />
+                <ChecksSection problems={problems} warnings={warnings} />
                 <ChangesSection draft={draft} />
               </div>
               <footer className="flex shrink-0 flex-col gap-2 border-t border-border/70 px-5 py-3">
@@ -289,7 +301,7 @@ function PrimarySection({ theme, update }: { theme: Theme; update: Update }) {
         <Ratio fg={theme.color.gold} bg={ink} min={4.5} label="on ink" />
         <Ratio fg={ink} bg={theme.color.gold} min={4.5} label="ink on gold" />
       </ColorField>
-      <div className="flex flex-col gap-1.5 pl-10 text-xs text-muted-foreground">
+      <div className="flex flex-col gap-1.5 pl-10 text-sm text-muted-foreground">
         <span className="flex items-center gap-2">
           <Swatch color={p.goldBright} />
           Bright <span className="font-mono">{p.goldBright}</span>
@@ -309,7 +321,7 @@ function PrimarySection({ theme, update }: { theme: Theme; update: Update }) {
         </Button>
       </div>
       <details className="group flex flex-col gap-2">
-        <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">Neighbours</summary>
+        <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">Neighbours</summary>
         <div className="mt-2 flex flex-col gap-3">
           <RangeField
             label="Bright lightness"
@@ -438,7 +450,7 @@ function TextSection({ mode, theme, update }: { mode: Mode; theme: Theme; update
         shown={`lightness ${c.text_on_paper.muted_text_lightness.toFixed(3)}`}
         onChange={(v) => update((t) => void (t.color.text_on_paper.muted_text_lightness = round(v, 3)))}
       />
-      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
         <Swatch color={p.mutedTextInk} />
         <span className="font-mono">{p.mutedTextInk}</span>
         <Ratio fg={p.mutedTextInk} bg={c.paper.hl} min={4.5} label="on lifted row" />
@@ -449,7 +461,7 @@ function TextSection({ mode, theme, update }: { mode: Mode; theme: Theme; update
 
 function DimNote() {
   return (
-    <p className="text-xs leading-normal text-muted-foreground">
+    <p className="text-sm leading-normal text-muted-foreground">
       The quietest text never carries meaning, so the build does not hold it to 4.5:1.
     </p>
   );
@@ -512,7 +524,7 @@ function StateSection({ mode, theme, update }: { mode: Mode; theme: Theme; updat
             shown={theme.color.destructive_lift_on_ink.toFixed(3)}
             onChange={(v) => update((t) => void (t.color.destructive_lift_on_ink = round(v, 3)))}
           />
-          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <Swatch color={p.destructive.dark} />
             Destructive <span className="font-mono">{p.destructive.dark}</span>
             <Ratio fg={p.destructive.dark} bg={ground} min={4.5} label="on canvas" />
@@ -669,70 +681,67 @@ function TypeSection({ theme, update }: { theme: Theme; update: Update }) {
   return (
     <Section
       title="Type sizes"
-      note={`Marketing sets landing pages, posts, and docs. App sets the web app and the internal tools. Each size is a whole number of pixels, ${TYPE_FLOOR_PX} or more.`}
+      note="Each scale has one base, its body size. Every other step is the base times its ratio, so a new base moves every step on the page. Marketing sets landing pages, posts, and docs. App sets the web app and the internal tools."
     >
       {(["marketing", "app"] as const).map((scale) => {
-        const h1 = remPx(theme.type.scales[scale].h1.size);
-        const shippedH1 = remPx(SHIPPED.type.scales[scale].h1.size);
-        const factor = h1 / shippedH1;
+        const base = remPx(theme.type.scales[scale].base);
+        const low = base < BASE_ADVICE_PX;
+        const adviceId = `theme-editor-base-${scale}`;
         return (
           <div key={scale} className="flex flex-col gap-2">
             <RangeField
-              label={`${SCALE_LABELS[scale]} scale`}
-              value={round(factor, 2)}
-              min={0.7}
-              max={1.5}
-              step={0.05}
-              shown={`${Math.round(factor * 100)}%`}
-              onChange={(f) =>
-                update((t) => {
-                  for (const step of STEPS) {
-                    const px = Math.max(TYPE_FLOOR_PX, Math.round(remPx(SHIPPED.type.scales[scale][step].size) * f));
-                    t.type.scales[scale][step].size = pxRem(px);
-                  }
-                })
-              }
+              label={`${SCALE_LABELS[scale]} base`}
+              value={base}
+              min={10}
+              max={24}
+              step={1}
+              shown={`${round2(base)}px, --ox-${SCALE_KEYS[scale]}-base`}
+              onChange={(v) => update((t) => void (t.type.scales[scale].base = pxRem(v)))}
             />
+            <p
+              id={adviceId}
+              className={cn("text-sm leading-normal", low ? "text-warning-ink" : "text-muted-foreground")}
+            >
+              {low ? (
+                <>
+                  This base is under {BASE_ADVICE_PX}px. Mac: &ldquo;{BASE_ADVICE_QUOTE}.&rdquo; The build still accepts it.
+                </>
+              ) : (
+                <>Mac: &ldquo;{BASE_ADVICE_QUOTE}.&rdquo;</>
+              )}
+            </p>
             <details>
-              <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
-                {SCALE_LABELS[scale]} steps
+              <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
+                {SCALE_LABELS[scale]} ratios
               </summary>
               <div className="mt-2 grid grid-cols-3 gap-2">
-                {STEPS.map((step) => {
-                  const px = Math.round(remPx(theme.type.scales[scale][step].size));
-                  const low = px < TYPE_FLOOR_PX;
+                {SCALE_STEPS[scale].map((step) => {
+                  const ratio = typeStep(theme, scale, step).ratio;
+                  const isBase = step === BASE_STEP;
                   return (
-                    <label key={step} className="flex flex-col gap-1 text-xs text-muted-foreground">
-                      {step}
+                    <label key={step} className="flex flex-col gap-1 text-sm text-muted-foreground">
+                      {isBase ? `${step}, the base` : step}
                       <input
                         type="number"
-                        min={TYPE_FLOOR_PX}
-                        max={160}
-                        step={1}
-                        value={px}
-                        aria-invalid={low || undefined}
-                        aria-describedby={`theme-editor-floor-${scale}`}
+                        min={0.1}
+                        max={10}
+                        step={0.01}
+                        value={ratio}
+                        disabled={isBase}
+                        aria-describedby={isBase ? adviceId : undefined}
                         onChange={(e) => {
-                          const next = Math.round(Number(e.target.value));
-                          if (next >= 1 && next <= 160) update((t) => void (t.type.scales[scale][step].size = pxRem(next)));
+                          const next = Number(e.target.value);
+                          if (next > 0 && next <= 10) {
+                            update((t) => void (typeStep(t, scale, step).ratio = Math.round(next * 1e6) / 1e6));
+                          }
                         }}
-                        className="h-8 rounded-lg border border-input-border bg-input-bg px-2 font-mono text-xs text-input-fg aria-invalid:border-input-invalid-border"
+                        className="h-8 rounded-lg border border-input-border bg-input-bg px-2 font-mono text-base text-input-fg disabled:bg-input-disabled-bg disabled:text-input-disabled-fg"
                       />
+                      <span className="font-mono tabular-nums">{round2(stepPx(theme, scale, step))}px</span>
                     </label>
                   );
                 })}
               </div>
-              <p
-                id={`theme-editor-floor-${scale}`}
-                className={cn(
-                  "mt-2 text-xs leading-normal",
-                  STEPS.some((step) => remPx(theme.type.scales[scale][step].size) < TYPE_FLOOR_PX)
-                    ? "text-error-ink"
-                    : "text-muted-foreground",
-                )}
-              >
-                Every step is {TYPE_FLOOR_PX}px or more, the micro step too. The build refuses a smaller size.
-              </p>
             </details>
           </div>
         );
@@ -759,21 +768,31 @@ function faceProblems(faces: Record<FaceRole, FaceChoice>, loads: Record<FaceRol
   return out;
 }
 
-function ChecksSection({ problems }: { problems: string[] }) {
+function ChecksSection({ problems, warnings }: { problems: string[]; warnings: string[] }) {
   return (
     <Section title="Checks" note="The build runs the same checks, and it refuses a theme that fails one.">
       {problems.length ? (
         <ul className="flex flex-col gap-1.5">
           {problems.map((p) => (
-            <li key={p} className="flex gap-2 text-xs leading-normal text-error-ink">
+            <li key={p} className="flex gap-2 text-sm leading-normal text-error-ink">
               <WarningIcon className="mt-0.5 size-3.5 shrink-0" aria-hidden />
               {p}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-xs text-muted-foreground">The build accepts these colours, faces, and sizes.</p>
+        <p className="text-sm text-muted-foreground">The build accepts these colours, faces, and sizes.</p>
       )}
+      {warnings.length ? (
+        <ul aria-label="Warnings" className="flex flex-col gap-1.5">
+          {warnings.map((w) => (
+            <li key={w} className="flex gap-2 text-sm leading-normal text-warning-ink">
+              <InfoIcon className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+              {w}
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </Section>
   );
 }
@@ -800,7 +819,7 @@ function ChangesSection({ draft }: { draft: Draft }) {
           ))}
         </ul>
       ) : (
-        <p className="text-xs text-muted-foreground">No changes yet. The page shows the shipped theme.</p>
+        <p className="text-sm text-muted-foreground">No changes yet. The page shows the shipped theme.</p>
       )}
     </Section>
   );
@@ -859,12 +878,14 @@ function ExportButtons({ draft }: { draft: Draft }) {
 function PublishView({
   draft,
   problems,
+  warnings,
   changes,
   now,
   onBack,
 }: {
   draft: Draft;
   problems: string[];
+  warnings: string[];
   changes: number;
   now: Date;
   onBack: () => void;
@@ -892,7 +913,7 @@ function PublishView({
             hint={`It becomes the commit message. The file is theme/requests/${fileName}.`}
           />
           {problems.length ? (
-            <div className="flex flex-col gap-1.5 rounded-xl border border-error/40 bg-error/5 p-3 text-xs text-error-ink">
+            <div className="flex flex-col gap-1.5 rounded-xl border border-error/40 bg-error/5 p-3 text-sm text-error-ink">
               <p className="font-medium">The build will refuse this theme until these clear:</p>
               <ul className="list-disc pl-4">
                 {problems.map((p) => (
@@ -901,23 +922,33 @@ function PublishView({
               </ul>
             </div>
           ) : null}
+          {warnings.length ? (
+            <div className="flex flex-col gap-1.5 rounded-xl border border-warning/40 bg-warning/5 p-3 text-sm text-warning-ink">
+              <p className="font-medium">The build accepts this theme. It goes against this advice:</p>
+              <ul className="list-disc pl-4">
+                {warnings.map((w) => (
+                  <li key={w}>{w}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </Section>
 
         <Section title="Steps">
-          <ol className="flex list-decimal flex-col gap-2.5 pl-4 text-sm leading-normal text-foreground">
+          <ol className="flex list-decimal flex-col gap-2.5 pl-4 text-base leading-normal text-foreground">
             {uploads.length ? (
               <>
                 <li>
                   Upload {uploads.length === 1 ? "this file" : "these files"} to <span className="font-mono">fonts/</span>:{" "}
-                  <span className="font-mono text-xs">{uploads.join(", ")}</span>. On GitHub, choose Create a new branch, name it{" "}
-                  <span className="font-mono text-xs">{branch}</span>, and select Propose changes, then Create pull request.{" "}
+                  <span className="font-mono text-sm">{uploads.join(", ")}</span>. On GitHub, choose Create a new branch, name it{" "}
+                  <span className="font-mono text-sm">{branch}</span>, and select Propose changes, then Create pull request.{" "}
                   <a className="underline underline-offset-2" href={uploadUrl("fonts")} target="_blank" rel="noreferrer">
                     Open the upload page
                   </a>
                 </li>
                 <li>
                   Open the request on GitHub below, and choose Commit directly to the{" "}
-                  <span className="font-mono text-xs">{branch}</span> branch.
+                  <span className="font-mono text-sm">{branch}</span> branch.
                 </li>
               </>
             ) : (
@@ -939,7 +970,7 @@ function PublishView({
         </Section>
 
         {!fits ? (
-          <p className="rounded-xl border border-border bg-muted/60 p-3 text-xs leading-normal text-foreground">
+          <p className="rounded-xl border border-border bg-muted/60 p-3 text-sm leading-normal text-foreground">
             This request is too long for a GitHub link: {url.length.toLocaleString("en-US")} characters, and the limit is{" "}
             {MAX_URL_LENGTH.toLocaleString("en-US")}. Download it, then upload it to{" "}
             <span className="font-mono">theme/requests/</span> on the{" "}
@@ -951,7 +982,7 @@ function PublishView({
         ) : null}
 
         <details>
-          <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">Request</summary>
+          <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">Request</summary>
           <pre className="mt-2 max-h-64 overflow-auto rounded-xl bg-muted/60 p-3 font-mono text-sm leading-relaxed text-foreground">
             {requestText(request)}
           </pre>

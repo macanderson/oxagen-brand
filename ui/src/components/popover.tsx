@@ -34,7 +34,7 @@ const PopoverTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <PopoverPrimitive.Title
     ref={ref}
-    className={cn("text-sm font-semibold text-foreground", className)}
+    className={cn("text-base font-semibold text-foreground", className)}
     {...props}
   />
 ));
@@ -46,7 +46,7 @@ const PopoverDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <PopoverPrimitive.Description
     ref={ref}
-    className={cn("mt-1 text-sm text-muted-foreground", className)}
+    className={cn("mt-1 text-base text-muted-foreground", className)}
     {...props}
   />
 ));
@@ -87,7 +87,7 @@ const PopoverPopup = React.forwardRef<
           ref={ref}
           className={cn(
             popoverSurface,
-            "z-50 max-w-sm px-4 py-3 text-sm outline-none",
+            "z-50 max-w-sm px-4 py-3 text-base outline-none",
             "origin-(--transform-origin) transition-[opacity,transform,translate,scale] duration-[var(--motion-overlay)] ease-[var(--ease-entry)] data-[starting-style]:opacity-0 data-[starting-style]:scale-[0.97] data-[ending-style]:opacity-0 data-[ending-style]:scale-[0.97]",
             className,
           )}

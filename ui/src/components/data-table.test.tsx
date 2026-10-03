@@ -63,7 +63,7 @@ describe("Table", () => {
     renderTable();
     const table = screen.getByRole("table", { name: "Invoices" });
     expect(table).toHaveAttribute("data-slot", "table");
-    expect(table.className).toContain("text-sm");
+    expect(table.className).toContain("text-base");
     expect(table.className).toContain("min-w-[560px]");
   });
 

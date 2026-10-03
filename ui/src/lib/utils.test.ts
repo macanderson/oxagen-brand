@@ -56,16 +56,17 @@ describe("cn", () => {
 // size. tailwind-merge's default config read them as a text colour, so a
 // colour class in the same list dropped them (oxageninc/brand#75).
 describe("cn with the house type utilities", () => {
-  const SCALES = { a: theme.type.scales.app, m: theme.type.scales.marketing };
+  const SCALES = { a: theme.type.scales.app.steps, m: theme.type.scales.marketing.steps };
   const UTILITIES = Object.entries(SCALES).flatMap(([prefix, steps]) =>
     Object.keys(steps).map((step) => `text-${prefix}-${step}`),
   );
 
   it("reads every step of both scales from theme/theme.json", () => {
     // The cases below run once per step the theme lists. A step added to the
-    // theme fails them until TYPE_STEPS in utils.ts names it too.
+    // theme fails them until MARKETING_STEPS or APP_STEPS in utils.ts names it too.
     expect(UTILITIES).toContain("text-a-h1");
     expect(UTILITIES).toContain("text-m-micro");
+    expect(UTILITIES).toContain("text-a-2xs");
   });
 
   it("keeps the Runs title's size beside its colour", () => {

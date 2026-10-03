@@ -337,20 +337,20 @@ function componentName(name: string): string {
   return `${pascal}Icon`;
 }
 
-const HEAD = "px-3 py-2 text-left text-xs font-medium text-muted-foreground";
+const HEAD = "px-3 py-2 text-left text-sm font-medium text-muted-foreground";
 const CELL = "px-3 py-2 align-middle";
 
 function IconMap() {
   return (
     <div className="flex max-w-[960px] flex-col gap-3">
-      <p className="max-w-[640px] text-sm text-muted-foreground">
+      <p className="max-w-[640px] text-base text-muted-foreground">
         Every icon the v3 mockup draws, with the Phosphor icon that replaces
         it. Import the component from <code>@phosphor-icons/react</code>, or
         from <code>@phosphor-icons/react/ssr</code> in a file with no{" "}
         <code>&quot;use client&quot;</code>. The kit draws the regular weight.
       </p>
       <div className="overflow-x-auto rounded-xl border border-border">
-        <table className="w-full min-w-[640px] border-collapse text-sm">
+        <table className="w-full min-w-[640px] border-collapse text-base">
           <caption className="sr-only">Mockup icons and their Phosphor names</caption>
           <thead className="bg-card">
             <tr className="border-b border-border">
@@ -378,14 +378,14 @@ function IconMap() {
                 className="border-b border-border last:border-b-0 hover:bg-hl"
               >
                 <td className={CELL}>
-                  <code className="text-xs text-foreground">{key}</code>
+                  <code className="text-sm text-foreground">{key}</code>
                 </td>
                 <td className={CELL}>
                   <div className="flex flex-col">
-                    <code className="text-xs text-foreground">{map}</code>
-                    <span className="text-xs text-dim">{file}</span>
+                    <code className="text-sm text-foreground">{map}</code>
+                    <span className="text-sm text-dim">{file}</span>
                     {through && (
-                      <span className="text-xs text-dim">
+                      <span className="text-sm text-dim">
                         Reads <code>{through}</code>
                       </span>
                     )}
@@ -395,10 +395,10 @@ function IconMap() {
                   <Glyph aria-hidden="true" className="size-5 text-foreground" />
                 </td>
                 <td className={CELL}>
-                  <code className="text-xs text-foreground">{name}</code>
+                  <code className="text-sm text-foreground">{name}</code>
                 </td>
                 <td className={CELL}>
-                  <code className="text-xs text-muted-foreground">
+                  <code className="text-sm text-muted-foreground">
                     {componentName(name)}
                   </code>
                 </td>

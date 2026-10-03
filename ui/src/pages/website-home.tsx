@@ -196,7 +196,7 @@ export function HomePage({ productMenuOpen }: { productMenuOpen: boolean }) {
                       <td className={cn(cell, "font-medium text-foreground")}>
                         {row.agent}
                       </td>
-                      <td className={cn(cell, "font-mono text-xs")}>
+                      <td className={cn(cell, "font-mono text-sm")}>
                         {row.request}
                       </td>
                       <td className={cell}>

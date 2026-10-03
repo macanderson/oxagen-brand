@@ -88,11 +88,11 @@ const AGENTS: [string, ToneBadgeTone][] = [
 
 export const InATable: Story = {
   render: () => (
-    <table className="w-[480px] border-collapse text-sm">
+    <table className="w-[480px] border-collapse text-base">
       <tbody>
         {AGENTS.map(([agent, tone]) => (
           <tr key={agent} className="border-b border-border last:border-b-0">
-            <td className="px-3 py-2 font-mono text-xs text-foreground">
+            <td className="px-3 py-2 font-mono text-sm text-foreground">
               {agent}
             </td>
             <td className="px-3 py-2 text-right">

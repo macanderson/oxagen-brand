@@ -56,7 +56,7 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
         ref={ref}
         data-slot="table"
         className={cn(
-          "w-full caption-bottom border-collapse text-sm",
+          "w-full caption-bottom border-collapse text-base",
           !narrow && "md:min-w-[560px]",
           densityVars[density],
           className,
@@ -149,7 +149,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     <th
       ref={ref}
       className={cn(
-        "whitespace-nowrap bg-card px-[var(--table-pad-x)] py-[var(--table-pad-y)] text-left align-middle text-sm font-semibold uppercase tracking-[0.09em] text-dim",
+        "whitespace-nowrap bg-card px-[var(--table-pad-x)] py-[var(--table-pad-y)] text-left align-middle text-xs font-semibold uppercase tracking-[0.09em] text-dim",
         numeric && "text-right tabular-nums",
         className,
       )}
@@ -186,7 +186,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-3 text-xs text-muted-foreground", className)}
+    className={cn("mt-3 text-sm text-muted-foreground", className)}
     {...props}
   />
 ));
@@ -212,7 +212,7 @@ const TableGroupRow = React.forwardRef<HTMLTableRowElement, TableGroupRowProps>(
     >
       <td
         colSpan={colSpan}
-        className="whitespace-nowrap bg-hl px-[var(--table-pad-x)] py-1.5 text-sm font-semibold uppercase tracking-[0.1em] text-dim"
+        className="whitespace-nowrap bg-hl px-[var(--table-pad-x)] py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-dim"
       >
         {children}
       </td>
@@ -233,7 +233,7 @@ const TableEmpty = React.forwardRef<HTMLTableRowElement, TableEmptyProps>(
     <tr ref={ref} className={cn("hover:bg-transparent", className)} {...props}>
       <td
         colSpan={colSpan}
-        className="px-[var(--table-pad-x)] py-8 text-center text-sm text-muted-foreground"
+        className="px-[var(--table-pad-x)] py-8 text-center text-base text-muted-foreground"
       >
         {children ?? "No results."}
       </td>

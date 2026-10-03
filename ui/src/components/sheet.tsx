@@ -105,7 +105,7 @@ const SheetPanel = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-[18px] pt-4 pb-12 text-sm",
+      "flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-[18px] pt-4 pb-12 text-base",
       className,
     )}
     {...props}
@@ -146,7 +146,7 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm leading-normal text-muted-foreground", className)}
+    className={cn("text-base leading-normal text-muted-foreground", className)}
     {...props}
   />
 ));

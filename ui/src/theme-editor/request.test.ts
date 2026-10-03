@@ -19,7 +19,7 @@ import {
   uploadUrl,
   uploadsNeeded,
 } from "./request";
-import { FACE_ROLES, SHIPPED, clone, type FaceChoice, type FaceRole } from "./theme";
+import { FACE_ROLES, SCALE_STEPS, SHIPPED, clone, typeStep, type FaceChoice, type FaceRole } from "./theme";
 
 const NOW = new Date("2026-10-01T23:05:42Z");
 
@@ -56,11 +56,11 @@ describe("the request", () => {
     const gold = other(SHIPPED.color.gold, "#C99B2E", "#D9B13B");
     const panel = other(SHIPPED.color.ink.panel, "#1C1C1F", "#1A1A1D");
     const base = other(SHIPPED.radius.base, "0.5rem", "0.45rem");
-    const size = other(SHIPPED.type.scales.app.body.size, "0.9375rem", "0.875rem");
+    const size = other(SHIPPED.type.scales.app.base, "0.9375rem", "0.875rem");
     theme.color.gold = gold;
     theme.color.ink.panel = panel;
     theme.radius.base = base;
-    theme.type.scales.app.body.size = size;
+    theme.type.scales.app.base = size;
     const request = buildRequest(theme, shippedFaces(), "A deeper gold", NOW);
     expect(request).toEqual({
       $schema: "../request.schema.json",
@@ -68,7 +68,7 @@ describe("the request", () => {
       requested_at: "2026-10-01T23:05Z",
       color: { gold, ink: { panel } },
       radius: { base },
-      type: { scales: { app: { body: { size } } } },
+      type: { scales: { app: { base: size } } },
     });
     expect(requestChanges(request)).toBe(true);
   });
@@ -190,9 +190,8 @@ describe("names and links", () => {
     theme.color.gold = other(SHIPPED.color.gold, "#C99B2E", "#D9B13B");
     const small = newFileUrl(buildRequest(theme, shippedFaces(), "x", NOW), "f.json");
     expect(fitsInUrl(small)).toBe(true);
-    for (const step of ["h1", "h2", "h3", "h4", "body", "micro"] as const) {
-      theme.type.scales.marketing[step].leading += 0.01;
-      theme.type.scales.app[step].leading += 0.01;
+    for (const scale of ["marketing", "app"] as const) {
+      for (const step of SCALE_STEPS[scale]) typeStep(theme, scale, step).leading += 0.01;
     }
     theme.shadow.ui.ink = "0 1px 2px oklch(0.15 0 0 / 0.07), 0 0 0 1px oklch(0.2 0 0 / 0.2), 0 8px 24px -6px oklch(0.1 0 0 / 0.3)";
     const big = newFileUrl(buildRequest(theme, shippedFaces(), "x".repeat(120), NOW), "f.json");

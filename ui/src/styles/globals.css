@@ -69,19 +69,24 @@
  * The Tailwind layer from tokens/ at the repository root, which imports
  * house-tokens.css from beside it. The kit reads both files in place. It
  * carries what the palette alone cannot: the `--color-ox-*` theme entries, the
- * tracking scale, and the twelve type utilities — `text-m-h1` to `text-m-micro`
- * for a landing page or a post, `text-a-h1` to `text-a-micro` for an app or a
+ * tracking scale, and the thirteen type utilities — `text-m-h1` to `text-m-micro`
+ * for a landing page or a post, `text-a-h1` to `text-a-2xs` for an app or a
  * docs site. Each one sets size, line-height, face and weight together, so a heading
- * cannot land on the wrong face or an off-scale size by accident. It also points
- * Tailwind's `text-xs` and `text-sm` at the app body step, so no class sets text
- * below 14px.
+ * cannot land on the wrong face or an off-scale size by accident. Every step is
+ * its scale's base times a ratio, so a new base moves every step.
  *
  * It is imported FIRST on purpose. Every name this file also defines below —
  * the semantic `:root` and `.dark` blocks, the `--font-*` roles — wins
  * on cascade order, so vendoring the kit's layer adds the scale without moving
  * a single pixel of the skin that is already shipped.
+ *
+ * house-text-scale.css comes right after it. It points Tailwind's `text-xs` to
+ * `text-3xl` at the app steps in order: `text-base` is the app base (14px),
+ * smaller text takes `text-sm` (12px) or `text-xs` (10px), and larger text
+ * takes `text-lg` (16px) and up. A site opts into that file. The kit does.
  */
 @import "../../../tokens/house-tailwind.css";
+@import "../../../tokens/house-text-scale.css";
 @import "../../../tokens/house-fonts.css";
 
 /*
@@ -1066,7 +1071,10 @@
    * TYPE RULE (Mac, 2026-10-02): h1 to h3 read --font-heading, which is
    * Aeonik in the app and Space Grotesk on a marketing or customer site.
    * Every h4 to h6 is Aeonik. Monaspace Neon (--font-mono) sets code and
-   * identifiers, with texture healing on. No text is set below 14px.
+   * identifiers, with texture healing on. Every size reads a step, and every
+   * step is its scale's base times a ratio. The app base is 14px and never
+   * goes lower. Smaller steps are for labels, badges, timestamps, and table
+   * headers.
    */
   h4,
   h5,
@@ -1675,7 +1683,8 @@
 /*
  * Phone rules from the app's phone.css that belong to no page: a control that
  * sets `data-touch-target` gets a 44px target, a tab row snaps as it scrolls,
- * and a text field sets 16px type so iOS does not zoom on focus.
+ * and a text field sets --text-input-touch, 16px or the app base, whichever
+ * is larger, so iOS does not zoom on focus.
  */
 @media (width < 48rem) {
   [data-touch-target] {
@@ -1692,7 +1701,7 @@
   input,
   select,
   textarea {
-    font-size: 16px;
+    font-size: var(--text-input-touch);
   }
 }
 

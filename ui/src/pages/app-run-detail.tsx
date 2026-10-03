@@ -138,7 +138,7 @@ function Timeline() {
             key={`${event.time}-${event.text}`}
             className="grid grid-cols-[4.5rem_1.5rem_minmax(0,1fr)_auto] items-start gap-x-3 px-[18px] py-3"
           >
-            <span className="pt-0.5 font-mono text-xs text-muted-foreground tabular-nums">
+            <span className="pt-0.5 font-mono text-sm text-muted-foreground tabular-nums">
               {event.time}
             </span>
             <span
@@ -148,24 +148,24 @@ function Timeline() {
               <KindIcon />
             </span>
             <div className="min-w-0">
-              <p className="text-sm text-foreground">
+              <p className="text-base text-foreground">
                 <span className="text-muted-foreground">{event.kind}</span>{" "}
                 <span
                   className={cn(
                     "font-medium",
-                    event.kind === "Tool call" && "font-mono text-xs",
+                    event.kind === "Tool call" && "font-mono text-sm",
                   )}
                 >
                   {event.text}
                 </span>
               </p>
               {event.detail ? (
-                <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                <p className="mt-0.5 truncate text-sm text-muted-foreground">
                   {event.detail}
                 </p>
               ) : null}
               {event.decidedBy ? (
-                <p className="mt-0.5 text-xs text-muted-foreground">
+                <p className="mt-0.5 text-sm text-muted-foreground">
                   {event.decidedBy}
                 </p>
               ) : null}
@@ -174,7 +174,7 @@ function Timeline() {
               {event.answer ? (
                 <AnswerBadge answer={event.answer} />
               ) : event.cost ? (
-                <span className="font-mono text-xs tabular-nums text-foreground">
+                <span className="font-mono text-sm tabular-nums text-foreground">
                   {event.cost}
                 </span>
               ) : null}
@@ -186,7 +186,7 @@ function Timeline() {
   );
 }
 
-const mono = "font-mono text-sm";
+const mono = "font-mono text-base";
 
 /**
  * The app's Run detail page, for the run the Runs page lists second. The

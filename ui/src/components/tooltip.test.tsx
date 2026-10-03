@@ -70,7 +70,7 @@ describe("Tooltip", () => {
     const cls = getByText("Pause the run").className;
     for (const want of [
       "rounded-lg",
-      "text-xs",
+      "text-sm",
       "px-2",
       "py-1",
       "origin-(--transform-origin)",

@@ -55,7 +55,7 @@ describe("StateWrap", () => {
       "Nothing has reached Oxagen from this workspace.",
     );
     expect(body.tagName).toBe("P");
-    expect(body).toHaveClass("max-w-[52ch]", "text-sm");
+    expect(body).toHaveClass("max-w-[52ch]", "text-base");
     expect(
       within(state).getByRole("button", { name: "Register an agent" })
         .parentElement,

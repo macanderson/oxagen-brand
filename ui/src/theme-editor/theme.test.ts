@@ -19,7 +19,12 @@ import {
   remPx,
   themeVars,
   typeProblems,
-  TYPE_FLOOR_PX,
+  typeWarnings,
+  stepPx,
+  typeStep,
+  BASE_ADVICE_PX,
+  BASE_ADVICE_QUOTE,
+  SCALE_STEPS,
   clone,
   type FaceChoice,
   type FaceRole,
@@ -53,9 +58,22 @@ describe("themeVars for the shipped theme", () => {
     }
   });
 
-  it("sets every type step's size and leading", () => {
-    expect(vars["--ox-m-h1"]).toBe(SHIPPED.type.scales.marketing.h1.size);
-    expect(vars["--ox-a-body-leading"]).toBe(String(SHIPPED.type.scales.app.body.leading));
+  it("sets each scale's base, and every step as a ratio of it", () => {
+    expect(vars["--ox-m-base"]).toBe(SHIPPED.type.scales.marketing.base);
+    expect(vars["--ox-a-base"]).toBe(SHIPPED.type.scales.app.base);
+    expect(vars["--ox-m-h1"]).toBe("calc(var(--ox-m-base) * 4.5)");
+    expect(vars["--ox-a-body"]).toBe("var(--ox-a-base)");
+    expect(vars["--ox-a-micro"]).toBe(`calc(var(--ox-a-base) * ${typeStep(SHIPPED, "app", "micro").ratio})`);
+    expect(vars["--ox-a-2xs"]).toMatch(/^calc\(var\(--ox-a-base\) \* 0\.71/);
+    expect(vars["--ox-a-body-leading"]).toBe(String(typeStep(SHIPPED, "app", "body").leading));
+  });
+
+  it("moves no step but the base when the base changes", () => {
+    const theme = clone(SHIPPED);
+    theme.type.scales.app.base = pxRem(16);
+    const moved = themeVars(theme, shippedFaces);
+    const changed = Object.keys(moved).filter((name) => moved[name] !== vars[name]);
+    expect(changed).toEqual(["--ox-a-base"]);
   });
 });
 
@@ -131,25 +149,52 @@ describe("lengths", () => {
 describe("type sizes", () => {
   it("accepts the shipped scales", () => {
     expect(typeProblems(SHIPPED)).toEqual([]);
+    expect(typeWarnings(SHIPPED)).toEqual([]);
   });
 
-  it("refuses any step below 14px, the micro steps too", () => {
-    expect(TYPE_FLOOR_PX).toBe(14);
-    const theme = clone(SHIPPED);
-    theme.type.scales.app.micro.size = pxRem(12);
-    theme.type.scales.marketing.body.size = pxRem(13);
-    const found = typeProblems(theme);
-    expect(found.some((p) => p.startsWith("The app micro is 12px."))).toBe(true);
-    expect(found.some((p) => p.startsWith("The marketing body is 13px."))).toBe(true);
+  it("ships a 16px marketing base and a 14px app base, with the small steps below the app base", () => {
+    expect(remPx(SHIPPED.type.scales.marketing.base)).toBe(16);
+    expect(remPx(SHIPPED.type.scales.app.base)).toBe(14);
+    expect(stepPx(SHIPPED, "app", "micro")).toBeCloseTo(12, 3);
+    expect(stepPx(SHIPPED, "app", "2xs")).toBeCloseTo(10, 3);
+    expect(stepPx(SHIPPED, "marketing", "micro")).toBe(14);
+    expect(SCALE_STEPS.app).toContain("2xs");
+    expect(SCALE_STEPS.marketing).not.toContain("2xs");
   });
 
-  it("keeps the shipped steps at or above the floor", () => {
-    for (const scale of ["marketing", "app"] as const) {
-      for (const step of Object.values(SHIPPED.type.scales[scale])) {
-        expect(remPx(step.size)).toBeGreaterThanOrEqual(TYPE_FLOOR_PX);
-      }
+  it("reproduces the step sizes the scales had before the base", () => {
+    const want = { h1: 30, h2: 24, h3: 20, h4: 16, body: 14 } as const;
+    for (const [step, px] of Object.entries(want)) {
+      expect(stepPx(SHIPPED, "app", step as keyof typeof want)).toBeCloseTo(px, 3);
     }
-    expect(remPx(SHIPPED.type.scales.marketing.body.size)).toBe(16);
-    expect(remPx(SHIPPED.type.scales.app.body.size)).toBe(14);
+    expect(stepPx(SHIPPED, "marketing", "h1")).toBe(72);
+  });
+
+  it("moves every step with the base", () => {
+    const theme = clone(SHIPPED);
+    theme.type.scales.app.base = pxRem(16);
+    for (const step of SCALE_STEPS.app) {
+      expect(stepPx(theme, "app", step)).toBeCloseTo((stepPx(SHIPPED, "app", step) * 16) / 14, 3);
+    }
+  });
+
+  it("refuses no small step and no small base, and warns below a 14px base", () => {
+    const theme = clone(SHIPPED);
+    theme.type.scales.app.base = pxRem(12);
+    typeStep(theme, "app", "2xs").ratio = 0.6;
+    expect(typeProblems(theme)).toEqual([]);
+    const warnings = typeWarnings(theme);
+    expect(BASE_ADVICE_PX).toBe(14);
+    expect(warnings[0]).toBe(`The app base is 12px. Mac: "${BASE_ADVICE_QUOTE}."`);
+    expect(warnings.some((w) => w.startsWith("The app h3 is 17.14px."))).toBe(true);
+  });
+
+  it("refuses a body ratio other than 1, and a scale that does not descend", () => {
+    const theme = clone(SHIPPED);
+    typeStep(theme, "marketing", "body").ratio = 1.1;
+    typeStep(theme, "app", "2xs").ratio = 0.9;
+    const found = typeProblems(theme);
+    expect(found).toContain("The marketing body is the base, so its ratio is 1, not 1.1.");
+    expect(found.some((p) => p.startsWith("app scale does not descend"))).toBe(true);
   });
 });
