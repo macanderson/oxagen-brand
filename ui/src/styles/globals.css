@@ -52,10 +52,12 @@
  * button (`primary`, `default`, `gradient`) is the gold fill in both themes.
  * `secondary`, `outline`, and `ghost` are neutral.
  *
- * Gold as INK on white is only 2.1:1, so — exactly as the kit specifies — the
- * light theme renders every gold *mark* (accent copy, links, the focus ring)
- * in the gold's own deep shade #8A7223 (4.65:1), and dark mode uses the gold
- * itself (9.5:1). A gold FILL is unaffected: ink on gold is 9.5:1 in both.
+ * Gold as INK on white is only 2.1:1, so the light theme draws a gold *mark*
+ * (the focus ring, a small detail) in the gold's deep shade, gold-deep
+ * (#8A7223, 4.65:1 on white), and sets gold *words* (links, accent copy,
+ * --gold-text) in gold-text-ink, which clears 4.5:1 on white and on a lifted
+ * row. Dark mode uses the gold itself for both (9.5:1). A gold FILL is
+ * unaffected: ink on gold is 9.5:1 in both.
  *
  * Card and table HEADERS stay flat — surface plus hairline, never shaded bars.
  *
@@ -266,7 +268,7 @@
        and would fail WCAG 1.4.11 (3:1 for a focus indicator); #8A7223 is
        4.65:1. Dark mode keeps the metal itself at 9.5:1. */
     --ring: var(--ox-gold-deep);
-    --link: var(--ox-gold-deep); /* #8A7223 — gold as ink on paper (4.65:1); the metal itself is 2.1:1 */
+    --link: var(--ox-gold-text-ink); /* gold as words on paper and on a lifted row (4.5:1 or more); the metal itself is 2.1:1 */
     --link-hover: var(--_amber-700); /* a darker gold, on white */
 
     /* Status — semantic names (error == destructive). */

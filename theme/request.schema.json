@@ -37,7 +37,11 @@
           "$ref": "#/$defs/neighbour"
         },
         "gold_deep": {
-          "description": "The gold's darker neighbour, for gold set as text on paper. The build derives it like gold_bright. It must clear 4.5:1 on paper, and the gold's lightness must sit between the two neighbours.",
+          "description": "The gold's darker neighbour: the gold as a mark or a small detail on paper, the hive's gradient, and words in the art. The build derives it like gold_bright. It must clear 4.5:1 on paper, and the gold's lightness must sit between the two neighbours. Words in the light theme's UI take gold_text.",
+          "$ref": "#/$defs/neighbour"
+        },
+        "gold_text": {
+          "description": "The gold set as words on paper, as --ox-gold-text-ink: a link, an accent word, or --gold-text in the light theme. The build derives it like gold_deep, on the gold's hue. It must clear 4.5:1 on paper and on a lifted row there (paper-hl). The marks, the hive's gradient, and the art keep gold_deep.",
           "$ref": "#/$defs/neighbour"
         },
         "ink": {

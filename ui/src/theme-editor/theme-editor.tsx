@@ -373,6 +373,11 @@ function PrimarySection({ theme, update }: { theme: Theme; update: Update }) {
           Deep <span className="font-mono">{p.goldDeep}</span>
           <Ratio fg={p.goldDeep} bg={paper} min={4.5} label="on paper" />
         </span>
+        <span className="flex flex-wrap items-center gap-2">
+          <Swatch color={p.goldTextInk} />
+          Words <span className="font-mono">{p.goldTextInk}</span>
+          <Ratio fg={p.goldTextInk} bg={theme.color.paper.hl} min={4.5} label="on a lifted row" />
+        </span>
       </div>
       <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-border/70 bg-background/40 px-3 py-3 text-foreground">
         <OxagenWordmark className="h-6" />
@@ -420,6 +425,24 @@ function PrimarySection({ theme, update }: { theme: Theme; update: Update }) {
             step={0.005}
             shown={theme.color.gold_deep.chroma.toFixed(3)}
             onChange={(v) => update((t) => void (t.color.gold_deep.chroma = round(v, 3)))}
+          />
+          <RangeField
+            label="Words lightness"
+            value={theme.color.gold_text.lightness}
+            min={0.2}
+            max={0.75}
+            step={0.005}
+            shown={theme.color.gold_text.lightness.toFixed(3)}
+            onChange={(v) => update((t) => void (t.color.gold_text.lightness = round(v, 3)))}
+          />
+          <RangeField
+            label="Words chroma"
+            value={theme.color.gold_text.chroma}
+            min={0}
+            max={0.3}
+            step={0.005}
+            shown={theme.color.gold_text.chroma.toFixed(3)}
+            onChange={(v) => update((t) => void (t.color.gold_text.chroma = round(v, 3)))}
           />
         </div>
       </details>

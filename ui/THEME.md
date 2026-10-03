@@ -97,8 +97,8 @@ reads two scopes, and `--report` counts what it finds by scope and kind.
   `EXEMPT` names the one file a kind skips: the generated brand marks.
 - **Contrast.** Every semantic text role clears 4.5:1 on the page, a card, a
   popover, a lifted row, and a panel header, in both themes. No word is set in
-  dim, which is below 4.5:1. Gold words are checked on the page, a card, and a
-  popover until #93 decides the gold for words on a lifted row.
+  dim, which is below 4.5:1. Gold words read `--ox-gold-text-ink` in the light
+  theme, which clears 4.5:1 on a lifted row too.
 
 A size passes when it reads a token: `var(--ox-a-body)`,
 `text-(length:--ox-a-h2)`, a house utility (`text-m-*`, `text-a-*`), or

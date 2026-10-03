@@ -32,8 +32,10 @@ same letter size exactly and the same height to within a pixel.
 
 The gold is `#D4AF37`. Its two neighbours are derived from it in OKLCH, not
 picked: `#F1CE65` is the highlight the shimmer passes through, and `#8A7223`
-is gold as text on white, where the metal itself is 2.1:1. Both names carry
-the one value, so the two marks cannot drift apart.
+is gold as a mark on white, where the metal itself is 2.1:1. Gold words in
+the light theme take a third neighbour, `#866D1D`, which clears 4.5:1 on white
+and on a lifted row. Both names carry the one value, so the two marks cannot
+drift apart.
 
 Three faces set the type. Aeonik sets the default text on every surface. It
 also sets h1 to h3 in the web app and the internal tools, and every h4 to h6
@@ -363,8 +365,9 @@ the skill's tokens or logo drift from the build.
   second one, never the whole word.
 - **Gold is identity and at most one action per screen.** It is never a
   surface and it never encodes a state.
-- **Gold as text on white becomes `#8A7223`.** The mark keeps its metal.
-  Words do not.
+- **Gold as text on white becomes `#866D1D`** (`--ox-gold-text-ink`, read
+  through `--gold-text`). A small gold mark on white is `#8A7223`. The mark
+  keeps its metal. Words do not.
 - **Gold is never a paragraph or a whole heading.** It is a mark, a metric
   callout, an indicator pill, the focus ring, or the one action.
 - **Nothing sits to the left of stella.** The asterisk is the only mark.

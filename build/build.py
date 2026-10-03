@@ -205,11 +205,12 @@ def _semantic(theme: str) -> list[tuple[str, str]]:
         ("input", ox("border" if dark else "paper-border")),
         # The focus ring is the one gold mark a component may carry.
         ("ring", ox("gold" if dark else "gold-deep")),
-        # The house gold, as a mark and as text. On paper, gold text is the
-        # deep shade; the metal itself is below AA there and stays a mark.
+        # The house gold, as a mark and as text. On paper, gold text is
+        # gold-text-ink, which clears AA on paper and on a lifted row; the
+        # metal itself is below AA there and stays a mark.
         ("gold", ox("gold")),
         ("gold-foreground", ox("ink")),
-        ("gold-text", ox("gold" if dark else "gold-deep")),
+        ("gold-text", ox("gold" if dark else "gold-text-ink")),
         ("sidebar", ox("panel" if dark else "paper-panel")),
         ("sidebar-foreground", ox("text-body" if dark else "text-ink-body")),
         ("sidebar-primary", ox("text" if dark else "ink")),

@@ -942,12 +942,6 @@ TEXT_ROLES = (
 #: lifted row or wash, and a panel header.
 GROUNDS = ("--background", "--card", "--popover", "--muted-surface", "--hl", "--panel-head")
 
-#: Gold words sit on the page, a card, or a popover. The deep gold that sets
-#: them on paper (#8A7223) is 4.23:1 on a lifted row, so a link or an accent
-#: word on a lifted ground waits on a darker gold for words (#93).
-GOLD_ROLES = ("--link", "--link-hover", "--accent-text", "--gold-text")
-GOLD_GROUNDS = ("--background", "--card", "--popover")
-
 #: A text tone below 4.5:1, kept for marks that carry no meaning, such as a
 #: struck-through line. No class or rule sets words in it (#88).
 QUIET_TONES = ("dim",)
@@ -1040,7 +1034,7 @@ def contrast_problems(root: Path = ROOT) -> list[str]:
                 found.append(f"{KIT_CSS}: {role} resolves to {v.get(role)!r} in the {theme} theme, which the contrast "
                              "check cannot read as a colour")
                 continue
-            for ground in GOLD_GROUNDS if role in GOLD_ROLES else GROUNDS:
+            for ground in GROUNDS:
                 bg = to_hex(v.get(ground, ""))
                 if bg is None:
                     continue
