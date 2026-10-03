@@ -86,9 +86,9 @@ export function HexField({
         <linearGradient id="oxHexEmber" x1="0" y1="0" x2="1" y2="1">
           {/* The kit's sheen, deep to metal to highlight. Every stop is a
               token, so a gold that moves in the kit moves here. */}
-          <stop offset="0" stopColor="var(--ox-gold-deep)" />
-          <stop offset="0.5" stopColor="var(--ox-gold)" />
-          <stop offset="1" stopColor="var(--ox-gold-bright)" />
+          <stop offset="0" stopColor="var(--gold-deep)" />
+          <stop offset="0.5" stopColor="var(--gold)" />
+          <stop offset="1" stopColor="var(--gold-bright)" />
         </linearGradient>
       </defs>
       {FIELD.map((c, i) => {

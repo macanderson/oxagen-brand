@@ -303,6 +303,10 @@
        out horizontally for the tab underline and any rule that shows it. The
        MARKS never take this: a mark is one colour, and the gold on a mark
        belongs to a single glyph. */
+    /* The always-dark code frame (.ox-code-frame): the lifted row over the panel,
+       the same in both themes. The house greys carry no hue. */
+    --code-frame-top: var(--_stone-850); /* #27272A */
+    --code-frame-bottom: var(--_stone-900); /* #18181B */
     --brand-gradient: linear-gradient(
       92deg,
       var(--ox-gold-deep) 0%,
@@ -1178,7 +1182,7 @@
     /* Baseline vertical rhythm so even bare tables (header cells with only
        padding-bottom) keep a balanced header row. Tables that set their own
        py-* utility win (longhand > this shorthand's matching side). */
-    padding-block: 0.5rem;
+    padding-block: calc(var(--ox-space) * 2);
   }
 
   /*
@@ -1383,12 +1387,7 @@
     --code-fg: var(--_ink-white);
     color: var(--code-fg);
     background:
-      linear-gradient(
-        180deg in oklab,
-        oklch(0.26 0.005 78),
-        oklch(0.22 0.004 78)
-      )
-      padding-box,
+      linear-gradient(180deg in oklab, var(--code-frame-top), var(--code-frame-bottom)) padding-box,
       var(--brand-gradient) border-box;
     border: 1px solid transparent;
   }

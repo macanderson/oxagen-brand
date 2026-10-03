@@ -100,7 +100,7 @@ function StateIcon({ tone, glyph }: { tone: StateTone; glyph: StateGlyph }) {
 
 /** `code { font-family:var(--mono); font-size:.9em; background:var(--hl); padding:.12em .38em; border-radius:4px }` */
 export const stateCode =
-  "rounded bg-hl px-[0.38em] py-[0.12em] font-mono";
+  "rounded bg-hl px-1.25 py-0.5 font-mono";
 
 /**
  * The trace line under an error's actions: `.mono.dim` at 11.5px, 16px below
@@ -161,12 +161,12 @@ export function StateWrap({
       {...data}
       data-testid={testId}
       aria-labelledby={id}
-      className="grid place-items-center px-5 py-[60px] text-center"
+      className="grid place-items-center px-5 py-15 text-center"
     >
       <StateIcon tone={tone} glyph={glyph ?? DEFAULT_GLYPH[tone]} />
       <Heading
         id={id}
-        className="mb-[7px] text-(length:--ox-a-h3) font-semibold tracking-[-0.015em] text-foreground"
+        className="mb-1.75 text-(length:--ox-a-h3) font-semibold tracking-[-0.015em] text-foreground"
       >
         {title}
       </Heading>
@@ -176,7 +176,7 @@ export function StateWrap({
         </p>
       )}
       {actions === undefined || actions === null ? null : (
-        <div className="flex flex-wrap justify-center gap-[9px]">{actions}</div>
+        <div className="flex flex-wrap justify-center gap-2.25">{actions}</div>
       )}
       {after}
     </section>

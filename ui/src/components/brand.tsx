@@ -327,7 +327,7 @@ export function NodeChip({
     >
       <span
         className="size-[7px] shrink-0 rounded-full"
-        style={{ background: color, boxShadow: `0 0 6px ${color}` }}
+        style={{ background: color }}
       />
       {label && <span className="font-sans font-medium">{label}</span>}
       {id && <span className="tracking-wide text-muted-foreground">{id}</span>}
@@ -371,7 +371,6 @@ export function ConfidenceBar({
           style={{
             width: `${s * 100}%`,
             background: track,
-            boxShadow: `0 0 8px ${track}`,
           }}
         />
       </span>

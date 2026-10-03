@@ -86,7 +86,7 @@ const CommandMenuShortcut = ({
 }: React.HTMLAttributes<HTMLElement>) => (
   <kbd
     className={cn(
-      "rounded-sm border border-border bg-hl px-[5px] py-px font-mono text-xs leading-normal text-muted-foreground",
+      "rounded-sm border border-border bg-hl px-1.25 py-px font-mono text-xs leading-normal text-muted-foreground",
       className,
     )}
     {...props}

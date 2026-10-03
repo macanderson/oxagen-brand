@@ -9,12 +9,13 @@
  * cannot trip the `useContext` null crash that breaks `/_global-error` static
  * export when the default (provider-wrapped) error tree is used instead.
  *
- * Styling is fully self-contained (hardcoded light-mode hexes, no theme `class`
- * dependency) so the fallback renders correctly with zero app context. Flat: no
- * radius, no shadow — matching the product skin. Because no tokens are loaded
- * here these hexes cannot follow a reskin: when the palette changes, update
- * them by hand against the light-mode values in
- * packages/ui/src/styles/globals.css.
+ * Styling is self-contained (no theme `class` dependency), so the fallback
+ * renders with zero app context. Every colour reads its semantic token and
+ * every space reads the spacing unit, each with a light-mode fallback inside
+ * the var(), so the page still draws when the kit's stylesheet is missing.
+ * Flat: no radius, no shadow, matching the product skin. When the palette
+ * changes, update the fallbacks against the light-mode values in
+ * ui/src/styles/globals.css.
  */
 export function GlobalErrorPage({
   error,
@@ -32,9 +33,9 @@ export function GlobalErrorPage({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "1.5rem",
-          background: "#FFFFFF",
-          color: "#09090B",
+          padding: "calc(var(--ox-space, 0.25rem) * 6)",
+          background: "var(--background, #FFFFFF)",
+          color: "var(--foreground, #09090B)",
           fontFamily:
             '"Aeonik", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
         }}
@@ -44,9 +45,9 @@ export function GlobalErrorPage({
             width: "100%",
             maxWidth: "28rem",
             borderRadius: "0",
-            border: "1px solid #E4E4E7",
-            background: "#FFFFFF",
-            padding: "2.5rem",
+            border: "1px solid var(--border, #E4E4E7)",
+            background: "var(--card, #FFFFFF)",
+            padding: "calc(var(--ox-space, 0.25rem) * 10)",
             textAlign: "center",
           }}
         >
@@ -55,9 +56,9 @@ export function GlobalErrorPage({
           </h1>
           <p
             style={{
-              marginTop: "0.5rem",
+              marginTop: "calc(var(--ox-space, 0.25rem) * 2)",
               fontSize: "var(--ox-a-body, 0.875rem)",
-              color: "#27272A",
+              color: "var(--body, #27272A)",
             }}
           >
             An unexpected error occurred. You can try again, and if it keeps
@@ -66,9 +67,9 @@ export function GlobalErrorPage({
           {error?.digest ? (
             <p
               style={{
-                marginTop: "0.75rem",
+                marginTop: "calc(var(--ox-space, 0.25rem) * 3)",
                 fontSize: "var(--ox-a-micro, 0.75rem)",
-                color: "#71717A",
+                color: "var(--muted-foreground, #71717A)",
                 fontFamily:
                   '"Monaspace Neon", ui-monospace, SFMono-Regular, monospace',
               }}
@@ -80,13 +81,13 @@ export function GlobalErrorPage({
             type="button"
             onClick={() => reset()}
             style={{
-              marginTop: "2rem",
+              marginTop: "calc(var(--ox-space, 0.25rem) * 8)",
               height: "2.25rem",
-              padding: "0 1.25rem",
+              padding: "0 calc(var(--ox-space, 0.25rem) * 5)",
               borderRadius: "0",
               border: "none",
-              background: "#D4AF37",
-              color: "#09090B",
+              background: "var(--button-primary-bg, #D4AF37)",
+              color: "var(--button-primary-fg, #09090B)",
               fontSize: "var(--ox-a-body, 0.875rem)",
               fontWeight: 500,
               cursor: "pointer",

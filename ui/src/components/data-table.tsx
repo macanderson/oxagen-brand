@@ -26,7 +26,7 @@ type TableColumn = {
 };
 
 /** `th,td { padding:9px 12px; vertical-align:middle }` */
-export const cell = "px-3 py-[9px] align-middle";
+export const cell = "px-3 py-2.25 align-middle";
 /*
  * A numeric cell takes the mono face: the kit assigns code, logs, digests and
  * the numbers in tables to Monaspace Neon, so a column of figures reads as one
@@ -40,7 +40,7 @@ export const numericCell = `${cell} whitespace-nowrap text-right font-mono tabul
  * clears 4.5:1 on every ground, in place of the mockup's dim (#88).
  */
 export const headCell =
-  "whitespace-nowrap bg-card px-3 py-[9px] text-xs font-semibold uppercase tracking-[0.09em] text-muted-foreground";
+  "whitespace-nowrap bg-card px-3 py-2.25 text-xs font-semibold uppercase tracking-[0.09em] text-muted-foreground";
 
 export function DataTable({
   label,

@@ -4,7 +4,7 @@ import { cn } from "../lib/utils";
 
 const textareaVariants = cva(
   // `max-md:text-input-touch` prevents iOS Safari focus auto-zoom (fonts <16px).
-  "flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-base max-md:text-input-touch shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
+  "flex w-full rounded-md border border-input-border bg-transparent px-3 py-2 text-base max-md:text-input-touch shadow-sm placeholder:text-input-placeholder focus-visible:outline-none focus-visible:border-input-border-focus focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
   {
     // coss ui density scale. Match the `size` you use on neighbouring inputs
     // (e.g. `lg`) for visual consistency.

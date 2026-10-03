@@ -12,7 +12,7 @@ import { cn } from "../lib/utils";
  * pill. The kind badge (`.kb`) is the app's, because its hues are.
  */
 const badgeVariants = cva(
-  "inline-flex items-center gap-[5px] whitespace-nowrap rounded-md border font-semibold leading-normal tracking-[0.02em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&_svg]:size-3 [&_svg]:shrink-0",
+  "inline-flex items-center gap-1.25 whitespace-nowrap rounded-md border font-semibold leading-normal tracking-[0.02em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&_svg]:size-3 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -22,7 +22,7 @@ const badgeVariants = cva(
         // text-color override a caller applies. Never monospace.
         default: "border-current bg-transparent text-foreground",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border-transparent bg-badge-bg text-badge-fg hover:bg-badge-bg/80",
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         // Alias of default: the outlined ink chip is the default now.
@@ -45,18 +45,18 @@ const badgeVariants = cva(
         "proven-soft": "border-proven/42 bg-proven/11 text-proven-ink",
         "critical-soft": "border-critical/42 bg-critical/12 text-critical-ink",
         // `.b-q`: the quiet neutral, muted ink on the wash.
-        quiet: "border-border bg-hl text-muted-foreground",
+        quiet: "border-badge-border bg-hl text-muted-foreground",
         // `.chip`: a neutral tag, body ink at regular weight.
-        chip: "border-border bg-hl font-normal tracking-normal text-[var(--body)]",
+        chip: "border-badge-border bg-hl font-normal tracking-normal text-[var(--body)]",
         // `.lab`: a neutral pill for a label such as a priority or an area.
         label:
-          "rounded-full border-border bg-hl font-medium tracking-normal text-[var(--body)]",
+          "rounded-full border-badge-border bg-hl font-medium tracking-normal text-[var(--body)]",
       },
       // coss ui adds size variants for density control. `lg` matches the fixed
       // shadcn/ui badge size.
       size: {
         sm: "px-1.5 py-0 text-xs",
-        default: "px-[7px] py-0.5 text-sm",
+        default: "px-1.75 py-0.5 text-sm",
         lg: "px-2.5 py-0.5 text-sm",
       },
     },

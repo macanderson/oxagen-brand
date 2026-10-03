@@ -134,7 +134,7 @@ describe("Dialog recipe", () => {
     const { getByText } = render(<OpenDialog />);
     const header = getByText("Edit agent").parentElement;
     expect(header?.className).toContain("border-b");
-    expect(header?.className).toContain("pl-[18px]");
+    expect(header?.className).toContain("pl-4.5");
     expect(header?.className).toContain("pr-12");
     const body = getByText("Release captain").parentElement;
     expect(body?.className).toContain("max-h-[62vh]");
@@ -160,7 +160,7 @@ describe("Dialog recipe", () => {
             <DialogTitle>Release captain</DialogTitle>
           </DialogHeader>
           <Tabs defaultValue="general">
-            <TabsList variant="underline" className="px-[18px]">
+            <TabsList variant="underline" className="px-4.5">
               <TabsTab value="general">General</TabsTab>
               <TabsTab value="spend">Spend</TabsTab>
             </TabsList>

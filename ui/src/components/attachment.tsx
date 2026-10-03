@@ -285,14 +285,14 @@ export function AttachmentCard({
     <Attachment
       state={state}
       className={cn(
-        "w-58 max-w-full gap-2.5 rounded-[10px] bg-card p-1.5 has-data-[slot=attachment-media]:p-1.5",
+        "w-58 max-w-full gap-2.5 rounded-xl bg-card p-1.5 has-data-[slot=attachment-media]:p-1.5",
         className,
       )}
       {...props}
     >
       <AttachmentMedia
         variant={file.previewUrl ? "image" : "icon"}
-        className="w-10 rounded-[7px] bg-hl text-muted-foreground [&_svg:not([class*='size-'])]:size-[18px]"
+        className="w-10 rounded-lg bg-hl text-muted-foreground [&_svg:not([class*='size-'])]:size-[18px]"
       >
         {file.previewUrl ? (
           <img src={file.previewUrl} alt="" />

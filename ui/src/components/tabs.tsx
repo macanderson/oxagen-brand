@@ -32,7 +32,7 @@ const tabsListVariants = cva(
       variant: {
         // Fits its tabs and scrolls sideways when they overflow the row.
         default:
-          "w-max max-w-full gap-0.5 overflow-x-auto rounded-[10px] bg-hl p-[3px] [scrollbar-width:thin]",
+          "w-max max-w-full gap-0.5 overflow-x-auto rounded-xl bg-hl p-0.75 [scrollbar-width:thin]",
         underline: "justify-start gap-4 border-b border-border",
       },
     },
@@ -103,7 +103,7 @@ const TabsTab = React.forwardRef<
       "inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-base font-medium text-tab-fg transition-all hover:text-tab-fg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
       // Default list treatment: muted tabs on the track, and the active tab
       // raised on its own ground with a border and a small shadow.
-      "group-data-[variant=default]/list:min-h-[30px] group-data-[variant=default]/list:flex-none group-data-[variant=default]/list:rounded-[7px] group-data-[variant=default]/list:border group-data-[variant=default]/list:border-transparent group-data-[variant=default]/list:px-[11px] group-data-[variant=default]/list:py-1 group-data-[variant=default]/list:text-base",
+      "group-data-[variant=default]/list:min-h-[30px] group-data-[variant=default]/list:flex-none group-data-[variant=default]/list:rounded-lg group-data-[variant=default]/list:border group-data-[variant=default]/list:border-transparent group-data-[variant=default]/list:px-2.75 group-data-[variant=default]/list:py-1 group-data-[variant=default]/list:text-base",
       "group-data-[variant=default]/list:data-[active]:border-border group-data-[variant=default]/list:data-[active]:bg-[var(--tab-on,var(--card))] group-data-[variant=default]/list:data-[active]:text-tab-fg-active group-data-[variant=default]/list:data-[active]:shadow-sm",
       // Underline list treatment — constant-width border at rest, color flips on state.
       "group-data-[variant=underline]/list:-mb-px group-data-[variant=underline]/list:border-b-[length:var(--tab-border-width)] group-data-[variant=underline]/list:border-tab-border group-data-[variant=underline]/list:hover:border-tab-border-hover group-data-[variant=underline]/list:px-1 group-data-[variant=underline]/list:py-2 group-data-[variant=underline]/list:data-[active]:border-tab-border-active group-data-[variant=underline]/list:data-[active]:text-tab-fg-active",

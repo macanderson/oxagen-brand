@@ -22,7 +22,7 @@ const toggleGroupClass =
 
 /** One button in the track. Pressed reads as the highlight ground and a heavier weight. */
 const toggleGroupItemClass = cn(
-  "inline-flex flex-[1_1_auto] items-center justify-center gap-1.5 whitespace-nowrap bg-card px-[11px] py-[5px] text-base font-medium text-[var(--body)]",
+  "inline-flex flex-[1_1_auto] items-center justify-center gap-1.5 whitespace-nowrap bg-card px-2.75 py-1.25 text-base font-medium text-[var(--body)]",
   "transition-colors duration-[120ms]",
   "hover:bg-[color-mix(in_srgb,var(--hl)_60%,var(--card))] hover:text-foreground",
   "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",

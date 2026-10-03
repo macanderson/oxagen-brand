@@ -176,7 +176,7 @@ function Composer({
           }
         }}
         className={cn(
-          "block min-h-[60px] max-h-[180px] w-full resize-none field-sizing-content rounded-[10px] border border-border bg-background px-[11px] py-[9px] text-base leading-[1.5] text-foreground transition-colors placeholder:text-muted-foreground focus-visible:border-gold focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 max-md:text-input-touch",
+          "block min-h-[60px] max-h-[180px] w-full resize-none field-sizing-content rounded-xl border border-input-border bg-input-bg px-2.75 py-2.25 text-base leading-[1.5] text-input-fg transition-colors placeholder:text-input-placeholder focus-visible:border-gold focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 max-md:text-input-touch",
           "group-data-[dragging]/composer:border-dashed group-data-[dragging]/composer:border-gold group-data-[dragging]/composer:bg-hl",
         )}
       />
@@ -244,7 +244,7 @@ function ComposerSentTurn({
     <div
       data-slot="composer-sent-turn"
       className={cn(
-        "ml-auto flex w-fit max-w-[88%] flex-col gap-1.5 rounded-[12px_12px_4px_12px] border border-border bg-hl px-3 py-2 text-base leading-[1.5] text-foreground [overflow-wrap:anywhere]",
+        "ml-auto flex w-fit max-w-[88%] flex-col gap-1.5 rounded-2xl rounded-br-sm border border-border bg-hl px-3 py-2 text-base leading-[1.5] text-foreground [overflow-wrap:anywhere]",
         className,
       )}
       {...props}
