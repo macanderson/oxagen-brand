@@ -53,6 +53,21 @@
   --a-micro: calc(var(--a-base) * 0.857143); --a-micro-leading: 1.4;
   --a-2xs: calc(var(--a-base) * 0.714286); --a-2xs-leading: 1.4;
 
+  /* The corner scale and the spacing unit copy tokens/house-tokens.css, and the kit's check holds them
+     to the theme. A corner reads --radius-<step> or --r (the site's 12px card corner), and a space
+     reads calc(var(--space) * n). */
+  --radius-base: 0.45rem;
+  --radius-xs: calc(var(--radius-base) * 0.4);
+  --radius-sm: calc(var(--radius-base) * 0.6);
+  --radius-md: calc(var(--radius-base) * 0.8);
+  --radius-lg: calc(var(--radius-base) * 1);
+  --radius-xl: calc(var(--radius-base) * 1.4);
+  --radius-2xl: calc(var(--radius-base) * 1.8);
+  --radius-3xl: calc(var(--radius-base) * 2.2);
+  --radius-4xl: calc(var(--radius-base) * 2.6);
+  --radius-card: var(--radius-2xl);
+  --space: 0.25rem;
+
   --r: 12px;
   --wrap: 1180px;
   --pad: 24px;

@@ -576,9 +576,13 @@ def spacing_literal(value: str) -> bool:
 def style_groups(decl: Decl) -> list[str]:
     """The groups a declaration's value answers to in the style scope.
 
-    A custom property is the page's own token layer, so its colour and its
-    spacing pass. Its corner, shadow, and size follow `group_of`.
+    A custom property is the file's own token layer, such as the SDLC site's
+    copy of the theme's steps, so it answers to none. `sdlc_step_problems`
+    holds that copy to the theme, and `font_size_hits` still reads a size
+    alias.
     """
+    if decl.prop.startswith("--"):
+        return []
     groups = []
     base = group_of(decl)
     if base in ("border-radius", "box-shadow", "font-size"):
@@ -789,7 +793,7 @@ def report(root: Path = ROOT) -> dict[str, dict[str, int]]:
 
 
 def sdlc_step_problems(root: Path = ROOT) -> list[str]:
-    """Each base, step, and leading `sdlc/public/sdlc.css` leaves out or names with a value other than the theme's.
+    """Each type step, corner step, and spacing unit `sdlc/public/sdlc.css` leaves out or names with a value other than the theme's.
 
     Each step reads its scale's base, `calc(var(--a-base) * 0.857143)`, so
     the page needs both bases and every step for its sizes to resolve.
@@ -797,7 +801,7 @@ def sdlc_step_problems(root: Path = ROOT) -> list[str]:
     path = root / SDLC_CSS
     if not path.is_file():
         return []
-    want = {f"--{name}": value for name, value in PC.type_sizes().items()}
+    want = {f"--{name}": value for name, value in {**PC.type_sizes(), **PC._shape_fixed()}.items()}
     found, seen = [], set()
     for d in declarations(path.read_text()):
         if d.prop not in want:
