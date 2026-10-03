@@ -4,6 +4,7 @@
  * the page's tokens move; then reach the Update all sites steps.
  */
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { BRAND_GOLD } from "../components/brand-marks.generated";
 import { STORAGE_KEY } from "./draft";
@@ -19,6 +20,7 @@ beforeEach(() => {
 afterEach(() => {
   cleanup();
   document.documentElement.removeAttribute("style");
+  document.documentElement.classList.remove("dark", "light");
 });
 
 describe("ThemeEditor", () => {
@@ -45,6 +47,25 @@ describe("ThemeEditor", () => {
     render(<ThemeEditor mode="dark" defaultOpen />);
     const canvas = screen.getByRole("textbox", { name: "Canvas" });
     expect(canvas).toHaveValue(SHIPPED.color.ink.ink);
+  });
+
+  it("asks its caller to switch the theme when Dark or Light is selected", async () => {
+    const asked: string[] = [];
+    render(<ThemeEditor mode="light" defaultOpen onModeChange={(mode) => asked.push(mode)} />);
+    expect(screen.getByRole("button", { name: "Light" })).toHaveAttribute("aria-pressed", "true");
+    await userEvent.click(screen.getByRole("button", { name: "Dark" }));
+    expect(asked).toEqual(["dark"]);
+  });
+
+  it("switches <html> and the colour fields itself when no caller owns the theme", async () => {
+    render(<ThemeEditor mode="light" defaultOpen />);
+    expect(screen.getByRole("textbox", { name: "Canvas" })).toHaveValue(SHIPPED.color.paper.paper);
+    await userEvent.click(screen.getByRole("button", { name: "Dark" }));
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+    expect(screen.getByRole("textbox", { name: "Canvas" })).toHaveValue(SHIPPED.color.ink.ink);
+    await userEvent.click(screen.getByRole("button", { name: "Light" }));
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
+    expect(screen.getByRole("textbox", { name: "Canvas" })).toHaveValue(SHIPPED.color.paper.paper);
   });
 
   it("shows the wordmark face read-only, and every other role with its picker", () => {

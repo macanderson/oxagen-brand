@@ -21,7 +21,8 @@ It reads two scopes:
   reads each `<style>` block and `style` attribute. In a script it reads
   Tailwind's arbitrary sizes (`text-[13px]`), a `fontSize` value, and CSS
   written in a string. Tests are not read, because they name classes to
-  assert them.
+  assert them. Neither is `ui/src/pages/app/`, a copy of the product app's
+  pages that keeps the app's own sizes.
 
 It is a regex pass with no CSS parser, on the model of the literal guard in
 oxageninc/product (`tools/scripts/lib/brand-literals.mjs`).
@@ -75,8 +76,12 @@ FONT_SCOPE: dict[str, tuple[str, ...]] = {
     "script": ("ui/src/**/*.ts", "ui/src/**/*.tsx", "pwa/*.js", "sdlc/public/*.js"),
 }
 
-#: A file the guard does not read for font sizes: a test names a class to assert it.
-SKIP = re.compile(r"\.test\.[jt]sx?$")
+#: A file the guard does not read for font sizes. A test names a class to
+#: assert it. `ui/src/pages/app/` is a copy of the product app's Work and Run
+#: pages, kept so the theme editor previews the app as it ships. Its sizes are
+#: the app's own, which the kit does not set, so holding the copy to the kit's
+#: rule would show a page the app never draws.
+SKIP = re.compile(r"\.test\.[jt]sx?$|^ui/src/pages/app/")
 
 #: The SDLC page's own names for the type steps, which must equal the theme's.
 SDLC_CSS = "sdlc/public/sdlc.css"

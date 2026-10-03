@@ -1,0 +1,9 @@
+/*
+ * Storybook's one stylesheet: the kit's globals.css, then the product app's
+ * own layer for the Pages/App stories. Both go through one Tailwind pass, so
+ * the colour names app.css adds compile beside the kit's utilities. The app
+ * layer's values apply only inside `.app-snapshot`.
+ */
+@import "../src/styles/globals.css";
+@import "../src/pages/app/app.css";
+@import "../src/pages/app/transcript-skins.css";
