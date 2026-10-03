@@ -1,0 +1,27 @@
+id: agent-runners-description
+brand: oxagen
+kind: pitch
+order: 20
+title: Oxagen Agent Runners description
+long: Set up a cloud runtime in your workspace. Each operator then starts runs on their own agents, from one command or the web app. Each run gets its own sandbox on a host Oxagen operates. Oxagen checks each launch against your rules and the agent's budget, and the operator's model credential stays in Oxagen, outside the sandbox.
+audience:
+  - operator
+  - platform
+  - engineering
+clause: operations
+surfaces:
+  - add-on-page
+  - pricing-page
+  - docs-intro
+  - app-runtimes
+status: candidate
+release: held
+gate:
+  - agent-runners-release
+evidence: 'Product owner: R6 passes. On the Build plan, an operator adds a credential, launches a run from the web, attaches to its terminal, and pauses and resumes it. The invoice shows the sandbox-hours, and they match the host records. Engineering: an inspection of a sandbox finds no model credential (M11).'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+  - '03'
+  - '04'
+notes: 'The short description for Oxagen Agent Runners, a candidate for Mac, written 2026-10-03 in lane B1. The launch check is scoped to the launch, as the spec runs it (rule, budget, credential on file). The credential sentence covers model credentials only, because a workspace environment and its secrets are injected into the sandbox at launch. A template that hands the harness root still runs, so the description makes no claim about containment.'

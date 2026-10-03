@@ -1,0 +1,23 @@
+id: agent-runners-line
+brand: oxagen
+kind: headline
+order: 20
+title: Start your agents in the cloud. Each run gets its own sandbox.
+audience:
+  - operator
+  - engineering
+clause: operations
+surfaces:
+  - add-on-page
+  - pricing-page
+  - docs-intro
+status: candidate
+release: held
+gate:
+  - agent-runners-release
+evidence: 'Product owner: R6 passes. On the Build plan, an operator adds a credential, launches a run from the web, attaches to its terminal, and pauses and resumes it. The invoice shows the sandbox-hours, and they match the host records.'
+owner: product owner
+review_by: '2026-10-15'
+findings:
+  - '07'
+notes: 'The product line for Oxagen Agent Runners, a candidate for Mac, written 2026-10-03 in lane B1. The operator is the actor. It claims sandboxes on hosts Oxagen operates and nothing more, because customer-operated hosts arrive in Phase 4. Held with rule-agent-runners-name until R6 passes.'
