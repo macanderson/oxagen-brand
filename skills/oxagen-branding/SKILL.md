@@ -48,7 +48,7 @@ A new line or a changed line starts as an entry in `messages/`, never in a produ
 
 ## Colours, type, and marks
 
-Every value comes from `tokens/`: `house-tokens.css` and `house-tokens.json` for colour, `house-tailwind.css` for the type scales and utilities, `house-fonts.css` and `fonts/` for the faces. A product imports those files. It never retypes a value. Logos are in `logo/svg/`, icons and favicons in `icons/`.
+Every value comes from `tokens/`: `house-tokens.css` and `house-tokens.json` for colour, `house-tailwind.css` for the type scales and utilities, `house-text-scale.css` for Tailwind's named sizes on the app steps when a product opts in, `house-fonts.css` and `fonts/` for the faces. A product imports those files. It never retypes a value. Logos are in `logo/svg/`, icons and favicons in `icons/`.
 
 ## Where this skill lives
 

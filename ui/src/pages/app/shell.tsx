@@ -184,7 +184,7 @@ function Sidebar({ current }: { current: NavKey }) {
         >
           <StellaIcon className="size-7 flex-none" />
           <span className="min-w-0 flex-1">
-            <span className="block text-sm font-semibold">
+            <span className="block text-base font-semibold">
               Ask{" "}
               <span className="ox-wordmark">
                 stella
@@ -221,7 +221,7 @@ function Topbar({ crumbs }: { crumbs: readonly Crumb[] }) {
         <ListIcon aria-hidden="true" className="size-4" />
       </button>
       <nav aria-label="Breadcrumb" className="min-w-0 flex-1">
-        <ol className="flex min-w-0 items-center gap-1.5 text-sm">
+        <ol className="flex min-w-0 items-center gap-1.5 text-base">
           {crumbs.map((crumb, i) => (
             <Fragment key={crumb.text}>
               {i > 0 ? (

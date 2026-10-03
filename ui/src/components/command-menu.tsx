@@ -65,7 +65,7 @@ const CommandMenuTrigger = React.forwardRef<
     ref={ref}
     aria-keyshortcuts="Meta+K Control+K"
     className={cn(
-      "inline-flex h-9 min-w-[190px] cursor-pointer items-center gap-2 rounded-4xl border border-border bg-card px-3 text-sm text-muted-foreground transition-colors outline-none hover:border-rule hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+      "inline-flex h-9 min-w-[190px] cursor-pointer items-center gap-2 rounded-4xl border border-border bg-card px-3 text-base text-muted-foreground transition-colors outline-none hover:border-rule hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
       className,
     )}
     {...props}
@@ -86,7 +86,7 @@ const CommandMenuShortcut = ({
 }: React.HTMLAttributes<HTMLElement>) => (
   <kbd
     className={cn(
-      "rounded-sm border border-border bg-hl px-[5px] py-px font-mono text-sm leading-normal text-muted-foreground",
+      "rounded-sm border border-border bg-hl px-[5px] py-px font-mono text-xs leading-normal text-muted-foreground",
       className,
     )}
     {...props}
@@ -145,7 +145,7 @@ const CommandMenuPopup = React.forwardRef<HTMLDivElement, CommandMenuPopupProps>
           {...props}
         >
           <div className="flex items-center justify-between gap-3 py-1 pr-1 pl-3 md:hidden">
-            <span className="text-sm font-semibold">{title}</span>
+            <span className="text-base font-semibold">{title}</span>
             <DialogPrimitive.Close className="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors outline-none hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-input-ring">
               <XIcon className="size-4" aria-hidden />
               <span className="sr-only">Close</span>
@@ -171,7 +171,7 @@ const CommandMenuInput = React.forwardRef<
   <AutocompletePrimitive.Input
     ref={ref}
     className={cn(
-      "mb-2 block w-full min-w-0 shrink-0 rounded-2xl border border-border bg-input-bg px-3 py-2.5 text-sm text-input-fg outline-none placeholder:text-input-placeholder focus-visible:border-input-border-focus max-md:text-base",
+      "mb-2 block w-full min-w-0 shrink-0 rounded-2xl border border-border bg-input-bg px-3 py-2.5 text-base text-input-fg outline-none placeholder:text-input-placeholder focus-visible:border-input-border-focus max-md:text-input-touch",
       className,
     )}
     {...props}
@@ -245,7 +245,7 @@ const CommandMenuItem = React.forwardRef<HTMLDivElement, CommandMenuItemProps>(
         </span>
       ) : null}
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-semibold">{children}</span>
+        <span className="block truncate text-base font-semibold">{children}</span>
         {detail ? (
           <span className="block truncate font-mono text-sm text-muted-foreground">
             {detail}
@@ -269,7 +269,7 @@ const CommandMenuEmpty = React.forwardRef<
   <AutocompletePrimitive.Empty
     ref={ref}
     className={cn(
-      "text-sm text-muted-foreground [&:not(:empty)]:px-2.5 [&:not(:empty)]:py-3.5",
+      "text-base text-muted-foreground [&:not(:empty)]:px-2.5 [&:not(:empty)]:py-3.5",
       className,
     )}
     {...props}

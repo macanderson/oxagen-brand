@@ -52,16 +52,16 @@ function Repositories({ items }: { items: readonly Repository[] }) {
         filters={FILTERS}
         allLabel={(column) => `All ${column.toLowerCase()}s`}
       />
-      <ul className="divide-y divide-border text-sm">
+      <ul className="divide-y divide-border text-base">
         {list.shown.map((repository) => (
           <li
             key={repository.name}
             className="flex items-center justify-between px-3 py-2"
           >
-            <span className="font-mono text-xs text-foreground">
+            <span className="font-mono text-sm text-foreground">
               {repository.name}
             </span>
-            <span className="text-xs text-muted-foreground tabular-nums">
+            <span className="text-sm text-muted-foreground tabular-nums">
               {repository.runs} runs
             </span>
           </li>

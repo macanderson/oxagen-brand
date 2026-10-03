@@ -22,7 +22,7 @@ import { Tooltip, TooltipTrigger, TooltipPopup } from "./tooltip";
  * every size.
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-4xl text-sm font-medium transition-[color,background-color,border-color,transform] duration-[var(--motion-micro)] ease-[var(--ease-hover)] hover:scale-[var(--button-hover-scale)] active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0 disabled:pointer-events-none disabled:hover:scale-100 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-4xl text-base font-medium transition-[color,background-color,border-color,transform] duration-[var(--motion-micro)] ease-[var(--ease-hover)] hover:scale-[var(--button-hover-scale)] active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0 disabled:pointer-events-none disabled:hover:scale-100 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -51,8 +51,8 @@ const buttonVariants = cva(
       },
       // The maia scale: default is 36px, and each step moves 4px.
       size: {
-        xs: "h-7 px-2.5 text-xs",
-        sm: "h-8 px-3 text-xs",
+        xs: "h-7 px-2.5 text-base",
+        sm: "h-8 px-3 text-base",
         default: "h-9 px-4",
         lg: "h-10 px-5",
         xl: "h-11 px-6 text-(length:--ox-a-h4)",

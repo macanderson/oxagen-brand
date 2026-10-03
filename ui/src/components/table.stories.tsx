@@ -96,7 +96,7 @@ export const Plain: Story = {
       <TableBody>
         {RUNS.map((run) => (
           <TableRow key={run.id} interactive>
-            <TableCell className="font-mono text-xs text-muted-foreground">
+            <TableCell className="font-mono text-sm text-muted-foreground">
               {run.id}
             </TableCell>
             <TableCell className="font-medium text-foreground">
@@ -148,7 +148,7 @@ function RunWithDay({ run, opensDay }: { run: Run; opensDay: boolean }) {
     <>
       {opensDay ? <TableGroupRow colSpan={3}>{run.day}</TableGroupRow> : null}
       <TableRow interactive>
-        <TableCell className="font-mono text-xs text-muted-foreground">
+        <TableCell className="font-mono text-sm text-muted-foreground">
           {run.id}
         </TableCell>
         <TableCell>{run.agent}</TableCell>
@@ -265,7 +265,7 @@ export const PhoneWidth: Story = {
         <TableBody>
           {RUNS.map((run) => (
             <TableRow key={run.id} interactive>
-              <TableCell className="font-mono text-xs text-muted-foreground">
+              <TableCell className="font-mono text-sm text-muted-foreground">
                 {run.id}
               </TableCell>
               <TableCell>{run.agent}</TableCell>

@@ -63,7 +63,7 @@ describe("Table", () => {
     renderTable();
     const table = screen.getByRole("table");
     expect(table).toHaveAttribute("data-slot", "table");
-    expect(table.className).toContain("text-sm");
+    expect(table.className).toContain("text-base");
     expect(table.className).toContain("border-collapse");
   });
 
@@ -101,7 +101,7 @@ describe("Table", () => {
     expect(th.tagName).toBe("TH");
     for (const token of [
       "uppercase",
-      "text-sm",
+      "text-xs",
       "tracking-[0.09em]",
       "font-semibold",
       "text-dim",

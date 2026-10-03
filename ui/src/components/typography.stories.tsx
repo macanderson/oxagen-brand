@@ -20,16 +20,17 @@ interface Sample {
 /*
  * The samples name no face and no size. Each one takes both from the kit's
  * base rules for its element and from its type utility, and the caption under
- * it reads them back from the browser. No sample is below 14px, the floor for
- * every surface.
+ * it reads them back from the browser. Every size is a step of its scale, and
+ * every step is the scale's base times a ratio. The app's micro and 2xs steps
+ * sit below the 14px base, for labels, badges, timestamps, and table headers.
  */
 const APP_SCALE: Sample[] = [
   { tag: "h1", className: "text-a-h1", text: "Refunds workspace" },
   { tag: "h2", className: "text-a-h2", text: "Policy review" },
   { tag: "h3", className: "text-a-h3", text: "Spend this week" },
   { tag: "h4", className: "text-a-h4", text: "Approvals waiting" },
-  { tag: "h5", className: "text-sm", text: "Deploy step" },
-  { tag: "h6", className: "text-xs", text: "Run details" },
+  { tag: "h5", className: "text-base", text: "Deploy step" },
+  { tag: "h6", className: "text-sm", text: "Run details" },
   {
     tag: "p",
     className: "text-a-body",
@@ -37,10 +38,11 @@ const APP_SCALE: Sample[] = [
   },
   {
     tag: "small",
-    className: "text-xs text-muted-foreground",
+    className: "text-sm text-muted-foreground",
     text: "Updated 4 minutes ago by the policy agent",
   },
   { tag: "code", className: "text-a-micro", text: "wo_01K6T9QX workspace.owner" },
+  { tag: "small", className: "text-a-2xs uppercase text-muted-foreground", text: "Table header" },
 ];
 
 const MARKETING_SCALE: Sample[] = [
@@ -165,7 +167,7 @@ function Specimen({ sample }: { sample: Sample }) {
           sample.text,
         )}
       </div>
-      <dl className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-xs">
+      <dl className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-sm">
         <Fact term="Element">{sample.tag}</Fact>
         <Fact term="Class">{sample.className}</Fact>
         {metrics && (
@@ -188,7 +190,7 @@ function Scale({ samples, label }: { samples: Sample[]; label?: string }) {
   return (
     <div className="flex max-w-[880px] flex-col">
       {label ? (
-        <p className="text-sm font-semibold text-muted-foreground">{label}</p>
+        <p className="text-base font-semibold text-muted-foreground">{label}</p>
       ) : null}
       {samples.map((sample) => (
         <Specimen

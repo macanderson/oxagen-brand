@@ -23,7 +23,7 @@
  * mockup's sheet buttons have.
  */
 const buttonBase =
-  "inline-flex min-h-9 max-md:min-h-11 items-center justify-center gap-1.5 rounded-4xl px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 " +
+  "inline-flex min-h-9 max-md:min-h-11 items-center justify-center gap-1.5 rounded-4xl px-3 py-1.5 text-base font-medium whitespace-nowrap transition-colors [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 " +
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring " +
   "disabled:cursor-not-allowed disabled:opacity-45 aria-disabled:cursor-not-allowed";
 
@@ -59,16 +59,16 @@ export const linkText =
  * The label and hint take the maia field's type: a 14px medium label in the
  * foreground, 8px above its control, and a 14px muted hint.
  */
-export const fieldLabel = "mb-2 block text-sm font-medium text-foreground";
-export const fieldHint = "mt-2 text-sm leading-normal text-muted-foreground";
+export const fieldLabel = "mb-2 block text-base font-medium text-foreground";
+export const fieldHint = "mt-2 text-base leading-normal text-muted-foreground";
 export const buttonSmall =
-  "inline-flex min-h-8 flex-none items-center justify-center gap-1 rounded-4xl border border-button-default-border bg-button-default-bg px-3 text-sm font-medium whitespace-nowrap text-button-default-fg hover:bg-button-default-hover-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-button-disabled-bg disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+  "inline-flex min-h-8 flex-none items-center justify-center gap-1 rounded-4xl border border-button-default-border bg-button-default-bg px-3 text-base font-medium whitespace-nowrap text-button-default-fg hover:bg-button-default-hover-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-button-disabled-bg disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 /** The one skin every field wears; `inputBase` and `textareaBase` add the shape. */
 const fieldSkin =
   // 16px below md as well as by phone.css, so the class list alone says an
   // input never makes iOS zoom the page on focus.
-  "block w-full min-w-0 border border-input-border bg-input-bg px-3 text-sm max-md:text-base text-input-fg placeholder:text-input-placeholder " +
+  "block w-full min-w-0 border border-input-border bg-input-bg px-3 text-base max-md:text-input-touch text-input-fg placeholder:text-input-placeholder " +
   "hover:border-input-border-hover focus-visible:border-input-border-focus focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-input-ring " +
   "disabled:bg-input-disabled-bg disabled:text-input-disabled-fg aria-invalid:border-input-invalid-border aria-invalid:outline-input-invalid-ring";
 
@@ -139,7 +139,7 @@ export const menuPopup = `${menuSurface} p-1`;
  */
 export const menuItemActive = "bg-foreground/10";
 export const menuItem =
-  "flex min-h-9 w-full cursor-pointer select-none items-center gap-2.5 rounded-2xl px-3 py-2 text-left text-sm text-menu-item-fg outline-none max-md:min-h-11 " +
+  "flex min-h-9 w-full cursor-pointer select-none items-center gap-2.5 rounded-2xl px-3 py-2 text-left text-base text-menu-item-fg outline-none max-md:min-h-11 " +
   "data-[highlighted]:bg-foreground/10 data-[disabled]:pointer-events-none data-[disabled]:text-menu-item-disabled-fg " +
   "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
@@ -150,10 +150,9 @@ export const menuSeparator = "-mx-1 my-1 h-px bg-menu-separator";
  * `.menu-h { font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
  * font-weight:600; padding:8px 12px 4px }`: a group's name over its rows. It
  * reads in the muted ink, since the dim ink fails contrast on the ground.
- * The kit sets the size at 14px through the token, since Mac's 2026-10-02 floor.
  */
 export const menuLabel =
-  "px-3 pt-2 pb-1 text-sm font-semibold uppercase tracking-[0.12em] text-menu-group-label-fg";
+  "px-3 pt-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-menu-group-label-fg";
 
 /**
  * A popover or hint that floats over the page, on the same surface as a menu.
@@ -174,7 +173,7 @@ export const panel =
 /**
  * `.eyebrow { font-size:12px; letter-spacing:.14em; text-transform:uppercase;
  * color:var(--accent-text); font-weight:600 }` — the scope line over an h1,
- * in gold-as-ink. The kit sets the size at 14px through the token, since Mac's 2026-10-02 floor.
+ * in gold-as-ink.
  */
 export const eyebrow =
   "text-sm font-semibold uppercase tracking-[0.14em] text-accent-text";
@@ -182,7 +181,7 @@ export const eyebrow =
 /**
  * `.eyebrow.q { color:var(--muted) }`: the same caps line inside a panel,
  * where it names a section rather than the page's scope, so it is muted
- * rather than gold. The kit sets the size at 14px through the token, since Mac's 2026-10-02 floor.
+ * rather than gold.
  */
 export const eyebrowQuiet =
   "text-sm font-semibold uppercase tracking-[0.14em] text-muted-foreground";
@@ -193,26 +192,25 @@ export const mono = "font-mono";
  * `.note { border-left:2px solid var(--gold); padding:2px 0 2px 12px;
  * font-size:12.5px; color:var(--muted) }`: the one sentence under a table or
  * a chart that says how to read it. The gold rule is identity, not state.
- * The kit sets the size at 14px through the token, since Mac's 2026-10-02 floor.
  */
 export const note =
-  "border-l-2 border-gold py-0.5 pl-3 text-sm text-muted-foreground";
+  "border-l-2 border-gold py-0.5 pl-3 text-base text-muted-foreground";
 
 /**
  * `.kv { display:grid; grid-template-columns:auto 1fr; gap:7px 16px;
  * font-size:12.5px }`, `.kv dt { color:var(--dim) }` and `.kv dd
  * { color:var(--body); overflow-wrap:anywhere }`: a record's fields, label
- * left in the dim ink and value right. The kit sets the size at 14px through the token, since Mac's 2026-10-02 floor.
+ * left in the dim ink and value right.
  */
 export const kvList =
-  "grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-[7px] text-sm";
+  "grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-[7px] text-base";
 export const kvTerm = "whitespace-nowrap text-dim";
 export const kvValue = "m-0 min-w-0 text-foreground [overflow-wrap:anywhere]";
 
 /**
  * `.b.b-q.lk` (the Run header's checkout strip): a quiet pill that is a link
  * or a copy button, so it carries the gold border and the wash on hover that
- * the badges around it do not. The kit sets the size at 14px through the token, since Mac's 2026-10-02 floor.
+ * the badges around it do not.
  */
 export const linkChip =
   "inline-flex min-w-0 max-w-full items-center gap-[5px] whitespace-nowrap rounded-md border border-border bg-hl px-[7px] py-0.5 text-sm font-semibold leading-normal tracking-[0.02em] text-muted-foreground transition-colors hover:border-gold hover:bg-hl hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
@@ -225,9 +223,9 @@ export const linkChip =
  */
 export const panelHeader =
   "flex flex-wrap items-center justify-between gap-3 border-b border-border bg-panel-head px-4 py-3";
-export const panelTitle = "text-sm font-semibold text-foreground";
+export const panelTitle = "text-base font-semibold text-foreground";
 export const panelFooter =
-  "flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-xs text-muted-foreground";
+  "flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-muted-foreground";
 /** `.panel-b { padding:14px 16px }` */
 export const panelBody = "px-4 py-3.5";
 
@@ -238,13 +236,13 @@ export const panelBody = "px-4 py-3.5";
  * a figure strip; every strip on every page draws these four. On a phone the
  * tile tightens to `#viewport.phone .stat { padding:11px 12px }` and its
  * figure to `.stat .v { font-size:17px }`, so two tiles fit a row. The kit sets
- * the labels and notes at 14px through the token, since Mac's 2026-10-02
- * floor, and the figure at the h2 step (24px, 16px on a phone).
+ * the label at the 2xs step (`text-xs`, 10px), the note at the micro step
+ * (`text-sm`, 12px), and the figure at the h2 step (24px, 16px on a phone).
  */
 export const statTile =
   "flex min-w-0 flex-col rounded-2xl border border-border bg-card px-[15px] py-[13px] text-card-foreground max-md:px-3 max-md:py-[11px]";
 export const statTerm =
-  "mb-[5px] text-sm font-semibold uppercase tracking-[0.1em] text-dim";
+  "mb-[5px] text-xs font-semibold uppercase tracking-[0.1em] text-dim";
 export const statValue =
   "text-(length:--ox-a-h2) font-bold leading-[1.15] tracking-[-0.02em] tabular-nums max-md:text-(length:--ox-a-h4)";
 export const statNote = "mt-[3px] text-sm text-muted-foreground";

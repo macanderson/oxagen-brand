@@ -115,13 +115,20 @@ class MergeTest(unittest.TestCase):
         self.assertEqual(after["faces"], before["faces"])
         self.assertEqual(before, theme(), "merge must not change its input")
 
-    def test_a_type_step_changes_one_field(self) -> None:
+    def test_a_type_base_changes_one_field(self) -> None:
         before = theme()
-        size = other(before["type"]["scales"]["app"]["body"]["size"], "0.9375rem", "0.875rem")
-        after = R.merge(before, {"summary": "x", "type": {"scales": {"app": {"body": {"size": size}}}}})
-        body = after["type"]["scales"]["app"]["body"]
-        self.assertEqual(body["size"], size)
-        self.assertEqual(body["leading"], before["type"]["scales"]["app"]["body"]["leading"])
+        base = other(before["type"]["scales"]["app"]["base"], "0.9375rem", "0.875rem")
+        after = R.merge(before, {"summary": "x", "type": {"scales": {"app": {"base": base}}}})
+        app = after["type"]["scales"]["app"]
+        self.assertEqual(app["base"], base)
+        self.assertEqual(app["steps"], before["type"]["scales"]["app"]["steps"])
+
+    def test_a_type_ratio_changes_one_field(self) -> None:
+        before = theme()
+        after = R.merge(before, {"summary": "x", "type": {"scales": {"app": {"steps": {"micro": {"ratio": 0.8}}}}}})
+        micro = after["type"]["scales"]["app"]["steps"]["micro"]
+        self.assertEqual(micro["ratio"], 0.8)
+        self.assertEqual(micro["leading"], before["type"]["scales"]["app"]["steps"]["micro"]["leading"])
 
     def test_the_merged_theme_validates(self) -> None:
         import theme as TH
@@ -129,14 +136,25 @@ class MergeTest(unittest.TestCase):
         after = R.merge(theme(), {"summary": "x", "radius": {"base": "0.5rem", "card": "xl"}, "spacing": {"unit": "0.25rem"}})
         self.assertEqual(TH.problems(after), [])
 
-    def test_a_step_below_the_floor_fails(self) -> None:
+    def test_a_small_base_and_a_small_step_pass(self) -> None:
         import theme as TH
 
-        after = R.merge(theme(), {"summary": "x", "type": {"scales": {"app": {"micro": {"size": "0.75rem"}}}}})
+        change = {"scales": {"app": {"base": "0.75rem", "steps": {"2xs": {"ratio": 0.6}}}, "marketing": {"base": "0.8125rem"}}}
+        after = R.merge(theme(), {"summary": "x", "type": change})
+        self.assertEqual(TH.problems(after), [])
+
+    def test_a_body_ratio_other_than_one_fails(self) -> None:
+        import theme as TH
+
+        after = R.merge(theme(), {"summary": "x", "type": {"scales": {"app": {"steps": {"body": {"ratio": 1.1}}}}}})
         found = TH.problems(after)
         self.assertEqual(len(found), 1)
-        self.assertIn("type.scales.app.micro.size is 0.75rem, which is 12px", found[0])
-        self.assertIn("14px or more", found[0])
+        self.assertIn("type.scales.app.steps.body.ratio is 1.1", found[0])
+
+    def test_the_theme_round_trips_through_its_layout(self) -> None:
+        import theme as TH
+
+        self.assertEqual(R.dump_theme(theme()), TH.THEME_FILE.read_text())
 
     def test_resolved_faces_replace_the_role(self) -> None:
         before = theme()

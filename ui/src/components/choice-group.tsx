@@ -66,7 +66,7 @@ function Option<V extends string>({
           if (event.key === "Escape") setOpen(false);
         }}
         className={[
-          "flex w-full min-w-0 flex-col items-start gap-0.5 rounded-lg border px-3 py-2 text-left text-sm focus-visible:outline-2 focus-visible:outline-ring",
+          "flex w-full min-w-0 flex-col items-start gap-0.5 rounded-lg border px-3 py-2 text-left text-base focus-visible:outline-2 focus-visible:outline-ring",
           checked
             ? "border-gold bg-hl text-foreground"
             : "border-border bg-app-panel-bg text-foreground",
@@ -77,7 +77,7 @@ function Option<V extends string>({
       >
         <span className="font-medium">{option.label}</span>
         {option.sub === undefined ? null : (
-          <span className="text-xs text-muted-foreground">{option.sub}</span>
+          <span className="text-sm text-muted-foreground">{option.sub}</span>
         )}
       </button>
       {disabled ? (
@@ -88,7 +88,7 @@ function Option<V extends string>({
           data-open={open ? "" : undefined}
           className={
             open
-              ? `${popoverSurface} absolute left-0 top-full z-20 mt-1.5 w-max max-w-72 px-3 py-2 text-xs`
+              ? `${popoverSurface} absolute left-0 top-full z-20 mt-1.5 w-max max-w-72 px-3 py-2 text-sm`
               : "sr-only"
           }
         >

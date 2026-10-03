@@ -81,8 +81,8 @@ export function WordmarkFace() {
       className="flex flex-col gap-2.5 rounded-2xl border border-border/70 bg-background/40 p-3"
     >
       <div className="flex items-center gap-2">
-        <span className="min-w-0 flex-1 text-sm text-foreground">{ROLE_LABELS.wordmark}</span>
-        <span className="text-xs text-muted-foreground">{face.family}</span>
+        <span className="min-w-0 flex-1 text-base text-foreground">{ROLE_LABELS.wordmark}</span>
+        <span className="text-sm text-muted-foreground">{face.family}</span>
       </div>
       <p
         className="truncate rounded-lg bg-muted/60 px-2.5 py-2 text-(length:--ox-a-h3) font-semibold text-foreground"
@@ -94,7 +94,7 @@ export function WordmarkFace() {
         <OxagenWordmark className="h-5" />
         <StellaWordmark className="h-5" />
       </div>
-      <p className="text-xs leading-normal text-muted-foreground">
+      <p className="text-sm leading-normal text-muted-foreground">
         The wordmark face is fixed. The gold x and asterisk follow the primary colour.
       </p>
     </div>
@@ -152,7 +152,7 @@ export function FaceEditor({
       <p
         className={cn(
           "truncate rounded-lg bg-muted/60 px-2.5 py-2 text-foreground",
-          role === "display" ? "text-(length:--ox-a-h3) font-semibold" : "text-sm",
+          role === "display" ? "text-(length:--ox-a-h3) font-semibold" : "text-base",
         )}
         style={{ fontFamily: family ? fontStack(role, choice) : undefined }}
       >
@@ -203,7 +203,7 @@ function GoogleFields({
         ))}
       </datalist>
       <fieldset className="flex flex-col gap-1.5">
-        <legend className="mb-1 text-sm text-foreground">Weights</legend>
+        <legend className="mb-1 text-base text-foreground">Weights</legend>
         <div className="flex flex-wrap gap-1.5">
           {WEIGHTS.map((w) => {
             const on = choice.weights.includes(w);
@@ -293,7 +293,7 @@ function UploadFields({
         onChange={(family) => onChange({ ...choice, family })}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={inputId} className="text-sm text-foreground">
+        <label htmlFor={inputId} className="text-base text-foreground">
           Files
         </label>
         <input
@@ -305,16 +305,16 @@ function UploadFields({
             void add(e.target.files);
             e.target.value = "";
           }}
-          className={cn(inputBase, "min-h-8 cursor-pointer py-1 text-xs file:mr-2 file:border-0 file:bg-transparent file:text-xs file:font-medium file:text-foreground")}
+          className={cn(inputBase, "min-h-8 cursor-pointer py-1 file:mr-2 file:border-0 file:bg-transparent file:text-base file:font-medium file:text-foreground")}
         />
-        {error ? <p className="text-xs text-error-ink">{error}</p> : null}
-        {load === "failed" ? <p className="text-xs text-error-ink">One or more files did not load. Upload them again.</p> : null}
+        {error ? <p className="text-sm text-error-ink">{error}</p> : null}
+        {load === "failed" ? <p className="text-sm text-error-ink">One or more files did not load. Upload them again.</p> : null}
       </div>
       {choice.files.length ? (
         <ul className="flex flex-col gap-1.5">
           {choice.files.map((f) => (
             <li key={f.name} className="flex items-center gap-2">
-              <span className="min-w-0 flex-1 truncate font-mono text-xs text-foreground" title={f.name}>
+              <span className="min-w-0 flex-1 truncate font-mono text-sm text-foreground" title={f.name}>
                 {f.name}
               </span>
               <select
@@ -326,7 +326,7 @@ function UploadFields({
                     files: choice.files.map((x) => (x.name === f.name ? { ...x, weight: e.target.value } : x)),
                   })
                 }
-                className={cn(inputBase, "min-h-7 w-auto py-0.5 pr-7 text-xs")}
+                className={cn(inputBase, "min-h-7 w-auto py-0.5 pr-7")}
               >
                 {UPLOAD_WEIGHTS.map((w) => (
                   <option key={w.value} value={w.value}>
@@ -346,7 +346,7 @@ function UploadFields({
         </ul>
       ) : null}
       {renamed.length ? (
-        <p className="text-xs leading-normal text-muted-foreground">
+        <p className="text-sm leading-normal text-muted-foreground">
           Rename {renamed.map((f) => `${f.original} to ${f.name}`).join(", ")} before you upload, because a file name
           in fonts/ takes letters, digits, dots, dashes, and underscores.
         </p>

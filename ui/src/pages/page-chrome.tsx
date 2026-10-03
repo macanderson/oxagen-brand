@@ -12,8 +12,8 @@
 // a change to a token reaches the pages with no edit.
 //
 // Type follows the house rule. The website's h1 to h3 wear text-m-h1 to
-// text-m-h3, which set Space Grotesk, and its body text is 16px. No text is
-// below 14px.
+// text-m-h3, which set Space Grotesk, and its body text is 16px, the
+// marketing base. Labels and captions take the smaller steps.
 //
 // Glass appears only where the kit's rule allows it: the sticky nav takes
 // `glassBar`, and the menus and popovers take `floatingSurface` through their
@@ -60,7 +60,7 @@ export const siteWrap = "mx-auto w-full max-w-[var(--ox-wrap)] px-6";
  * current page.
  */
 const barLink =
-  "inline-flex h-9 items-center gap-1 rounded-4xl px-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=page]:bg-foreground/10 data-[popup-open]:bg-foreground/10";
+  "inline-flex h-9 items-center gap-1 rounded-4xl px-3 text-base font-medium text-foreground transition-colors hover:bg-foreground/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=page]:bg-foreground/10 data-[popup-open]:bg-foreground/10";
 
 type ProductPage = { label: string; line: string; icon: Icon };
 
@@ -95,7 +95,7 @@ function ProductMenuRow({ label, line, icon: RowIcon }: ProductPage) {
       <RowIcon className="mt-0.5 text-muted-foreground" aria-hidden />
       <span className="min-w-0">
         <span className="block font-medium text-foreground">{label}</span>
-        <span className="block text-sm leading-snug text-muted-foreground">
+        <span className="block text-base leading-snug text-muted-foreground">
           {line}
         </span>
       </span>
@@ -178,7 +178,7 @@ export function Qualifier({
   children: React.ReactNode;
 }) {
   return (
-    <p className={cn("text-sm text-muted-foreground", className)}>{children}</p>
+    <p className={cn("text-base text-muted-foreground", className)}>{children}</p>
   );
 }
 
@@ -254,7 +254,7 @@ export function SiteCard({
     <article className={cn(panel, "flex flex-col p-6")}>
       <h3 className="text-m-h3 text-foreground">{title}</h3>
       {meta ? (
-        <p className="mt-1 text-sm text-muted-foreground">{meta}</p>
+        <p className="mt-1 text-base text-muted-foreground">{meta}</p>
       ) : null}
       <p className="mt-3 text-m-body text-[var(--body)]">
         {line ? (
@@ -268,7 +268,7 @@ export function SiteCard({
       {action ? (
         <a
           href="#more"
-          className="mt-auto inline-flex w-fit items-center gap-1.5 rounded-sm pt-5 text-sm font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="mt-auto inline-flex w-fit items-center gap-1.5 rounded-sm pt-5 text-base font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           {action}
           <ArrowRightIcon className="size-3.5" aria-hidden />
@@ -304,7 +304,7 @@ export function RequestSteps({ className }: { className?: string }) {
         <li key={step.title} className="flex gap-4">
           <span
             aria-hidden
-            className="flex size-8 flex-none items-center justify-center rounded-md border border-border bg-card font-mono text-sm text-foreground"
+            className="flex size-8 flex-none items-center justify-center rounded-md border border-border bg-card font-mono text-base text-foreground"
           >
             {index + 1}
           </span>
@@ -333,14 +333,14 @@ export function SiteFooter() {
       >
         <div className="max-w-[34rem]">
           <OxagenWordmark className="h-6" />
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-4 text-base text-muted-foreground">
             Oxagen is workforce management for autonomous agents: give each
             agent an identity, set its authority and budget, equip it with
             tools and skills, and review what it did and what its operators
             spent, through a shared agent control plane.
           </p>
         </div>
-        <nav aria-label="Footer" className="flex gap-6 text-sm">
+        <nav aria-label="Footer" className="flex gap-6 text-base">
           {["Product", "Security", "Docs"].map((label) => (
             <a
               key={label}

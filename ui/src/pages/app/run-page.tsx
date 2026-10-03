@@ -232,12 +232,12 @@ function SummaryPanel() {
         <button type="button" className={buttonSecondary}>
           Summarize
         </button>
-        <a href="#actions" className={`${buttonSecondary} min-h-7 px-2.5 font-mono text-xs`}>
+        <a href="#actions" className={`${buttonSecondary} min-h-7 px-2.5 font-mono text-base`}>
           Check the summary against the frames
         </a>
       </div>
       <div className="mt-2">
-        <div className="max-w-prose text-xs">
+        <div className="max-w-prose text-sm">
           <label
             className="flex items-center gap-2 text-muted-foreground"
             title="stella reads captured turns and uses organization credits."
@@ -353,7 +353,7 @@ const txProseLine = "min-w-0 truncate";
 const txs = "flex min-w-0 flex-col font-mono text-[12.5px] leading-[1.65] text-foreground";
 const txTools = "flex flex-wrap items-center gap-2 pb-2.5";
 const txSearch =
-  "w-[220px] max-w-full max-md:w-full rounded-lg border border-border bg-void px-2.5 py-1.5 font-mono text-xs text-foreground placeholder:text-dim focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-ring max-md:text-base";
+  "w-[220px] max-w-full max-md:w-full rounded-lg border border-border bg-void px-2.5 py-1.5 font-mono text-base text-foreground placeholder:text-dim focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-ring max-md:text-base";
 
 const chipShape = "whitespace-nowrap rounded-[5px] border bg-card px-1.5 font-mono text-[10.5px] leading-[1.6] tabular-nums";
 const CHIP = {
@@ -749,7 +749,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   return (
     <>
       <dt className={`${kvTerm} text-[11px]`}>{label}</dt>
-      <dd className={`${kvValue} text-xs`}>{children}</dd>
+      <dd className={`${kvValue} text-sm`}>{children}</dd>
     </>
   );
 }
@@ -804,7 +804,7 @@ function ChangesPanel() {
           ))}
         </ul>
         <div className="mt-2 flex">
-          <a href="#transcript" className={`${buttonSecondary} min-h-7 px-2.5 text-xs`}>
+          <a href="#transcript" className={`${buttonSecondary} min-h-7 px-2.5 text-base`}>
             Open the diff in the transcript
           </a>
         </div>
@@ -943,7 +943,7 @@ function OutputsSpine() {
                 </div>
                 {gate ? (
                   <div className="mt-[9px] flex flex-wrap items-center gap-2.5">
-                    <a href="#actions" className={`${buttonSecondary} min-h-7 px-2.5 text-xs`}>
+                    <a href="#actions" className={`${buttonSecondary} min-h-7 px-2.5 text-base`}>
                       Review the approval
                     </a>
                     <span className="text-[11px] text-muted-foreground">the run is stopped here until someone answers</span>

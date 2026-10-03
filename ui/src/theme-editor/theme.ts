@@ -41,16 +41,31 @@ export interface ThemeFace {
   outline?: { file: string; weight?: number };
 }
 
+/** One step of a type scale. Its size is the scale's base times `ratio`. */
 export interface TypeStep {
-  size: string;
+  ratio: number;
   leading: number;
   weight: number;
   tracking: string;
 }
 
-export const STEPS = ["h1", "h2", "h3", "h4", "body", "micro"] as const;
-export type StepName = (typeof STEPS)[number];
 export type ScaleName = "marketing" | "app";
+export type StepName = "h1" | "h2" | "h3" | "h4" | "body" | "micro" | "2xs";
+
+/** The steps of each scale, largest first, as `theme/theme.json` lists them. The app scale has a 2xs step below micro. */
+export const SCALE_STEPS: Record<ScaleName, readonly StepName[]> = {
+  marketing: ["h1", "h2", "h3", "h4", "body", "micro"],
+  app: ["h1", "h2", "h3", "h4", "body", "micro", "2xs"],
+};
+
+/** The step each scale's base sets. Its ratio is always 1. */
+export const BASE_STEP = "body" satisfies StepName;
+
+/** A type scale: one base, the body size, and the steps that multiply it. */
+export interface TypeScale {
+  base: string;
+  steps: Partial<Record<StepName, TypeStep>>;
+}
 
 export const RADIUS_STEPS = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"] as const;
 
@@ -66,7 +81,7 @@ export interface Theme {
   type: {
     weights: Record<string, number>;
     tracking: Record<string, string>;
-    scales: Record<ScaleName, Record<StepName, TypeStep>>;
+    scales: Record<ScaleName, TypeScale>;
   };
 }
 
@@ -182,61 +197,108 @@ export function themeVars(theme: Theme, faces: Record<FaceRole, FaceChoice>): Re
 
   vars["--ox-space"] = theme.spacing.unit;
 
-  for (const [scale, key] of [
-    ["marketing", "m"],
-    ["app", "a"],
-  ] as const) {
-    for (const step of STEPS) {
-      const s = theme.type.scales[scale][step];
-      vars[`--ox-${key}-${step}`] = s.size;
+  // Each step reads its scale's base, as house-tokens.css writes it, so a
+  // new base moves every step on the page without a new value for each.
+  for (const scale of ["marketing", "app"] as const) {
+    const key = SCALE_KEYS[scale];
+    vars[`--ox-${key}-base`] = theme.type.scales[scale].base;
+    for (const step of SCALE_STEPS[scale]) {
+      const s = typeStep(theme, scale, step);
+      vars[`--ox-${key}-${step}`] = stepSizeCss(key, step, s.ratio);
       vars[`--ox-${key}-${step}-leading`] = String(s.leading);
     }
   }
   return vars;
 }
 
+/** The utility and token key of each scale: `--ox-m-*` and `--ox-a-*`. */
+export const SCALE_KEYS: Record<ScaleName, "m" | "a"> = { marketing: "m", app: "a" };
+
+/** A step's size token as `build/typeset.py` writes it: the base for body, else the base times the ratio. */
+export function stepSizeCss(key: "m" | "a", step: StepName, ratio: number): string {
+  const base = `var(--ox-${key}-base)`;
+  return step === BASE_STEP ? base : `calc(${base} * ${String(ratio)})`;
+}
+
+/** A step of a scale. Every step `SCALE_STEPS` names is in the theme, which `build/theme.py` holds to its schema. */
+export function typeStep(theme: Theme, scale: ScaleName, step: StepName): TypeStep {
+  const found = theme.type.scales[scale].steps[step];
+  if (!found) throw new Error(`type.scales.${scale}.steps has no ${step}`);
+  return found;
+}
+
+/** A step's size in pixels: its scale's base times its ratio. */
+export function stepPx(theme: Theme, scale: ScaleName, step: StepName): number {
+  return remPx(theme.type.scales[scale].base) * typeStep(theme, scale, step).ratio;
+}
+
 /**
- * The smallest size a type step may take, on either scale, as `build/theme.py`
- * holds it. Mac, 2026-10-02: "The minimum font size in the app has to be 14px
- * at least! Not 13px!" No step is exempt, the micro steps included.
+ * The base the editor advises against going under. It is advice, not a rule:
+ * no check refuses a smaller base, and the editor shows a warning instead.
+ * Mac: "The base page font size should never be lower than 14px".
  */
-export const TYPE_FLOOR_PX = 14;
+export const BASE_ADVICE_PX = 14;
 
-/** A heading step that can take the display face is set at this size or up, as `build/typeset.py` holds it. */
-export const DISPLAY_FLOOR_PX = 20;
+/** Mac's words, which the base warning quotes. */
+export const BASE_ADVICE_QUOTE = "The base page font size should never be lower than 14px";
 
 /**
- * The type rules `build/theme.py` and `build/typeset.py` check that a size
- * change can break, in their words: every step is 14px or more, each scale
- * descends, h1 to h3 stay 20px or more, and each h1's leading sits between
- * 1.05 and 1.25.
+ * Space Grotesk's wide letters lose their shape below this size, so the
+ * editor warns when a heading that can take the display face falls under it.
+ * Like the base, it is advice: `build/typeset.py` does not refuse it.
+ */
+export const DISPLAY_ADVICE_PX = 20;
+
+/**
+ * The type rules `build/theme.py` and `build/typeset.py` refuse a theme for,
+ * in their words: each body step is its scale's base, so its ratio is 1, each
+ * scale descends, and each h1's leading sits between 1.05 and 1.25. No rule
+ * sets a smallest size.
  */
 export function typeProblems(theme: Theme): string[] {
   const out: string[] = [];
   for (const scale of ["marketing", "app"] as const) {
-    for (const step of STEPS) {
-      const px = remPx(theme.type.scales[scale][step].size);
-      if (px < TYPE_FLOOR_PX) {
-        out.push(
-          `The ${scale} ${step} is ${Math.round(px)}px. Every step on both scales is ${TYPE_FLOOR_PX}px or more, so set it to ${TYPE_FLOOR_PX} or larger.`,
-        );
-      }
+    const body = typeStep(theme, scale, BASE_STEP).ratio;
+    if (body !== 1) out.push(`The ${scale} body is the base, so its ratio is 1, not ${body}.`);
+    const ratios = SCALE_STEPS[scale].map((step) => typeStep(theme, scale, step).ratio);
+    if (ratios.some((r, i) => i > 0 && r > (ratios[i - 1] ?? r))) {
+      out.push(`${scale} scale does not descend: ratios [${ratios.join(", ")}]`);
     }
-    for (const step of ["h1", "h2", "h3"] as const) {
-      const px = remPx(theme.type.scales[scale][step].size);
-      if (px >= TYPE_FLOOR_PX && px < DISPLAY_FLOOR_PX) {
-        out.push(`The ${scale} ${step} is ${Math.round(px)}px. A heading that can take the display face is ${DISPLAY_FLOOR_PX}px or more.`);
-      }
-    }
-    const sizes = STEPS.map((s) => Math.round(remPx(theme.type.scales[scale][s].size)));
-    const sorted = [...sizes].sort((a, b) => b - a);
-    if (sizes.some((s, i) => s !== sorted[i])) {
-      out.push(`${scale} scale does not descend: [${sizes.join(", ")}]`);
-    }
-    const lead = theme.type.scales[scale].h1.leading;
+    const lead = typeStep(theme, scale, "h1").leading;
     if (!(lead >= 1.05 && lead <= 1.25)) out.push(`${scale} h1 line-height ${lead} is outside 1.05 to 1.25`);
   }
   return out;
+}
+
+/**
+ * Advice the editor shows without blocking anything: a base under 14px, in
+ * Mac's words, and a heading that can take the display face under 20px. The
+ * build accepts a theme with either.
+ */
+export function typeWarnings(theme: Theme): string[] {
+  const out: string[] = [];
+  for (const scale of ["marketing", "app"] as const) {
+    const base = remPx(theme.type.scales[scale].base);
+    if (base < BASE_ADVICE_PX) {
+      out.push(`The ${scale} base is ${round2(base)}px. Mac: "${BASE_ADVICE_QUOTE}."`);
+    }
+    for (const step of ["h1", "h2", "h3"] as const) {
+      // A ratio such as 1.428571 lands a hair under its whole pixel (19.999994px
+      // at a 14px base), so compare the size as the editor shows it.
+      const px = round2(stepPx(theme, scale, step));
+      if (px < DISPLAY_ADVICE_PX) {
+        out.push(
+          `The ${scale} ${step} is ${round2(px)}px. A heading that can take the display face reads best at ${DISPLAY_ADVICE_PX}px or more.`,
+        );
+      }
+    }
+  }
+  return out;
+}
+
+/** A number of pixels with at most two decimals, as the editor shows it. */
+export function round2(px: number): number {
+  return Math.round(px * 100) / 100;
 }
 
 /** A rem or px length in CSS pixels at a 16px root, as `build/theme.py` reads one. */

@@ -25,7 +25,7 @@ function AnchoredCard() {
     <div className="min-h-56 w-72">
       <span
         ref={cell}
-        className="block w-48 truncate rounded-md border border-border px-3 py-2 text-sm"
+        className="block w-48 truncate rounded-md border border-border px-3 py-2 text-base"
       >
         Retry the billing webhook after the Stripe signature check fails
       </span>
@@ -36,7 +36,7 @@ function AnchoredCard() {
             Retry the billing webhook after the Stripe signature check fails,
             then open a pull request with the fix.
           </p>
-          <p className="mt-2 text-xs text-muted-foreground">
+          <p className="mt-2 text-sm text-muted-foreground">
             142 runs this week, $18.40 spent
           </p>
         </HoverCardContent>

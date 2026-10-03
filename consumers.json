@@ -1,5 +1,5 @@
 {
-  "about": "Every repo that ships Oxagen or Stella, and every live surface it serves. The fan-out workflow runs each repo's sync against the kit after a merge to main and opens a PR there. build/conformance.py checks each repo and surface. Add a repo here when it starts shipping either brand.",
+  "about": "Every repo that ships Oxagen or Stella, and every live surface it serves. The fan-out workflow runs each repo's sync against the kit after a merge to main, copies each file a consumer's copy list names (a kit file its own sync does not write yet, such as an opt-in token file), and opens a PR there. build/conformance.py checks each repo and surface. Add a repo here when it starts shipping either brand.",
   "kit": {
     "surfaces": [
       { "url": "https://brand.oxagen.cloud", "pages": ["/", "/brand-guide"] },
@@ -11,6 +11,9 @@
       "repo": "oxageninc/product",
       "sync": "node tools/scripts/sync-brand-assets.mjs --brand \"$KIT\"",
       "apt": [],
+      "copy": [
+        { "from": "tokens/house-text-scale.css", "to": "packages/ui/src/styles/house-text-scale.css" }
+      ],
       "surfaces": [
         { "url": "https://oxagen.sh", "pages": ["/"] },
         { "url": "https://app.oxagen.sh", "pages": ["/"] },

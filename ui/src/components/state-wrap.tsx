@@ -171,7 +171,7 @@ export function StateWrap({
         {title}
       </Heading>
       {children === undefined ? null : (
-        <p className="mx-auto mb-4 max-w-[52ch] text-sm text-muted-foreground">
+        <p className="mx-auto mb-4 max-w-[52ch] text-base text-muted-foreground">
           {children}
         </p>
       )}

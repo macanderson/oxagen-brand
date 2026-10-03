@@ -326,7 +326,7 @@ function plural(count: number, one: string, other: string): string {
 /** The banner a failing collector raises: what it reads and its last good read. */
 function CollectorBanner() {
   return (
-    <div className="flex flex-wrap items-start gap-x-3 gap-y-2 rounded-[10px] border border-error/40 bg-error/10 px-3.5 py-[11px] text-sm text-foreground">
+    <div className="flex flex-wrap items-start gap-x-3 gap-y-2 rounded-[10px] border border-error/40 bg-error/10 px-3.5 py-[11px] text-base text-foreground">
       <div className="flex min-w-0 grow flex-col gap-1">
         <p>
           <b className="font-semibold">Collector github is failing</b> It reads a-intel/platform and

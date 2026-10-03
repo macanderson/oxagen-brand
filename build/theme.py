@@ -16,8 +16,9 @@ six-digit hex, a font file is a bare file name, and no string may carry the
 characters that would end a CSS declaration or an HTML tag.
 
 Two rules sit beside the schema, because a schema cannot say them: the
-wordmark face is fixed (`wordmark_problems`), and no type step on either scale
-is set below 14px (`type_problems`).
+wordmark face is fixed (`wordmark_problems`), and each scale's body step is
+its base, so its ratio is 1 (`type_problems`). No rule sets a smallest size.
+The theme editor warns when a base goes under 14px, and it never refuses one.
 
 The validator covers the keywords the schema uses, with the standard library
 alone, because `build/conformance.py` imports `color.py` and runs with no
@@ -163,26 +164,30 @@ def wordmark_problems(theme: dict) -> list[str]:
     return found
 
 
-#: The smallest size a type step may take, on either scale. Mac, 2026-10-02:
-#: "The minimum font size in the app has to be 14px at least! Not 13px! And we
-#: can't hard code font sizes in classes, we need to let the tokens do their
-#: job." No step is exempt, the micro steps included. An eyebrow or a badge
-#: stands apart by case, tracking, weight, or colour, never by a smaller size.
-TYPE_FLOOR_PX = 14
+#: The step each scale's base sets. Every other step is the base times its ratio.
+BASE_STEP = "body"
+
+
+def step_size(base: str, ratio: float) -> float:
+    """A step's size in CSS pixels at a 16px root: its scale's base times its ratio."""
+    return rem_px(base) * ratio
 
 
 def type_problems(theme: dict) -> list[str]:
-    """Each step of `theme`'s two scales set below the floor. Expects a theme that validates."""
+    """Each scale whose body step is not its base. Expects a theme that validates.
+
+    No rule here sets a smallest size. Mac sets the base from the kit as he
+    wishes, and the theme editor warns, without refusing, when a base goes
+    under 14px.
+    """
     found = []
-    for scale, steps in theme["type"]["scales"].items():
-        for step, spec in steps.items():
-            px = rem_px(spec["size"])
-            if px < TYPE_FLOOR_PX:
-                found.append(
-                    f"type.scales.{scale}.{step}.size is {spec['size']}, which is {px:g}px. "
-                    f"Every step on both scales is {TYPE_FLOOR_PX}px or more, so set it to "
-                    f"{TYPE_FLOOR_PX / 16:g}rem or larger"
-                )
+    for scale, spec in theme["type"]["scales"].items():
+        ratio = spec["steps"][BASE_STEP]["ratio"]
+        if ratio != 1:
+            found.append(
+                f"type.scales.{scale}.steps.{BASE_STEP}.ratio is {json.dumps(ratio)}. The {BASE_STEP} step is the "
+                f"scale's base, so set its ratio to 1 and change type.scales.{scale}.base to move it"
+            )
     return found
 
 

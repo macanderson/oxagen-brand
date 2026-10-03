@@ -122,7 +122,7 @@ export function useList<T>(
 }
 
 const select =
-  "min-h-9 rounded-md border border-input-border bg-input-bg px-2 text-base text-input-fg focus-visible:outline-2 focus-visible:outline-input-ring sm:text-sm";
+  "min-h-9 rounded-md border border-input-border bg-input-bg px-2 text-input-touch text-input-fg focus-visible:outline-2 focus-visible:outline-input-ring sm:text-base";
 
 /** `.lt-bar`: search, then the filters or the sort. */
 export function ListBar<T>({
@@ -146,7 +146,7 @@ export function ListBar<T>({
   return (
     <div
       data-list-bar=""
-      className="flex flex-wrap items-center gap-2.5 border-b border-border px-3 py-2.5 text-sm text-muted-foreground"
+      className="flex flex-wrap items-center gap-2.5 border-b border-border px-3 py-2.5 text-base text-muted-foreground"
     >
       <input
         type="search"

@@ -25,8 +25,8 @@ with its own bundler. The design-system bundle below is the one compiled form.
 
 - `.` is `src/index.ts`: the component barrel, the providers, and `cn`.
 - `./components/*` is one component file.
-- `./styles/globals.css` is the stylesheet. It imports the house tokens and
-  fonts from `../tokens/`.
+- `./styles/globals.css` is the stylesheet. It imports the house tokens, the
+  opt-in text scale (`house-text-scale.css`), and the fonts from `../tokens/`.
 - `./lib/motion` is the motion helpers.
 
 ## Rules
@@ -42,10 +42,13 @@ with its own bundler. The design-system bundle below is the one compiled form.
    `data-[ending-style]`.
 6. Every component has a story for each state it draws.
 7. Every font size reads a token. A class reads a step through a house utility
-   (`text-a-h3`), `text-sm`, or `text-(length:--ox-<step>)`, and never sets a
-   size of its own, such as `text-[13px]`. No text is below 14px, so a badge
-   or an eyebrow stands apart by case, tracking, weight, or colour.
-   `build/build.py --check` fails on a hard-coded size.
+   (`text-a-h3`), a Tailwind size the kit points at an app step (`text-base`
+   is the base, `text-sm` is micro, `text-xs` is 2xs), or
+   `text-(length:--ox-<step>)`, and never sets a size of its own, such as
+   `text-[13px]`. Running text, controls, inputs, buttons, menu items, and
+   table body cells take the base. Labels, badges, timestamps, and table
+   headers take a smaller step. `build/build.py --check` fails on a
+   hard-coded size.
 
 ```tsx
 <Button render={<Link href="/login" />}>Log in</Button>
@@ -256,8 +259,8 @@ take it.
   menu, select, combobox, popover, and hover card, the command menu, and the
   toast. It is the popover ground at 70% over a 40px blur at 150% saturation,
   with a faint ring in place of a border, a deep shadow, and a 16px corner.
-  Its rows are 8px by 12px with 14px text. The ring and the shadow are the
-  `--pop-ring` and `--ui-shadow-pop` tokens in `globals.css`. The tooltip
+  Its rows are 8px by 12px with text at the app base. The ring and the shadow
+  are the `--pop-ring` and `--ui-shadow-pop` tokens in `globals.css`. The tooltip
   stays opaque.
 - **Sticky bar.** `glassBar` draws the website's nav and the app's header. It
   is the page ground at 72% over a 24px blur at 150% saturation, with a

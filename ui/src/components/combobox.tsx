@@ -87,7 +87,7 @@ Combobox.displayName = "Combobox";
 // Mirrors the Select trigger: a pill on the --input-* tokens, so the field
 // reads as a solid field rather than a cut-out that shows the page through.
 const comboboxTriggerVariants = cva(
-  "flex w-full cursor-pointer items-center justify-between gap-1.5 whitespace-nowrap rounded-4xl border border-input-border bg-input-bg px-3 py-2 text-sm text-input-fg transition-colors outline-none hover:border-input-border-hover focus-visible:border-input-border-focus focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-input-ring data-[popup-open]:border-input-border-focus disabled:cursor-not-allowed disabled:bg-input-disabled-bg disabled:text-input-disabled-fg [&>span]:line-clamp-1",
+  "flex w-full cursor-pointer items-center justify-between gap-1.5 whitespace-nowrap rounded-4xl border border-input-border bg-input-bg px-3 py-2 text-base text-input-fg transition-colors outline-none hover:border-input-border-hover focus-visible:border-input-border-focus focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-input-ring data-[popup-open]:border-input-border-focus disabled:cursor-not-allowed disabled:bg-input-disabled-bg disabled:text-input-disabled-fg [&>span]:line-clamp-1",
   {
     variants: {
       size: {
@@ -212,7 +212,7 @@ function ComboboxPopup({
             <MagnifyingGlassIcon className="size-4 shrink-0 text-muted-foreground" />
             <ComboboxPrimitive.Input
               ref={inputRef}
-              className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-input-placeholder disabled:cursor-not-allowed disabled:opacity-50"
+              className="min-w-0 flex-1 bg-transparent text-base text-foreground outline-none placeholder:text-input-placeholder disabled:cursor-not-allowed disabled:opacity-50"
               placeholder={searchPlaceholder}
               value={searchValue}
               onChange={(e) => setSearchValue(e.currentTarget.value)}
@@ -227,7 +227,7 @@ function ComboboxPopup({
           </ComboboxPrimitive.List>
           {/* The live region stays mounted so a screen reader hears the
               message arrive; it takes room only while it holds text. */}
-          <ComboboxPrimitive.Empty className="px-3 text-center text-sm text-muted-foreground [&:not(:empty)]:py-6">
+          <ComboboxPrimitive.Empty className="px-3 text-center text-base text-muted-foreground [&:not(:empty)]:py-6">
             {hasOptions ? null : "No results found."}
           </ComboboxPrimitive.Empty>
         </ComboboxPrimitive.Popup>

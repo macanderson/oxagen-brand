@@ -130,7 +130,7 @@ export function RowsField({
       <span
         id={id}
         data-slot="field-label"
-        className="flex w-fit text-sm leading-snug font-medium whitespace-nowrap text-foreground max-sm:sr-only"
+        className="flex w-fit text-base leading-snug font-medium whitespace-nowrap text-foreground max-sm:sr-only"
       >
         {label}
       </span>
@@ -229,7 +229,7 @@ export function RowsPager({
         {range === undefined ? null : (
           <span
             data-range=""
-            className="font-mono text-xs whitespace-nowrap text-dim tabular-nums"
+            className="font-mono text-sm whitespace-nowrap text-dim tabular-nums"
           >
             {range}
           </span>

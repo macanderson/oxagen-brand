@@ -282,7 +282,7 @@ describe("CommandMenu recipe", () => {
 
   it("rounds the field and rows one step in and caps the group names", () => {
     render(<CommandMenu groups={GROUPS} defaultOpen />);
-    expect(screen.getByRole("combobox", INPUT)).toHaveClass("rounded-2xl", "text-sm");
+    expect(screen.getByRole("combobox", INPUT)).toHaveClass("rounded-2xl", "text-base");
     expect(screen.getByRole("option", { name: "Runs" })).toHaveClass(
       "rounded-2xl",
       "px-3",

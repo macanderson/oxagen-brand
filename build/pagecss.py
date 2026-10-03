@@ -70,11 +70,16 @@ def _shape_fixed() -> dict[str, str]:
 
 
 def type_sizes() -> dict[str, str]:
-    """Each step of both scales and its leading, in the short names: `--m-body` is the marketing body."""
+    """Each scale's base, each step, and each leading, in the short names: `--m-body` is the marketing body.
+
+    A step reads its scale's base, `calc(var(--m-base) * 2.5)`, so a page
+    that sets `--m-base` or `--a-base` moves every step on that scale.
+    """
     v = {}
     for scale in T.SCALES:
+        v[f"{scale.key}-base"] = scale.base
         for st in scale.steps:
-            v[f"{scale.key}-{st.name}"] = st.size
+            v[f"{scale.key}-{st.name}"] = scale.size_css(st, "--")
             v[f"{scale.key}-{st.name}-leading"] = st.leading
     return v
 

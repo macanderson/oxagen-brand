@@ -14,8 +14,9 @@
    fallback for a viewer that cannot load that file. Gold is identity only: the two marks. State
    is shown by border shape: double for works, dashed for pending, single for broken.
    This is a public page, so it reads the marketing type steps (--ox-m-*): h1 to h3 in Space
-   Grotesk, all other text in Aeonik with body at 16px, code in Monaspace Neon, and no text
-   below 14px. */
+   Grotesk, all other text in Aeonik on the 16px base, and code in Monaspace Neon. Table
+   headers, chips, step numbers, and small labels read the app micro step (--ox-a-micro).
+   Every step is its scale's base times a ratio, so no size here is hard-coded. */
 :root {
   --bg: var(--ox-ink, #09090B);
   --panel: var(--ox-panel, #18181B);
@@ -102,7 +103,7 @@ section { margin-top: 64px; display: grid; gap: 20px; }
 section > .sub { color: var(--muted); }
 
 /* state chips: shape carries the state */
-.chip { display: inline-flex; align-items: center; justify-content: center; min-width: 76px; padding: 2px 10px; border-radius: 999px; font-size: var(--ox-m-micro, 0.875rem); font-weight: 500; color: var(--fg); white-space: nowrap; }
+.chip { display: inline-flex; align-items: center; justify-content: center; min-width: 76px; padding: 2px 10px; border-radius: 999px; font-size: var(--ox-a-micro, 0.75rem); font-weight: 500; color: var(--fg); white-space: nowrap; }
 .chip.works { border: 3px double var(--muted); }
 .chip.pending { border: 1px dashed var(--muted); }
 .chip.broken { border: 1px solid var(--fg); }
@@ -121,7 +122,7 @@ section > .sub { color: var(--muted); }
 /* steps */
 ol.steps { counter-reset: step; list-style: none; padding: 0; gap: 18px; }
 ol.steps > li { counter-increment: step; display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 4px 12px; max-width: none; }
-ol.steps > li::before { content: counter(step); grid-row: 1 / span 3; width: 28px; height: 28px; border: 1px solid var(--rule); border-radius: 999px; display: grid; place-items: center; font-family: var(--mono); font-size: var(--ox-m-micro, 0.875rem); color: var(--fg); font-variant-numeric: tabular-nums; }
+ol.steps > li::before { content: counter(step); grid-row: 1 / span 3; width: 28px; height: 28px; border: 1px solid var(--rule); border-radius: 999px; display: grid; place-items: center; font-family: var(--mono); font-size: var(--ox-a-micro, 0.75rem); color: var(--fg); font-variant-numeric: tabular-nums; }
 ol.steps > li > * { grid-column: 2; min-width: 0; }
 ol.steps strong { color: var(--fg); font-weight: 600; }
 
@@ -129,8 +130,8 @@ ol.steps strong { color: var(--fg); font-weight: 600; }
 .copybox { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
 .copybox pre { margin: 0; padding: 14px 92px 14px 16px; overflow-x: auto; font-size: var(--ox-m-micro, 0.875rem); line-height: 1.55; color: var(--fg); white-space: pre; }
 .copybox.prompt pre { white-space: pre-wrap; font-family: var(--sans); font-size: var(--ox-m-body, 1rem); }
-.copybox .label { display: block; padding: 10px 16px 0; font-size: var(--ox-m-micro, 0.875rem); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.copybox button { position: absolute; top: 8px; right: 8px; font: 500 var(--ox-m-micro, 0.875rem)/1 var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 7px 10px; cursor: pointer; }
+.copybox .label { display: block; padding: 10px 16px 0; font-size: var(--ox-a-micro, 0.75rem); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.copybox button { position: absolute; top: 8px; right: 8px; font: 500 var(--ox-m-body, 1rem)/1 var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 7px 10px; cursor: pointer; }
 .copybox button:hover { border-color: var(--fg); }
 
 .note { border-left: 2px solid var(--rule); padding: 4px 0 4px 14px; color: var(--body); }
@@ -141,7 +142,7 @@ ol.steps strong { color: var(--fg); font-weight: 600; }
 .lane { display: grid; gap: 10px; align-content: start; }
 .step { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; background: var(--panel); display: grid; gap: 6px; }
 .step b { color: var(--fg); font-weight: 500; }
-.step small { color: var(--muted); font-size: var(--ox-m-micro, 0.875rem); line-height: 1.45; }
+.step small { color: var(--muted); font-size: var(--ox-a-micro, 0.75rem); line-height: 1.45; }
 .step.blocked { border-style: dashed; border-color: var(--rule); background: transparent; }
 @media (max-width: 720px) { .flow { grid-template-columns: minmax(0, 1fr); } }
 
@@ -150,7 +151,7 @@ ol.steps strong { color: var(--fg); font-weight: 600; }
 table { border-collapse: collapse; width: 100%; font-size: var(--ox-m-body, 1rem); }
 th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
 tr:last-child td { border-bottom: 0; }
-th { color: var(--muted); font-weight: 500; font-size: var(--ox-m-micro, 0.875rem); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+th { color: var(--muted); font-weight: 500; font-size: var(--ox-a-micro, 0.75rem); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
 td:first-child { color: var(--fg); }
 td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
 .repos td { min-width: 140px; }
@@ -268,7 +269,7 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
         <tr><td><code>radius</code></td><td>The base every corner multiplies, each step's multiplier, the step a card takes, and the website's corner.</td></tr>
         <tr><td><code>shadow</code></td><td>The shadow under a control and the shadow under a floating surface, each on ink and on paper.</td></tr>
         <tr><td><code>spacing</code></td><td>The spacing unit and the page width.</td></tr>
-        <tr><td><code>type</code></td><td>The weights, the tracking, and the marketing and app scales. Body text is 16px on the marketing scale and 14px on the app scale. No step is below 14px.</td></tr>
+        <tr><td><code>type</code></td><td>The weights, the tracking, and the marketing and app scales. Each scale has one base: 16px on marketing and 14px in the app. Every step is that base times its ratio, so a new base moves every step.</td></tr>
       </tbody>
     </table>
   </div>
@@ -320,7 +321,7 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
     </table>
   </div>
   <p class="note"><strong>Heading faces.</strong> Marketing and customer sites set h1 to h3 in Space Grotesk. They are oxagen.sh, the docs sites, stella.oxagen.sh, survey.oxagen.cloud, and the kit's public pages, this guide among them. The web app and the internal tools set h1 to h3 in Aeonik. Every h4 to h6 is Aeonik on every surface. In Tailwind, <code>text-m-h1</code> to <code>text-m-h3</code> set Space Grotesk. <code>text-a-h1</code> to <code>text-a-h3</code> and a bare h1 to h3 read <code>--font-heading</code>, which stays Aeonik until a marketing page sets it to <code>var(--font-display)</code>.</p>
-  <p class="note"><strong>Type sizes.</strong> Body text is 16px on marketing and customer sites and 14px in the app. No text is below 14px on any surface. That includes badges, eyebrows, labels, table headers, timestamps, and hints. An eyebrow or a badge stands apart by case, tracking, weight, or colour. Space Grotesk is never set below 20px. Every font size reads a type step token: <code>--ox-m-*</code> on the marketing scale and <code>--ox-a-*</code> on the app scale.</p>
+  <p class="note"><strong>Type sizes.</strong> Each scale has one base. The base is 16px on marketing and customer sites, docs included, and 14px in the web app and the internal tools. In your words: "The base page font size should never be lower than 14px." Every other step is the base times a ratio. Change the base in <code>theme/theme.json</code> or the theme editor, and every step on that scale follows. The smaller steps are for labels, badges, timestamps, and table headers. At the shipped base, the app's micro step is 12px, its 2xs step is 10px, and the marketing micro step is 14px. Running text, buttons, inputs, and table cells use the base. Space Grotesk loses its shape below 20px, so the theme editor warns when a heading that can take it falls under 20px. Nothing is hard-coded: every font size reads a step token, <code>--ox-m-*</code> on the marketing scale and <code>--ox-a-*</code> on the app scale.</p>
   <ol class="steps">
     <li><strong>Check the licence.</strong><p>On 2026-10-01 you decided that a licensed face may be committed to this public repo like the open faces. Its licence must still allow web embedding on Oxagen's sites.</p></li>
     <li><strong>Add the files.</strong><p>Put the <code>.woff2</code> files under <code>fonts/</code>, and add their rows to <code>fonts/README.md</code>.</p></li>

@@ -103,7 +103,7 @@ const DialogPanel = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex max-h-[62vh] min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-[18px] py-[17px] text-sm",
+      "flex max-h-[62vh] min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-[18px] py-[17px] text-base",
       className,
     )}
     {...props}
@@ -144,7 +144,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm leading-normal text-muted-foreground", className)}
+    className={cn("text-base leading-normal text-muted-foreground", className)}
     {...props}
   />
 ));

@@ -7,7 +7,7 @@
 
 /** A pill 36px tall, 12px across, 14px text, a 16px glyph. */
 const buttonBase =
-  "inline-flex min-h-9 max-md:min-h-11 items-center justify-center gap-1.5 rounded-4xl px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 " +
+  "inline-flex min-h-9 max-md:min-h-11 items-center justify-center gap-1.5 rounded-4xl px-3 py-1.5 text-base font-medium whitespace-nowrap transition-colors [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 " +
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring " +
   "disabled:cursor-not-allowed disabled:opacity-45 aria-disabled:cursor-not-allowed";
 
@@ -21,7 +21,7 @@ export const buttonSecondary = `${buttonBase} border border-button-default-borde
 export const buttonDanger = `${buttonBase} border border-error/40 bg-button-default-bg text-error-ink hover:bg-error/10 active:bg-error/15`;
 
 export const buttonSmall =
-  "inline-flex min-h-8 flex-none items-center justify-center gap-1 rounded-4xl border border-button-default-border bg-button-default-bg px-3 text-sm font-medium whitespace-nowrap text-button-default-fg hover:bg-button-default-hover-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-button-disabled-bg disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+  "inline-flex min-h-8 flex-none items-center justify-center gap-1 rounded-4xl border border-button-default-border bg-button-default-bg px-3 text-base font-medium whitespace-nowrap text-button-default-fg hover:bg-button-default-hover-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-button-disabled-bg disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 /** Gold as ink, underlined on hover. */
 export const linkText =
@@ -56,9 +56,9 @@ export const linkChip =
 
 export const panelHeader =
   "flex flex-wrap items-center justify-between gap-3 border-b border-border bg-panel-head px-4 py-3";
-export const panelTitle = "text-sm font-semibold text-foreground";
+export const panelTitle = "text-base font-semibold text-foreground";
 export const panelFooter =
-  "flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-xs text-muted-foreground";
+  "flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-muted-foreground";
 export const panelBody = "px-4 py-3.5";
 
 /** One tile of a figure strip. */
