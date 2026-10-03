@@ -2,12 +2,14 @@
 // The product app's Work page, copied from oxageninc/product
 // apps/app/src/features/work/ (work-page.tsx, work-table.tsx, words.tsx,
 // new-item.tsx) at fad620bcef (2026-10-02). It keeps the app's markup and
-// classes, so the theme editor shows the page as the app draws it. It reads
+// classes, except that each font size, space, and corner reads the nearest
+// kit token, so the theme editor shows the page as the app draws it. It reads
 // the sample items in work-items.ts in place of the workspace's, and a tab
 // switches the table on the page in place of changing the URL.
 //
 // The page will drift from the app. To refresh it, copy the same files from
-// the app again and keep the data as props.
+// the app again, keep the data as props, and move each literal the guard
+// lists (build/css_literals.py) to its token.
 import * as React from "react";
 import { PaperPlaneTiltIcon, PlusIcon } from "@phosphor-icons/react";
 import { WORKSPACE } from "./fixtures";
@@ -92,7 +94,7 @@ function PriorityCell({ priority }: { priority: WorkItem["priority"] }) {
       <Badge tone={PRIORITY_TONE[priority.label]} dot={false}>
         {priority.label}
       </Badge>
-      <span className="text-[11.5px] text-muted-foreground" data-wrap="">
+      <span className="text-sm text-muted-foreground" data-wrap="">
         {priority.setBy === undefined ? null : `Set by ${priority.setBy}. `}
         {priority.reason}
         {priority.cites.map((cite) => (
@@ -112,7 +114,7 @@ function CostText({ cost }: { cost: WorkItem["cost"] }) {
     <span className="inline-flex flex-col items-end gap-0.5">
       {cost.total === null ? <span className="text-muted-foreground">unknown</span> : <Money>{cost.total}</Money>}
       {cost.knownRuns < cost.runs ? (
-        <span className="text-[11.5px] text-muted-foreground">
+        <span className="text-sm text-muted-foreground">
           {cost.knownRuns} of {cost.runs} runs known
         </span>
       ) : null}
@@ -131,7 +133,7 @@ function ItemCell({ item, labels }: { item: WorkItem; labels: boolean }) {
         <span className={`${mono} flex-none text-muted-foreground`}>{item.number}</span>{" "}
         <span className="min-w-0 [overflow-wrap:anywhere]">{item.title}</span>
       </a>
-      <span className="text-[12.5px] text-muted-foreground" data-wrap="">
+      <span className="text-sm text-muted-foreground" data-wrap="">
         {item.wait}
       </span>
       {labels && item.labels.length > 0 ? (
@@ -205,7 +207,7 @@ function RunningTable({ items }: { items: readonly WorkItem[] }) {
             ) : (
               <span className="flex flex-col">
                 <span>{item.send.agent}</span>
-                <span className="text-[12px] text-muted-foreground">{item.send.runtime}</span>
+                <span className="text-sm text-muted-foreground">{item.send.runtime}</span>
               </span>
             )}
           </td>
@@ -213,7 +215,7 @@ function RunningTable({ items }: { items: readonly WorkItem[] }) {
             <span className="flex flex-col items-start gap-1">
               <WorkStatusBadge status={item.status} />
               {item.send === null ? null : (
-                <span className="text-[12px] text-muted-foreground">Sent on {item.send.sentOn}</span>
+                <span className="text-sm text-muted-foreground">Sent on {item.send.sentOn}</span>
               )}
             </span>
           </td>
@@ -250,7 +252,7 @@ function ReviewTable({ items }: { items: readonly WorkItem[] }) {
               ) : (
                 <span className="flex flex-col">
                   <span className={mono}>#{pr.number}</span>
-                  <span className={`${mono} text-[12px] text-muted-foreground`}>{pr.head}</span>
+                  <span className={`${mono} text-sm text-muted-foreground`}>{pr.head}</span>
                 </span>
               )}
             </td>
@@ -326,7 +328,7 @@ function plural(count: number, one: string, other: string): string {
 /** The banner a failing collector raises: what it reads and its last good read. */
 function CollectorBanner() {
   return (
-    <div className="flex flex-wrap items-start gap-x-3 gap-y-2 rounded-[10px] border border-error/40 bg-error/10 px-3.5 py-[11px] text-base text-foreground">
+    <div className="flex flex-wrap items-start gap-x-3 gap-y-2 rounded-xl border border-error/40 bg-error/10 px-3.5 py-2.75 text-base text-foreground">
       <div className="flex min-w-0 grow flex-col gap-1">
         <p>
           <b className="font-semibold">Collector github is failing</b> It reads a-intel/platform and
