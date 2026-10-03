@@ -223,7 +223,7 @@
       </div>
     </div>
 
-    <div class="table-wrap reveal" style="margin-top:48px">
+    <div class="table-wrap reveal" style="margin-top:calc(var(--space) * 12)">
       <table>
         <thead><tr><th scope="col">Part of the process</th><th scope="col">The old way</th><th scope="col">The new way</th></tr></thead>
         <tbody>
@@ -261,7 +261,7 @@
       <p class="caption">Source: pull requests merged into Oxagen's GitHub repository from September 1 to 29 of 2026.</p>
     </div>
 
-    <h3 class="reveal" style="margin:56px 0 16px">The agents' rules</h3>
+    <h3 class="reveal" style="margin:calc(var(--space) * 14) 0 calc(var(--space) * 4)">The agents' rules</h3>
     <ol class="rules reveal">
       <li>Every change starts as an issue, and the issue says what done looks like.</li>
       <li>A triage agent sets each issue's priority and size. Whoever files the issue does not.</li>
@@ -274,7 +274,7 @@
       <li>Each run ends with a note on the issue: minutes planned, minutes spent, and what the next agent should know.</li>
     </ol>
 
-    <h3 class="reveal" style="margin:56px 0 4px">Oxagen's role</h3>
+    <h3 class="reveal" style="margin:calc(var(--space) * 14) 0 calc(var(--space) * 1)">Oxagen's role</h3>
     <p class="reveal muted">Oxagen is workforce management for autonomous agents. It is the part of this process that manages the agents themselves.</p>
     <div class="oxfit">
       <div class="card reveal"><h4>Identity</h4><p>Each agent gets its own identity. Agents do not share an account.</p></div>
@@ -319,7 +319,7 @@
       <div class="card reveal"><h3>Decisions</h3><p>A rule can send a request to a person. Spending over a budget, adding a new tool, and reading production data are common ones. The run waits for the answer.</p></div>
       <div class="card reveal"><h3>Record</h3><p>Each day, the operator reads what shipped, what is waiting on a person, what broke, and what it all cost.</p></div>
     </div>
-    <h4 class="reveal" style="margin-top:40px">Dropped tasks</h4>
+    <h4 class="reveal" style="margin-top:calc(var(--space) * 10)">Dropped tasks</h4>
     <ul class="stop-list reveal">
       <li>Reading every line of every change</li>
       <li>Running checks again by hand</li>
@@ -349,8 +349,8 @@
   <div class="wrap template-grid">
     <div class="reveal">
       <p class="eyebrow">Template</p>
-      <h2 style="margin-bottom:16px">A copy for your team</h2>
-      <p class="lead" style="margin-bottom:28px">Type your company name. You get this process as a document with your name in it. It has blanks for your rules, your checks, and your people.</p>
+      <h2 style="margin-bottom:calc(var(--space) * 4)">A copy for your team</h2>
+      <p class="lead" style="margin-bottom:calc(var(--space) * 7)">Type your company name. You get this process as a document with your name in it. It has blanks for your rules, your checks, and your people.</p>
       <form class="make" action="/api/template" method="post" data-make>
         <div class="make-row">
           <label class="field">
@@ -384,7 +384,7 @@
       </form>
     </div>
     <div class="panel reveal">
-      <h4 style="margin-bottom:12px">Contents</h4>
+      <h4 style="margin-bottom:calc(var(--space) * 3)">Contents</h4>
       <ul class="contents">
         <li>About this document</li>
         <li>Reasons for the change</li>
