@@ -196,8 +196,8 @@ class SemanticTokens(unittest.TestCase):
                "@media (prefers-color-scheme: dark) { :root:not(.light):not(.dark) { --x: white; } }\n"
                ":root { --x: black; }")
         found = L.semantic_problems(css, "x.css")
-        self.assertEqual(len(found), 2)
-        self.assertTrue(any("declares --x on :root after .dark does" in p for p in found))
+        self.assertEqual(len(found), 1)
+        self.assertIn("x.css:3 declares --x on :root after .dark does (line 1)", found[0])
 
     def test_the_os_dark_block_must_repeat_dark(self) -> None:
         css = (":root { --x: black; }\n.dark { --x: white; }\n"

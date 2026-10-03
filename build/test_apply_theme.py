@@ -221,7 +221,7 @@ class GoldTest(Scratch):
             f"--gold:{new['gold']};--hi:{new['gold-bright']};--deep:{new['gold-deep']};",
         )
         degrees = A.gold_hue(after) - A.gold_hue(before)
-        self.assertIn(f"oklch(0.25 0.035 {88 + degrees})", (css / "globals.css").read_text())
+        self.assertIn(f"oklch(0.985 0.02 {95 + degrees})", (css / "globals.css").read_text())
 
     def test_every_carry_file_exists(self) -> None:
         for rel in A.CARRY_FILES:
