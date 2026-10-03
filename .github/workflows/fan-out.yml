@@ -41,7 +41,7 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - id: read
         run: |
-          echo "consumers=$(jq -c '[.consumers[] | {repo, sync, apt: (.apt // [])}]' consumers.json)" >> "$GITHUB_OUTPUT"
+          echo "consumers=$(jq -c '[.consumers[] | {repo, sync, apt: (.apt // []), copy: (.copy // [])}]' consumers.json)" >> "$GITHUB_OUTPUT"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   sync:
@@ -107,6 +107,27 @@ jobs:
           mkdir -p .claude/skills/oxagen-branding
           cp "$KIT/skills/stub/oxagen-branding/SKILL.md" .claude/skills/oxagen-branding/SKILL.md
           sh -c "$SYNC"
+      # A kit file the consumer's own sync does not copy yet, such as the
+      # opt-in house-text-scale.css, lands beside the files the sync writes.
+      # Nothing in the consumer imports it until the consumer opts in. The
+      # paths come from consumers.json, so each must be a plain relative path.
+      - name: Copy the opt-in files
+        working-directory: site
+        env:
+          KIT: ${{ github.workspace }}/kit
+          COPY: ${{ toJSON(matrix.consumer.copy) }}
+        run: |
+          printf '%s' "$COPY" | jq -r '.[] | "\(.from) \(.to)"' | while read -r from to; do
+            for p in "$from" "$to"; do
+              if ! printf '%s\n' "$p" | grep -Eqx '[A-Za-z0-9_][A-Za-z0-9_./-]*' || printf '%s\n' "$p" | grep -q '[.][.]'; then
+                echo "::error::consumers.json lists a copy path that is not a plain relative path: $p"
+                exit 1
+              fi
+            done
+            mkdir -p "$(dirname "$to")"
+            cp "$KIT/$from" "$to"
+            echo "Copied $from to $to"
+          done
       - name: Open the PR
         working-directory: site
         env:
