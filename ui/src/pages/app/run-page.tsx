@@ -2,7 +2,8 @@
 // The product app's Run page, copied from oxageninc/product
 // apps/app/src/features/run/ (run.tsx, header.tsx, stats.tsx, tabs.tsx,
 // transcript-view.tsx, transcript-skin.tsx, work.tsx, outputs.tsx, parts.tsx)
-// at fad620bcef (2026-10-02). It keeps the app's markup and classes, so the
+// at fad620bcef (2026-10-02). It keeps the app's markup and classes, except
+// that each font size, space, and corner reads the nearest kit token, so the
 // theme editor shows the page as the app draws it.
 //
 // It draws one live run, with the Transcript tab open, from the sample record
@@ -14,7 +15,8 @@
 // opens and closes.
 //
 // The page will drift from the app. To refresh it, copy the same files from
-// the app again and keep the data as props.
+// the app again, keep the data as props, and move each literal the guard
+// lists (build/css_literals.py) to its token.
 import * as React from "react";
 import {
   CopyIcon,
@@ -54,7 +56,7 @@ function Chip({ children, code = false, title }: { children: React.ReactNode; co
   return (
     <span
       title={title}
-      className={`inline-flex min-w-0 max-w-full items-center gap-[5px] whitespace-nowrap rounded-md border border-border bg-hl px-[7px] py-0.5 leading-normal tracking-[0.02em] text-muted-foreground ${code ? "font-mono text-[10.5px] font-medium" : "text-[11px] font-semibold"}`}
+      className={`inline-flex min-w-0 max-w-full items-center gap-1.25 whitespace-nowrap rounded-md border border-border bg-hl px-1.75 py-0.5 leading-normal tracking-[0.02em] text-muted-foreground ${code ? "font-mono text-xs font-medium" : "text-sm font-semibold"}`}
     >
       {children}
     </span>
@@ -73,7 +75,7 @@ function AgentAvatar({ initials, size }: { initials: string; size: number }) {
       <Avatar initials={initials} shape="agent" size={size} />
       <span
         className="absolute -bottom-[3px] -left-[3px] grid place-items-center rounded-full bg-background text-foreground ring-[1.5px] ring-background [&_svg]:size-full"
-        style={{ width: badge, height: badge, padding: 1.5 }}
+        style={{ width: badge, height: badge, padding: "calc(var(--ox-space) * 0.375)" }}
       >
         <RobotIcon weight="fill" />
       </span>
@@ -84,13 +86,13 @@ function AgentAvatar({ initials, size }: { initials: string; size: number }) {
 /** The agent's key and a line under it, in the compact card the header and the summary use. */
 function AgentCard({ sub }: { sub: React.ReactNode }) {
   return (
-    <span className="flex min-w-0 items-center gap-2.5 text-left inline-flex max-w-full rounded-[10px] border border-border bg-background py-[5px] pl-1.5 pr-[11px]">
+    <span className="flex min-w-0 items-center gap-2.5 text-left inline-flex max-w-full rounded-xl border border-border bg-background py-1.25 pl-1.5 pr-2.75">
       <AgentAvatar initials="SC" size={30} />
       <span className="flex min-w-0 flex-col max-w-[280px] leading-[1.3]">
-        <span title={RUN.agentKey} className={`${mono} truncate text-[12px] text-foreground`}>
+        <span title={RUN.agentKey} className={`${mono} truncate text-sm text-foreground`}>
           {RUN.agentKey}
         </span>
-        <span className="truncate text-[11.5px] text-muted-foreground">{sub}</span>
+        <span className="truncate text-sm text-muted-foreground">{sub}</span>
       </span>
     </span>
   );
@@ -98,21 +100,21 @@ function AgentCard({ sub }: { sub: React.ReactNode }) {
 
 function RunHeader() {
   return (
-    <header className="mb-[18px] flex flex-wrap items-start gap-[18px]">
+    <header className="mb-4.5 flex flex-wrap items-start gap-4.5">
       <div className="min-w-0">
         <p className={`${eyebrow} mb-2.5`}>Run</p>
-        <h1 className="mb-1 break-words text-[19px] font-bold leading-tight text-foreground">{RUN.name}</h1>
+        <h1 className="mb-1 break-words text-xl font-bold leading-tight text-foreground">{RUN.name}</h1>
         <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
           <button
             type="button"
             aria-label={`Copy run id ${RUN.id}`}
-            className="inline-flex min-w-0 items-center gap-1 rounded-sm font-mono text-[11.5px] text-muted-foreground hover:text-foreground max-md:min-h-11"
+            className="inline-flex min-w-0 items-center gap-1 rounded-sm font-mono text-sm text-muted-foreground hover:text-foreground max-md:min-h-11"
           >
             <span className="min-w-0 break-all">{RUN.id}</span>
             <CopyIcon aria-hidden="true" className="size-3 flex-none opacity-70" />
           </button>
         </span>
-        <div aria-label="Run identity" className="mt-2 flex flex-wrap items-center gap-[9px]">
+        <div aria-label="Run identity" className="mt-2 flex flex-wrap items-center gap-2.25">
           <AgentCard
             sub={
               <>
@@ -128,7 +130,7 @@ function RunHeader() {
           </Badge>
           <Chip>task {RUN.task}</Chip>
         </div>
-        <div className="mt-2 flex flex-wrap items-center gap-[9px]">
+        <div className="mt-2 flex flex-wrap items-center gap-2.25">
           <Chip>
             {RUN.harness}
             <span className="font-mono font-normal text-muted-foreground">{RUN.harnessVersion}</span>
@@ -144,7 +146,7 @@ function RunHeader() {
           <a href="#repository" className={linkChip}>
             {RUN.repository}
           </a>
-          <a href="#branch" className={`${linkChip} font-mono text-[10.5px] font-medium`}>
+          <a href="#branch" className={`${linkChip} font-mono text-xs font-medium`}>
             <GitBranchIcon aria-hidden="true" className="size-3 flex-none" />
             {RUN.branch}
           </a>
@@ -152,7 +154,7 @@ function RunHeader() {
             <span className="text-muted-foreground">no pull request</span>
           </Chip>
           <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
-            <button type="button" className={`${linkChip} font-mono text-[10.5px] font-medium`}>
+            <button type="button" className={`${linkChip} font-mono text-xs font-medium`}>
               <TreeStructureIcon aria-hidden="true" className="size-3 flex-none opacity-80" />
               <span className="min-w-0 truncate [direction:rtl] [text-align:left]">
                 <bdi>{RUN.path}</bdi>
@@ -160,7 +162,7 @@ function RunHeader() {
             </button>
           </span>
         </div>
-        <p className="mt-2 max-w-[70ch] text-[13px] text-muted-foreground">
+        <p className="mt-2 max-w-[70ch] text-base text-muted-foreground">
           started <time>{RUN.started}</time>
         </p>
       </div>
@@ -196,24 +198,24 @@ function SummaryPanel() {
   return (
     <section
       aria-labelledby="run-summary-title"
-      className="rounded-xl border border-border bg-card px-[18px] py-4 text-card-foreground"
+      className="rounded-xl border border-border bg-card px-4.5 py-4 text-card-foreground"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 id="run-summary-title" className={`${eyebrowQuiet} m-0`}>
           Summary
         </h2>
         <Badge tone="quiet" dot={false}>
-          <span className="text-[10.5px]">generated from the record</span>
+          <span className="text-xs">generated from the record</span>
         </Badge>
       </div>
       <div className="mt-2.5 flex flex-wrap items-center gap-2.5">
         <AgentCard sub={`${RUN.agentName} · ${RUN.harness}`} />
-        <span className="font-mono text-[11.5px] text-muted-foreground">on behalf of →</span>
-        <span className="inline-flex min-w-0 max-w-full items-center gap-[9px] rounded-full border border-border bg-background py-[5px] pl-1.5 pr-3 text-[12.5px] text-foreground">
+        <span className="font-mono text-sm text-muted-foreground">on behalf of →</span>
+        <span className="inline-flex min-w-0 max-w-full items-center gap-2.25 rounded-full border border-border bg-background py-1.25 pl-1.5 pr-3 text-sm text-foreground">
           <Avatar initials={RUN.operatorInitials} size={30} />
           <span className="flex min-w-0 flex-col leading-tight">
             <b className="truncate font-semibold">{RUN.operator}</b>
-            <span className="truncate font-mono text-[10.5px] text-muted-foreground">
+            <span className="truncate font-mono text-xs text-muted-foreground">
               <span>operator</span>
               {" · "}
               <span>workspace.member</span>
@@ -223,8 +225,8 @@ function SummaryPanel() {
           </span>
         </span>
       </div>
-      <p className="mb-2.5 mt-3 max-w-[78ch] text-[15px] leading-[1.55] text-foreground">{RUN.summary}</p>
-      <div className="mt-[13px] flex flex-wrap items-center gap-2.5 border-t border-border pt-[11px] font-mono text-[11px] text-muted-foreground">
+      <p className="mb-2.5 mt-3 max-w-[78ch] text-lg leading-[1.55] text-foreground">{RUN.summary}</p>
+      <div className="mt-3.25 flex flex-wrap items-center gap-2.5 border-t border-border pt-2.75 font-mono text-sm text-muted-foreground">
         <span className="min-w-0 flex-1">
           generated by <b className="font-semibold text-muted-foreground">{RUN.summaryModel}</b> ·{" "}
           <time>{RUN.summaryAt}</time>
@@ -280,7 +282,7 @@ function StatRow() {
       <Stat label="Prompts" note="one-shot session">
         1
       </Stat>
-      <Stat label="Cost" note={<span className="font-mono text-[10.5px] text-muted-foreground">list price</span>}>
+      <Stat label="Cost" note={<span className="font-mono text-xs text-muted-foreground">list price</span>}>
         <Money>$1.04</Money>
       </Stat>
       <Stat label="Wasted" note="the cost of steps that did not advance the task">
@@ -319,43 +321,43 @@ const RUN_TABS = [
 /* ── Transcript ─────────────────────────────────────────────────────────── */
 
 const kindShape =
-  "inline-flex items-center gap-1.5 rounded-md py-[3px] pr-2 font-mono text-[11px] focus-visible:outline-2 focus-visible:outline-ring max-md:min-h-9";
+  "inline-flex items-center gap-1.5 rounded-md py-0.75 pr-2 font-mono text-sm focus-visible:outline-2 focus-visible:outline-ring max-md:min-h-9";
 const kindPressed =
-  "aria-pressed:bg-hl aria-pressed:shadow-[inset_0_0_0_1px_var(--rule)] aria-[pressed=false]:text-muted-foreground aria-[pressed=false]:[&>span:not([data-dot])]:line-through";
+  "aria-pressed:bg-hl aria-pressed:inset-ring aria-pressed:inset-ring-rule aria-[pressed=false]:text-muted-foreground aria-[pressed=false]:[&>span:not([data-dot])]:line-through";
 const txKind = `${kindShape} ${kindPressed} pl-1.5 text-muted-foreground aria-pressed:text-foreground`;
 const txKindAll = `${kindShape} pl-2 text-muted-foreground hover:text-foreground`;
 const txKindErrors = `${kindShape} ${kindPressed} pl-1.5 text-muted-foreground aria-pressed:text-error`;
-const txKindCount = "text-[10px] tabular-nums text-muted-foreground";
+const txKindCount = "text-xs tabular-nums text-muted-foreground";
 
 const DOT: Record<string, string> = {
-  prompt: "bg-fk-op shadow-[0_0_0_1px_color-mix(in_srgb,var(--fk-op)_40%,transparent)]",
-  responses: "bg-fk-model shadow-[0_0_0_1px_color-mix(in_srgb,var(--fk-model)_40%,transparent)]",
-  thinking: "bg-fk-model shadow-[0_0_0_1px_color-mix(in_srgb,var(--fk-model)_40%,transparent)]",
-  tools: "bg-fk-tool shadow-[0_0_0_1px_color-mix(in_srgb,var(--fk-tool)_40%,transparent)]",
-  usage: "bg-fk-gov shadow-[0_0_0_1px_color-mix(in_srgb,var(--fk-gov)_40%,transparent)]",
-  recall: "bg-fk-ctx shadow-[0_0_0_1px_color-mix(in_srgb,var(--fk-ctx)_40%,transparent)]",
-  seal: "bg-fk-gov shadow-[0_0_0_1px_color-mix(in_srgb,var(--fk-gov)_40%,transparent)]",
+  prompt: "bg-fk-op ring-1 ring-fk-op/40",
+  responses: "bg-fk-model ring-1 ring-fk-model/40",
+  thinking: "bg-fk-model ring-1 ring-fk-model/40",
+  tools: "bg-fk-tool ring-1 ring-fk-tool/40",
+  usage: "bg-fk-gov ring-1 ring-fk-gov/40",
+  recall: "bg-fk-ctx ring-1 ring-fk-ctx/40",
+  seal: "bg-fk-gov ring-1 ring-fk-gov/40",
 };
 
 const buttonShape =
-  "inline-flex items-center justify-center gap-[7px] rounded-[7px] border border-border px-2 py-[3px] font-mono text-[11.5px] font-medium text-foreground transition-colors hover:border-rule hover:bg-hl aria-pressed:border-rule aria-pressed:bg-hl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-45 max-md:min-h-9";
+  "inline-flex items-center justify-center gap-1.75 rounded-lg border border-border px-2 py-0.75 font-mono text-sm font-medium text-foreground transition-colors hover:border-rule hover:bg-hl aria-pressed:border-rule aria-pressed:bg-hl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-45 max-md:min-h-9";
 const txButton = `${buttonShape} min-w-[30px] bg-card`;
 const txGhost = `${buttonShape} min-w-[30px] bg-transparent`;
 const txPlayButton = `${buttonShape} min-w-[74px] bg-card`;
 const txSeg = "ml-1 inline-flex gap-0.5 rounded-lg border border-border bg-void p-0.5";
 const txSegButton =
-  "inline-flex min-w-[30px] items-center justify-center rounded-[7px] border border-transparent bg-transparent px-2 py-[3px] font-mono text-[11.5px] font-medium text-foreground hover:bg-hl aria-pressed:border-rule aria-pressed:bg-hl max-md:min-h-9";
-const txCount = "ml-1 whitespace-nowrap text-[10.5px] tabular-nums text-muted-foreground";
+  "inline-flex min-w-[30px] items-center justify-center rounded-lg border border-transparent bg-transparent px-2 py-0.75 font-mono text-sm font-medium text-foreground hover:bg-hl aria-pressed:border-rule aria-pressed:bg-hl max-md:min-h-9";
+const txCount = "ml-1 whitespace-nowrap text-xs tabular-nums text-muted-foreground";
 const txBurn =
-  "flex items-center gap-2 whitespace-nowrap text-[10.5px] tabular-nums text-muted-foreground max-md:flex-wrap max-md:whitespace-normal";
+  "flex items-center gap-2 whitespace-nowrap text-xs tabular-nums text-muted-foreground max-md:flex-wrap max-md:whitespace-normal";
 const txProse = "min-w-0 whitespace-pre-wrap [overflow-wrap:anywhere]";
 const txProseLine = "min-w-0 truncate";
-const txs = "flex min-w-0 flex-col font-mono text-[12.5px] leading-[1.65] text-foreground";
+const txs = "flex min-w-0 flex-col font-mono text-sm leading-[1.65] text-foreground";
 const txTools = "flex flex-wrap items-center gap-2 pb-2.5";
 const txSearch =
   "w-[220px] max-w-full max-md:w-full rounded-lg border border-border bg-void px-2.5 py-1.5 font-mono text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-ring max-md:text-base";
 
-const chipShape = "whitespace-nowrap rounded-[5px] border bg-card px-1.5 font-mono text-[10.5px] leading-[1.6] tabular-nums";
+const chipShape = "whitespace-nowrap rounded-sm border bg-card px-1.5 font-mono text-xs leading-[1.6] tabular-nums";
 const CHIP = {
   plain: `${chipShape} border-border text-muted-foreground`,
   ok: `${chipShape} border-border text-success`,
@@ -403,7 +405,7 @@ function Fold({
 function Prose({ text, open, onToggle }: { text: string; open: boolean; onToggle: () => void }) {
   return (
     <div className={open ? txProse : txProseLine}>
-      <Fold open={open} label={open ? "Show less" : "Show in full"} closedGlyph="⏵" onToggle={onToggle} className="pr-[1ch]" />
+      <Fold open={open} label={open ? "Show less" : "Show in full"} closedGlyph="⏵" onToggle={onToggle} className="pr-(--t-cell)" />
       {open ? text : (
         <span className="cursor-pointer" onClick={onToggle}>
           {closedLine(text)}
@@ -461,7 +463,7 @@ function RowView({ row, open, onToggle }: { row: FeedRow; open: boolean; onToggl
         <Cells
           line={
             <div className="tx-ln tx-think">
-              <div className="flex min-w-0 items-baseline gap-[1ch]">
+              <div className="flex min-w-0 items-baseline gap-(--t-cell)">
                 <button type="button" className="tx-fold flex-none" aria-expanded={open} onClick={onToggle}>
                   <span aria-hidden="true">{open ? "⏶ " : "⏵ "}</span>
                   {lines} lines of thinking
@@ -506,7 +508,7 @@ function RowView({ row, open, onToggle }: { row: FeedRow; open: boolean; onToggl
                   {row.parked === null ? null : (
                     <div className="tx-res">The call waits for a person to approve it.</div>
                   )}
-                  <div className="tx-res flex flex-wrap items-baseline gap-[1ch]">
+                  <div className="tx-res flex flex-wrap items-baseline gap-(--t-cell)">
                     <FrameChip frame={row.frame}>
                       {row.frame.type} · fr {row.frame.seq}
                     </FrameChip>
@@ -584,10 +586,10 @@ function Transcript() {
     <section aria-label="Transcript" className={txs}>
       <div className={txTools}>
         <input type="search" placeholder="Search the transcript…" aria-label="Search the transcript" className={txSearch} />
-        <div role="group" aria-label="Filter the transcript" className="flex flex-wrap gap-[3px]">
+        <div role="group" aria-label="Filter the transcript" className="flex flex-wrap gap-0.75">
           {KINDS.map((kind) => (
             <button key={kind.group} type="button" aria-pressed className={txKind}>
-              <span data-dot="" aria-hidden="true" className={`size-2 flex-none rounded-[2px] ${DOT[kind.group] ?? ""}`} />
+              <span data-dot="" aria-hidden="true" className={`size-2 flex-none rounded-xs ${DOT[kind.group] ?? ""}`} />
               <span>{kind.label}</span>
               <span className={txKindCount}>{kind.count}</span>
             </button>
@@ -681,7 +683,7 @@ function Transcript() {
               </span>
               <span className={txBurn}>
                 <span>burn</span>
-                <span className="h-1 w-[120px] overflow-hidden rounded-[2px] bg-hl">
+                <span className="h-1 w-[120px] overflow-hidden rounded-xs bg-hl">
                   <i aria-hidden="true" className="block h-full bg-info" style={{ width: "21%" }} />
                 </span>
                 <b className="font-semibold text-foreground">
@@ -748,7 +750,7 @@ function Transcript() {
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <>
-      <dt className={`${kvTerm} text-[11px]`}>{label}</dt>
+      <dt className={`${kvTerm} text-sm`}>{label}</dt>
       <dd className={`${kvValue} text-sm`}>{children}</dd>
     </>
   );
@@ -776,7 +778,7 @@ function ChangesPanel() {
         </h3>
       </div>
       <div className={panelBody}>
-        <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-[7px]">
+        <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-1.75">
           <Row label="Pull request">
             <span className="text-muted-foreground">none yet (the run is still working)</span>
           </Row>
@@ -796,7 +798,7 @@ function ChangesPanel() {
           {FILES.map((file) => (
             <li
               key={file.name}
-              className="flex min-w-0 justify-between gap-2.5 border-b border-border py-[5px] text-[11.5px]"
+              className="flex min-w-0 justify-between gap-2.5 border-b border-border py-1.25 text-sm"
             >
               <span className="min-w-0 truncate font-mono">{file.name}</span>
               <DiffStat added={file.added} removed={file.removed} />
@@ -879,48 +881,48 @@ const OUTPUTS: readonly {
 ];
 
 const linkQuiet =
-  "rounded-sm text-[11.5px] text-muted-foreground underline decoration-rule underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "rounded-sm text-sm text-muted-foreground underline decoration-rule underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 function OutputsSpine() {
   return (
     <section
       aria-label="Run outputs"
-      className="rounded-xl border border-border bg-card px-[18px] pb-[13px] pt-[15px] text-card-foreground"
+      className="rounded-xl border border-border bg-card px-4.5 pb-3.25 pt-3.75 text-card-foreground"
     >
       <div className="mb-3 flex flex-wrap items-center gap-2.5">
         <h2 className={`${eyebrowQuiet} m-0`}>Outputs</h2>
-        <span className="ml-auto font-mono text-[11px] text-muted-foreground">3 artifacts · 2 reads · 1 gate</span>
+        <span className="ml-auto font-mono text-sm text-muted-foreground">3 artifacts · 2 reads · 1 gate</span>
         <a href="#reads" className={linkQuiet}>
           Hide reads
         </a>
       </div>
-      <ol className="relative m-0 list-none py-0 pl-[30px] before:absolute before:bottom-1.5 before:left-[11px] before:top-1.5 before:w-px before:content-[''] before:bg-gradient-to-b before:from-rule before:from-[78%] before:to-transparent">
-        <li className="relative flex min-w-0 flex-wrap items-baseline gap-2 py-[5px]">
+      <ol className="relative m-0 list-none py-0 pl-7.5 before:absolute before:bottom-1.5 before:left-[11px] before:top-1.5 before:w-px before:content-[''] before:bg-gradient-to-b before:from-rule before:from-[78%] before:to-transparent">
+        <li className="relative flex min-w-0 flex-wrap items-baseline gap-2 py-1.25">
           <span aria-hidden="true" className="absolute -left-[23px] top-3 h-px w-[9px] bg-rule" />
-          <span className="min-w-0 text-[11.5px] text-muted-foreground">
+          <span className="min-w-0 text-sm text-muted-foreground">
             read{" "}
-            <b className="break-all font-mono text-[11px] font-medium text-muted-foreground">db/schema/invoices.sql</b>,{" "}
-            <b className="break-all font-mono text-[11px] font-medium text-muted-foreground">db/README.md</b>
+            <b className="break-all font-mono text-sm font-medium text-muted-foreground">db/schema/invoices.sql</b>,{" "}
+            <b className="break-all font-mono text-sm font-medium text-muted-foreground">db/README.md</b>
           </span>
         </li>
         {OUTPUTS.map((node) => {
           const gate = node.kind === "gate";
           return (
-            <li key={node.name} className="relative min-w-0 py-[7px]">
+            <li key={node.name} className="relative min-w-0 py-1.75">
               <span
                 aria-hidden="true"
-                className={`absolute -left-[30px] top-1.5 grid size-[23px] place-items-center rounded-full border bg-card ${
+                className={`absolute -left-7.5 top-1.5 grid size-[23px] place-items-center rounded-full border bg-card ${
                   node.state === "awaiting" ? "border-info/55 text-info" : "border-border text-muted-foreground"
                 }`}
               >
                 <Glyph kind={node.kind} />
               </span>
-              <div className={`min-w-0 ${gate ? "rounded-[10px] border border-info/40 bg-info/10 px-3 py-2.5" : ""}`}>
+              <div className={`min-w-0 ${gate ? "rounded-xl border border-info/40 bg-info/10 px-3 py-2.5" : ""}`}>
                 <div className="flex min-w-0 flex-wrap items-center gap-2">
-                  <b className="min-w-0 max-w-full truncate font-mono text-[13px] font-semibold text-foreground">{node.name}</b>
+                  <b className="min-w-0 max-w-full truncate font-mono text-base font-semibold text-foreground">{node.name}</b>
                   <Badge tone={node.state === "awaiting" ? "approval" : "allowed"}>{node.state}</Badge>
                   {node.stat === null ? null : (
-                    <span className={`${mono} shrink-0 text-[11px] tabular-nums`}>
+                    <span className={`${mono} shrink-0 text-sm tabular-nums`}>
                       <b className="font-semibold text-success">+{node.stat.added}</b>{" "}
                       <b className="font-semibold text-warning">&minus;{node.stat.removed}</b>
                     </span>
@@ -928,25 +930,25 @@ function OutputsSpine() {
                   <a
                     href={`#fr-${node.seq}`}
                     title="Open the frame that recorded this"
-                    className="shrink-0 rounded-md border border-border bg-background px-1.5 py-px font-mono text-[10.5px] text-muted-foreground hover:border-rule hover:text-foreground"
+                    className="shrink-0 rounded-md border border-border bg-background px-1.5 py-px font-mono text-xs text-muted-foreground hover:border-rule hover:text-foreground"
                   >
                     fr {node.seq}
                   </a>
                 </div>
-                <div className="mt-[3px] flex flex-wrap items-baseline gap-2 text-[11.5px] leading-normal">
+                <div className="mt-0.75 flex flex-wrap items-baseline gap-2 text-sm leading-normal">
                   {node.where === null ? null : (
-                    <span className="min-w-0 font-mono text-[11px] text-muted-foreground [overflow-wrap:anywhere]">{node.where}</span>
+                    <span className="min-w-0 font-mono text-sm text-muted-foreground [overflow-wrap:anywhere]">{node.where}</span>
                   )}
                   {node.note === null ? null : (
                     <span className="min-w-0 text-muted-foreground [overflow-wrap:anywhere]">{node.note}</span>
                   )}
                 </div>
                 {gate ? (
-                  <div className="mt-[9px] flex flex-wrap items-center gap-2.5">
+                  <div className="mt-2.25 flex flex-wrap items-center gap-2.5">
                     <a href="#actions" className={`${buttonSecondary} min-h-7 px-2.5 text-base`}>
                       Review the approval
                     </a>
-                    <span className="text-[11px] text-muted-foreground">the run is stopped here until someone answers</span>
+                    <span className="text-sm text-muted-foreground">the run is stopped here until someone answers</span>
                   </div>
                 ) : null}
               </div>
@@ -954,7 +956,7 @@ function OutputsSpine() {
           );
         })}
       </ol>
-      <p className="mt-[11px] flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-border pt-2.5 text-[11px] text-muted-foreground">
+      <p className="mt-2.75 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-border pt-2.5 text-sm text-muted-foreground">
         <span>In frame order.</span>
       </p>
     </section>
