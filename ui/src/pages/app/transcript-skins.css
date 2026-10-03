@@ -128,7 +128,7 @@
     color: var(--muted);
   }
   .rp-time span + span {
-    color: var(--dim);
+    color: var(--muted-foreground);
   }
 
   /* The terminal: a title bar, then one grid row per line. */
@@ -209,7 +209,7 @@
     font-variant-numeric: tabular-nums;
     text-align: right;
     white-space: nowrap;
-    color: var(--dim);
+    color: var(--muted-foreground);
   }
   .tc {
     min-width: 0;
@@ -277,10 +277,10 @@
     padding-top: 3px;
     border-top: 1px dashed var(--rule);
     font-style: italic;
-    color: var(--dim);
+    color: var(--muted-foreground);
   }
   .tm .tx-fold {
-    color: var(--dim);
+    color: var(--muted-foreground);
   }
   .tm .tx-fold:hover {
     color: var(--fg);

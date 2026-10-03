@@ -260,5 +260,22 @@ class StyleLiterals(unittest.TestCase):
             self.assertTrue(why.strip())
 
 
+class Contrast(unittest.TestCase):
+    def test_every_text_role_clears_4_5_on_its_grounds_and_no_word_is_quiet(self) -> None:
+        self.assertEqual(L.contrast_problems(), [])
+
+    def test_a_resolved_colour_reads_as_hex(self) -> None:
+        self.assertEqual(L.to_hex("#fff"), "#FFFFFF")
+        self.assertEqual(L.to_hex("oklch(1 0 0)"), "#FFFFFF")
+        self.assertEqual(L.to_hex("color-mix(in srgb, #000000 50%, #FFFFFF)"), "#808080")
+        self.assertIsNone(L.to_hex("linear-gradient(red, blue)"))
+
+    def test_a_quiet_word_fails_and_a_comment_passes(self) -> None:
+        code = 'const a = "uppercase text-dim";\n// text-dim in a note\nconst b = "hover:text-dim";'
+        self.assertEqual([u for _l, u in L.quiet_uses(code, "script")], ["text-dim", "hover:text-dim"])
+        css = "/* color: var(--dim) */\n.a { color: var(--dim); }\n.b { text-decoration-color: var(--dim); }"
+        self.assertEqual(L.quiet_uses(css, "css"), [(2, "color: var(--dim)")])
+
+
 if __name__ == "__main__":
     unittest.main()

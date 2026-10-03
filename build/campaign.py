@@ -738,11 +738,11 @@ svg.art{display:block;width:100%;height:auto;max-width:100%}
 figure svg.art{border:1px solid var(--border);border-radius:8px}
 figcaption{display:flex;justify-content:space-between;gap:6px 12px;flex-wrap:wrap;font-size:var(--a-micro);color:var(--muted);margin-top:8px}
 figcaption a,.uses a{font-family:var(--mono);font-size:var(--a-micro)}
-.uses{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:var(--a-micro);color:var(--dim);margin:0 0 8px}
+.uses{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:var(--a-micro);color:var(--muted);margin:0 0 8px}
 .site{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--ink);margin:14px 0 8px}
 .site .chrome{display:flex;align-items:center;gap:7px;padding:9px 14px;border-bottom:1px solid var(--border);background:var(--panel)}
 .site .chrome i{width:9px;height:9px;border-radius:50%;border:1px solid var(--rule);display:block}
-.site .chrome .url{margin-left:8px;font-family:var(--mono);font-size:var(--a-micro);color:var(--dim)}
+.site .chrome .url{margin-left:8px;font-family:var(--mono);font-size:var(--a-micro);color:var(--muted)}
 .m-body{padding:clamp(22px,5vw,56px)}
 .m-eyebrow{font-size:var(--a-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 16px}
 .m-h1{font-family:var(--font-display);font-weight:700;font-size:clamp(var(--m-h3),4.6vw,var(--m-h2));line-height:1.04;letter-spacing:-.025em;color:var(--fg);margin:0;max-width:20ch;text-wrap:balance}
@@ -752,7 +752,7 @@ figcaption a,.uses a{font-family:var(--mono);font-size:var(--a-micro)}
 .m-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:26px}
 .m-btn{display:inline-block;background:var(--gold);color:var(--on-gold);border:1px solid var(--gold-deep);border-radius:8px;padding:10px 16px;font-weight:600;font-size:var(--m-micro)}
 .m-quietbtn{display:inline-block;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-weight:600;font-size:var(--m-micro);color:var(--fg);margin-bottom:12px}
-.m-url{font-family:var(--mono);font-size:var(--a-micro);color:var(--dim)}
+.m-url{font-family:var(--mono);font-size:var(--a-micro);color:var(--muted)}
 .m-cat{font-size:var(--m-micro);color:var(--muted);margin:22px 0 0}
 .m-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:28px;align-items:center}
 .m-art svg{color:var(--fg)}

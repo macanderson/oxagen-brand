@@ -327,7 +327,7 @@ export function AttachmentCard({
           <AttachmentAction
             aria-label={`Remove ${file.name}`}
             onClick={() => onRemove(file)}
-            className="text-dim hover:bg-hl hover:text-foreground [&_svg]:size-3"
+            className="text-muted-foreground hover:bg-hl hover:text-foreground [&_svg]:size-3"
           >
             <XIcon aria-hidden="true" />
           </AttachmentAction>

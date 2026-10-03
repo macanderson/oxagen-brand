@@ -112,7 +112,7 @@ const Stat = React.forwardRef<HTMLDivElement, StatProps>(
           {icon && (
             <div
               aria-hidden="true"
-              className="-mt-px shrink-0 text-dim [&_svg]:size-4"
+              className="-mt-px shrink-0 text-muted-foreground [&_svg]:size-4"
             >
               {icon}
             </div>

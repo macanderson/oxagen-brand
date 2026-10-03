@@ -176,7 +176,7 @@ function Composer({
           }
         }}
         className={cn(
-          "block min-h-[60px] max-h-[180px] w-full resize-none field-sizing-content rounded-[10px] border border-border bg-background px-[11px] py-[9px] text-base leading-[1.5] text-foreground transition-colors placeholder:text-dim focus-visible:border-gold focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 max-md:text-input-touch",
+          "block min-h-[60px] max-h-[180px] w-full resize-none field-sizing-content rounded-[10px] border border-border bg-background px-[11px] py-[9px] text-base leading-[1.5] text-foreground transition-colors placeholder:text-muted-foreground focus-visible:border-gold focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 max-md:text-input-touch",
           "group-data-[dragging]/composer:border-dashed group-data-[dragging]/composer:border-gold group-data-[dragging]/composer:bg-hl",
         )}
       />
@@ -209,7 +209,7 @@ function Composer({
             addFiles(picked);
           }}
         />
-        <div className="min-w-0 flex-1 truncate text-sm text-dim">
+        <div className="min-w-0 flex-1 truncate text-sm text-muted-foreground">
           {toolbar}
         </div>
         <Button

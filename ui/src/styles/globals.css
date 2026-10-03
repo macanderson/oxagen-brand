@@ -1038,7 +1038,9 @@
   --color-muted: var(--muted-surface);
   --color-panel-head: var(--panel-head);
   /* The mockup's palette names, so a recipe says what the design says: gold
-     for identity, dim for a label, hl for a wash, rule for a hairline. */
+     for identity, hl for a wash, rule for a hairline. dim is below 4.5:1, so
+     it marks only what carries no meaning, such as a struck-through line;
+     a label reads --muted-foreground (#88). */
   --color-gold: var(--gold);
   --color-on-gold: var(--on-gold);
   --color-gold-deep: var(--gold-deep);

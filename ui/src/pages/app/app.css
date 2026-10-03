@@ -137,7 +137,7 @@
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--dim);
+  color: var(--muted-foreground);
 }
 
 :where(.app-snapshot [data-shell-page]) table tbody :is(td, th) {

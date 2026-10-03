@@ -908,6 +908,141 @@ def semantic_problems(css: str, path: str = KIT_CSS) -> list[str]:
     return found
 
 
+# --------------------------------------------------------------------------
+# contrast: every semantic text role that carries meaning
+# --------------------------------------------------------------------------
+
+#: The semantic text roles that carry meaning. Each clears 4.5:1, the WCAG AA
+#: bar for text at any size, on every ground in GROUNDS, in both themes.
+TEXT_ROLES = (
+    "--foreground", "--card-foreground", "--popover-foreground", "--accent-foreground", "--secondary-foreground",
+    "--muted-foreground", "--muted", "--body", "--fg", "--tab-fg", "--app-link-fg", "--card-header-fg",
+    "--menu-item-fg", "--menu-group-label-fg", "--button-default-fg", "--input-placeholder",
+    "--link", "--link-hover", "--accent-text", "--gold-text",
+    "--error-ink", "--warning-ink", "--success-ink", "--info-ink", "--proven-ink", "--critical-ink",
+)
+
+#: The grounds a text role sits on: the page, a card or panel, a popover, a
+#: lifted row or wash, and a panel header.
+GROUNDS = ("--background", "--card", "--popover", "--muted-surface", "--hl", "--panel-head")
+
+#: Gold words sit on the page, a card, or a popover. The deep gold that sets
+#: them on paper (#8A7223) is 4.23:1 on a lifted row, so a link or an accent
+#: word on a lifted ground waits on a darker gold for words (#93).
+GOLD_ROLES = ("--link", "--link-hover", "--accent-text", "--gold-text")
+GOLD_GROUNDS = ("--background", "--card", "--popover")
+
+#: A text tone below 4.5:1, kept for marks that carry no meaning, such as a
+#: struck-through line. No class or rule sets words in it (#88).
+QUIET_TONES = ("dim",)
+
+#: The token files, in the order the kit's stylesheet imports them.
+TOKEN_STACK = (
+    "tokens/house-tokens.css", "tokens/house-tailwind.css", "tokens/house-text-scale.css", KIT_CSS,
+)
+
+_THEMES = {"light": {LIGHT: 1}, "dark": {LIGHT: 1, DARK: 1}}
+
+
+def theme_values(root: Path = ROOT) -> dict[str, dict[str, str]]:
+    """Each custom property's resolved value in the light and the dark theme, with every var() substituted."""
+    toks: list[Token] = []
+    for rel in TOKEN_STACK:
+        toks += tokens((root / rel).read_text())
+    out = {}
+    for theme, blocks in _THEMES.items():
+        raw: dict[str, tuple[int, str]] = {}
+        for order, t in enumerate(toks):
+            if len(t.scope) != 1 or t.scope[0] not in blocks:
+                continue
+            raw[t.name] = (order, t.value)
+        def resolve(value: str, depth: int = 0) -> str:
+            if depth > 40:
+                return value
+            def sub(m: re.Match[str]) -> str:
+                name, fallback = m.group(1), m.group(2)
+                if name in raw:
+                    return resolve(raw[name][1], depth + 1)
+                return resolve(fallback, depth + 1) if fallback is not None else ""
+            prev = None
+            while prev != value:
+                prev, value = value, _VAR_REF.sub(sub, value)
+            return " ".join(value.split())
+        out[theme] = {name: resolve(v) for name, (_o, v) in raw.items()}
+    return out
+
+
+_VAR_REF = re.compile(r"var\(\s*(--[\w-]+)\s*(?:,\s*([^()]*(?:\([^()]*\)[^()]*)*))?\)")
+
+
+def to_hex(value: str) -> str | None:
+    """A resolved colour as a hex: a hex, an `oklch()`, or a `color-mix()` of two of them. None for anything else."""
+    import color as C
+
+    v = value.strip()
+    if re.fullmatch(r"#[0-9a-fA-F]{6}", v):
+        return v.upper()
+    if re.fullmatch(r"#[0-9a-fA-F]{3}", v):
+        return "#" + "".join(ch * 2 for ch in v[1:]).upper()
+    m = re.fullmatch(r"oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)", v)
+    if m:
+        return C.oklch_hex(float(m.group(1)), float(m.group(2)), float(m.group(3))).upper()
+    m = re.fullmatch(r"color-mix\(\s*in\s+(srgb|oklab|oklch)\s*,\s*(.+?)\s+([\d.]+)%\s*,\s*(.+?)(?:\s+([\d.]+)%)?\s*\)", v)
+    if m:
+        a, b = to_hex(m.group(2)), to_hex(m.group(4))
+        if not a or not b:
+            return None
+        p = float(m.group(3)) / 100
+        if m.group(1) == "srgb":
+            ra, rb = C.hex_to_rgb(a), C.hex_to_rgb(b)
+            return C.rgb_to_hex(*(x * p + y * (1 - p) for x, y in zip(ra, rb))).upper()
+        la, lb = C.rgb_to_oklab(*C.hex_to_rgb(a)), C.rgb_to_oklab(*C.hex_to_rgb(b))
+        mixed = tuple(x * p + y * (1 - p) for x, y in zip(la, lb))
+        return C.rgb_to_hex(*C.oklab_to_rgb(*mixed)).upper()
+    return None
+
+
+def quiet_uses(text: str, kind: str) -> list[tuple[int, str]]:
+    """Each place a file sets words in a quiet tone: a `text-dim` class or a `color: var(--dim)` rule, comments left out."""
+    quiet = "|".join(QUIET_TONES)
+    text_class = re.compile(rf"(?<![\w-])(?:[\w-]+:)*text-(?:{quiet})(?![\w-])")
+    css_color = re.compile(rf"(?<![\w-])color\s*:\s*var\(--(?:{quiet})\)")
+    bare = strip_comments(text) if kind == "css" else strip_script_comments(text) if kind == "script" else text
+    return [(_line(bare, m.start()), m.group(0)) for m in [*text_class.finditer(bare), *css_color.finditer(bare)]]
+
+
+def contrast_problems(root: Path = ROOT) -> list[str]:
+    """Each text role below 4.5:1 on a ground, and each quiet tone set as a word's colour in the scope."""
+    import color as C
+
+    found = []
+    values = theme_values(root)
+    for theme, v in values.items():
+        for role in TEXT_ROLES:
+            fg = to_hex(v.get(role, ""))
+            if fg is None:
+                found.append(f"{KIT_CSS}: {role} resolves to {v.get(role)!r} in the {theme} theme, which the contrast "
+                             "check cannot read as a colour")
+                continue
+            for ground in GOLD_GROUNDS if role in GOLD_ROLES else GROUNDS:
+                bg = to_hex(v.get(ground, ""))
+                if bg is None:
+                    continue
+                ratio = C.contrast(fg, bg)
+                if ratio < 4.5:
+                    found.append(f"{KIT_CSS}: {role} ({fg}) is {ratio:.2f}:1 on {ground} ({bg}) in the {theme} theme, "
+                                 "below the 4.5:1 a word that carries meaning needs")
+    for kind, f in scanned_files(root):
+        rel = f.relative_to(root).as_posix()
+        text = f.read_text()
+        found += [
+            f"{rel}:{line} sets words in {use}, a tone below 4.5:1. Use text-muted-foreground or "
+            "var(--muted-foreground) (var(--muted) on a kit page) for a word that carries meaning"
+            for line, use in quiet_uses(text, kind)
+        ]
+    return found
+
+
 def check(path: Path = ROOT / KIT_CSS, root: Path = ROOT) -> list[str]:
     """The guard's problems, as `build/build.py --check` prints them."""
     hits, stale = literals(path.read_text())
@@ -933,7 +1068,7 @@ def check(path: Path = ROOT / KIT_CSS, root: Path = ROOT) -> list[str]:
         "Remove the entry from KEEP."
         for k in stale + [k for k in KEEP if k.path != KIT_CSS and k not in used]
     ]
-    return problems + problems_semantic + sdlc_step_problems(root)
+    return problems + problems_semantic + contrast_problems(root) + sdlc_step_problems(root)
 
 
 def summary() -> list[str]:

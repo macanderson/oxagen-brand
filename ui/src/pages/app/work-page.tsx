@@ -96,7 +96,7 @@ function PriorityCell({ priority }: { priority: WorkItem["priority"] }) {
         {priority.setBy === undefined ? null : `Set by ${priority.setBy}. `}
         {priority.reason}
         {priority.cites.map((cite) => (
-          <span key={cite} className={`${mono} ml-1 text-dim`}>
+          <span key={cite} className={`${mono} ml-1 text-muted-foreground`}>
             {cite}
           </span>
         ))}

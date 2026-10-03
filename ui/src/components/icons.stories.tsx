@@ -383,9 +383,9 @@ function IconMap() {
                 <td className={CELL}>
                   <div className="flex flex-col">
                     <code className="text-sm text-foreground">{map}</code>
-                    <span className="text-sm text-dim">{file}</span>
+                    <span className="text-sm text-muted-foreground">{file}</span>
                     {through && (
-                      <span className="text-sm text-dim">
+                      <span className="text-sm text-muted-foreground">
                         Reads <code>{through}</code>
                       </span>
                     )}

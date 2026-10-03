@@ -104,7 +104,7 @@ describe("Table", () => {
       "text-xs",
       "tracking-[0.09em]",
       "font-semibold",
-      "text-dim",
+      "text-muted-foreground",
       "bg-card",
       "whitespace-nowrap",
     ]) {

@@ -200,11 +200,12 @@ export const note =
  * `.kv { display:grid; grid-template-columns:auto 1fr; gap:7px 16px;
  * font-size:12.5px }`, `.kv dt { color:var(--dim) }` and `.kv dd
  * { color:var(--body); overflow-wrap:anywhere }`: a record's fields, label
- * left in the dim ink and value right.
+ * left in the muted ink and value right. The mockup's dim label falls below
+ * 4.5:1, so the kit sets it in --muted-foreground (#88).
  */
 export const kvList =
   "grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-[7px] text-base";
-export const kvTerm = "whitespace-nowrap text-dim";
+export const kvTerm = "whitespace-nowrap text-muted-foreground";
 export const kvValue = "m-0 min-w-0 text-foreground [overflow-wrap:anywhere]";
 
 /**
@@ -242,7 +243,7 @@ export const panelBody = "px-4 py-3.5";
 export const statTile =
   "flex min-w-0 flex-col rounded-2xl border border-border bg-card px-[15px] py-[13px] text-card-foreground max-md:px-3 max-md:py-[11px]";
 export const statTerm =
-  "mb-[5px] text-xs font-semibold uppercase tracking-[0.1em] text-dim";
+  "mb-[5px] text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground";
 export const statValue =
   "text-(length:--ox-a-h2) font-bold leading-[1.15] tracking-[-0.02em] tabular-nums max-md:text-(length:--ox-a-h4)";
 export const statNote = "mt-[3px] text-sm text-muted-foreground";
