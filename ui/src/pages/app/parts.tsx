@@ -70,6 +70,14 @@ const AVATAR_TONE: Record<AvatarTone, string> = {
   "gold-deep": "bg-gold-deep text-on-gold-deep border-gold-deep",
 };
 
+/**
+ * A length that follows the app base: `px` at the shipped 14px base, and the
+ * same share of the base when the theme editor or a site moves it.
+ */
+function baseLength(px: number): string {
+  return `calc(var(--ox-a-base) * ${Number((px / 14).toFixed(4))})`;
+}
+
 /** One letter fills half the tile, two letters a little less. */
 function initialsScale(letters: number): number {
   if (letters <= 1) return 0.5;
@@ -99,9 +107,9 @@ export function Avatar({
     <span
       aria-hidden="true"
       style={{
-        width: size,
-        height: size,
-        fontSize: Math.round(size * initialsScale(initials.length)),
+        width: baseLength(size),
+        height: baseLength(size),
+        fontSize: baseLength(Math.round(size * initialsScale(initials.length))),
         letterSpacing: "0.02em",
       }}
       className={cn(
