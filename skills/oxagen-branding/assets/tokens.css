@@ -35,7 +35,7 @@
   --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --font-heading: var(--font);
   --font-wordmark: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --font: "Aeonik", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --mono-features: "calt", "liga";
   --radius: 12px; --wrap: 1180px;

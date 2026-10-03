@@ -7,7 +7,7 @@ vendored in `fonts/`, instanced to a fixed weight at build time.
 
 The art's lines of text (headlines, answer lines, kickers, calls to action,
 taglines) are outlined the same way, from the text face (`faces.sans.outline`,
-Aeonik since 2026-10-02), because the text face sets every line of text and
+Geist since 2026-10-03), because the text face sets every line of text and
 Space Grotesk sets the wordmarks. `set_line`, `font`, and `shape` default to
 the wordmark face. `text_width` and `text_path` default to the text face.
 

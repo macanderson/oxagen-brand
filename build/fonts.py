@@ -1,6 +1,7 @@
-"""Make the code webfont from its upstream release, and check every webfont the kit ships.
+"""Make the text and code webfonts from their upstream releases, and check every webfont the kit ships.
 
-    .venv/bin/python build/fonts.py mono "path/to/Monaspace Neon Var.woff2"
+    .venv/bin/python build/fonts.py geist path/to/Geist[wght].woff2
+    .venv/bin/python build/fonts.py mono  "path/to/Monaspace Neon Var.woff2"
     .venv/bin/python build/fonts.py --check
 
 Space Grotesk is outlined at build time from the variable TTF in `fonts/`, and
@@ -8,10 +9,11 @@ its four static webfonts were instanced from it (see the git history of
 `fonts/`).
 
 Aeonik ships as CoType Foundry delivered it: four variable WOFF2 files, each on
-one weight axis from 100 to 900, copied into `fonts/` unchanged. Mac chose it
-as the house sans on 2026-10-02. This script does not make them.
+one weight axis from 100 to 900, copied into `fonts/` unchanged. It was the
+house sans from 2026-10-02 to 2026-10-03, when Mac set Geist back. All four
+load, and no role takes them. This script does not make them.
 
-    fonts/aeonik-wght.woff2         Aeonik, upright: every heading and line of text
+    fonts/aeonik-wght.woff2         Aeonik, upright: loads, and no role takes it
     fonts/aeonik-italic-wght.woff2  Aeonik, italic: the same family, font-style italic
     fonts/aeonik-mono-wght.woff2    Aeonik Mono: loads, and no role takes it yet
     fonts/aeonik-fono-wght.woff2    Aeonik Fono: loads, and no role takes it yet
@@ -20,9 +22,11 @@ Each file names itself with a " VF" suffix ("Aeonik VF"). The CSS asks for the
 family the theme names ("Aeonik"), and the @font-face rule binds that name to
 the file, so the suffix never reaches a page.
 
-Monaspace Neon ships as one variable file, subset to the latin codepoints the
-Space Grotesk webfonts carry, with the weight axis kept:
+Geist and Monaspace Neon ship as one variable file each, subset to the latin
+codepoints the Space Grotesk webfonts carry, with the weight axis kept:
 
+    fonts/geist-latin-wght.woff2           Geist, wght 100 to 900: every heading
+                                           and line of text
     fonts/monaspace-neon-latin-wght.woff2  Monaspace Neon, wght 200 to 800,
                                            width pinned at 100, upright
 
@@ -55,13 +59,19 @@ FONTS = ROOT / "fonts"
 #: subset already carries, so the faces agree on what they can set.
 REFERENCE_SUBSET = FONTS / "space-grotesk-latin-400.woff2"
 
-#: The OpenType features the Monaspace subset keeps. `calt` is its texture
+#: The OpenType features the subset keeps. `calt` is Monaspace's texture
 #: healing; `liga` the code ligatures; the rest are the ordinary text features
-#: and the numerals the tables need.
+#: Geist ships with and the numerals the tables need.
 FEATURES = ["calt", "liga", "kern", "ccmp", "locl", "case", "tnum", "pnum", "frac", "dnom", "numr", "sups", "subs", "ordn"]
 
 #: The faces this script makes from an upstream release.
 FACES: dict[str, dict] = {
+    "geist": {
+        "out": "geist-latin-wght.woff2",
+        "family": "Geist",
+        "axes": {"wght": (100, 900)},
+        "pin": {},
+    },
     "mono": {
         "out": "monaspace-neon-latin-wght.woff2",
         "family": "Monaspace Neon",
@@ -71,8 +81,8 @@ FACES: dict[str, dict] = {
 }
 
 
-#: Codepoints in the Space Grotesk subset that neither Monaspace Neon nor Aeonik
-#: draws: the division slash and the okina. Not required of them.
+#: Codepoints in the Space Grotesk subset that Geist, Monaspace Neon, and Aeonik
+#: do not draw: the division slash and the okina. Not required of them.
 NOT_UPSTREAM = {0x2215, 0x02BB}
 
 #: Codepoints in the Space Grotesk subset that Aeonik does not draw: the
@@ -85,6 +95,10 @@ NOT_IN_AEONIK = {0x02BC, 0x2032, 0x2033}
 #: features the CSS relies on, the required codepoints it may lack, and how to
 #: put it back when it is missing.
 CHECKS: dict[str, dict] = {
+    FACES["geist"]["out"]: {
+        "family": FACES["geist"]["family"], "axes": FACES["geist"]["axes"], "italic": None,
+        "features": ("liga",), "lacks": set(), "restore": "run build/fonts.py geist <release file>",
+    },
     "aeonik-wght.woff2": {
         "family": "Aeonik VF", "axes": {"wght": (100, 900)}, "italic": False,
         "features": ("liga",), "lacks": NOT_IN_AEONIK, "restore": "copy aeonikvf.woff2 from the CoType release",

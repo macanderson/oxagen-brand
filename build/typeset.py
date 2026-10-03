@@ -1,11 +1,11 @@
 """The house type: three faces, five roles, and two size scales.
 
 Mac set this rule on 2026-10-02. It replaces every earlier face and size rule.
+On 2026-10-03 Mac set Geist back as the house sans in place of Aeonik.
 
-**Aeonik** sets the default text on every surface: body, labels, buttons,
+**Geist** sets the default text on every surface: body, labels, buttons,
 tables, and navigation. It sets h1 to h3 in the web app and the internal
-tools, and every h4 to h6 everywhere. Its italic ships beside the upright as
-the same family. **Space Grotesk** sets h1 to h3 on the marketing and customer
+tools, and every h4 to h6 everywhere. **Space Grotesk** sets h1 to h3 on the marketing and customer
 sites, and the docs sites count as customer sites. It also sets the oxagen and
 stella wordmarks and Stella's asterisk, and that use is fixed. Its wide
 geometric letters lose their shape below 20 px, so no heading step that can
@@ -13,19 +13,20 @@ take it is smaller. **Monaspace Neon** sets code, terminal output, logs,
 digests, paths, ids, and the numbers in a metric or a table. Its texture
 healing (`calt`) and code ligatures (`liga`) are on wherever it is used.
 
-**Aeonik Mono** and **Aeonik Fono** ship too, from `extra_faces` in the
-theme. Each gets @font-face rules and a next/font loader, so a page can name
-its family. No role reads them yet.
+**Aeonik**, **Aeonik Mono**, and **Aeonik Fono** ship too, from `extra_faces`
+in the theme. Each gets @font-face rules and a next/font loader, so a page can
+name its family. Aeonik's italic ships beside its upright as the same family.
+No role reads them.
 
 A product's CSS names a role, `--font-<role>`, and each role resolves to one
 face:
 
-- `sans` is Aeonik, for everything read, every app heading, and every h4 to h6.
+- `sans` is Geist, for everything read, every app heading, and every h4 to h6.
 - `display` is Space Grotesk, for h1 to h3 on a marketing or customer site.
   It is the theme's `display` face, which the theme editor offers as the
   heading role.
 - `heading` is the face h1 to h3 take on the surface. It reads `sans`, so an
-  app heading is Aeonik. A marketing or docs site points it at `display` with
+  app heading is Geist. A marketing or docs site points it at `display` with
   one line, `--font-heading: var(--font-display)`.
 - `mono` is Monaspace Neon.
 - `wordmark` is Space Grotesk, for a wordmark set as text rather than drawn.
@@ -142,7 +143,7 @@ def _one_per_family(faces: tuple[Face, ...]) -> tuple[Face, ...]:
 FACES: tuple[Face, ...] = _one_per_family(tuple(FACE.values()))
 
 #: Faces the kit ships and loads that no role takes, from `extra_faces` in the
-#: theme: Aeonik Mono and Aeonik Fono today. They get @font-face rules and a
+#: theme: Aeonik, Aeonik Mono, and Aeonik Fono today. They get @font-face rules and a
 #: next/font loader, so a page can name the family, and no `--font-*` or
 #: `--ox-font-*` token. Their keys stay out of FACE, so no role can resolve to one.
 EXTRA_FACES: tuple[Face, ...] = tuple(
@@ -322,7 +323,7 @@ class Route:
 
 
 #: Which role each element takes, whatever the scale. This is the routing.
-#: h1 to h3 read the surface's heading role, so an app gets Aeonik and a
+#: h1 to h3 read the surface's heading role, so an app gets Geist and a
 #: marketing site that repoints `--font-heading` gets Space Grotesk. No
 #: element reaches the display or wordmark face on its own.
 ROUTING: tuple[Route, ...] = (

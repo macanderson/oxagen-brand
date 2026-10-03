@@ -53,9 +53,9 @@ A state colour is a mark, and a mark needs only 3:1. A word in a state's colour 
 
 ## Type
 
-Three faces, each with its own job. Mac set this rule on 2026-10-02. It replaces every earlier face and size rule.
+Three faces, each with its own job. Mac set this rule on 2026-10-02. It replaces every earlier face and size rule. On 2026-10-03 Mac set Geist back as the house sans in place of Aeonik.
 
-- **Aeonik** sets the default text on every surface: body, labels, buttons, tooltips, tables, and navigation. It sets h1 to h3 in the web app (app.oxagen.sh) and the internal tools (roadmap.oxagen.cloud, gtm.oxagen.cloud). It sets every h4 to h6 on every surface. Small headings take weight 500 or 600 to stand apart from body. Its italic ships beside it, so `em` draws the real italic.
+- **Geist** sets the default text on every surface: body, labels, buttons, tooltips, tables, and navigation. It sets h1 to h3 in the web app (app.oxagen.sh) and the internal tools (roadmap.oxagen.cloud, gtm.oxagen.cloud). It sets every h4 to h6 on every surface. Small headings take weight 500 or 600 to stand apart from body.
 - **Space Grotesk** sets h1 to h3 on the marketing and customer sites: oxagen.sh, docs.oxagen.sh, stella.oxagen.sh and its docs, and survey.oxagen.cloud. It also sets the oxagen and stella wordmarks and Stella's asterisk icon, and that use is fixed. Nothing in Space Grotesk is set below 20px, because its wide letters lose their shape there.
 - **Monaspace Neon** is the code face: code, commands, terminal output, logs, digests, paths, frame kinds, verdict values, ids, and the numbers in tables. Texture healing and code ligatures are on (`font-feature-settings: "calt", "liga"`).
 
@@ -63,32 +63,32 @@ The kit's own pages follow the same split. `playbook.html`, `brand-guide.html`, 
 
 No fourth role face. In CSS a rule names a role, never a face. Five roles carry the three faces:
 
-- `--font-sans` is Aeonik, the default text.
+- `--font-sans` is Geist, the default text.
 - `--font-display` is Space Grotesk, for h1 to h3 on a marketing or customer site. `text-m-h1` to `text-m-h3` read it.
-- `--font-heading` is the face h1 to h3 take on the surface. It reads `--font-sans`, so a bare h1 to h3 and `text-a-h1` to `text-a-h3` draw Aeonik. A marketing or docs site sets its h1 to h3 in Space Grotesk with one line in its own stylesheet: `:root { --font-heading: var(--font-display); }`.
+- `--font-heading` is the face h1 to h3 take on the surface. It reads `--font-sans`, so a bare h1 to h3 and `text-a-h1` to `text-a-h3` draw Geist. A marketing or docs site sets its h1 to h3 in Space Grotesk with one line in its own stylesheet: `:root { --font-heading: var(--font-display); }`.
 - `--font-mono` is Monaspace Neon.
 - `--font-wordmark` is Space Grotesk, for a wordmark set as text rather than drawn. It stays Space Grotesk whatever face `--font-display` takes.
 
-The token files name the same roles `--ox-font`, `--ox-font-display`, `--ox-font-heading`, `--ox-font-mono`, and `--ox-font-wordmark`. A site that reads them sets its h1 to h3 in Space Grotesk with `h1, h2, h3 { font-family: var(--ox-font-display); }`. `assets/tokens.css` and the kit's pages call the text role `--font` and the code role `--mono`. Aeonik Mono and Aeonik Fono ship in the kit's `fonts/` too and load as their own families, and no role takes either one yet. Headings are sentence case.
+The token files name the same roles `--ox-font`, `--ox-font-display`, `--ox-font-heading`, `--ox-font-mono`, and `--ox-font-wordmark`. A site that reads them sets its h1 to h3 in Space Grotesk with `h1, h2, h3 { font-family: var(--ox-font-display); }`. `assets/tokens.css` and the kit's pages call the text role `--font` and the code role `--mono`. Aeonik, Aeonik Mono, and Aeonik Fono ship in the kit's `fonts/` too and load as their own families, and no role takes any of them. Headings are sentence case.
 
 Two scales. Each has one base, and every step is the base times its ratio. Each cell gives the size at the shipped base, the ratio, the line height, the weight, and the tracking.
 
 | Step | Marketing face | Marketing (`text-m-*`) | App face | App (`text-a-*`) |
 |---|---|---|---|---|
 | base | | 16px, `--ox-m-base` | | 14px, `--ox-a-base` |
-| h1 | Space Grotesk | 72px, ×4.5, 1.05, 700, -0.03em | Aeonik | 30px, ×2.142857, 1.15, 700, -0.02em |
-| h2 | Space Grotesk | 40px, ×2.5, 1.2, 700, -0.01em | Aeonik | 24px, ×1.714286, 1.2, 600 |
-| h3 | Space Grotesk | 28px, ×1.75, 1.3, 600 | Aeonik | 20px, ×1.428571, 1.25, 600 |
-| h4 | Aeonik | 20px, ×1.25, 1.4, 500 | Aeonik | 16px, ×1.142857, 1.4, 600 |
-| body | Aeonik | 16px, ×1, 1.625, 400 | Aeonik | 14px, ×1, 1.5, 400 |
+| h1 | Space Grotesk | 72px, ×4.5, 1.05, 700, -0.03em | Geist | 30px, ×2.142857, 1.15, 700, -0.02em |
+| h2 | Space Grotesk | 40px, ×2.5, 1.2, 700, -0.01em | Geist | 24px, ×1.714286, 1.2, 600 |
+| h3 | Space Grotesk | 28px, ×1.75, 1.3, 600 | Geist | 20px, ×1.428571, 1.25, 600 |
+| h4 | Geist | 20px, ×1.25, 1.4, 500 | Geist | 16px, ×1.142857, 1.4, 600 |
+| body | Geist | 16px, ×1, 1.625, 400 | Geist | 14px, ×1, 1.5, 400 |
 | micro | Monaspace Neon | 14px, ×0.875, 1.5, 400 | Monaspace Neon | 12px, ×0.857143, 1.4, 400 |
-| 2xs | none | none | Aeonik | 10px, ×0.714286, 1.4, 500 |
+| 2xs | none | none | Geist | 10px, ×0.714286, 1.4, 500 |
 
 Marketing is for landing pages and posts: large and spaced. App is for the web app and the internal tools: dense, for dashboards, panels, tables, terminals, and logs. Docs sites are customer sites, so their h1 to h3 take Space Grotesk and their body is 16px. A docs site sets both in its own stylesheet: `--font-heading: var(--font-display)` for the headings, and `--ox-m-body` for the body.
 
 The base is the body size: 16px on the marketing and customer sites, docs included, and 14px in the app and the internal tools. Mac, 2026-10-03: "The base page font size should never be lower than 14px". Every step derives from its scale's base (`--ox-m-base`, `--ox-a-base`) as the base times its ratio, such as `calc(var(--ox-a-base) * 0.857143)` for the app micro step, so a change to the base in `theme/theme.json` or the theme editor moves every step. The theme editor warns when a base goes under 14px. Set the base on `:root`. Each step is computed where `:root` declares it, so a base set on a descendant element does not move the steps inside it.
 
-The smaller steps are for labels, badges, timestamps, and table headers, and dense metadata such as a chart axis: micro (12px) and 2xs (10px) in the app, and micro (14px) on marketing. Running text, control labels, inputs, buttons, menu items, and table body cells take the base, never a smaller step. An eyebrow takes the micro step's size in Aeonik, uppercase, at 0.14em tracking: 14px on a marketing or customer site and 12px in the app, at the shipped bases.
+The smaller steps are for labels, badges, timestamps, and table headers, and dense metadata such as a chart axis: micro (12px) and 2xs (10px) in the app, and micro (14px) on marketing. Running text, control labels, inputs, buttons, menu items, and table body cells take the base, never a smaller step. An eyebrow takes the micro step's size in Geist, uppercase, at 0.14em tracking: 14px on a marketing or customer site and 12px in the app, at the shipped bases.
 
 No class or stylesheet writes a font size of its own. Mac, 2026-10-02: "we can't hard code font sizes in classes, we need to let the tokens do their job." Every size reads a step token (`--ox-m-*`, `--ox-a-*`) or a house utility (`text-m-*`, `text-a-*`). A hard-coded small size becomes the nearest smaller step, never a literal. In this kit, `build/css_literals.py` fails on a hard-coded size.
 

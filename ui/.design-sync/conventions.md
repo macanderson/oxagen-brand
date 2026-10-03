@@ -49,7 +49,7 @@ tokens through CSS, so nothing else is needed — never hand-pick a hex.
 
 ### Type and the gold rule
 
-Three families, each with its own job. **Aeonik** (`--ox-font`, read through
+Three families, each with its own job. **Geist** (`--ox-font`, read through
 `--font-sans`) sets the default text on every surface: body, labels, buttons, tables,
 navigation. It also sets h1 to h3 in the app and the internal tools, through
 `--font-heading`, and every h4 to h6 everywhere. **Space Grotesk** (`--ox-font-display`,
@@ -59,16 +59,16 @@ included. `--font-wordmark` sets a wordmark in it as text. **Monaspace Neon**
 digests, paths, ids, and numbers in tables, with `calt` and `liga` on for texture
 healing. A figure in a table is mono so columns of digits align.
 
-Mac set this rule on 2026-10-02. A component's h1 to h3 read `--font-heading`, which is
-Aeonik. A marketing or docs design sets `--font-heading: var(--font-display)` on its
+Mac set this rule on 2026-10-02 and set Geist back as the house sans on 2026-10-03. A
+component's h1 to h3 read `--font-heading`, which is Geist. A marketing or docs design sets `--font-heading: var(--font-display)` on its
 root, so its h1 to h3 draw Space Grotesk. Each scale has one base: 14px in the app
 (`--ox-a-base`) and 16px on marketing (`--ox-m-base`), never below 14px. Every step is the
 base times a ratio, so it follows the base. No style writes a font size of its own: read
 a step token, such as `var(--ox-a-body)` (the app base) or `var(--ox-a-micro)` (12px).
 Running text, controls, inputs, buttons, menu items, and table body cells take the base
 (`text-base`). Labels, badges, timestamps, and table headers take a smaller step:
-`text-sm` (micro, 12px) or `text-xs` (2xs, 10px). Aeonik Mono and Aeonik Fono load as
-their own families, and no role takes either one yet.
+`text-sm` (micro, 12px) or `text-xs` (2xs, 10px). Aeonik, Aeonik Mono, and Aeonik Fono
+load as their own families, and no role takes any of them.
 
 **Glass belongs only on chrome that floats over content:** menus, selects, comboboxes,
 popovers, hover cards, the command menu, toasts, a dialog's scrim, and sticky navigation

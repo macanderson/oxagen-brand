@@ -1,17 +1,17 @@
 # fonts
 
-Three faces take a role. Aeonik sets the default text on every surface, h1 to
+Three faces take a role. Geist sets the default text on every surface, h1 to
 h3 in the web app and the internal tools, and every h4 to h6. Space Grotesk
 sets h1 to h3 on the marketing and customer sites, docs included, and the two
 wordmarks. Monaspace Neon sets code, logs, digests, and data. Mac set this
-rule on 2026-10-02.
+rule on 2026-10-02, and set Geist back in place of Aeonik on 2026-10-03.
 
-Aeonik Mono and Aeonik Fono ship here too. Each loads as its own family, so a
-page can name it. No role takes either one yet.
+Aeonik, Aeonik Mono, and Aeonik Fono ship here too. Each loads as its own
+family, so a page can name it. No role takes any of them.
 
-Aeonik, Aeonik Mono, and Aeonik Fono are by CoType Foundry. Space Grotesk and
-Monaspace Neon are under the SIL Open Font License, and each has its licence
-beside it.
+Aeonik, Aeonik Mono, and Aeonik Fono are by CoType Foundry. Geist, Space
+Grotesk, and Monaspace Neon are under the SIL Open Font License, and each has
+its licence beside it.
 
 The wordmark face is fixed: Space Grotesk, drawn from
 `SpaceGrotesk-VariableFont_wght.ttf` at weight 600. `build/theme.py` refuses
@@ -22,7 +22,8 @@ name the wordmark.
 |---|---|---|
 | `SpaceGrotesk-VariableFont_wght.ttf` | Space Grotesk, the fixed source the wordmarks are outlined from at weight 600 at build time | `LICENSE-OFL.txt` |
 | `space-grotesk-latin-{400,500,600,700}.woff2` | Space Grotesk, four static weights for the web | `LICENSE-OFL.txt` |
-| `aeonik-wght.woff2` | Aeonik, variable weight 100 to 900, upright, and the source the art's lines of text are outlined from at build time | |
+| `geist-latin-wght.woff2` | Geist, variable weight 100 to 900, and the source the art's lines of text are outlined from at build time | `LICENSE-OFL-geist.txt` |
+| `aeonik-wght.woff2` | Aeonik, variable weight 100 to 900, upright | |
 | `aeonik-italic-wght.woff2` | Aeonik, variable weight 100 to 900, italic | |
 | `aeonik-mono-wght.woff2` | Aeonik Mono, variable weight 100 to 900 | |
 | `aeonik-fono-wght.woff2` | Aeonik Fono, variable weight 100 to 900 | |
@@ -33,12 +34,13 @@ Each covers the latin set the Space Grotesk webfonts carry, except the modifier
 letter apostrophe, the prime, and the double prime. A browser takes those from
 the fallback stack.
 
-`build/fonts.py` makes the Monaspace Neon file from its upstream release
-(Monaspace v1.400), keeping texture healing (`calt`) and the code ligatures
-(`liga`), and checks every file here:
+`build/fonts.py` makes the Geist and Monaspace Neon files from their upstream
+releases (Geist v1.7.2, Monaspace v1.400), keeping texture healing (`calt`) and
+the code ligatures (`liga`), and checks every file here:
 
 ```sh
-.venv/bin/python build/fonts.py mono "Monaspace Neon Var.woff2"
+.venv/bin/python build/fonts.py geist "Geist[wght].woff2"
+.venv/bin/python build/fonts.py mono  "Monaspace Neon Var.woff2"
 .venv/bin/python build/fonts.py --check
 ```
 

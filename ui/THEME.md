@@ -51,10 +51,10 @@ twin on paper. `h1`, `h2`, and `h3` read `--ox-a-h1-leading`,
 `--ox-a-h2-leading`, and `--ox-a-h3-leading`, as product's `packages/ui` does.
 `h4` to `h6` read `--ox-a-h4-leading`.
 
-`h1` to `h3` take `--font-heading`, which is Aeonik in the kit, as in the app.
+`h1` to `h3` take `--font-heading`, which is Geist in the kit, as in the app.
 A Pages/Website story points it at `--font-display`, Space Grotesk, as a
 marketing or docs site does in its own stylesheet. `h4` to `h6` take
-`--font-sans`, Aeonik, on every surface.
+`--font-sans`, Geist, on every surface.
 
 `globals.css` imports `../tokens/house-text-scale.css` after
 `house-tailwind.css`, so Tailwind's named sizes read the app steps in order.

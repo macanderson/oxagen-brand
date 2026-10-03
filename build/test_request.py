@@ -221,14 +221,16 @@ class StyleTest(unittest.TestCase):
         req = {"summary": "Aeonik", "faces": {"display": {"family": "Aeonik", "source": "kit", "files": files}}}
         self.assertTrue(any("oblique" in p for p in R.problems(req)))
 
-    def test_the_shipped_theme_loads_an_italic_and_two_extra_faces(self) -> None:
+    def test_the_shipped_theme_sets_geist_and_loads_aeonik_as_extra_faces(self) -> None:
         import theme as TH
 
         shipped = theme()
         self.assertEqual(TH.problems(), [])
-        styles = [f.get("style", "normal") for f in shipped["faces"]["sans"]["files"]]
+        self.assertEqual(shipped["faces"]["sans"]["family"], "Geist")
+        extras = {f["family"]: f for f in shipped["extra_faces"]}
+        self.assertEqual(list(extras), ["Aeonik", "Aeonik Mono", "Aeonik Fono"])
+        styles = [f.get("style", "normal") for f in extras["Aeonik"]["files"]]
         self.assertEqual(sorted(styles), ["italic", "normal"])
-        self.assertEqual([f["family"] for f in shipped["extra_faces"]], ["Aeonik Mono", "Aeonik Fono"])
         self.assertNotIn("extra_faces", R.request_schema()["properties"], "a request cannot change the extra faces")
 
 
