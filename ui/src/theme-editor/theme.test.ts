@@ -53,7 +53,7 @@ describe("themeVars for the shipped theme", () => {
 
   it("matches every --ox-* token in house-tokens.css", () => {
     for (const [name, value] of Object.entries(vars)) {
-      if (!name.startsWith("--ox-") || name === "--ox-ember-soft") continue;
+      if (!name.startsWith("--ox-")) continue;
       expect(declared(tokensCss, name), name).toBe(value);
     }
   });

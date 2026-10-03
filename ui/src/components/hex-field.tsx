@@ -2,8 +2,8 @@ import type { CSSProperties } from "react";
 
 /**
  * HexField — an ambient background of hexagon cells abstracted from the Oxagen
- * logomark (the ember hex-cluster). Cells come in exactly two forms: faint
- * outlines ("faint"), and cells lit with the ember gradient that breathe slowly
+ * logomark (the gold hex-cluster). Cells come in exactly two forms: faint
+ * outlines ("faint"), and cells lit with the gold gradient that breathe slowly
  * ("lit"). There is deliberately no third, differently-hued variant — the
  * backdrop speaks one accent, and it is the largest graphic on the product.
  * Used as a pointer-events-none backdrop behind hero / auth / shell surfaces so

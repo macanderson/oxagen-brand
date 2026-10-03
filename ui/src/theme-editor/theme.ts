@@ -154,7 +154,6 @@ export const WORDMARK_STACK = `"${SHIPPED.faces.wordmark.family}", ${familyStack
  * hold for any gold, and `theme.test.ts` checks them against the file.
  */
 export const GOLD_RAMP: readonly { name: string; l: number; c: number; offset: number }[] = [
-  { name: "--ox-ember-soft", l: 0.25, c: 0.035, offset: -3 },
   { name: "--_amber-50", l: 0.985, c: 0.02, offset: 4 },
   { name: "--_amber-100", l: 0.965, c: 0.04, offset: 4 },
   { name: "--_amber-200", l: 0.925, c: 0.08, offset: 2 },

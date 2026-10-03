@@ -127,16 +127,9 @@
     --_ink: var(--ox-ink); /* #09090B — the dark canvas, and light-mode ink */
     --_ink-white: var(--ox-text); /* #FFFFFF — primary text on ink */
 
-    /* Named brand swatches. --ox-ember is THE accent knob: it drives --brand,
-       --ring, links and chart-1. The `ember` spelling predates the house
-       system and is kept rather than renamed to `gold` because ~25 files across
-       apps/ and packages/ bind to these identifiers; a skin owns the values,
-       not the names. All three stops are the kit's gold, unaltered. */
+    /* The light card. The gold reads straight from --ox-gold, --ox-gold-deep,
+       and --ox-gold-bright, which drive --brand, --ring, links, and chart-1. */
     --ox-surface: var(--ox-paper-panel); /* #FFFFFF — light card */
-    --ox-ember-deep: var(--ox-gold-deep); /* #8A7223 — gold as INK on paper (4.65:1) */
-    --ox-ember: var(--ox-gold); /* #D4AF37 — the metal */
-    --ox-ember-light: var(--ox-gold-bright); /* #F1CE65 — the shimmer highlight */
-    --ox-ember-soft: oklch(0.25 0.035 88); /* gold at 14% over obsidian: a tinted fill on the dark canvas */
 
     /* RULE — the house system has exactly ONE accent hue, the gold. There is no
        second brand colour anywhere: the categorical ramp spends the palette's
@@ -182,14 +175,6 @@
     --_amber-700: oklch(0.47 0.09 80); /* link hover on white */
     --_amber-800: oklch(0.38 0.07 80);
     --_amber-900: oklch(0.3 0.05 80);
-
-    /* Brand mark gradient stops — the kit's own sheen, deep → metal → highlight.
-       Used for the tab underline and any surface that shows the metal moving;
-       the MARKS themselves never take it (a mark is one colour). */
-    --_ember-a: var(--ox-gold-deep); /* #8A7223 */
-    --_ember-b: var(--ox-gold); /* #D4AF37 */
-    --_ember-c: var(--ox-gold-bright); /* #F1CE65 */
-    --_ember-navy: var(--ox-ink); /* #09090B — the canvas black */
 
     /* Status hues, from the kit's own state ramp.
      *
@@ -248,8 +233,8 @@
     --ink-light: var(--_ink-white);
     --ink-dark: var(--_ink);
 
-    /* The brand hue — ember accent drives links, focus, CTAs. */
-    --brand: var(--ox-ember);
+    /* The brand hue — the gold drives links, focus, CTAs. */
+    --brand: var(--ox-gold);
     --brand-foreground: var(--ox-ink);
 
     /* ════════════════════════════════════════════════════════════════════════
@@ -280,8 +265,8 @@
        that gold on white becomes its deep shade: #D4AF37 is 2.1:1 here
        and would fail WCAG 1.4.11 (3:1 for a focus indicator); #8A7223 is
        4.65:1. Dark mode keeps the metal itself at 9.5:1. */
-    --ring: var(--ox-ember-deep);
-    --link: var(--ox-ember-deep); /* #8A7223 — gold as ink on paper (4.65:1); the metal itself is 2.1:1 */
+    --ring: var(--ox-gold-deep);
+    --link: var(--ox-gold-deep); /* #8A7223 — gold as ink on paper (4.65:1); the metal itself is 2.1:1 */
     --link-hover: var(--_amber-700); /* a darker gold, on white */
 
     /* Status — semantic names (error == destructive). */
@@ -313,7 +298,6 @@
        paper, so accent copy must not use it directly: light mode takes the
        gold's own deep shade (#8A7223, 4.65:1) and dark mode the gold itself
        (9.5:1). This is the kit's "gold as text on paper" rule. */
-    --ember-ink: var(--ox-ember-deep); /* #8A7223 — the kit's "gold as text on paper" */
 
     /* The metal in motion — the kit's sheen (deep → metal → highlight), laid
        out horizontally for the tab underline and any rule that shows it. The
@@ -321,16 +305,16 @@
        belongs to a single glyph. */
     --brand-gradient: linear-gradient(
       92deg,
-      var(--_ember-a) 0%,
-      var(--_ember-b) 46%,
-      var(--_ember-c) 100%
+      var(--ox-gold-deep) 0%,
+      var(--ox-gold) 46%,
+      var(--ox-gold-bright) 100%
     );
 
     /* Charts — categorical ramp drawn entirely from palette primitives:
-       ember · slate · moss · ochre · silver. Four hues roughly 60° apart plus
+       gold · slate · moss · ochre · silver. Four hues roughly 60° apart plus
        one achromatic, so five series stay separable with no colour from
        outside the skin. */
-    --chart-1: var(--ox-ember);
+    --chart-1: var(--ox-gold);
     --chart-2: var(--_slate);
     --chart-3: var(--_moss);
     --chart-4: var(--_ochre);
@@ -382,7 +366,7 @@
     --app-topbar-border: var(--border);
     /* App-chrome icons/links (support, notifications bell, mobile nav). Neutral
        at rest so they match the rest of the UI — no second accent — brightening to
-       the foreground on hover; the active nav item picks up the ember primary. */
+       the foreground on hover; the active nav item picks up the gold primary. */
     --app-link-fg: var(--muted-foreground);
     --app-link-hover-fg: var(--foreground);
     --app-link-active-fg: var(--foreground);
@@ -496,7 +480,7 @@
     --gold: var(--ox-gold);
     --gold-bright: var(--ox-gold-bright);
     --gold-deep: var(--ox-gold-deep);
-    --accent-text: var(--ember-ink);
+    --accent-text: var(--gold-text);
     --on-gold: var(--ox-ink);
     /* The glyph on a gold-deep fill (#8A7223): paper reads at 4.66:1. */
     --on-gold-deep: var(--ox-paper);
@@ -572,10 +556,9 @@
     --destructive-foreground: var(--ox-ink);
     --border: var(--_stone-800); /* #27272A — the hairline on ink */
     --input: var(--ox-rule); /* #3F3F46 — the heavier rule on ink */
-    --ring: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
-    --ember-ink: var(--ox-ember); /* #D4AF37 — the metal reads as ink on the canvas (9.5:1) */
-    --link: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas */
-    --link-hover: var(--ox-ember-light); /* #F1CE65 — gold-bright */
+    --ring: var(--ox-gold); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
+    --link: var(--ox-gold); /* #D4AF37 — 9.5:1 on the canvas */
+    --link-hover: var(--ox-gold-bright); /* #F1CE65 — gold-bright */
 
     --success: var(--_moss-light);
     --success-foreground: oklch(0.18 0.03 160);
@@ -595,7 +578,7 @@
     --proven-ink: var(--ox-st-proven-text); /* #44A7A7 — 5.20:1 */
     --critical-ink: var(--ox-st-critical-text); /* #EF5C72 — 4.57:1 */
 
-    --chart-1: var(--ox-ember);
+    --chart-1: var(--ox-gold);
     --chart-2: var(--_slate-light);
     --chart-3: var(--_moss-light);
     --chart-4: var(--_ochre-light);
@@ -728,10 +711,9 @@
       --destructive-foreground: var(--ox-ink); /* 4.92:1; white on this fill is 3.92:1 */
       --border: var(--_stone-800); /* #27272A — the hairline on ink */
       --input: var(--ox-rule); /* #3F3F46 — the heavier rule on ink */
-      --ring: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
-      --ember-ink: var(--ox-ember); /* #D4AF37 — the metal reads as ink on the canvas (9.5:1) */
-      --link: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas */
-      --link-hover: var(--ox-ember-light); /* #F1CE65 — gold-bright */
+      --ring: var(--ox-gold); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
+      --link: var(--ox-gold); /* #D4AF37 — 9.5:1 on the canvas */
+      --link-hover: var(--ox-gold-bright); /* #F1CE65 — gold-bright */
 
       --success: var(--_moss-light);
       --success-foreground: oklch(0.18 0.03 160);
@@ -753,7 +735,7 @@
       --proven-ink: var(--ox-st-proven-text); /* #44A7A7 — 5.20:1 */
       --critical-ink: var(--ox-st-critical-text); /* #EF5C72 — 4.57:1 */
 
-      --chart-1: var(--ox-ember);
+      --chart-1: var(--ox-gold);
       --chart-2: var(--_slate-light);
       --chart-3: var(--_moss-light);
       --chart-4: var(--_ochre-light);
@@ -899,24 +881,6 @@
   --color-brand-foreground: var(--brand-foreground);
   --color-ink-light: var(--ink-light);
   --color-ink-dark: var(--ink-dark);
-
-  /* Ember gradient stops (mark-specific, rarely used directly in utilities). */
-  --color-ember-gold: var(--_ember-a);
-  --color-ember-flame: var(--_ember-b);
-  --color-ember-crimson: var(--_ember-c);
-
-  /* Accent ramp — exposed for rare direct-access. NOTE: the --*-violet-* NAMES
-     are retained for API stability; the VALUES are ember flame, not violet. */
-  --color-violet-50: var(--_amber-50);
-  --color-violet-100: var(--_amber-100);
-  --color-violet-200: var(--_amber-200);
-  --color-violet-300: var(--_amber-300);
-  --color-violet-400: var(--_amber-400);
-  --color-violet-500: var(--_amber-500);
-  --color-violet-600: var(--_amber-600);
-  --color-violet-700: var(--_amber-700);
-  --color-violet-800: var(--_amber-800);
-  --color-violet-900: var(--_amber-900);
 
   /* Charts */
   --color-chart-1: var(--chart-1);
@@ -1130,8 +1094,8 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    /* Native form controls (checkbox/radio/range/progress) tint ember, not the
-       OS blue. Inherits to the whole tree. */
+    /* Native form controls (checkbox/radio/range/progress) tint with the
+       primary, not the OS blue. Inherits to the whole tree. */
     accent-color: var(--primary);
   }
 
@@ -1216,12 +1180,12 @@
   }
 
   /*
-   * Focus ring — brand ember everywhere, NEVER the browser's blue/violet
-   * default. Native <select>/<input>/<textarea> that ship no focus styling
-   * (e.g. the agent-editor selects) get an ember outline + border on
-   * :focus-visible. coss Input/Select/Button opt out via
-   * focus-visible:outline-none (a utility with higher specificity) and keep
-   * their own ember ring, so this never doubles up on them.
+   * Focus ring — the gold ring everywhere, NEVER the browser's blue default.
+   * Native <select>/<input>/<textarea> that ship no focus styling (e.g. the
+   * agent-editor selects) get a gold outline + border on :focus-visible.
+   * coss Input/Select/Button opt out via focus-visible:outline-none (a
+   * utility with higher specificity) and keep their own gold ring, so this
+   * never doubles up on them.
    */
   :where(input, select, textarea):focus-visible {
     outline: 2px solid var(--ring);
@@ -1291,10 +1255,10 @@
   }
 
   /* The single gold glyph inside a text wordmark. On paper the metal is only
-     2.1:1, so it takes the kit's deep shade there; --ember-ink already flips
+     2.1:1, so it takes the kit's deep shade there; --gold-text already flips
      to the metal itself in dark mode. */
   .ox-wordmark-accent {
-    color: var(--ember-ink);
+    color: var(--gold-text);
   }
 
   /* Wide-tracked uppercase eyebrow label (sans). */
@@ -1345,35 +1309,35 @@
     background-size: 22px 22px;
   }
 
-  /* ── Brand hero backdrop + ember button surfaces ─────────────────────────
-   * The canonical ember "hero" system, shared by the docs landing page and the
+  /* ── Brand hero backdrop + gold button surfaces ──────────────────────────
+   * The canonical gold "hero" system, shared by the docs landing page and the
    * app (auth, onboarding, in-app shell backdrop). A deliberate, brand-scoped
    * exception to the flat-surface default: gradients/glow are permitted ONLY on
    * these opt-in `.ox-hero-*` / `.ox-grad-*` helpers for hero + brand moments,
    * never on stock surfaces. Every rule is inert unless a consumer opts in.
-   * Colours come from the ember mark primitives so the fill is theme-stable.
+   * Colours come from the gold tokens, so the fill is theme-stable.
    * Motion is auto-suppressed by the global prefers-reduced-motion kill-switch
    * at the end of this file.
    * ──────────────────────────────────────────────────────────────────────── */
 
-  /* Ember gradient fill for CTAs (gold → flame → crimson). Literal fallbacks so
-     the fill renders regardless of which token scope is active. */
+  /* The gold sheen for CTAs (deep → metal → highlight). The stops read the
+     theme-independent gold tokens, so the fill is the same in every theme. */
   .ox-grad-surface {
     background-image: linear-gradient(
       100deg,
-      var(--_ember-a, #8A7223) 0%,
-      var(--_ember-b, #D4AF37) 46%,
-      var(--_ember-c, #F1CE65) 100%
+      var(--gold-deep) 0%,
+      var(--gold) 46%,
+      var(--gold-bright) 100%
     );
   }
 
-  /* The same ember sweep clipped to text — for accent words in headings. */
+  /* The same gold sweep clipped to text — for accent words in headings. */
   .ox-grad-text {
     background-image: linear-gradient(
       100deg,
-      var(--_ember-a) 0%,
-      var(--_ember-b) 46%,
-      var(--_ember-c) 100%
+      var(--gold-deep) 0%,
+      var(--gold) 46%,
+      var(--gold-bright) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -1408,7 +1372,7 @@
     );
   }
 
-  /* Vibrant code/terminal surface — a charcoal fill with the ember brand
+  /* Vibrant code/terminal surface — a charcoal fill with the gold brand
      gradient painted into a 1px border (padding-box fill + border-box gradient),
      identical in light and dark so a code block reads as a high-contrast, bold
      terminal on the light page. A real transparent `border` keeps a system line
@@ -1427,12 +1391,12 @@
     border: 1px solid transparent;
   }
 
-  /* A soft ember light source bleeding from behind the hero. */
+  /* A soft gold light source bleeding from behind the hero. */
   .ox-hero-orb {
     background: radial-gradient(
       circle at center,
-      color-mix(in oklch, var(--_ember-b) 38%, transparent) 0%,
-      color-mix(in oklch, var(--_ember-c) 16%, transparent) 40%,
+      color-mix(in oklch, var(--gold) 38%, transparent) 0%,
+      color-mix(in oklch, var(--gold-bright) 16%, transparent) 40%,
       transparent 70%
     );
     filter: blur(36px);
@@ -1452,7 +1416,7 @@
   }
 }
 
-/* Ember hero keyframes (paired with the .ox-hero-* / .ox-hex-* helpers above).
+/* Gold hero keyframes (paired with the .ox-hero-* / .ox-hex-* helpers above).
    Suppressed by the global prefers-reduced-motion kill-switch below. */
 @keyframes ox-glow {
   0%,

@@ -99,7 +99,7 @@ describe("the preview", () => {
     expect(vars["--ox-gold"]).toBe(NEW_GOLD);
     expect(vars["--ox-gold-bright"]).toBe(palette.goldBright);
     expect(vars["--ox-gold-deep"]).toBe(palette.goldDeep);
-    expect(vars["--ox-ember-soft"]).toBe(rampVars(NEW_GOLD)["--ox-ember-soft"]);
+    expect(vars["--_amber-50"]).toBe(rampVars(NEW_GOLD)["--_amber-50"]);
     expect(vars["--ox-ink"]).toBeUndefined();
   });
 
