@@ -504,9 +504,102 @@ def sdlc_step_problems(root: Path = ROOT) -> list[str]:
     return found
 
 
+# --------------------------------------------------------------------------
+# semantic tokens: one definition per theme
+# --------------------------------------------------------------------------
+
+#: The theme blocks of the kit's stylesheet: light, dark by class, and dark by
+#: the OS setting, which repeats the dark block for a page with no class.
+LIGHT, DARK, DARK_OS = ":root", ".dark", ":root:not(.light):not(.dark)"
+DARK_MEDIA = "@media (prefers-color-scheme: dark)"
+
+
+@dataclass(frozen=True)
+class Token:
+    """One custom-property declaration: the blocks it sits in, its name and value, its order, and its line."""
+
+    scope: tuple[str, ...]
+    name: str
+    value: str
+    order: int
+    line: int
+
+
+def tokens(css: str) -> list[Token]:
+    """Every custom property `css` declares, with the full stack of blocks around it (`@layer` left out)."""
+    text = strip_comments(css)
+    out: list[Token] = []
+    stack: list[str] = []
+    start = depth = 0
+    for i, ch in enumerate(text):
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        elif ch == "{" and depth == 0:
+            stack.append(" ".join(text[start:i].split()))
+            start = i + 1
+        elif ch in ";}" and depth == 0:
+            m = re.match(r"\s*(--[\w-]+)\s*:", text[start:i])
+            if m:
+                scope = tuple(b for b in stack if not b.startswith("@layer"))
+                line = text.count("\n", 0, start + m.start(1)) + 1
+                out.append(Token(scope, m.group(1), " ".join(text[start + m.end():i].split()), len(out), line))
+            if ch == "}" and stack:
+                stack.pop()
+            start = i + 1
+    return out
+
+
+def semantic_problems(css: str, path: str = KIT_CSS) -> list[str]:
+    """Each way the stylesheet gives a semantic token more than one definition in a theme.
+
+    - A token declared twice in the same block: the later one wins, and the
+      earlier one reads as live while it is dead.
+    - A `:root` declaration after a `.dark` one of the same token: on a page
+      whose `<html>` carries `.dark`, both match at the same specificity, so
+      the later `:root` value wins and the dark value is dead there, though it
+      still applies to a `.dark` element further down.
+    - A dark-by-OS block that differs from `.dark`: a dark OS with no class
+      draws a different theme from a page that sets `.dark`.
+    """
+    toks = tokens(css)
+    found = []
+    seen: dict[tuple[tuple[str, ...], str], Token] = {}
+    for t in toks:
+        first = seen.setdefault((t.scope, t.name), t)
+        if first is not t:
+            found.append(
+                f"{path}:{t.line} declares {t.name} a second time in {' '.join(t.scope) or 'the top level'} "
+                f"(first at line {first.line}). Keep one declaration per theme block."
+            )
+    last = {}
+    for t in toks:
+        if t.scope in ((LIGHT,), (DARK,)):
+            last[(t.scope[0], t.name)] = t
+    for (block, name), t in last.items():
+        light = last.get((LIGHT, name))
+        if block == DARK and light and light.order > t.order:
+            found.append(
+                f"{path}:{light.line} declares {name} on :root after .dark does (line {t.line}), so the "
+                "dark value never reaches a page whose <html> is .dark. Declare the light value before the "
+                ".dark block."
+            )
+    dark = {t.name: t.value for t in toks if t.scope == (DARK,)}
+    dark_os = {t.name: t.value for t in toks if t.scope == (DARK_MEDIA, DARK_OS)}
+    for name in sorted(set(dark) | set(dark_os)):
+        if dark.get(name) != dark_os.get(name):
+            found.append(
+                f"{path} sets {name} to {dark.get(name)!r} in .dark and {dark_os.get(name)!r} in the "
+                f"{DARK_MEDIA} block. The OS block repeats .dark, so make them equal."
+            )
+    return found
+
+
 def check(path: Path = ROOT / KIT_CSS, root: Path = ROOT) -> list[str]:
     """The guard's problems, as `build/build.py --check` prints them."""
     hits, stale = literals(path.read_text())
+    problems_semantic = semantic_problems(path.read_text())
     problems = [
         f"{KIT_CSS}:{h.line} writes {h.prop}: {h.value} as a literal. Read {h.use} instead, "
         "or add it to KEEP in build/css_literals.py with the reason it stays."
@@ -523,7 +616,7 @@ def check(path: Path = ROOT / KIT_CSS, root: Path = ROOT) -> list[str]:
         "Remove the entry from KEEP."
         for k in stale + [k for k in KEEP if k.path != KIT_CSS and k not in used]
     ]
-    return problems + sdlc_step_problems(root)
+    return problems + problems_semantic + sdlc_step_problems(root)
 
 
 def summary() -> list[str]:

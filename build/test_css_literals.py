@@ -180,5 +180,37 @@ class Keep(unittest.TestCase):
         self.assertEqual(L.literals(".a { color: red; }", keep=keep), ([], list(keep)))
 
 
+
+class SemanticTokens(unittest.TestCase):
+    def test_the_kit_stylesheet_gives_each_token_one_definition_per_theme(self) -> None:
+        self.assertEqual(L.semantic_problems((L.ROOT / L.KIT_CSS).read_text()), [])
+
+    def test_a_second_declaration_in_one_block_fails(self) -> None:
+        css = ":root {\n  --muted: #eee;\n}\n:root {\n  --muted: #666;\n}"
+        found = L.semantic_problems(css, "x.css")
+        self.assertEqual(len(found), 1)
+        self.assertIn("x.css:5 declares --muted a second time in :root (first at line 2)", found[0])
+
+    def test_a_root_declaration_after_dark_fails(self) -> None:
+        css = (".dark { --x: white; }\n"
+               "@media (prefers-color-scheme: dark) { :root:not(.light):not(.dark) { --x: white; } }\n"
+               ":root { --x: black; }")
+        found = L.semantic_problems(css, "x.css")
+        self.assertEqual(len(found), 2)
+        self.assertTrue(any("declares --x on :root after .dark does" in p for p in found))
+
+    def test_the_os_dark_block_must_repeat_dark(self) -> None:
+        css = (":root { --x: black; }\n.dark { --x: white; }\n"
+               "@media (prefers-color-scheme: dark) { :root:not(.light):not(.dark) { --x: grey; } }")
+        found = L.semantic_problems(css, "x.css")
+        self.assertEqual(len(found), 1)
+        self.assertIn("sets --x to 'white' in .dark and 'grey'", found[0])
+
+    def test_one_definition_per_theme_passes(self) -> None:
+        css = (":root { --x: black; }\n.dark { --x: white; }\n"
+               "@media (prefers-color-scheme: dark) { :root:not(.light):not(.dark) { --x: white; } }")
+        self.assertEqual(L.semantic_problems(css, "x.css"), [])
+
+
 if __name__ == "__main__":
     unittest.main()

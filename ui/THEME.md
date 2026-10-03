@@ -17,7 +17,7 @@ drift and no sync step.
 | What type scale and utilities exist? | `../tokens/house-tailwind.css`, with the `text-m-*` marketing and `text-a-*` app scales, and `../tokens/house-text-scale.css`, which points Tailwind's `text-xs` to `text-3xl` at the app steps |
 | Which face and size does each surface take? | The Type section of `../skills/oxagen-branding/references/system.md` |
 | Which font files load, and how? | `../tokens/house-fonts.css` and `../fonts/` |
-| How do tokens map to semantic roles, per theme? | `src/styles/globals.css`: the `:root`, `.dark`, and `prefers-color-scheme` blocks, then the v3 layer at the end of the file |
+| How do tokens map to semantic roles, per theme? | `src/styles/globals.css`: the `:root`, `.dark`, and `prefers-color-scheme` blocks, with one definition of each semantic token per theme |
 | Where do the values come from? | `../theme/theme.json`, which `../build/color.py` and `../build/typeset.py` read |
 | What may a surface say? | `../skills/oxagen-branding/`, whose `references/positioning.md` carries the live and retired lines |
 
@@ -32,14 +32,19 @@ reskin surface. It maps the house values onto the semantic roles components
 use. A component never names a Tailwind palette colour or a hex. It names a
 house token only to read a type step, as `text-(length:--ox-a-h4)` does.
 
-The v3 layer at the end of `globals.css` came from the oxagen app with the
-components in `src/components/`. It sets the gold primary, the panel and rule
-tokens, table truncation, the phone rules, and the shimmer and spinner motion.
-It comes last, so it wins on cascade order.
+The v3 design came from the oxagen app with the components in
+`src/components/`. Its tokens, such as the gold primary button and the panel
+and rule tokens, sit at the end of each theme block. Each semantic token has
+one definition per theme: `:root` for light, `.dark` for dark, and the
+`prefers-color-scheme` block, which repeats `.dark` for a dark OS with no
+class. `build/css_literals.py` fails when a token is declared twice in one
+block, or when a later `:root` declaration would override a `.dark` one. Table
+truncation, the phone rules, and the shimmer and spinner motion sit after the
+utilities.
 
 Each corner, shadow, font size, and heading line height in `globals.css` is
 declared once and reads an `--ox-*` token. The radius and shadow scales sit in
-the mapping layer, above the v3 layer. The radius scale reads `--ox-radius-xs`
+the mapping layer. The radius scale reads `--ox-radius-xs`
 to `--ox-radius-4xl`, which multiply `--ox-radius-base`. The shadow scale reads
 `--ox-shadow-ui` and `shadow-pop` reads `--ox-shadow-pop`, each with its `-ink`
 twin on paper. `h1`, `h2`, and `h3` read `--ox-a-h1-leading`,
