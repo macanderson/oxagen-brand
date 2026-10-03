@@ -6,7 +6,9 @@
  *
  * Every control writes `--ox-*` variables on `<html>`. The semantic roles in
  * `globals.css` read those tokens, so the page, the marks, and the panel
- * follow, in light and dark. The draft lives in localStorage. Update all sites
+ * follow, in light and dark. The Light and Dark switch at the top of the
+ * panel turns the page's theme, and the colour sections edit the theme it
+ * shows. The draft lives in localStorage. Update all sites
  * turns the draft into a theme request and opens GitHub with it filled in;
  * the apply-theme workflow does the rest (see CHANGING.md, "Theme editor").
  *
@@ -23,13 +25,16 @@ import {
   ArrowSquareOutIcon,
   CopyIcon,
   DownloadSimpleIcon,
+  MoonIcon,
   PaletteIcon,
+  SunIcon,
   WarningIcon,
   XIcon,
 } from "@phosphor-icons/react";
 import { OxagenIcon, OxagenWordmark, StellaWordmark } from "../components/brand";
 import { Button } from "../components/button";
 import { popoverSurface } from "../components/control-styles";
+import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
 import { cn } from "../lib/utils";
 import type { Hex } from "./color";
 import { ColorField, Ratio, RangeField, Section, SelectField, Swatch, TextField } from "./controls";
@@ -72,6 +77,13 @@ export type Mode = "light" | "dark";
 export interface ThemeEditorProps {
   /** The theme the page shows. The colour sections edit this theme's values. */
   mode: Mode;
+  /**
+   * Turns the page's theme when the Light and Dark switch changes. Storybook
+   * passes one that sets its theme global, so the toolbar and the panel agree.
+   * Without it, the editor keeps the mode itself and sets the `dark` or
+   * `light` class on `<html>`.
+   */
+  onModeChange?: (mode: Mode) => void;
   /** Open the panel on mount. Defaults to the `theme-editor=open` query parameter. */
   defaultOpen?: boolean;
 }
@@ -86,7 +98,27 @@ function openFromUrl(): boolean {
 
 const idleLoads = (): Record<FaceRole, LoadState> => ({ display: "idle", sans: "idle", mono: "idle" });
 
-export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
+/**
+ * The mode the panel edits. With `onModeChange`, the caller owns the theme and
+ * `mode` follows it. Without one, the editor holds the mode and sets the class
+ * on `<html>`, which is where the kit's tokens look for it.
+ */
+function useMode(mode: Mode, onModeChange: ((mode: Mode) => void) | undefined): [Mode, (mode: Mode) => void] {
+  const [own, setOwn] = React.useState<Mode>(mode);
+  React.useEffect(() => setOwn(mode), [mode]);
+  const controlled = onModeChange !== undefined;
+  React.useEffect(() => {
+    if (controlled) return;
+    const root = document.documentElement;
+    root.classList.toggle("dark", own === "dark");
+    root.classList.toggle("light", own === "light");
+    return () => root.classList.remove("dark", "light");
+  }, [controlled, own]);
+  return controlled ? [mode, onModeChange] : [own, setOwn];
+}
+
+export function ThemeEditor({ mode: shown, onModeChange, defaultOpen }: ThemeEditorProps) {
+  const [mode, setMode] = useMode(shown, onModeChange);
   const [draft, setDraft] = React.useState<Draft>(() => loadDraft());
   const [open, setOpen] = React.useState(() => defaultOpen ?? openFromUrl());
   const [publishAt, setPublishAt] = React.useState<Date | null>(null);
@@ -195,6 +227,7 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
             <DialogPrimitive.Description className="text-xs leading-normal text-muted-foreground">
               Changes preview on this page. Nothing reaches a site until you update all sites.
             </DialogPrimitive.Description>
+            <ModeSwitch mode={mode} onChange={setMode} />
             <DialogPrimitive.Close
               aria-label="Close"
               className="absolute top-3 right-3 inline-flex size-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground outline-none hover:bg-foreground/10 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
@@ -271,6 +304,35 @@ export function ThemeEditor({ mode, defaultOpen }: ThemeEditorProps) {
 }
 
 type Update = (change: (theme: Theme) => void) => void;
+
+/**
+ * Light and Dark: turns the page's theme and picks which theme the colour
+ * sections edit. The gold, the corners, the type, and the spacing are one value
+ * in both themes, so they stay as they are.
+ */
+function ModeSwitch({ mode, onChange }: { mode: Mode; onChange: (mode: Mode) => void }) {
+  return (
+    <ToggleGroup
+      aria-label="Theme to preview and edit"
+      wide
+      className="mt-2"
+      value={[mode]}
+      onValueChange={(value: string[]) => {
+        const next = value[0];
+        if (next === "light" || next === "dark") onChange(next);
+      }}
+    >
+      <ToggleGroupItem value="light">
+        <SunIcon className="size-4" aria-hidden />
+        Light
+      </ToggleGroupItem>
+      <ToggleGroupItem value="dark">
+        <MoonIcon className="size-4" aria-hidden />
+        Dark
+      </ToggleGroupItem>
+    </ToggleGroup>
+  );
+}
 
 // --------------------------------------------------------------------------
 // colour
@@ -363,7 +425,7 @@ const GROUND_LABELS: [keyof InkGrounds & keyof PaperGrounds | "ink" | "paper", s
 ];
 
 function modeNote(mode: Mode, what: string): string {
-  return `The ${mode} theme's ${what}. Switch the theme in the toolbar to edit the ${mode === "dark" ? "light" : "dark"} one.`;
+  return `The ${mode} theme's ${what}. Select ${mode === "dark" ? "Light" : "Dark"} at the top of the panel to edit the ${mode === "dark" ? "light" : "dark"} one.`;
 }
 
 function SurfaceSection({ mode, theme, update }: { mode: Mode; theme: Theme; update: Update }) {

@@ -1,0 +1,224 @@
+/*
+ * The product app's own style layer, copied from oxageninc/product
+ * apps/app/src/app/globals.css at fad620bcef (2026-10-02), so the Work and
+ * Run pages here draw as the app draws them.
+ *
+ * The app imports the kit's globals.css and adds this layer on top. Most of
+ * the app's layer has since moved into the kit (the v3 layer at the end of
+ * globals.css), so this file holds only what the kit lacks.
+ *
+ * The app sets these values on :root. Here they sit on `.app-snapshot`, the
+ * class each copied page wears, so no other story picks them up. The dark
+ * values sit on `.dark .app-snapshot`. The kit's tokens still drive every
+ * colour, so the theme editor restyles these pages as it restyles the app.
+ *
+ * Storybook imports this file after globals.css through
+ * `.storybook/preview.css`, so the colour names below compile with the kit's
+ * utilities. The kit's own exports do not include it.
+ */
+
+@theme inline {
+  --color-banner: var(--banner-bg);
+  --color-app-canvas: var(--ink);
+  --color-data-surface: var(--data-surface);
+  /* What a frame is on the Run page: model, tool, governance, context, operator. */
+  --color-fk-model: var(--fk-model);
+  --color-fk-tool: var(--fk-tool);
+  --color-fk-gov: var(--fk-gov);
+  --color-fk-ctx: var(--fk-ctx);
+  --color-fk-op: var(--fk-op);
+  --color-kind-rule: var(--k-rule);
+  --color-kind-constraint: var(--k-constraint);
+  --color-kind-procedure: var(--k-procedure);
+  --color-kind-fact: var(--k-fact);
+  --color-kind-memory: var(--k-memory);
+  --color-kind-preference: var(--k-preference);
+  --color-code-bg: var(--code-bg);
+  --color-code-comment: var(--code-comment);
+  --color-code-table: var(--code-table);
+  --color-code-key: var(--code-key);
+  --color-code-string: var(--code-string);
+  --color-code-number: var(--code-number);
+  --color-code-punct: var(--code-punct);
+}
+
+@layer base {
+  .app-snapshot {
+    --sk-on: var(--st-allowed);
+    --sk-off: var(--dim);
+    --sk-held: var(--st-denied);
+    --sk-res: var(--fk-ctx);
+    --k-rule: #5d4ab5;
+    --fk-model: #2a78d6;
+    --fk-tool: #eb6834;
+    --fk-gov: #1baf7a;
+    --fk-ctx: #4a3aa7;
+    --fk-op: #e87ba4;
+    --chart-1: #4a3aa7;
+    --chart-2: #6c9600;
+    --chart-3: #6e2b58;
+    --chart-4: #1495b5;
+    --chart-5: #914de6;
+    --chart-grid: color-mix(in oklab, var(--border) 70%, transparent);
+    --chart-baseline: var(--border);
+    --k-constraint: #a0397f;
+    --k-procedure: #5f7a1f;
+    --k-fact: #1e7392;
+    --k-memory: #4e6280;
+    --k-preference: #98485e;
+    --tx-surface: var(--ox-paper);
+    --side-w: 236px;
+    --sidebar-width: var(--side-w);
+    --sidebar-bg: var(--void);
+    --data-surface: var(--ox-paper-hl);
+    --banner-bg: var(--hl);
+    --sidebar-nav-link-fg: var(--_stone-700);
+    --sidebar-nav-label-fg: var(--_stone-700);
+    --code-bg: var(--ox-paper-hl);
+    --code-comment: var(--muted-foreground);
+    --code-table: var(--ember-ink);
+    --code-key: var(--foreground);
+    --code-string: var(--proven);
+    --code-number: var(--info);
+    --code-punct: var(--muted-foreground);
+
+    /* The app's `body`. */
+    margin: 0;
+    background: var(--ink);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: var(--ox-a-body);
+    line-height: var(--ox-a-body-leading);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .dark .app-snapshot {
+    --sidebar-nav-link-fg: var(--muted);
+    --sidebar-nav-label-fg: var(--muted-foreground);
+    --tx-surface: var(--void);
+    --k-rule: #9d8be3;
+    --fk-model: #3987e5;
+    --fk-tool: #d95926;
+    --fk-gov: #199e70;
+    --fk-ctx: #9085e9;
+    --fk-op: #d55181;
+    --chart-1: #9085e9;
+    --chart-2: #b8dd0b;
+    --chart-3: #934d7b;
+    --chart-4: #6fdbfd;
+    --chart-5: #8347cf;
+    --k-constraint: #d677b5;
+    --k-procedure: #a6b95e;
+    --k-fact: #5cb5d6;
+    --k-memory: #94a3c2;
+    --k-preference: #d08fa0;
+    --data-surface: var(--ox-hl);
+    --banner-bg: var(--ox-hl);
+    --code-bg: color-mix(in oklab, var(--ox-panel) 55%, var(--ox-ink));
+  }
+}
+
+/* The app's workspace frame and data density, shared by every app page. */
+.app-snapshot [data-shell-page] main#main {
+  max-width: 1500px;
+  padding: 22px 24px 80px;
+}
+
+.app-snapshot [data-shell-page] table {
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.app-snapshot [data-shell-page] table thead th {
+  padding: 9px 12px;
+  white-space: nowrap;
+  background: var(--panel);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+:where(.app-snapshot [data-shell-page]) table tbody :is(td, th) {
+  padding: 9px 12px;
+  vertical-align: middle;
+}
+
+/* Text in a table never wraps. A value wider than its column ends in an ellipsis. */
+@media (width >= 48rem) {
+  .app-snapshot table thead th {
+    white-space: nowrap;
+  }
+
+  .app-snapshot table tbody :is(td, th):not([colspan]) {
+    max-width: var(--cell-max, 20rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-snapshot table tbody :is(td, th):not([colspan]) :not(textarea, pre, pre *, [data-wrap], [data-wrap] *) {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+
+  .app-snapshot table tbody :is(td, th):not([colspan]):has([data-actions]) {
+    max-width: none;
+    overflow: visible;
+  }
+
+  .app-snapshot table tbody :is(td, th):not([colspan]) [data-wrap] {
+    white-space: normal;
+  }
+}
+
+@media (width < 48rem) {
+  .app-snapshot [data-shell-page] main#main {
+    padding: 16px 16px 88px;
+  }
+}
+
+/* A page's sections rise a few pixels into place. */
+@keyframes ox-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-snapshot [data-shell-page] main#main > * {
+  animation: ox-rise var(--motion-entry) var(--ease-entry) both;
+}
+.app-snapshot [data-shell-page] main#main > :nth-child(2) {
+  animation-delay: 40ms;
+}
+.app-snapshot [data-shell-page] main#main > :nth-child(3) {
+  animation-delay: 80ms;
+}
+.app-snapshot [data-shell-page] main#main > :nth-child(4) {
+  animation-delay: 120ms;
+}
+.app-snapshot [data-shell-page] main#main > :nth-child(n + 5) {
+  animation-delay: 160ms;
+}
+
+.app-snapshot [data-shell-page] details[open] > :not(summary) {
+  animation: fade-in var(--motion-base) var(--ease-entry) both;
+}
+
+.app-snapshot [data-shell-page] :is(a, button, summary, [role="tab"], tbody tr) {
+  transition:
+    color var(--motion-micro) var(--ease-hover),
+    background-color var(--motion-micro) var(--ease-hover),
+    border-color var(--motion-micro) var(--ease-hover),
+    opacity var(--motion-micro) var(--ease-hover);
+}
+
+.app-snapshot [data-shell-page] .app-panel {
+  transition: border-color var(--motion-base) var(--ease-hover);
+}
