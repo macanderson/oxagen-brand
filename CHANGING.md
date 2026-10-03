@@ -55,7 +55,7 @@ Each face lists its `family`, its `source`, its `files` with their weights, its 
 
 1. Edit `theme/theme.json`.
 2. Run `.venv/bin/python build/build.py`, then `.venv/bin/python build/playbook.py` and `.venv/bin/python build/messages.py`. `--svg` skips the rasters while you iterate, and it deletes the PNGs in the steps it runs, so run the full build before you commit.
-3. Run `.venv/bin/python build/build.py --check`. It fails when the theme does not match its schema, when the wordmark face is not Space Grotesk at weight 600, when a value breaks a rule (contrast, the gold between its neighbours, the drawn wordmark against the reference, the type scales), when a file the literal guard reads hard-codes a font size, or when a generated file differs from what the theme produces.
+3. Run `.venv/bin/python build/build.py --check`. It fails when the theme does not match its schema, when the wordmark face is not Space Grotesk at weight 600, when a value breaks a rule (contrast, the gold between its neighbours, the drawn wordmark against the reference, the type scales), when a file the literal guard reads hard-codes a colour, corner, shadow, space, or font size, when a semantic token has a second definition in a theme, when a semantic text role drops below 4.5:1 on a ground, or when a generated file differs from what the theme produces.
 4. Change the copies no generator writes. The colour and font sections below list them.
 5. Open the PR.
 

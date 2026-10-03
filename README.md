@@ -352,8 +352,10 @@ derivation, if any text token drops below AA on its ground, if a state text
 stop drops below AA on a surface of its theme or leaves its mark's hue, if h1
 to h3 stop reading the heading role or h4 to h6 stop reading the text face, if
 a webfont loses a face, its italic, or a feature, if a file in
-`ui/src`, `sdlc/public`, or `pwa/`, or one of the kit's pages, hard-codes a font
-size, or if the skill's tokens or logo drift from the build.
+`ui/src`, `sdlc/public`, or `pwa/`, or one of the kit's pages, hard-codes a
+colour, corner, shadow, space, or font size, if a semantic token has a second
+definition in a theme, if a word that carries meaning drops below 4.5:1, or if
+the skill's tokens or logo drift from the build.
 
 ## Rules worth knowing before you use it
 
