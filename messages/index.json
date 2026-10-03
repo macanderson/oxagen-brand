@@ -4,8 +4,8 @@
   "counts": {
     "entries": 261,
     "status": {
-      "approved": 139,
-      "candidate": 94,
+      "approved": 141,
+      "candidate": 92,
       "retired": 28
     },
     "release": {
@@ -899,7 +899,7 @@
       "kind": "pitch",
       "order": 20,
       "title": "Oxagen Agent Runners description",
-      "long": "Set up a cloud runtime in your workspace. Each operator then starts runs on their own agents, from one command or the web app. Each run gets its own sandbox on a host Oxagen operates. Oxagen checks each launch against your rules and the agent's budget, and the operator's model credential stays in Oxagen, outside the sandbox.",
+      "long": "Each operator starts runs on their own agents, with one command or from the web app. Each run gets its own sandbox on a host Oxagen operates, so the laptop does none of the work. For model calls, Oxagen attaches the operator's credential at its gateway, and the sandbox gets a run token.",
       "audience": [
         "operator",
         "platform",
@@ -912,7 +912,7 @@
         "docs-intro",
         "app-runtimes"
       ],
-      "status": "candidate",
+      "status": "approved",
       "release": "held",
       "gate": [
         "agent-runners-release"
@@ -924,7 +924,7 @@
         "03",
         "04"
       ],
-      "notes": "The short description for Oxagen Agent Runners, a candidate for Mac, written 2026-10-03 in lane B1. The launch check is scoped to the launch, as the spec runs it (rule, budget, credential on file). The credential sentence covers model credentials only, because a workspace environment and its secrets are injected into the sandbox at launch. A template that hands the harness root still runs, so the description makes no claim about containment.",
+      "notes": "The short description for Oxagen Agent Runners. Mac chose it on 2026-10-03 from the lane B1 candidates (B1 variant). The credential sentence covers model credentials only: the gateway attaches the operator's credential to each model call, and the sandbox gets a run token. It does not say the sandbox holds only a run token, because a workspace environment and its secrets are injected into the sandbox at launch. A template that hands the harness root still runs, so the description makes no claim about containment.",
       "group": "lead",
       "path": "messages/lead/agent-runners-description.yaml"
     },
@@ -933,7 +933,7 @@
       "brand": "oxagen",
       "kind": "headline",
       "order": 20,
-      "title": "Start your agents in the cloud. Each run gets its own sandbox.",
+      "title": "Start each agent run in its own cloud sandbox, from one command or the web app.",
       "audience": [
         "operator",
         "engineering"
@@ -944,7 +944,7 @@
         "pricing-page",
         "docs-intro"
       ],
-      "status": "candidate",
+      "status": "approved",
       "release": "held",
       "gate": [
         "agent-runners-release"
@@ -955,7 +955,7 @@
       "findings": [
         "07"
       ],
-      "notes": "The product line for Oxagen Agent Runners, a candidate for Mac, written 2026-10-03 in lane B1. The operator is the actor. It claims sandboxes on hosts Oxagen operates and nothing more, because customer-operated hosts arrive in Phase 4. Held with rule-agent-runners-name until R6 passes.",
+      "notes": "The product line for Oxagen Agent Runners. Mac chose it on 2026-10-03 from the lane B1 candidates (B1 variant 1). The operator is the actor and starts the run. It claims sandboxes on hosts Oxagen operates and nothing more, because customer-operated hosts arrive in Phase 4. Held with rule-agent-runners-name until R6 passes.",
       "group": "lead",
       "path": "messages/lead/agent-runners-line.yaml"
     },
@@ -4836,7 +4836,7 @@
       "findings": [
         "07"
       ],
-      "notes": "Mac settled the name and both terms on 2026-10-02, in the Decisions table of the Oxagen Agent Runners spec (oxageninc/roadmap, initiatives/cloud-agent-runners/oxagen-agent-runners-spec.html). The gate agent-runners-release opens when lane R6, the release live test, passes: a customer-like workspace on the Build plan runs end to end, and its invoice shows the sandbox-hours. Until then the name stays out of the site, ads, and outreach. The candidate line and description are agent-runners-line and agent-runners-description.",
+      "notes": "Mac settled the name and both terms on 2026-10-02, in the Decisions table of the Oxagen Agent Runners spec (oxageninc/roadmap, initiatives/cloud-agent-runners/oxagen-agent-runners-spec.html). The gate agent-runners-release opens when lane R6, the release live test, passes: a customer-like workspace on the Build plan runs end to end, and its invoice shows the sandbox-hours. Until then the name stays out of the site, ads, and outreach. The approved line and description are agent-runners-line and agent-runners-description, which Mac chose on 2026-10-03. Mac ruled the same day that the add-on keeps the positioning in core.md, positioning.md, always-on.md, and words.md: Oxagen provides the runtime and is not the agent, so Oxagen does not run agents. The customer guides (lane R5) use the approved line and stay off the public docs until the gate opens.",
       "group": "rules",
       "path": "messages/rules/rule-agent-runners-name.yaml"
     },
