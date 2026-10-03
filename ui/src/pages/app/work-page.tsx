@@ -358,9 +358,13 @@ export interface WorkPageProps {
 export function WorkPage({ tab: initial, collectorFailing }: WorkPageProps) {
   const [tab, setTab] = React.useState<WorkTab>(initial);
   React.useEffect(() => setTab(initial), [initial]);
-  const groups = Object.fromEntries(
-    TABS.map(({ name }) => [name, WORK_ITEMS.filter((item) => item.tab === name)]),
-  ) as Record<WorkTab, readonly WorkItem[]>;
+  const on = (name: WorkTab) => WORK_ITEMS.filter((item) => item.tab === name);
+  const groups: Record<WorkTab, readonly WorkItem[]> = {
+    inbox: on("inbox"),
+    running: on("running"),
+    review: on("review"),
+    done: on("done"),
+  };
   const ready = groups.inbox.filter((item) => item.status === "ready").length;
   const waitingForRuntime = groups.running.filter((item) => item.status === "waiting_for_claim").length;
   const waitingForMerge = groups.review.filter((item) => item.status === "accepted").length;
