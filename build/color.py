@@ -122,7 +122,15 @@ GOLD_HUE = float(round(hex_to_oklch(GOLD)[2]))
 GOLD_BRIGHT_LCH = (_COLOR["gold_bright"]["lightness"], _COLOR["gold_bright"]["chroma"], GOLD_HUE)
 GOLD_DEEP_LCH = (_COLOR["gold_deep"]["lightness"], _COLOR["gold_deep"]["chroma"], GOLD_HUE)
 GOLD_BRIGHT = oklch_hex(*GOLD_BRIGHT_LCH)  # the highlight the shimmer passes through, in motion only
-GOLD_DEEP = oklch_hex(*GOLD_DEEP_LCH)  # gold as text on paper, and small details there
+GOLD_DEEP = oklch_hex(*GOLD_DEEP_LCH)  # gold as a mark on paper, the hive's gradient, and words in the art
+
+#: The gold set as words in the light theme's UI: a link, an accent word, and
+#: --gold-text. gold-deep is 4.23:1 on a lifted row (paper-hl), so words take
+#: their own neighbour, a little darker on the same hue, which clears 4.5:1 on
+#: paper and on paper-hl. The marks, the hive's gradient, and the art keep
+#: gold-deep, so no drawing moves. The theme holds its lightness and chroma.
+GOLD_TEXT_INK_LCH = (_COLOR["gold_text"]["lightness"], _COLOR["gold_text"]["chroma"], GOLD_HUE)
+GOLD_TEXT_INK = oklch_hex(*GOLD_TEXT_INK_LCH)
 
 # --------------------------------------------------------------------------
 # the grounds and the greys
@@ -175,7 +183,8 @@ MUTED_TEXT_INK = oklch_hex(*MUTED_TEXT_INK_LCH)
 TOKENS: list[tuple[str, str, str]] = [
     ("gold", GOLD, "the gold: identity, one action per screen. flat, always"),
     ("gold-bright", GOLD_BRIGHT, "the shimmer highlight; hover on ink"),
-    ("gold-deep", GOLD_DEEP, "gold as text on paper; small gold details there"),
+    ("gold-deep", GOLD_DEEP, "gold as a mark on paper; small gold details there"),
+    ("gold-text-ink", GOLD_TEXT_INK, "gold as words on paper and on a lifted row there"),
     ("ink", INK, "the dark canvas"),
     ("void", VOID, "below the canvas"),
     ("panel", PANEL, "panels, cards, code blocks"),
@@ -202,7 +211,12 @@ TOKENS: list[tuple[str, str, str]] = [
 GROUNDS = {"dark": INK, "light": PAPER}
 TEXT_ON = {"dark": PAPER_TEXT, "light": INK_TEXT}
 MUTED_ON = {"dark": MUTED, "light": MUTED_INK}
+#: The gold a word takes in the art (ads, social cards, content cards), on its
+#: ground. The art keeps gold-deep on white, where it clears 4.65:1. The UI's
+#: words take GOLD_WORDS_ON.
 GOLD_TEXT_ON = {"dark": GOLD, "light": GOLD_DEEP}
+#: The gold a word takes in the UI: the metal on ink, gold-text-ink on paper.
+GOLD_WORDS_ON = {"dark": GOLD, "light": GOLD_TEXT_INK}
 BORDER_ON = {"dark": BORDER, "light": PAPER_BORDER}
 
 # --------------------------------------------------------------------------
@@ -301,7 +315,11 @@ STATE_TEXT: dict[str, dict[str, str]] = {
 def verify() -> list[str]:
     """Every fact the palette claims, checked. Returns the problems found."""
     problems = []
-    for name, lch, value in (("gold-bright", GOLD_BRIGHT_LCH, GOLD_BRIGHT), ("gold-deep", GOLD_DEEP_LCH, GOLD_DEEP)):
+    for name, lch, value in (
+        ("gold-bright", GOLD_BRIGHT_LCH, GOLD_BRIGHT),
+        ("gold-deep", GOLD_DEEP_LCH, GOLD_DEEP),
+        ("gold-text-ink", GOLD_TEXT_INK_LCH, GOLD_TEXT_INK),
+    ):
         # rgb_to_hex clamps a colour outside sRGB, which moves its hue, so the
         # derived hex is measured, not only its coordinates.
         _, _, h = hex_to_oklch(value)
@@ -355,6 +373,10 @@ def verify() -> list[str]:
         problems.append(f"gold on ink is {contrast(GOLD, INK):.2f}:1, below AA")
     if contrast(GOLD_DEEP, PAPER) < 4.5:
         problems.append(f"gold-deep on paper is {contrast(GOLD_DEEP, PAPER):.2f}:1, below AA")
+    # Gold words in the light theme sit on paper, a panel, and a lifted row.
+    for surface, ground in (("paper", PAPER), ("paper-panel", PAPER_PANEL), ("paper-hl", PAPER_HL)):
+        if contrast(GOLD_TEXT_INK, ground) < 4.5:
+            problems.append(f"gold-text-ink is {contrast(GOLD_TEXT_INK, ground):.2f}:1 on {surface}, below AA")
     if contrast(INK, GOLD) < 4.5:
         problems.append(f"ink on a gold fill is {contrast(INK, GOLD):.2f}:1, below AA")
     for name, value, ground in (

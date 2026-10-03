@@ -35,7 +35,7 @@ def _light() -> dict[str, str]:
         "ink": C.PAPER, "void": C.PAPER_VOID, "panel": C.PAPER_PANEL, "hl": C.PAPER_HL,
         "border": C.PAPER_BORDER, "rule": C.PAPER_RULE,
         "fg": C.INK_TEXT, "body": C.TEXT_INK, "muted": C.MUTED_INK, "dim": C.DIM_INK,
-        "accent-text": C.GOLD_DEEP, "destructive": C.DESTRUCTIVE["light"],
+        "accent-text": C.GOLD_TEXT_INK, "destructive": C.DESTRUCTIVE["light"],
     }
     v.update({f"state-{n}": l for n, _, l, _ in C.STATES})
     v.update({f"state-{n}-text": C.STATE_TEXT[n]["light"] for n, _, _, _ in C.STATES})

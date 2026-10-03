@@ -4,6 +4,7 @@
     "gold": "#D4AF37",
     "gold_bright": { "lightness": 0.86, "chroma": 0.13 },
     "gold_deep": { "lightness": 0.56, "chroma": 0.1 },
+    "gold_text": { "lightness": 0.545, "chroma": 0.1 },
     "ink": {
       "ink": "#09090B",
       "void": "#000000",

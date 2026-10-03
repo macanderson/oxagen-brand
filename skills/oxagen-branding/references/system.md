@@ -33,7 +33,7 @@ Every text role that carries meaning clears 4.5:1 on its ground, and the build c
 
 ## Gold
 
-`#D4AF37`, bright `#F1CE65`, deep `#8A7223`. The bright and deep shades are derived from the gold in OKLCH, not picked. Gold is the identity. It appears in the hive's two lit cells, the x of oxagen, and the asterisk of stella, and on at most one action per screen. The focus ring is gold too, because it marks where the one action is. Gold is never a state colour, never a surface fill, never a border on a card, never a highlight on a row, and never a paragraph or a full heading. If a second gold thing appears on a screen, one of them is wrong.
+`#D4AF37`, bright `#F1CE65`, deep `#8A7223`, and words `#866D1D`. The neighbours are derived from the gold in OKLCH, not picked. Deep is gold as a mark on white. Gold words on white, a link or an accent word, take the words shade (`--ox-gold-text-ink`, through `--gold-text`), which clears 4.5:1 on white and on a lifted row. Gold is the identity. It appears in the hive's two lit cells, the x of oxagen, and the asterisk of stella, and on at most one action per screen. The focus ring is gold too, because it marks where the one action is. Gold is never a state colour, never a surface fill, never a border on a card, never a highlight on a row, and never a paragraph or a full heading. If a second gold thing appears on a screen, one of them is wrong.
 
 Gold on obsidian is 9.5:1. Gold on white is 2.1:1, so gold as text on white is always the deep shade (4.7:1). The mark keeps its metal; words do not.
 

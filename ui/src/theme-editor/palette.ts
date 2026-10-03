@@ -57,6 +57,8 @@ export interface ThemeColor {
   gold: Hex;
   gold_bright: Neighbour;
   gold_deep: Neighbour;
+  /** The gold as words on paper, `--ox-gold-text-ink`. */
+  gold_text: Neighbour;
   ink: InkGrounds;
   paper: PaperGrounds;
   text_on_ink: { body: Hex; muted: Hex; dim: Hex };
@@ -74,6 +76,8 @@ export interface Palette {
   goldDeep: Hex;
   goldBrightLch: Lch;
   goldDeepLch: Lch;
+  goldTextInk: Hex;
+  goldTextInkLch: Lch;
   mutedTextInk: Hex;
   mutedTextInkLch: Lch;
   destructive: Record<Mode, Hex>;
@@ -97,6 +101,8 @@ export function derivePalette(color: ThemeColor): Palette {
   const goldDeepLch: Lch = [color.gold_deep.lightness, color.gold_deep.chroma, hue];
   const goldBright = oklchHex(...goldBrightLch);
   const goldDeep = oklchHex(...goldDeepLch);
+  const goldTextInkLch: Lch = [color.gold_text.lightness, color.gold_text.chroma, hue];
+  const goldTextInk = oklchHex(...goldTextInkLch);
 
   const [, mC, mH] = lchRounded(color.text_on_paper.muted);
   const mutedTextInkLch: Lch = [color.text_on_paper.muted_text_lightness, mC, mH];
@@ -128,6 +134,7 @@ export function derivePalette(color: ThemeColor): Palette {
     "--ox-gold": color.gold,
     "--ox-gold-bright": goldBright,
     "--ox-gold-deep": goldDeep,
+    "--ox-gold-text-ink": goldTextInk,
     "--ox-ink": ink.ink,
     "--ox-void": ink.void,
     "--ox-panel": ink.panel,
@@ -170,6 +177,8 @@ export function derivePalette(color: ThemeColor): Palette {
     goldDeep,
     goldBrightLch,
     goldDeepLch,
+    goldTextInk,
+    goldTextInkLch,
     mutedTextInk,
     mutedTextInkLch,
     destructive,
@@ -205,6 +214,7 @@ export function verifyPalette(color: ThemeColor): string[] {
   for (const [name, lch, value] of [
     ["gold-bright", p.goldBrightLch, p.goldBright],
     ["gold-deep", p.goldDeepLch, p.goldDeep],
+    ["gold-text-ink", p.goldTextInkLch, p.goldTextInk],
   ] as const) {
     const [, , h] = hexToOklch(value);
     if (hueDistance(h, lch[2]) > 2) {
@@ -278,6 +288,16 @@ export function verifyPalette(color: ThemeColor): string[] {
   }
   if (contrast(p.goldDeep, PAPER) < 4.5) {
     problems.push(`gold-deep on paper is ${fixed(contrast(p.goldDeep, PAPER), 2)}:1, below AA`);
+  }
+  // Gold words in the light theme sit on paper, a panel, and a lifted row.
+  for (const [surface, ground] of [
+    ["paper", PAPER],
+    ["paper-panel", color.paper.panel],
+    ["paper-hl", color.paper.hl],
+  ] as const) {
+    if (contrast(p.goldTextInk, ground) < 4.5) {
+      problems.push(`gold-text-ink is ${fixed(contrast(p.goldTextInk, ground), 2)}:1 on ${surface}, below AA`);
+    }
   }
   if (contrast(INK, color.gold) < 4.5) {
     problems.push(`ink on a gold fill is ${fixed(contrast(INK, color.gold), 2)}:1, below AA`);

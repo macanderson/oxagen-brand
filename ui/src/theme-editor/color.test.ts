@@ -43,6 +43,7 @@ describe("the shipped palette", () => {
     expect(p.gold).toBe(houseTokens.gold.hex);
     expect(p.goldBright).toBe(houseTokens.gold.bright);
     expect(p.goldDeep).toBe(houseTokens.gold.deep);
+    expect(p.goldTextInk).toBe(houseTokens.tokens["gold-text-ink"]);
     for (const [name, value] of Object.entries(houseTokens.tokens)) {
       expect(p.vars[`--ox-${name}`], name).toBe(value);
     }

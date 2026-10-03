@@ -32,6 +32,7 @@ CASES: list[tuple[str, dict]] = [
     ("blue primary", {"gold": "#4F7CD9"}),
     ("dark gold", {"gold": "#7A5A10"}),
     ("neighbours moved", {"gold_bright": {"lightness": 0.9, "chroma": 0.15}, "gold_deep": {"lightness": 0.5, "chroma": 0.12}}),
+    ("text gold too light", {"gold_text": {"lightness": 0.56, "chroma": 0.1}}),
     (
         "states moved",
         {

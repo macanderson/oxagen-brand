@@ -29,7 +29,8 @@ brew install harfbuzz librsvg
 | Field | What it sets |
 |---|---|
 | `color.gold` | The primary brand colour, as six uppercase hex digits. It fills the gold glyph of each wordmark, the hive's lit cells, Stella's asterisk, the primary button, and the focus ring. |
-| `color.gold_bright`, `color.gold_deep` | The OKLCH lightness and chroma of the gold's two neighbours. The build takes the hue from the gold and derives the hex. |
+| `color.gold_bright`, `color.gold_deep` | The OKLCH lightness and chroma of the gold's two neighbours. The build takes the hue from the gold and derives the hex. `gold_deep` is gold as a mark on paper, the hive's gradient, and words in the art. |
+| `color.gold_text` | The OKLCH lightness and chroma of gold as words on paper, as `--ox-gold-text-ink`. `--gold-text`, `--link`, and `--accent-text` read it in the light theme. The build derives it like the neighbours, and fails if it drops below 4.5:1 on paper, a panel, or a lifted row. |
 | `color.ink`, `color.paper` | The dark and the light surfaces: the canvas, `void`, `panel`, `hl`, `border`, and `rule`. |
 | `color.text_on_ink`, `color.text_on_paper` | Body, muted, and dim text. Primary text is the other ground: paper on ink, and ink on paper. `muted_text_lightness` sets muted-text-ink, the secondary text that also clears 4.5:1 on a lifted row on paper. |
 | `color.states` | Each governance state's mark on ink and on paper. |
@@ -91,7 +92,7 @@ The editor's colour maths is a port of `build/color.py`. `build/editor_fixture.p
 ## Change a colour token
 
 1. Edit `color` in `theme/theme.json`. Every colour the token files carry is a field there, or is derived from one.
-2. The gold's two neighbours are derived in OKLCH. `gold_bright` and `gold_deep` hold each neighbour's lightness and chroma, the hue is the gold's own, rounded to a whole degree, and `build/color.py` derives the hex. A new gold moves both neighbours with it.
+2. The gold's neighbours are derived in OKLCH. `gold_bright`, `gold_deep`, and `gold_text` hold each neighbour's lightness and chroma, the hue is the gold's own, rounded to a whole degree, and `build/color.py` derives the hex. A new gold moves both neighbours with it.
    - Each state, and the destructive red, also has a text stop for words, derived from its mark. A text stop keeps the mark's hue and chroma. On ink it sits at `state_text_lightness_on_ink`, and on paper it keeps the mark's own lightness. When a state's mark moves, its text stop moves with it. `muted_text_lightness` does the same for secondary text on paper-hl.
 3. Run `.venv/bin/python build/build.py`. It rewrites the token files, the skill's `assets/tokens.css`, the marks, the icons, and every raster that paints the colour. Add `--svg` to skip the rasters while you iterate.
 4. Run `.venv/bin/python build/playbook.py` and `.venv/bin/python build/messages.py`. Both pages embed the tokens.
