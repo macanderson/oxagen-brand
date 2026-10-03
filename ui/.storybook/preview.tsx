@@ -1,6 +1,7 @@
 import * as React from "react";
-import "../src/styles/globals.css";
+import "./preview.css";
 import type { Decorator, Preview } from "@storybook/react-vite";
+import { useGlobals } from "storybook/preview-api";
 import { ThemeEditor } from "../src/theme-editor/theme-editor";
 
 /**
@@ -52,17 +53,19 @@ const withTheme: Decorator = (Story, context) => {
 /**
  * The theme editor (#63): a Theme button on every page story (`page: true`,
  * the `Pages/` stories) opens a panel that previews a theme change on the
- * page and sends it to every site. It edits the colours of the theme the
- * toolbar shows. Add `theme-editor=open` to the iframe's query string to open
- * the panel on load.
+ * page and sends it to every site. Its Light and Dark switch sets the same
+ * theme global as the toolbar, so either one turns the page, and the panel
+ * edits the colours of the theme the page shows. Add `theme-editor=open` to
+ * the iframe's query string to open the panel on load.
  */
 const withThemeEditor: Decorator = (Story, context) => {
+  const [globals, updateGlobals] = useGlobals();
   if (context.parameters.page !== true) return <Story />;
-  const mode = context.globals.theme === "dark" ? "dark" : "light";
+  const mode = globals.theme === "dark" ? "dark" : "light";
   return (
     <>
       <Story />
-      <ThemeEditor mode={mode} />
+      <ThemeEditor mode={mode} onModeChange={(theme) => updateGlobals({ theme })} />
     </>
   );
 };

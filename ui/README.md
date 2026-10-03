@@ -79,14 +79,24 @@ overlays open on load sets `parameters.docs.story` so each of its stories draws
 in its own frame on the Docs page. Without it, every open menu or dialog would
 float over the whole page.
 
-The `Pages/` stories show the kit at page scale: two website pages (Home and
-Security) and two app pages (Runs and Run detail), each in light and dark, with
-its menus, popover, command menu, or toast open over real content. They live in
-`src/pages/`. Each page's body is `<page>.tsx`, its stories are
-`<page>.stories.tsx`, and the website's nav and the app's shell and header are
-in `page-chrome.tsx`. They are fixtures, so the barrel, the bundle, and the
-bundle's types leave them out. A story that sets `parameters: { page: true }`
-renders without the 24px frame, so its sticky bar meets the top of the frame.
+The `Pages/` stories show the kit at page scale, each in light and dark.
+
+- **Website pages.** Home and Security, with their menus and popover open over
+  real content. They live in `src/pages/`. Each page's body is `<page>.tsx`,
+  its stories are `<page>.stories.tsx`, and the website's nav is in
+  `page-chrome.tsx`.
+- **App pages.** Work and Run are copies of the product app's pages
+  (oxageninc/product, `apps/app`) as of 2026-10-02, filled with sample data.
+  They keep the app's shell, markup, and classes, so a theme change shows how
+  the app will look. They live in `src/pages/app/`. The app's own style layer
+  is `app.css`. `.storybook/preview.css` imports it after `globals.css`, and
+  its values apply only inside `.app-snapshot`. The copies will drift from
+  the app. To refresh one, copy the app's files again and keep the data as
+  props.
+
+The pages are fixtures, so the barrel, the bundle, and the bundle's types leave
+them out. A story that sets `parameters: { page: true }` renders without the
+24px frame, so its sticky bar meets the top of the frame.
 
 A push to `main` deploys the static build to
 [brand.oxagen.cloud/storybook](https://brand.oxagen.cloud/storybook/).

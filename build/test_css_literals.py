@@ -91,6 +91,15 @@ class FontSizesEverywhere(unittest.TestCase):
         hits, _used = L.font_size_hits()
         self.assertEqual([f"{h.path}:{h.line} {h.value}" for h in hits], [])
 
+    def test_the_app_copy_is_skipped_and_nothing_else_is(self) -> None:
+        self.assertTrue(L.SKIP.search("ui/src/pages/app/work-page.tsx"))
+        self.assertTrue(L.SKIP.search("ui/src/pages/app/app.css"))
+        self.assertFalse(L.SKIP.search("ui/src/pages/website-home.tsx"))
+        self.assertFalse(L.SKIP.search("ui/src/components/app/button.tsx"))
+        scanned = {p.relative_to(L.ROOT).as_posix() for _kind, p in L.scanned_files()}
+        self.assertFalse(any(p.startswith("ui/src/pages/app/") for p in scanned))
+        self.assertIn("ui/src/pages/website-home.tsx", scanned)
+
     def test_a_tailwind_arbitrary_size_fails(self) -> None:
         hits = L.script_font_sizes('const a = "px-2 text-[13px] font-medium";\nconst b = "text-[0.75rem]";', "x.tsx")
         self.assertEqual([(h.line, h.value) for h in hits], [(1, "text-[13px]"), (2, "text-[0.75rem]")])
