@@ -1,9 +1,10 @@
 /*
  * Copied as it stands from oxageninc/product apps/app/src/ui/transcript-skins.css
  * at fad620bcef (2026-10-02), for the Run page's Transcript tab in Storybook.
- * Each skin keeps its own terminal's colours, so this is the one place the
- * app writes raw colours. The theme editor does not move them, as it does
- * not in the app.
+ * The Claude Code, Codex, and Cursor skins keep their own terminals' colours,
+ * so this is the one place the app writes raw colours. The theme editor does
+ * not move them, as it does not in the app. The stella skin reads the house
+ * tokens. Every font size, space, and corner reads a kit token.
  */
 /*
  * The Run page's transcript, drawn as the harness drew it (the v3 mockup in
@@ -24,11 +25,11 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 12px;
-    padding: 7px 10px;
+    gap: calc(var(--ox-space) * 1.5);
+    margin-bottom: calc(var(--ox-space) * 3);
+    padding: calc(var(--ox-space) * 1.75) calc(var(--ox-space) * 2.5);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--ox-radius-2xl);
     background: color-mix(in srgb, var(--panel) 94%, transparent);
     backdrop-filter: blur(10px);
   }
@@ -37,7 +38,7 @@
     flex: 1 1 200px;
     min-width: 0;
     height: 30px;
-    margin: 0 6px;
+    margin: 0 calc(var(--ox-space) * 1.5);
   }
   .rp-rail {
     position: absolute;
@@ -46,7 +47,7 @@
     height: 6px;
     overflow: hidden;
     border: 1px solid var(--border);
-    border-radius: 3px;
+    border-radius: var(--ox-radius-xs);
     background: var(--hl);
     pointer-events: none;
   }
@@ -61,7 +62,7 @@
     top: 9px;
     width: 2px;
     height: 12px;
-    border-radius: 1px;
+    border-radius: var(--ox-radius-xs);
     transform: translateX(-1px);
     pointer-events: none;
   }
@@ -97,7 +98,7 @@
   .rp-range::-webkit-slider-thumb {
     width: 14px;
     height: 14px;
-    margin-top: 8px;
+    margin-top: calc(var(--ox-space) * 2);
     border: 2px solid var(--panel);
     border-radius: 50%;
     background: var(--gold);
@@ -112,7 +113,7 @@
     background: var(--gold);
   }
   .rp-range:focus-visible {
-    border-radius: 6px;
+    border-radius: var(--ox-radius-md);
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
@@ -122,7 +123,7 @@
     align-items: flex-end;
     min-width: 64px;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: var(--ox-a-micro);
     line-height: 1.3;
     font-variant-numeric: tabular-nums;
     color: var(--muted);
@@ -136,6 +137,8 @@
     --tg: 78px;
     --tm: 188px;
     --t-font: var(--mono);
+    /* One character cell of the terminal's face: a space the type sets. */
+    --t-cell: 1ch;
     --g-w: 2ch;
     min-width: 0;
     font-family: var(--t-font);
@@ -152,27 +155,27 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px 10px;
+    gap: calc(var(--ox-space) * 1.5) calc(var(--ox-space) * 2.5);
     min-width: 0;
-    padding: 8px 12px;
+    padding: calc(var(--ox-space) * 2) calc(var(--ox-space) * 3);
     border: 1px solid var(--t-line);
-    border-radius: 10px 10px 0 0;
+    border-radius: var(--ox-radius-xl) var(--ox-radius-xl) 0 0;
     background: var(--t-bar);
-    font-size: 12px;
+    font-size: var(--ox-a-micro);
     color: var(--t-dim);
   }
   .term-dots {
     display: flex;
     flex: none;
-    gap: 6px;
+    gap: calc(var(--ox-space) * 1.5);
   }
-  /* The window lights are the kit's zinc rule, on paper and on ink. The
+  /* The window lights are the kit's rule colour, on paper and on ink. The
      macOS red, amber, and green were not house values (#4804). */
   .term-dots i {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: light-dark(var(--ox-paper-rule), var(--ox-rule));
+    background: var(--rule);
   }
   .term-t {
     flex: 1 1 12rem;
@@ -183,7 +186,7 @@
     white-space: nowrap;
   }
   .term-t b {
-    margin-right: 1ch;
+    margin-right: var(--t-cell);
     font-weight: 700;
     color: var(--t-fg);
   }
@@ -191,9 +194,9 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 5px;
+    gap: calc(var(--ox-space) * 1.25);
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: var(--ox-a-micro);
   }
   .rp-body {
     max-height: clamp(440px, calc(100vh - 262px), 1000px);
@@ -203,9 +206,9 @@
   .tg {
     min-width: 0;
     overflow: hidden;
-    padding: 8px 10px 0 0;
+    padding: calc(var(--ox-space) * 2) calc(var(--ox-space) * 2.5) 0 0;
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: var(--ox-a-2xs);
     font-variant-numeric: tabular-nums;
     text-align: right;
     white-space: nowrap;
@@ -213,17 +216,17 @@
   }
   .tc {
     min-width: 0;
-    padding: 6px 16px 2px calc(16px + var(--depth, 0) * 2ch);
+    padding: calc(var(--ox-space) * 1.5) calc(var(--ox-space) * 4) calc(var(--ox-space) * 0.5) calc(var(--ox-space) * 4 + var(--depth, 0) * var(--t-cell) * 2);
     border-inline: 1px solid var(--t-line);
     background: var(--t-bg);
-    font-size: var(--t-size, 12.5px);
+    font-size: var(--t-size, var(--ox-a-micro));
     line-height: var(--t-lh, 1.5);
     overflow-wrap: anywhere;
     color: var(--t-fg);
   }
   .tx-nest .tc {
     background-image: linear-gradient(var(--t-line), var(--t-line));
-    background-position: calc(16px + (var(--depth, 1) - 1) * 2ch + 0.5ch) 0;
+    background-position: calc(var(--ox-space) * 4 + (var(--depth, 1) - 1) * var(--t-cell) * 2 + var(--t-cell) * 0.5) 0;
     background-repeat: no-repeat;
     background-size: 1px 100%;
   }
@@ -232,11 +235,11 @@
     flex-wrap: wrap;
     align-content: flex-start;
     align-items: baseline;
-    gap: 4px 5px;
+    gap: calc(var(--ox-space) * 1) calc(var(--ox-space) * 1.25);
     min-width: 0;
-    padding: 7px 0 4px 12px;
+    padding: calc(var(--ox-space) * 1.75) 0 calc(var(--ox-space) * 1) calc(var(--ox-space) * 3);
     font-family: var(--font);
-    font-size: 11.5px;
+    font-size: var(--ox-a-micro);
     color: var(--muted);
   }
   .tm > * {
@@ -245,22 +248,22 @@
     text-overflow: ellipsis;
   }
   .tr-banner .tc {
-    padding-top: 12px;
+    padding-top: calc(var(--ox-space) * 3);
   }
   .tr-foot .tc {
-    padding-bottom: 14px;
+    padding-bottom: calc(var(--ox-space) * 3.5);
     border-bottom: 1px solid var(--t-line);
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 var(--ox-radius-xl) var(--ox-radius-xl);
   }
 
   /* The margin: what Oxagen adds beside the harness's own lines. */
   .mg-cost {
-    padding: 1px 7px;
+    padding: calc(var(--ox-space) * 0.25) calc(var(--ox-space) * 1.75);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: var(--ox-radius-md);
     background: var(--panel);
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: var(--ox-a-micro);
     color: var(--fg);
   }
   .mg-note {
@@ -274,7 +277,7 @@
   }
   .mg-gap {
     flex-basis: 100%;
-    padding-top: 3px;
+    padding-top: calc(var(--ox-space) * 0.75);
     border-top: 1px dashed var(--rule);
     font-style: italic;
     color: var(--muted-foreground);
@@ -336,7 +339,7 @@
     color: var(--t-err);
   }
   .tx-quiet {
-    font-size: 11.5px;
+    font-size: var(--ox-a-micro);
     color: var(--t-dim);
   }
   .tx-err {
@@ -351,7 +354,7 @@
   .tx-head {
     display: flex;
     align-items: baseline;
-    gap: 1ch;
+    gap: var(--t-cell);
     min-width: 0;
     cursor: pointer;
   }
@@ -376,8 +379,8 @@
   .tx-recall-items {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: 2px 12px;
-    font-size: 11.5px;
+    gap: calc(var(--ox-space) * 0.5) calc(var(--ox-space) * 3);
+    font-size: var(--ox-a-micro);
     color: var(--t-dim);
   }
   .tx-fold {
@@ -385,7 +388,7 @@
     border: 0;
     background: none;
     font: inherit;
-    font-size: 11px;
+    font-size: var(--ox-a-micro);
     color: var(--t-dim);
     cursor: pointer;
   }
@@ -402,7 +405,7 @@
     position: relative;
     min-width: 0;
     margin-left: var(--g-w);
-    padding-left: 3ch;
+    padding-left: calc(var(--t-cell) * 3);
     color: var(--t-dim);
   }
   .tx-res::before {
@@ -424,12 +427,12 @@
   }
   .tx-diff {
     min-width: 0;
-    margin: 2px 0 4px;
+    margin: calc(var(--ox-space) * 0.5) 0 calc(var(--ox-space) * 1);
   }
   .tx-dpath {
     display: flex;
     flex-wrap: wrap;
-    gap: 1ch;
+    gap: var(--t-cell);
   }
   .tx-dpath b {
     font-weight: 700;
@@ -447,7 +450,7 @@
   .tx-dn {
     flex: none;
     min-width: 4ch;
-    margin-right: 1ch;
+    margin-right: var(--t-cell);
     text-align: right;
     color: var(--t-dim);
     user-select: none;
@@ -468,7 +471,7 @@
     opacity: 0.75;
   }
   .tx-dl.gap {
-    padding-left: 5ch;
+    padding-left: calc(var(--t-cell) * 5);
     color: var(--t-dim);
   }
 
@@ -477,14 +480,14 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 16px;
-    padding: 2px 0 6px;
+    gap: calc(var(--ox-space) * 4);
+    padding: calc(var(--ox-space) * 0.5) 0 calc(var(--ox-space) * 1.5);
   }
   .tx-clawd {
     margin: 0;
     overflow: visible;
     font-family: var(--mono);
-    font-size: 13px;
+    font-size: var(--ox-a-body);
     line-height: 1.12;
     color: var(--t-acc);
   }
@@ -492,7 +495,7 @@
     font-weight: 700;
   }
   .tx-working {
-    margin-top: 8px;
+    margin-top: calc(var(--ox-space) * 2);
     color: var(--t-acc);
   }
   .tx-spin {
@@ -533,14 +536,14 @@
     --g-think: "∴";
   }
   .term.cc .tx-user {
-    margin: 4px -8px 0;
-    padding: 3px 8px 3px calc(8px + var(--g-w));
-    border-radius: 3px;
+    margin: calc(var(--ox-space) * 1) calc(var(--ox-space) * -2) 0;
+    padding: calc(var(--ox-space) * 0.75) calc(var(--ox-space) * 2) calc(var(--ox-space) * 0.75) calc(var(--ox-space) * 2 + var(--g-w));
+    border-radius: var(--ox-radius-xs);
     background: var(--t-user);
   }
   .term.cc .tx-user::before {
-    top: 3px;
-    left: 8px;
+    top: calc(var(--ox-space) * 0.75);
+    left: calc(var(--ox-space) * 2);
   }
   .term.cc .tx-arg::before {
     content: "(";
@@ -577,14 +580,14 @@
     color: var(--t-dim);
   }
   .term.cx .tx-user {
-    margin-top: 4px;
-    padding: 6px 10px 6px calc(10px + var(--g-w));
+    margin-top: calc(var(--ox-space) * 1);
+    padding: calc(var(--ox-space) * 1.5) calc(var(--ox-space) * 2.5) calc(var(--ox-space) * 1.5) calc(var(--ox-space) * 2.5 + var(--g-w));
     border-left: 2px solid var(--t-acc);
     background: var(--t-user);
   }
   .term.cx .tx-user::before {
-    top: 6px;
-    left: 10px;
+    top: calc(var(--ox-space) * 1.5);
+    left: calc(var(--ox-space) * 2.5);
     font-weight: 700;
     color: var(--t-acc);
   }
@@ -602,12 +605,12 @@
     display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2px;
+    gap: calc(var(--ox-space) * 0.5);
     min-width: min(430px, 100%);
-    margin-bottom: 4px;
-    padding: 8px 14px;
+    margin-bottom: calc(var(--ox-space) * 1);
+    padding: calc(var(--ox-space) * 2) calc(var(--ox-space) * 3.5);
     border: 1px solid var(--t-line);
-    border-radius: 8px;
+    border-radius: var(--ox-radius-lg);
   }
   .term.cx .tx-spin::before {
     content: "•";
@@ -616,7 +619,7 @@
   /* Cursor. */
   .term.cu {
     --t-font: var(--font);
-    --t-size: 13px;
+    --t-size: var(--ox-a-body);
     --t-lh: 1.55;
     --t-bg: light-dark(#f8f8f8, #181818);
     --t-fg: light-dark(#1f1f1f, #d6d6d6);
@@ -630,23 +633,24 @@
     --t-add: light-dark(rgb(46 160 67 / 16%), rgb(46 160 67 / 20%));
     --t-del: light-dark(rgb(248 81 73 / 14%), rgb(248 81 73 / 20%));
     --t-user: light-dark(#ededed, #252526);
+    --t-res: light-dark(#fff, #1f1f1f);
     --g-w: 0px;
     --g-res: none;
     --g-think: "▸";
   }
   .term.cu .tx-user {
-    margin-top: 4px;
-    padding: 10px 12px;
+    margin-top: calc(var(--ox-space) * 1);
+    padding: calc(var(--ox-space) * 2.5) calc(var(--ox-space) * 3);
     border: 1px solid var(--t-line);
-    border-radius: 10px;
+    border-radius: var(--ox-radius-xl);
     background: var(--t-user);
   }
   .term.cu .tx-think {
     --g-w: 1em;
-    font-size: 12.5px;
+    font-size: var(--ox-a-micro);
   }
   .term.cu .tx-call {
-    font-size: 12.5px;
+    font-size: var(--ox-a-micro);
     color: var(--t-dim);
   }
   .term.cu .tx-name {
@@ -654,18 +658,18 @@
     color: var(--t-fg);
   }
   .term.cu .tx-res {
-    margin-top: 4px;
-    padding: 6px 10px;
+    margin-top: calc(var(--ox-space) * 1);
+    padding: calc(var(--ox-space) * 1.5) calc(var(--ox-space) * 2.5);
     border: 1px solid var(--t-line);
-    border-radius: 8px;
-    background: light-dark(#fff, #1f1f1f);
+    border-radius: var(--ox-radius-lg);
+    background: var(--t-res);
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: var(--ox-a-micro);
   }
   .term.cu .tx-res + .tx-res {
     margin-top: 0;
     border-top: 0;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 var(--ox-radius-lg) var(--ox-radius-lg);
   }
   .term.cu .tx-working {
     color: var(--t-dim);
@@ -676,20 +680,27 @@
 
   /* stella. */
   .term.st {
-    --t-bg: light-dark(#fff, #09090b);
-    --t-fg: light-dark(#27272a, #e4e4e7);
-    --t-dim: light-dark(#8a8a93, #71717a);
+    --t-bg: light-dark(var(--ox-paper), var(--ox-ink));
+    --t-fg: light-dark(var(--ox-text-ink-body), var(--ox-text-body));
+    /* #8A8A93 and the bar's two greys are stella's own; no house token holds them. */
+    --t-dim: light-dark(#8a8a93, var(--ox-dim));
     --t-bar: light-dark(#f1f1f3, #141416);
-    --t-line: light-dark(#e4e4e7, #27272a);
-    --t-acc: light-dark(#8a7223, #d4af37);
-    --t-ask: light-dark(#8a7223, #f1ce65);
-    --t-ok: light-dark(#2f7d52, #57a97c);
-    --t-err: light-dark(#9b4526, #c66a4a);
-    --t-add: light-dark(rgb(47 125 82 / 12%), rgb(87 169 124 / 14%));
-    --t-del: light-dark(rgb(155 69 38 / 10%), rgb(198 106 74 / 16%));
+    --t-line: light-dark(var(--ox-paper-border), var(--ox-border));
+    --t-acc: light-dark(var(--ox-gold-deep), var(--ox-gold));
+    --t-ask: light-dark(var(--ox-gold-deep), var(--ox-gold-bright));
+    --t-ok: light-dark(var(--ox-st-allowed-ink), var(--ox-st-allowed));
+    --t-err: light-dark(var(--ox-st-denied-ink), var(--ox-st-denied));
+    --t-add: light-dark(
+      color-mix(in srgb, var(--ox-st-allowed-ink) 12%, transparent),
+      color-mix(in srgb, var(--ox-st-allowed) 14%, transparent)
+    );
+    --t-del: light-dark(
+      color-mix(in srgb, var(--ox-st-denied-ink) 10%, transparent),
+      color-mix(in srgb, var(--ox-st-denied) 16%, transparent)
+    );
     --t-user: transparent;
-    --s-gold: #d4af37;
-    --s-silver: light-dark(#71717a, #a1a1aa);
+    --s-gold: var(--ox-gold);
+    --s-silver: light-dark(var(--ox-muted-ink), var(--ox-muted));
     --g-user: ">>>";
     --g-call: "●";
     --g-think: "◐";
@@ -702,20 +713,20 @@
   }
   .term.st .tx-call,
   .term.st .tx-think {
-    padding-left: calc(var(--g-w) + 10px);
+    padding-left: calc(var(--g-w) + var(--ox-space) * 2.5);
     border-left: 2px solid
       color-mix(in srgb, var(--s-silver) 45%, transparent);
   }
   .term.st .tx-call::before,
   .term.st .tx-think::before {
-    left: 10px;
+    left: calc(var(--ox-space) * 2.5);
     color: var(--t-acc);
   }
   .term.st .tx-think {
     border-left-color: var(--t-ask);
   }
   .term.st .tx-x {
-    left: 10px;
+    left: calc(var(--ox-space) * 2.5);
   }
   .term.st .tx-call:is(
       [data-tool="edit"],
@@ -751,12 +762,12 @@
     color: var(--t-acc);
   }
   .term.st .tx-res {
-    margin-left: calc(var(--g-w) + 12px);
+    margin-left: calc(var(--g-w) + var(--ox-space) * 3);
     padding-left: 0;
   }
   .term.st .tx-banner {
     justify-content: space-between;
-    padding-bottom: 8px;
+    padding-bottom: calc(var(--ox-space) * 2);
     border-bottom: 1px solid var(--t-line);
     color: var(--t-dim);
   }
@@ -776,8 +787,8 @@
   /* A phone: one column, the margin under its line, no gutter. */
   @media (width < 48rem) {
     .rpbar {
-      gap: 4px;
-      padding: 6px 8px;
+      gap: calc(var(--ox-space) * 1);
+      padding: calc(var(--ox-space) * 1.5) calc(var(--ox-space) * 2);
     }
     .rp-track {
       order: 9;
@@ -800,7 +811,7 @@
     }
     .term .tm {
       align-items: center;
-      padding: 2px 12px 4px calc(12px + var(--depth, 0) * 1.5ch);
+      padding: calc(var(--ox-space) * 0.5) calc(var(--ox-space) * 3) calc(var(--ox-space) * 1) calc(var(--ox-space) * 3 + var(--depth, 0) * var(--t-cell) * 1.5);
       border-inline: 1px solid var(--t-line);
       background: var(--t-bg);
     }
@@ -808,8 +819,8 @@
       display: none;
     }
     .term .tc {
-      padding-inline: calc(12px + var(--depth, 0) * 1.5ch) 12px;
-      font-size: 11.5px;
+      padding-inline: calc(var(--ox-space) * 3 + var(--depth, 0) * var(--t-cell) * 1.5) calc(var(--ox-space) * 3);
+      font-size: var(--ox-a-micro);
     }
     .rp-body {
       max-height: 68vh;
