@@ -70,15 +70,12 @@
       "features": []
     },
     "sans": {
-      "family": "Aeonik",
+      "family": "Geist",
       "source": "kit",
-      "files": [
-        { "file": "aeonik-wght.woff2", "weight": "100 900" },
-        { "file": "aeonik-italic-wght.woff2", "weight": "100 900", "style": "italic" }
-      ],
+      "files": [{ "file": "geist-latin-wght.woff2", "weight": "100 900" }],
       "fallback": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       "features": [],
-      "outline": { "file": "aeonik-wght.woff2" }
+      "outline": { "file": "geist-latin-wght.woff2" }
     },
     "mono": {
       "family": "Monaspace Neon",
@@ -89,6 +86,16 @@
     }
   },
   "extra_faces": [
+    {
+      "family": "Aeonik",
+      "source": "kit",
+      "files": [
+        { "file": "aeonik-wght.woff2", "weight": "100 900" },
+        { "file": "aeonik-italic-wght.woff2", "weight": "100 900", "style": "italic" }
+      ],
+      "fallback": ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+      "features": []
+    },
     {
       "family": "Aeonik Mono",
       "source": "kit",

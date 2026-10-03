@@ -721,7 +721,7 @@ def build_html() -> str:
         ("messages/", "the message registry: one YAML file per line, with its status, scope, evidence, and owner"),
         ("build/", "color.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py"),
         ("build/reference/", "the kit wordmark and logomark this system is checked against"),
-        ("fonts/", "Space Grotesk, Aeonik, Aeonik Mono, Aeonik Fono, and Monaspace Neon"),
+        ("fonts/", "Space Grotesk, Geist, Monaspace Neon, Aeonik, Aeonik Mono, and Aeonik Fono"),
         ("tokens/", "house-tokens.css · house-tokens.json"),
         ("logo/svg, logo/png", "wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles"),
         ("icons/", "favicons and app icons, 16 to 512"),
@@ -1032,7 +1032,7 @@ brew install harfbuzz librsvg
 </section>
 
 </main>
-<footer><div class="wrap">Oxagen house system · built from the Oxagen brand kit · Aeonik by CoType Foundry · Space Grotesk and Monaspace Neon under the SIL Open Font License</div></footer>
+<footer><div class="wrap">Oxagen house system · built from the Oxagen brand kit · Space Grotesk, Geist, and Monaspace Neon under the SIL Open Font License · Aeonik by CoType Foundry</div></footer>
 <script>
 (function(){{var b=document.getElementById('theme'),r=document.documentElement;
 b.addEventListener('click',function(){{var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',dark?'light':'dark');}});}})();

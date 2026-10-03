@@ -1069,10 +1069,10 @@
  * :root for both the Tailwind font-* utilities and the raw var(--font-*) refs
  * below.
  *
- * The house type rule (Mac, 2026-10-02): Aeonik sets the default text on
+ * The house type rule (Mac, 2026-10-02): Geist sets the default text on
  * every surface, every app heading, and every h4 to h6. Space Grotesk sets
  * h1 to h3 on the marketing and customer sites, through --font-display.
- * --font-heading is the face h1 to h3 take on a surface. It is Aeonik here,
+ * --font-heading is the face h1 to h3 take on a surface. It is Geist here,
  * as in the app. A Pages/Website story points it at --font-display, as a
  * marketing or docs site does in its own stylesheet. --font-wordmark is the
  * wordmark face, which is fixed.
@@ -1081,9 +1081,9 @@
  * are the kit's too.
  */
 @theme {
-  --font-sans: var(--ox-font); /* Aeonik: body, UI, every app heading, every h4 to h6 */
+  --font-sans: var(--ox-font); /* Geist: body, UI, every app heading, every h4 to h6 */
   --font-display: var(--ox-font-display); /* Space Grotesk: h1 to h3 on a marketing or customer site */
-  --font-heading: var(--ox-font-heading); /* Aeonik: h1 to h3 on this surface */
+  --font-heading: var(--ox-font-heading); /* Geist: h1 to h3 on this surface */
   /* Monaspace Neon: code, logs, ids, and numbers in tables. */
   --font-mono: var(--ox-font-mono);
   /* Space Grotesk: a wordmark set as text. */
@@ -1109,8 +1109,8 @@
 
   /*
    * TYPE RULE (Mac, 2026-10-02): h1 to h3 read --font-heading, which is
-   * Aeonik in the app and Space Grotesk on a marketing or customer site.
-   * Every h4 to h6 is Aeonik. Monaspace Neon (--font-mono) sets code and
+   * Geist in the app and Space Grotesk on a marketing or customer site.
+   * Every h4 to h6 is Geist. Monaspace Neon (--font-mono) sets code and
    * identifiers, with texture healing on. Every size reads a step, and every
    * step is its scale's base times a ratio. The app base is 14px and never
    * goes lower. Smaller steps are for labels, badges, timestamps, and table

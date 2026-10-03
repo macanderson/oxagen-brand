@@ -3,10 +3,10 @@
 Every word is outlined to paths, so GitHub needs no font to draw a badge. A
 wordmark label (`oxagen`, `stella*`) is the wordmark: the wordmark face at the
 logo weight, with its accent glyph in gold. Every other word is in the text
-face, Aeonik, because the text face sets every line of text and Space Grotesk
-sets the wordmarks (Mac, 2026-09-29 and 2026-10-02). Colours come from
-`color.py`, so a change to `theme/theme.json` moves every badge on the next
-build.
+face, Geist, because the text face sets every line of text and Space Grotesk
+sets the wordmarks (Mac, 2026-09-29, 2026-10-02, and 2026-10-03). Colours come
+from `color.py`, so a change to `theme/theme.json` moves every badge on the
+next build.
 
 Gold appears only as the accent glyph of a wordmark label. It never encodes a
 state. The state is the shape: a filled square is verified, a hollow square is

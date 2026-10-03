@@ -79,7 +79,7 @@ A heading names the thing, a caption states one fact, and no label carries a com
 - [ ] Buyer quotes are labelled hypothetical unless an attributed customer approved them
 - [ ] No traction numbers, partner counts, or setup durations without dated evidence
 - [ ] Every claim is one the record can back
-- [ ] Aeonik for the default text on every surface, for h1 to h3 in the app and the internal tools, and for every h4 to h6. Space Grotesk for h1 to h3 on the marketing and customer sites, docs included, and for the wordmarks. Monaspace Neon for code, data, digests, and commands
+- [ ] Geist for the default text on every surface, for h1 to h3 in the app and the internal tools, and for every h4 to h6. Space Grotesk for h1 to h3 on the marketing and customer sites, docs included, and for the wordmarks. Monaspace Neon for code, data, digests, and commands
 - [ ] Body at the base: 16px on the marketing and customer sites, docs included, and 14px in the app and the internal tools, and never a base below 14px. The marketing scale (`text-m-*`) for landing pages and posts, the app scale (`text-a-*`) for the app and the internal tools
 - [ ] Every step derives from its scale's base (`--ox-m-base`, `--ox-a-base`), and no font size is hard-coded: every size reads a step token or a house utility
 - [ ] A smaller step only for labels, badges, timestamps, and table headers: micro (12px) and 2xs (10px) in the app, micro (14px) on marketing. Running text, controls, inputs, buttons, menu items, and table body cells at the base

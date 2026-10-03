@@ -62,7 +62,7 @@ const MARKETING_SCALE: Sample[] = [
  * The heading rule. On a marketing or customer site, h1 to h3 wear
  * text-m-h1 to text-m-h3, which set Space Grotesk. In the app and the
  * internal tools, h1 to h3 wear text-a-h1 to text-a-h3, which read
- * --font-heading, Aeonik by default. Every h4 to h6 is Aeonik on both.
+ * --font-heading, Geist by default. Every h4 to h6 is Geist on both.
  */
 const MARKETING_HEADINGS: Sample[] = [
   { tag: "h1", className: "text-m-h1", text: "Govern every agent" },
@@ -79,8 +79,8 @@ const APP_HEADINGS: Sample[] = [
 ];
 
 /*
- * The face tokens. Aeonik sets --font-sans and, by default, --font-heading,
- * so an Aeonik sample matches both. Space Grotesk sets --font-display and
+ * The face tokens. Geist sets --font-sans and, by default, --font-heading,
+ * so a Geist sample matches both. Space Grotesk sets --font-display and
  * --font-wordmark, so a Space Grotesk sample matches both. The caption names
  * every match.
  */
@@ -216,8 +216,8 @@ export const MarketingScale: Story = {
 
 /**
  * Headings on each surface. A marketing or customer site sets h1 to h3 in
- * Space Grotesk. The app and the internal tools set them in Aeonik. Every h4
- * is Aeonik.
+ * Space Grotesk. The app and the internal tools set them in Geist. Every h4
+ * is Geist.
  */
 export const Headings: Story = {
   name: "Headings",

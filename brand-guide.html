@@ -14,7 +14,7 @@
    fallback for a viewer that cannot load that file. Gold is identity only: the two marks. State
    is shown by border shape: double for works, dashed for pending, single for broken.
    This is a public page, so it reads the marketing type steps (--ox-m-*): h1 to h3 in Space
-   Grotesk, all other text in Aeonik on the 16px base, and code in Monaspace Neon. Table
+   Grotesk, all other text in Geist on the 16px base, and code in Monaspace Neon. Table
    headers, chips, step numbers, and small labels read the app micro step (--ox-a-micro).
    Every step is its scale's base times a ratio, so no size here is hard-coded. */
 :root {
@@ -28,7 +28,7 @@
   --muted: var(--ox-muted, #A1A1AA);
   --show-dark: inline-block;
   --show-light: none;
-  --sans: var(--ox-font, "Aeonik", system-ui, -apple-system, "Segoe UI", sans-serif);
+  --sans: var(--ox-font, "Geist", system-ui, -apple-system, "Segoe UI", sans-serif);
   --display: var(--ox-font-display, "Space Grotesk", "Helvetica Neue", Arial, sans-serif);
   --mono: var(--ox-font-mono, "Monaspace Neon", ui-monospace, "SF Mono", Menlo, Consolas, monospace);
   --radius: var(--ox-radius, 0.75rem);
@@ -265,7 +265,7 @@ footer { margin-top: calc(var(--ox-space, 0.25rem) * 18); padding-top: calc(var(
       <tbody>
         <tr><td><code>color</code></td><td>The gold, the lightness and chroma of its two neighbours, the ink and paper surfaces, the text colours, the six state marks, the lightness of their text stops on ink, and the destructive lift.</td></tr>
         <tr><td><code>faces</code></td><td>The face of each role: <code>wordmark</code>, <code>display</code>, <code>sans</code>, and <code>mono</code>. Each lists its family, source, files with their weights and styles, fallback families, and features. The wordmark face is fixed: Space Grotesk at weight 600.</td></tr>
-        <tr><td><code>extra_faces</code></td><td>Faces that load and take no role: Aeonik Mono and Aeonik Fono. A page can name either family.</td></tr>
+        <tr><td><code>extra_faces</code></td><td>Faces that load and take no role: Aeonik, Aeonik Mono, and Aeonik Fono. A page can name any of these families.</td></tr>
         <tr><td><code>radius</code></td><td>The base every corner multiplies, each step's multiplier, the step a card takes, and the website's corner.</td></tr>
         <tr><td><code>shadow</code></td><td>The shadow under a control and the shadow under a floating surface, each on ink and on paper.</td></tr>
         <tr><td><code>spacing</code></td><td>The spacing unit and the page width.</td></tr>
@@ -314,13 +314,13 @@ footer { margin-top: calc(var(--ox-space, 0.25rem) * 18); padding-top: calc(var(
       <tbody>
         <tr><td>Both wordmarks and Stella's icon</td><td>Space Grotesk 600</td><td><code>faces.wordmark.outline</code></td></tr>
         <tr><td>h1 to h3 on marketing and customer sites</td><td>Space Grotesk</td><td><code>faces.display</code></td></tr>
-        <tr><td>Default text on every surface, h1 to h3 in the app and the internal tools, and every h4 to h6</td><td>Aeonik</td><td><code>faces.sans</code></td></tr>
+        <tr><td>Default text on every surface, h1 to h3 in the app and the internal tools, and every h4 to h6</td><td>Geist</td><td><code>faces.sans</code></td></tr>
         <tr><td>Code, data, digests, and commands</td><td>Monaspace Neon</td><td><code>faces.mono</code></td></tr>
-        <tr><td>No role yet</td><td>Aeonik Mono and Aeonik Fono</td><td><code>extra_faces</code></td></tr>
+        <tr><td>No role</td><td>Aeonik, Aeonik Mono, and Aeonik Fono</td><td><code>extra_faces</code></td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note"><strong>Heading faces.</strong> Marketing and customer sites set h1 to h3 in Space Grotesk. They are oxagen.sh, the docs sites, stella.oxagen.sh, survey.oxagen.cloud, and the kit's public pages, this guide among them. The web app and the internal tools set h1 to h3 in Aeonik. Every h4 to h6 is Aeonik on every surface. In Tailwind, <code>text-m-h1</code> to <code>text-m-h3</code> set Space Grotesk. <code>text-a-h1</code> to <code>text-a-h3</code> and a bare h1 to h3 read <code>--font-heading</code>, which stays Aeonik until a marketing page sets it to <code>var(--font-display)</code>.</p>
+  <p class="note"><strong>Heading faces.</strong> Marketing and customer sites set h1 to h3 in Space Grotesk. They are oxagen.sh, the docs sites, stella.oxagen.sh, survey.oxagen.cloud, and the kit's public pages, this guide among them. The web app and the internal tools set h1 to h3 in Geist. Every h4 to h6 is Geist on every surface. In Tailwind, <code>text-m-h1</code> to <code>text-m-h3</code> set Space Grotesk. <code>text-a-h1</code> to <code>text-a-h3</code> and a bare h1 to h3 read <code>--font-heading</code>, which stays Geist until a marketing page sets it to <code>var(--font-display)</code>.</p>
   <p class="note"><strong>Type sizes.</strong> Each scale has one base. The base is 16px on marketing and customer sites, docs included, and 14px in the web app and the internal tools. In your words: "The base page font size should never be lower than 14px." Every other step is the base times a ratio. Change the base in <code>theme/theme.json</code> or the theme editor, and every step on that scale follows. The smaller steps are for labels, badges, timestamps, and table headers. At the shipped base, the app's micro step is 12px, its 2xs step is 10px, and the marketing micro step is 14px. Running text, buttons, inputs, and table cells use the base. Space Grotesk loses its shape below 20px, so the theme editor warns when a heading that can take it falls under 20px. Nothing is hard-coded: every font size reads a step token, <code>--ox-m-*</code> on the marketing scale and <code>--ox-a-*</code> on the app scale.</p>
   <ol class="steps">
     <li><strong>Check the licence.</strong><p>On 2026-10-01 you decided that a licensed face may be committed to this public repo like the open faces. Its licence must still allow web embedding on Oxagen's sites.</p></li>
@@ -381,7 +381,7 @@ footer { margin-top: calc(var(--ox-space, 0.25rem) * 18); padding-top: calc(var(
       <thead><tr><th>Part</th><th>Oxagen</th><th>Stella</th></tr></thead>
       <tbody>
         <tr><td>Colours</td><td colspan="2">Shared: obsidian, white, the greys, and one gold</td></tr>
-        <tr><td>Typefaces</td><td colspan="2">Shared: Space Grotesk, Aeonik, and Monaspace Neon</td></tr>
+        <tr><td>Typefaces</td><td colspan="2">Shared: Space Grotesk, Geist, and Monaspace Neon</td></tr>
         <tr><td>Components</td><td colspan="2">Shared: <code>@oxagen/ui</code>, shown in the Storybook</td></tr>
         <tr><td>Layout</td><td colspan="2">Shared: 12px card radius and a 1180px page width</td></tr>
         <tr><td>Voice and lines</td><td colspan="2">Shared: the message registry under <code>messages/</code></td></tr>

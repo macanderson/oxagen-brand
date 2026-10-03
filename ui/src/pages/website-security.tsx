@@ -140,7 +140,7 @@ function ScopePopover({ open }: { open: boolean }) {
  *
  * The wrapper points `--font-heading` at Space Grotesk, the one line a
  * marketing site writes, so every h1 to h3 on the page takes it. The Scope
- * popover renders outside the wrapper, so its 14px title stays in Aeonik.
+ * popover renders outside the wrapper, so its 14px title stays in Geist.
  */
 export function SecurityPage({ scopeOpen }: { scopeOpen: boolean }) {
   return (

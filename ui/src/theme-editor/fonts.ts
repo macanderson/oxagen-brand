@@ -13,6 +13,7 @@
 export const GOOGLE_SUGGESTIONS: Record<"text" | "mono", string[]> = {
   text: [
     "Inter",
+    "Geist",
     "Space Grotesk",
     "Manrope",
     "DM Sans",
@@ -31,6 +32,7 @@ export const GOOGLE_SUGGESTIONS: Record<"text" | "mono", string[]> = {
   mono: [
     "JetBrains Mono",
     "IBM Plex Mono",
+    "Geist Mono",
     "Fira Code",
     "Source Code Pro",
     "DM Mono",
