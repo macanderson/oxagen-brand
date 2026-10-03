@@ -31,18 +31,20 @@ What passes without an entry in KEEP:
 - a value that reads a token (`var(--...)`) and writes no length of its own,
   a fallback inside the `var()` included;
 - a Tailwind size that reads a token, `text-(length:--ox-a-h2)` or
-  `text-[length:var(--ox-a-h2)]`, and `text-xs` and `text-sm`, which
-  `tokens/house-tailwind.css` points at the app body step. Tailwind's other
-  named sizes (`text-base`, `text-lg` and up) are its own fixed sizes, so
-  they fail;
+  `text-[length:var(--ox-a-h2)]`, and Tailwind's named sizes `text-xs` to
+  `text-3xl`, which `tokens/house-tailwind.css` points at the app steps in
+  order (`text-base` is the app base). Tailwind's larger sizes (`text-4xl`
+  and up) read no step, so they fail;
 - a corner of 0, a circle (50%), or a pill (999px or 9999px);
 - a ring, which is a shadow with no offset and no blur, such as a focus or
   hover ring, and an inset bar;
 - a font size of 1em or more, or 100% or more, which never sets text below
   its parent.
 
-A font size under 1em or under 100% fails, because it sets text below a
-step: `.9em` of a 14px body is 12.6px.
+A font size under 1em or under 100% fails, because it sets a size no step
+names: `.9em` of a 14px body is 12.6px. Text that should be smaller reads a
+smaller step, such as `text-sm` (micro) or `text-xs` (2xs). No rule here sets
+a smallest size.
 
 Every other literal is in KEEP, with its file and its reason. An entry that
 matches nothing fails too, so the allowlist cannot outlive the literal it
@@ -58,7 +60,9 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from theme import ROOT, THEME, TYPE_FLOOR_PX, rem_px
+import pagecss as PC
+import typeset as T
+from theme import ROOT, THEME, rem_px
 
 KIT_CSS = "ui/src/styles/globals.css"
 
@@ -86,14 +90,16 @@ class Keep:
     path: str = KIT_CSS
 
 
-#: Why a text field keeps Tailwind's 16px `text-base` on a phone.
-_IOS_ZOOM = "Safari's floor for a text field on a phone, below which iOS zooms the page on focus"
+#: Why a text field keeps a fixed 16px on a phone. It is a device rule, not a
+#: step: iOS Safari zooms the page when a focused field's text is under 16px,
+#: whatever the base.
+_IOS_ZOOM = "Safari's smallest size for a text field on a phone, below which iOS zooms the page on focus"
 
 #: The literals the guard excuses, by file, group, and value.
 KEEP: tuple[Keep, ...] = (
     Keep("font-size", "16px", _IOS_ZOOM),
     *(
-        Keep("font-size", "text-base", _IOS_ZOOM, f"ui/src/components/{name}")
+        Keep("font-size", "text-[16px]", _IOS_ZOOM, f"ui/src/components/{name}")
         for name in ("command-menu.tsx", "composer.tsx", "control-styles.ts", "input.tsx", "list-controls.tsx", "textarea.tsx")
     ),
 )
@@ -288,7 +294,6 @@ def _nearest(target: float, options: dict[str, float], unit: str = "") -> str:
 
 def suggestion(group: str, value: str, prop: str = "") -> str:
     """The token to read instead of a literal, for the guard's message."""
-    app = THEME["type"]["scales"]["app"]
     step = re.fullmatch(r"--radius-([\w]+)", prop)
     if group == "border-radius" and step and step.group(1) in THEME["radius"]["steps"]:
         return f"var(--ox-radius-{step.group(1)})"
@@ -297,7 +302,7 @@ def suggestion(group: str, value: str, prop: str = "") -> str:
                 "or no shadow on a surface at rest")
     if group == "line-height":
         found = re.search(r"\d*\.?\d+", without_vars(value))
-        steps = {f"--ox-a-{s}-leading": float(app[s]["leading"]) for s in app}
+        steps = {f"--ox-a-{st.name}-leading": float(st.leading) for st in T.APP.steps}
         return _nearest(float(found.group()), steps) if found else "an --ox-a-*-leading step"
     found = _LENGTH.search(without_vars(value))
     px = float(found.group(1)) * (16 if found and found.group(2) == "rem" else 1) if found else None
@@ -310,14 +315,25 @@ def suggestion(group: str, value: str, prop: str = "") -> str:
     return size_suggestion(px)
 
 
+def _step_sizes(prefix: str = "--ox-") -> dict[str, float]:
+    """Each step of both scales and its size at the theme's base, by token name."""
+    return {f"{prefix}{s.key}-{st.name}": st.px for s in T.SCALES for st in s.steps}
+
+
 def size_suggestion(px: float | None, prefix: str = "--ox-") -> str:
-    """The step a font size takes instead: the body step under the floor, else the nearest step."""
-    app, marketing = THEME["type"]["scales"]["app"], THEME["type"]["scales"]["marketing"]
-    if px is None or px < TYPE_FLOOR_PX:
-        return f"var({prefix}a-body), the {rem_px(app['body']['size']):g}px floor, or the step for its role"
-    sizes = {f"{prefix}a-{s}": rem_px(app[s]["size"]) for s in app}
-    sizes.update({f"{prefix}m-{s}": rem_px(marketing[s]["size"]) for s in marketing})
-    return _nearest(px, sizes, "px")
+    """The step a font size takes instead: the nearest step, the small ones included, or the step for its role."""
+    if px is None:
+        return f"var({prefix}a-body), the app base, or the step for its role"
+    return _nearest(px, _step_sizes(prefix), "px") + ", or the step for its role"
+
+
+def tailwind_suggestion(px: float | None) -> str:
+    """The Tailwind size a class takes instead: the named size whose app step is nearest."""
+    named = {f"text-{name}": T.APP.step(step).px for name, step in T.TAILWIND_SIZES}
+    if px is None:
+        return "text-base (the app base), or the named size for its role"
+    name = min(named, key=lambda k: abs(named[k] - px))
+    return f"{name} ({named[name]:g}px at the base), a text-a-* or text-m-* step, or the named size for its role"
 
 
 def literals(css: str, keep: tuple[Keep, ...] = KEEP, path: str = KIT_CSS) -> tuple[list[Hit], list[Keep]]:
@@ -392,9 +408,9 @@ def strip_script_comments(code: str) -> str:
 
 
 _TW_SIZE = re.compile(r"(?<![\w-])text-\[([^\]\s]+)\]")
-#: Tailwind's own fixed sizes. `text-xs` and `text-sm` are not here, because
-#: `tokens/house-tailwind.css` points both at the app body step.
-_TW_NAMED = re.compile(r"(?<![\w-])text-(base|lg|xl|[2-9]xl)(?![\w-])")
+#: Tailwind's own fixed sizes: the ones above 3xl. `text-xs` to `text-3xl` are
+#: not here, because `tokens/house-tailwind.css` points each at an app step.
+_TW_NAMED = re.compile(r"(?<![\w-])text-([4-9]xl)(?![\w-])")
 _FONT_SIZE_PROP = re.compile(r"\bfontSize\s*[:=]\s*\{?\s*(?:([\"'`])([^\"'`]*)\1|(-?\d*\.?\d+))")
 _CSS_IN_STRING = re.compile(r"(?<![\w-])(font-size|font)\s*:\s*([^;\"'`}\n]+)")
 
@@ -410,15 +426,11 @@ def script_font_sizes(code: str, path: str) -> list[Hit]:
             continue
         found = _LENGTH.search(body)
         px = float(found.group(1)) * (16 if found.group(2) == "rem" else 1) if found else None
-        use = (
-            f"text-sm ({TYPE_FLOOR_PX}px, the app body step)"
-            if px is None or px < TYPE_FLOOR_PX
-            else f"a text-a-* or text-m-* step, or text-(length:{size_suggestion(px).split(' ')[0][4:-1]})"
-        )
-        out.append(Hit(_line(text, m.start()), "font-size", "class", f"text-[{value}]", use, path))
+        out.append(Hit(_line(text, m.start()), "font-size", "class", f"text-[{value}]", tailwind_suggestion(px), path))
     for m in _TW_NAMED.finditer(text):
         out.append(Hit(_line(text, m.start()), "font-size", "class", m.group(0),
-                       "a text-a-* or text-m-* step, or text-(length:--ox-<step>), in place of Tailwind's own size", path))
+                       "text-3xl or a smaller named size, a text-a-* or text-m-* step, or text-(length:--ox-<step>), "
+                       "in place of Tailwind's own size", path))
     for m in _FONT_SIZE_PROP.finditer(text):
         value = m.group(2) if m.group(2) is not None else m.group(3)
         if m.group(3) is not None or small_or_fixed(value):
@@ -467,22 +479,30 @@ def font_size_hits(root: Path = ROOT, keep: tuple[Keep, ...] = KEEP) -> tuple[li
 
 
 def sdlc_step_problems(root: Path = ROOT) -> list[str]:
-    """Each type step `sdlc/public/sdlc.css` names with a value other than the theme's."""
+    """Each base, step, and leading `sdlc/public/sdlc.css` leaves out or names with a value other than the theme's.
+
+    Each step reads its scale's base, `calc(var(--a-base) * 0.857143)`, so
+    the page needs both bases and every step for its sizes to resolve.
+    """
     path = root / SDLC_CSS
     if not path.is_file():
         return []
-    want = {}
-    for scale, key in (("marketing", "m"), ("app", "a")):
-        for step, spec in THEME["type"]["scales"][scale].items():
-            want[f"--{key}-{step}"] = spec["size"]
-            want[f"--{key}-{step}-leading"] = f"{spec['leading']:g}"
-    found = []
+    want = {f"--{name}": value for name, value in PC.type_sizes().items()}
+    found, seen = [], set()
     for d in declarations(path.read_text()):
-        if d.prop in want and d.value != want[d.prop]:
+        if d.prop not in want:
+            continue
+        seen.add(d.prop)
+        if d.value != want[d.prop]:
             found.append(
                 f"{SDLC_CSS}:{d.line} names {d.prop}: {d.value}, and theme/theme.json makes it {want[d.prop]}. "
                 "Copy the theme's value."
             )
+    found += [
+        f"{SDLC_CSS} does not name {name}. Add `{name}: {value};` beside the other type steps."
+        for name, value in want.items()
+        if name not in seen
+    ]
     return found
 
 
@@ -497,7 +517,7 @@ def check(path: Path = ROOT / KIT_CSS, root: Path = ROOT) -> list[str]:
     sizes, used = font_size_hits(root)
     problems += [
         f"{h.path}:{h.line} sets {h.prop} {h.value}, a font size the tokens do not set. "
-        f"Use {h.use} instead. No text is set below {TYPE_FLOOR_PX}px."
+        f"Use {h.use} instead."
         for h in sizes
     ]
     problems += [

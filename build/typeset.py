@@ -35,8 +35,16 @@ Two scales, because a landing page and a dashboard do not breathe the same
 way. The **marketing** scale is large and spaced for a landing page or a post
 read once. Its h1 to h3 read `display`. The **app** scale is dense for panels,
 tables, and logs. Its h1 to h3 read `heading`. On both scales h4 and body read
-`sans`, and micro reads `mono`. A surface picks one scale and uses it
-throughout. No step on either scale is below 14px (`theme.TYPE_FLOOR_PX`).
+`sans`, and micro reads `mono`. The app scale's 2xs step reads `sans`, for an
+uppercase label. A surface picks one scale and uses it throughout.
+
+Each scale has one base, its body size: 16px on marketing and 14px in the
+app. Every other step is the base times its ratio, and the tokens write it as
+`calc(var(--ox-a-base) * ratio)`, so a page that sets the base moves every
+step on that scale. Headings sit above the base. micro and 2xs sit below it,
+for labels, badges, timestamps, and table headers. No rule sets a smallest
+size. Mac: "The base page font size should never be lower than 14px", so the
+theme editor warns, without refusing, when a base goes under 14px.
 
 Every value here comes from `theme/theme.json`, through `build/theme.py`, and
 `build/build.py` emits it into `tokens/`. Nothing downstream retypes a size.
@@ -50,7 +58,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from theme import ROOT, THEME, TYPE_FLOOR_PX, rem_px
+from theme import BASE_STEP, ROOT, THEME, rem_px
 
 FONTS = ROOT / "fonts"
 
@@ -208,13 +216,23 @@ TRACKING = dict(_TYPE["tracking"])
 
 @dataclass(frozen=True)
 class Step:
-    name: str  # h1 | h2 | h3 | h4 | body | micro
-    role: str  # display | sans | mono
-    size: str  # rem
-    px: int  # the same size, for the reader
+    name: str  # h1 | h2 | h3 | h4 | body | micro | 2xs
+    role: str  # display | heading | sans | mono
+    ratio: float  # the size as a multiple of the scale's base
+    px: float  # the size at the theme's base, for the reader
     leading: str  # unitless line-height
     weight: int
     tracking: str = "0"
+
+
+def ratio_css(ratio: float) -> str:
+    """A ratio as the tokens write it: the shortest form that reads back as the same number.
+
+    The theme editor writes `String(ratio)` in TypeScript, and the two must
+    agree, so `2.142857` stays `2.142857` and `1.0` is `1`.
+    """
+    text = repr(float(ratio))
+    return text[:-2] if text.endswith(".0") else text
 
 
 @dataclass(frozen=True)
@@ -222,45 +240,77 @@ class Scale:
     key: str  # the utility prefix: text-<key>-<step>
     name: str
     use: str
+    base: str  # rem: the body size, which every step multiplies
     steps: tuple[Step, ...]
 
+    @property
+    def base_px(self) -> float:
+        return rem_px(self.base)
+
     def step(self, name: str) -> Step:
-        """The step named `name`: h1, h2, h3, h4, body, or micro."""
+        """The step named `name`: h1, h2, h3, h4, body, micro, or 2xs."""
         return next(st for st in self.steps if st.name == name)
+
+    def size_css(self, step: Step, prefix: str = "--ox-") -> str:
+        """The value of a step's size token: the base for body, else the base times the ratio."""
+        base = f"var({prefix}{self.key}-base)"
+        return base if step.name == BASE_STEP else f"calc({base} * {ratio_css(step.ratio)})"
 
 
 #: The role each step reads. A marketing h1 to h3 reads the display face. An
 #: app h1 to h3 reads the surface's heading role, which is the text face
 #: unless the surface points it at display. Every h4 and body read the text
-#: face, and micro the code face.
+#: face, micro the code face, and the app's 2xs step the text face, for an
+#: uppercase label.
 STEP_ROLES = {
     "marketing": {"h1": "display", "h2": "display", "h3": "display", "h4": "sans", "body": "sans", "micro": "mono"},
-    "app": {"h1": "heading", "h2": "heading", "h3": "heading", "h4": "sans", "body": "sans", "micro": "mono"},
+    "app": {
+        "h1": "heading", "h2": "heading", "h3": "heading", "h4": "sans", "body": "sans", "micro": "mono", "2xs": "sans",
+    },
 }
 
 
 def _scale(key: str, name: str, use: str) -> Scale:
+    spec = _TYPE["scales"][name]
+    base = rem_px(spec["base"])
     steps = []
     for step, role in STEP_ROLES[name].items():
-        spec = _TYPE["scales"][name][step]
+        st = spec["steps"][step]
         steps.append(
             Step(
                 step,
                 role,
-                spec["size"],
-                round(rem_px(spec["size"])),
-                f"{spec['leading']:g}",
-                spec["weight"],
-                TRACKING[spec["tracking"]],
+                st["ratio"],
+                round(base * st["ratio"], 2),
+                f"{st['leading']:g}",
+                st["weight"],
+                TRACKING[st["tracking"]],
             )
         )
-    return Scale(key=key, name=name, use=use, steps=tuple(steps))
+    return Scale(key=key, name=name, use=use, base=spec["base"], steps=tuple(steps))
 
 
 MARKETING = _scale("m", "marketing", "landing pages and posts read once: large and spaced")
 APP = _scale("a", "app", "dashboards, panels, tables, terminals, logs: dense")
 
 SCALES: tuple[Scale, ...] = (MARKETING, APP)
+
+#: Tailwind's named sizes, smallest first, and the app step each reads.
+#: `tokens/house-tailwind.css` points each `--text-<name>` at its step, so
+#: `text-base` is the app base, smaller text takes `text-sm` or `text-xs`,
+#: and larger text takes `text-lg` and up. Mac, 2026-10-03: base is 14px,
+#: with "text that is supposed to be smaller to have text-sm, for text that's
+#: supposed to be larger to have text-xl". Tailwind's sizes above 3xl read no
+#: step.
+TAILWIND_SIZES: tuple[tuple[str, str], ...] = (
+    ("xs", "2xs"),
+    ("sm", "micro"),
+    ("base", "body"),
+    ("lg", "h4"),
+    ("xl", "h3"),
+    ("2xl", "h2"),
+    ("3xl", "h1"),
+)
 
 
 @dataclass(frozen=True)
@@ -281,9 +331,11 @@ ROUTING: tuple[Route, ...] = (
     Route("pre, code, kbd, samp, [data-mono]", "mono", (f"font-feature-settings: {MONASPACE_NEON.features}",)),
 )
 
-#: A heading step that can take the display face is set at this size or up.
-#: Space Grotesk's wide letters lose their shape below it.
-DISPLAY_FLOOR_PX = 20
+#: Space Grotesk's wide letters lose their shape below this size. The theme
+#: editor warns, without refusing, when a heading step that can take the
+#: display face falls under it. No build check reads it, so a smaller base
+#: still builds.
+DISPLAY_ADVICE_PX = 20
 
 
 # --------------------------------------------------------------------------
@@ -361,18 +413,21 @@ def as_json() -> dict:
         "weights": WEIGHTS,
         "tracking": TRACKING,
         "routing": [{"elements": r.elements, "role": r.role, "family": family(r.role)} for r in ROUTING],
-        "display_floor_px": DISPLAY_FLOOR_PX,
-        "type_floor_px": TYPE_FLOOR_PX,
+        "tailwind_sizes": {f"text-{name}": f"--ox-a-{step}" for name, step in TAILWIND_SIZES},
         "scales": {
             s.name: {
                 "utility_prefix": f"text-{s.key}-",
                 "use": s.use,
+                "base": s.base,
+                "base_px": s.base_px,
+                "base_var": f"--ox-{s.key}-base",
                 "steps": [
                     {
                         "step": st.name,
                         "role": st.role,
                         "family": family(st.role),
-                        "size": st.size,
+                        "ratio": st.ratio,
+                        "size": s.size_css(st),
                         "px": st.px,
                         "line_height": float(st.leading),
                         "weight": st.weight,
@@ -433,21 +488,14 @@ def verify() -> list[str]:
         if r.role in ("display", "wordmark"):
             problems.append(f"{r.elements} route to the {r.role} role, which an app surface must not reach on its own")
     for s in SCALES:
-        sizes = [st.px for st in s.steps]
-        if sizes != sorted(sizes, reverse=True):
-            problems.append(f"{s.name} scale does not descend: {sizes}")
+        ratios = [st.ratio for st in s.steps]
+        if ratios != sorted(ratios, reverse=True):
+            problems.append(f"{s.name} scale does not descend: ratios {ratios}")
+        if s.step(BASE_STEP).ratio != 1:
+            problems.append(f"{s.name} {BASE_STEP} is the base, so its ratio is 1, not {s.step(BASE_STEP).ratio}")
         for st in s.steps:
-            if abs(rem_px(st.size) - st.px) > 1e-6:
-                problems.append(f"{s.name} {st.name}: {st.size} is {rem_px(st.size):g}px, not a whole number of pixels")
             if st.role != STEP_ROLES[s.name][st.name]:
                 problems.append(f"{s.name} {st.name} reads the {st.role} role, not the {STEP_ROLES[s.name][st.name]} role")
-            if st.px < TYPE_FLOOR_PX:
-                problems.append(f"{s.name} {st.name} is {st.px}px, below the {TYPE_FLOOR_PX}px floor for every step")
-            if st.role in ("display", "heading") and st.px < DISPLAY_FLOOR_PX:
-                problems.append(
-                    f"{s.name} {st.name} is {st.px}px and can take {DISPLAY_FACE.family}, "
-                    f"below the {DISPLAY_FLOOR_PX}px floor for a display heading"
-                )
             if st.name == "h1" and not (1.05 <= float(st.leading) <= 1.25):
                 problems.append(f"{s.name} h1 line-height {st.leading} is outside 1.05 to 1.25")
     for scale, steps in STEP_ROLES.items():
@@ -455,12 +503,17 @@ def verify() -> list[str]:
             problems.append(f"the {scale} h1 to h3 do not read the {'display' if scale == 'marketing' else 'heading'} role")
         if (steps["h4"], steps["body"], steps["micro"]) != ("sans", "sans", "mono"):
             problems.append(f"the {scale} h4, body, and micro do not read the text, text, and code faces")
+        if steps.get("2xs", "sans") != "sans":
+            problems.append(f"the {scale} 2xs step does not read the text face")
+    app_px = [APP.step(step).px for _, step in TAILWIND_SIZES]
+    if app_px != sorted(app_px):
+        problems.append(f"Tailwind's text-xs to text-3xl do not read app steps in ascending order: {app_px}")
     return problems
 
 
 if __name__ == "__main__":
     for s in SCALES:
-        print(f"{s.name}: {s.use}")
+        print(f"{s.name}: {s.use}, base {s.base} ({s.base_px:g}px)")
         for st in s.steps:
-            print(f"  {st.name:6} {st.role:8} {family(st.role):15} {st.size:9} {st.px:3}px  lh {st.leading:5}  w{st.weight}  {st.tracking}")
+            print(f"  {st.name:6} {st.role:8} {family(st.role):15} x{ratio_css(st.ratio):9} {st.px:g}px  lh {st.leading:5}  w{st.weight}  {st.tracking}")
     print("problems:", verify() or "none")

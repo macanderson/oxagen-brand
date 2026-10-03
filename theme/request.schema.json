@@ -275,17 +275,89 @@
           }
         },
         "scales": {
-          "description": "The two size scales. marketing is large and spaced, for a page read once. app is dense, for panels, tables, and logs read all day. No step is larger than the step above it, and every step on both scales is 14px (0.875rem) or more. build/theme.py refuses a smaller step.",
+          "description": "The two size scales. marketing is large and spaced, for a page read once. app is dense, for panels, tables, and logs read all day. Each scale has one base, its body size, and every step is the base times its ratio, so a change to the base moves every step on that scale. No step is larger than the step above it.",
           "type": "object",
           "additionalProperties": false,
           "properties": {
             "marketing": {
-              "description": "The text-m-* utilities and the --ox-m-* sizes.",
-              "$ref": "#/$defs/scale"
+              "description": "The text-m-* utilities and the --ox-m-* sizes, for marketing and customer sites, docs included.",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "base": {
+                  "description": "The marketing body size, as --ox-m-base and its alias --ox-m-body. It ships at 1rem (16px). Mac: \"The base page font size should never be lower than 14px\", so the theme editor warns below 14px. No check refuses a smaller base.",
+                  "$ref": "#/$defs/rem"
+                },
+                "steps": {
+                  "description": "Each step of the scale, from the largest to the smallest. Every size is the base times the step's ratio.",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "h1": {
+                      "$ref": "#/$defs/step"
+                    },
+                    "h2": {
+                      "$ref": "#/$defs/step"
+                    },
+                    "h3": {
+                      "$ref": "#/$defs/step"
+                    },
+                    "h4": {
+                      "$ref": "#/$defs/step"
+                    },
+                    "body": {
+                      "description": "Running text: the base itself, so its ratio is 1.",
+                      "$ref": "#/$defs/step"
+                    },
+                    "micro": {
+                      "description": "A label, a badge, a timestamp, or a table header, below the base.",
+                      "$ref": "#/$defs/step"
+                    }
+                  }
+                }
+              }
             },
             "app": {
-              "description": "The text-a-* utilities and the --ox-a-* sizes.",
-              "$ref": "#/$defs/scale"
+              "description": "The text-a-* utilities and the --ox-a-* sizes, for the web app and the internal tools.",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "base": {
+                  "description": "The app body size, as --ox-a-base and its alias --ox-a-body. It ships at 0.875rem (14px). Mac: \"The base page font size should never be lower than 14px\", so the theme editor warns below 14px. No check refuses a smaller base.",
+                  "$ref": "#/$defs/rem"
+                },
+                "steps": {
+                  "description": "Each step of the scale, from the largest to the smallest. Every size is the base times the step's ratio.",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "h1": {
+                      "$ref": "#/$defs/step"
+                    },
+                    "h2": {
+                      "$ref": "#/$defs/step"
+                    },
+                    "h3": {
+                      "$ref": "#/$defs/step"
+                    },
+                    "h4": {
+                      "$ref": "#/$defs/step"
+                    },
+                    "body": {
+                      "description": "Running text: the base itself, so its ratio is 1.",
+                      "$ref": "#/$defs/step"
+                    },
+                    "micro": {
+                      "description": "A label, a badge, a timestamp, or a table header, below the base.",
+                      "$ref": "#/$defs/step"
+                    },
+                    "2xs": {
+                      "description": "The smallest step, for a dense table header, a small badge, a menu group label, or a chart axis.",
+                      "$ref": "#/$defs/step"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -535,9 +607,11 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "size": {
-          "description": "The font size. It must be a whole number of pixels, and 14px (0.875rem) or more.",
-          "$ref": "#/$defs/rem"
+        "ratio": {
+          "description": "The step's size as a multiple of its scale's base. body is the base, so its ratio is 1. The build writes the step as calc(var(--ox-<scale>-base) * ratio), so a change to the base moves the step with it.",
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
         },
         "leading": {
           "description": "The line height, as a multiple of the size.",
@@ -557,30 +631,6 @@
             "heading",
             "none"
           ]
-        }
-      }
-    },
-    "scale": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "h1": {
-          "$ref": "#/$defs/step"
-        },
-        "h2": {
-          "$ref": "#/$defs/step"
-        },
-        "h3": {
-          "$ref": "#/$defs/step"
-        },
-        "h4": {
-          "$ref": "#/$defs/step"
-        },
-        "body": {
-          "$ref": "#/$defs/step"
-        },
-        "micro": {
-          "$ref": "#/$defs/step"
         }
       }
     },

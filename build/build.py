@@ -158,7 +158,9 @@ def _faces_note() -> list[str]:
         f"and every h4 to h6. {T.DISPLAY_FACE.family} sets h1 to h3 on the marketing and customer sites "
         f"(--ox-font-display). {T.CODE_FACE.family} sets code, logs, digests, and the numbers in tables. "
         f"{T.WORDMARK_FACE.family} sets the wordmarks (--ox-font-wordmark), and that face is fixed. "
-        f"No type step is below {T.TYPE_FLOOR_PX}px."
+        f"Each type scale has one base, --ox-m-base ({T.MARKETING.base_px:g}px) and --ox-a-base "
+        f"({T.APP.base_px:g}px), and every step is the base times its ratio, so a change to a base "
+        "moves every step on its scale."
     )
 
 
@@ -279,8 +281,14 @@ def house_tokens_css() -> str:
         lines.append(f"  --ox-tracking-{job}: {t};")
     lines.append("")
     for scale in T.SCALES:
+        lines.append(
+            f"  --ox-{scale.key}-base: {scale.base}; /* {scale.base_px:g}px: the {scale.name} body size, which every step multiplies */"
+        )
         for st in scale.steps:
-            lines.append(f"  --ox-{scale.key}-{st.name}: {st.size}; /* {scale.name} {st.name}, {st.px}px, line-height {st.leading} */")
+            what = "the base" if st.name == "body" else f"{st.px:g}px at the base"
+            lines.append(
+                f"  --ox-{scale.key}-{st.name}: {scale.size_css(st)}; /* {scale.name} {st.name}, {what}, line-height {st.leading} */"
+            )
         lines.append("")
     for scale in T.SCALES:
         for st in scale.steps:
@@ -348,8 +356,10 @@ def house_tailwind_css() -> str:
         *_wrap(
             "Type: text-m-* is the marketing scale, text-a-* the app scale. A surface picks one."
             f" {T.TEXT_FACE.family} sets the default text everywhere, and {T.CODE_FACE.family} sets code"
-            " with texture healing on. No step on either scale is below"
-            f" {T.TYPE_FLOOR_PX}px, and text-xs and text-sm read the app body step, so they cannot go below it either."
+            " with texture healing on. Each scale has one base, --ox-m-base and --ox-a-base, and every"
+            " step is the base times its ratio. Tailwind's text-xs to text-3xl read the app steps in"
+            " order: text-base is the app base, text-sm and text-xs are smaller, and text-lg and up are"
+            " larger. Each follows the base."
         ),
         "",
         *_wrap(
@@ -390,11 +400,11 @@ def house_tailwind_css() -> str:
         face = T.FACE[role.face]
         out += f"  --font-{role.key}: var({face.next_var}, \"{face.family}\"), {face.stack}; /* {role.job} */\n"
     out += "\n"
-    # Tailwind's two named sizes below the floor read the floor, so a text-xs
-    # or text-sm class cannot set text under it.
-    for name in ("xs", "sm"):
-        out += f"  --text-{name}: var(--ox-a-body); /* {T.APP.step('body').px}px, the app body step */\n"
-        out += f"  --text-{name}--line-height: var(--ox-a-body-leading);\n"
+    # Tailwind's named sizes read the app steps in order, so text-base is the
+    # app base and every named size follows it.
+    for name, step in T.TAILWIND_SIZES:
+        out += f"  --text-{name}: var(--ox-a-{step}); /* {T.APP.step(step).px:g}px at the base, the app {step} step */\n"
+        out += f"  --text-{name}--line-height: var(--ox-a-{step}-leading);\n"
     out += "\n"
     for job, t in T.TRACKING.items():
         out += f"  --tracking-{job}: {t};\n"
@@ -524,7 +534,7 @@ def build_tokens() -> None:
             "baseline": m["baseline"],
         }
     payload = {
-        "version": "2.6.0",
+        "version": "2.7.0",
         "name": "oxagen house system",
         "built_on": "oxagen brand kit (Space Grotesk), on obsidian and white with one gold",
         "icons": {
@@ -1088,7 +1098,7 @@ def check(drift_check: bool = True) -> int:
         print("check: every text token clears AA on its ground")
         print(f"check: {len(T.FACES)} role faces and {len(T.EXTRA_FACES)} extra faces in fonts/, {len(T.SCALES)} type scales, "
               f"marketing h1 to h3 in {T.DISPLAY_FACE.family}, app h1 to h3 and every h4 to h6 in {T.TEXT_FACE.family}, "
-              f"code in {T.CODE_FACE.family}, every step {T.TYPE_FLOOR_PX}px or more")
+              f"code in {T.CODE_FACE.family}, every step a ratio of its scale's base")
         if drift_check:
             print("check: every generated file, the skill's tokens, and playbook.html match theme/theme.json")
             for line in CL.summary():
