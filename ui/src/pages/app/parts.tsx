@@ -1,8 +1,9 @@
 // The product app's small shared parts, copied from oxageninc/product
 // apps/app/src/ui/ (badge.tsx, avatar.tsx, table.tsx, page-header.tsx,
 // route-tabs.tsx) at fad620bcef (2026-10-02). Each keeps the app's markup and
-// classes. What the app reads from its data layer or its router is a prop
-// here: a tab is a link that calls `onSelect` in place of changing the URL.
+// classes, except that each font size, space, and corner reads the nearest kit
+// token. What the app reads from its data layer or its router is a prop here:
+// a tab is a link that calls `onSelect` in place of changing the URL.
 import type * as React from "react";
 import { cn } from "../../lib/utils";
 import { cell, eyebrow as eyebrowStyle, headCell, tabCount, tabLink } from "./styles";
