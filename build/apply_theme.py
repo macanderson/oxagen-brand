@@ -78,7 +78,7 @@ CARRY_FILES = (
 #: The gold ramp in `globals.css`: tints typed as `oklch()` on the gold's hue.
 #: A new gold turns each one by the same number of degrees the gold moved.
 RAMP = re.compile(
-    r"(?P<head>--(?:_amber-\d+|ox-ember-soft):\s*oklch\(\s*)(?P<l>[\d.]+)(?P<s1>\s+)(?P<c>[\d.]+)(?P<s2>\s+)(?P<h>[\d.]+)(?P<tail>\s*\))"
+    r"(?P<head>--_amber-\d+:\s*oklch\(\s*)(?P<l>[\d.]+)(?P<s1>\s+)(?P<c>[\d.]+)(?P<s2>\s+)(?P<h>[\d.]+)(?P<tail>\s*\))"
 )
 
 GOOGLE_CSS = "https://fonts.googleapis.com/css2"

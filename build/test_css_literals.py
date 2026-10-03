@@ -63,7 +63,10 @@ class Shadows(unittest.TestCase):
         self.assertEqual(flagged(css), [])
 
     def test_a_ring_beside_a_drop_shadow_fails(self) -> None:
-        self.assertEqual(len(flagged(".a { box-shadow: 0 0 0 1px red, 0 2px 4px black; }")), 1)
+        self.assertEqual(len(flagged(".a { box-shadow: 0 0 0 1px var(--ring), 0 2px 4px var(--fg); }")), 1)
+
+    def test_a_ring_in_a_colour_literal_fails(self) -> None:
+        self.assertEqual(flagged(".a { box-shadow: 0 0 0 1px #fff; }"), [(1, "box-shadow", "0 0 0 1px #fff")])
 
     def test_a_token_passes(self) -> None:
         self.assertEqual(flagged(".a { box-shadow: var(--ui-shadow); } :root { --ui-shadow: var(--ox-shadow-ui-ink); }"), [])
@@ -91,13 +94,13 @@ class FontSizesEverywhere(unittest.TestCase):
         hits, _used = L.font_size_hits()
         self.assertEqual([f"{h.path}:{h.line} {h.value}" for h in hits], [])
 
-    def test_the_app_copy_is_skipped_and_nothing_else_is(self) -> None:
-        self.assertTrue(L.SKIP.search("ui/src/pages/app/work-page.tsx"))
-        self.assertTrue(L.SKIP.search("ui/src/pages/app/app.css"))
-        self.assertFalse(L.SKIP.search("ui/src/pages/website-home.tsx"))
-        self.assertFalse(L.SKIP.search("ui/src/components/app/button.tsx"))
+    def test_only_tests_are_skipped(self) -> None:
+        self.assertTrue(L.SKIP.search("ui/src/components/button.test.tsx"))
+        self.assertFalse(L.SKIP.search("ui/src/pages/app/work-page.tsx"))
+        self.assertFalse(L.SKIP.search("ui/src/pages/app/app.css"))
         scanned = {p.relative_to(L.ROOT).as_posix() for _kind, p in L.scanned_files()}
-        self.assertFalse(any(p.startswith("ui/src/pages/app/") for p in scanned))
+        self.assertIn("ui/src/pages/app/work-page.tsx", scanned)
+        self.assertIn("ui/src/pages/app/app.css", scanned)
         self.assertIn("ui/src/pages/website-home.tsx", scanned)
 
     def test_a_tailwind_arbitrary_size_fails(self) -> None:
@@ -157,7 +160,7 @@ class HeadingLineHeights(unittest.TestCase):
 
 class Reading(unittest.TestCase):
     def test_a_literal_in_a_comment_passes(self) -> None:
-        self.assertEqual(flagged("/* .a { border-radius: 6px; } */\n.b { color: red; }"), [])
+        self.assertEqual(flagged("/* .a { border-radius: 6px; } */\n.b { color: var(--fg); }"), [])
 
     def test_a_glob_in_a_string_does_not_open_a_comment(self) -> None:
         # `/*` inside the @source path is not a comment, so the rule after it is still read.
@@ -177,7 +180,108 @@ class Keep(unittest.TestCase):
 
     def test_an_entry_that_excuses_nothing_is_stale(self) -> None:
         keep = (L.Keep("font-size", "16px", "the iOS zoom floor"),)
-        self.assertEqual(L.literals(".a { color: red; }", keep=keep), ([], list(keep)))
+        self.assertEqual(L.literals(".a { color: var(--fg); }", keep=keep), ([], list(keep)))
+
+
+
+class SemanticTokens(unittest.TestCase):
+    def test_the_kit_stylesheet_gives_each_token_one_definition_per_theme(self) -> None:
+        self.assertEqual(L.semantic_problems((L.ROOT / L.KIT_CSS).read_text()), [])
+
+    def test_a_second_declaration_in_one_block_fails(self) -> None:
+        css = ":root {\n  --muted: #eee;\n}\n:root {\n  --muted: #666;\n}"
+        found = L.semantic_problems(css, "x.css")
+        self.assertEqual(len(found), 1)
+        self.assertIn("x.css:5 declares --muted a second time in :root (first at line 2)", found[0])
+
+    def test_a_root_declaration_after_dark_fails(self) -> None:
+        css = (".dark { --x: white; }\n"
+               "@media (prefers-color-scheme: dark) { :root:not(.light):not(.dark) { --x: white; } }\n"
+               ":root { --x: black; }")
+        found = L.semantic_problems(css, "x.css")
+        self.assertEqual(len(found), 1)
+        self.assertIn("x.css:3 declares --x on :root after .dark does (line 1)", found[0])
+
+    def test_the_os_dark_block_must_repeat_dark(self) -> None:
+        css = (":root { --x: black; }\n.dark { --x: white; }\n"
+               "@media (prefers-color-scheme: dark) { :root:not(.light):not(.dark) { --x: grey; } }")
+        found = L.semantic_problems(css, "x.css")
+        self.assertEqual(len(found), 1)
+        self.assertIn("sets --x to 'white' in .dark and 'grey'", found[0])
+
+    def test_one_definition_per_theme_passes(self) -> None:
+        css = (":root { --x: black; }\n.dark { --x: white; }\n"
+               "@media (prefers-color-scheme: dark) { :root:not(.light):not(.dark) { --x: white; } }")
+        self.assertEqual(L.semantic_problems(css, "x.css"), [])
+
+
+class StyleLiterals(unittest.TestCase):
+    def test_the_scope_reads_every_colour_corner_shadow_and_space_from_a_token(self) -> None:
+        self.assertEqual([(h.path, h.line, h.group, h.value) for h in L.style_hits()], [])
+
+    def test_a_colour_literal_fails_and_a_token_passes(self) -> None:
+        for value in ("#fff", "rgb(0 0 0 / 0.5)", "oklch(0.5 0.1 80)", "white", "1px solid #27272A", "var(--ox-gold)"):
+            self.assertTrue(L.color_literal(value), value)
+        for value in ("var(--border)", "transparent", "currentColor", "var(--x, #fff)",
+                      "color-mix(in oklch, var(--gold) 40%, transparent)", "1px solid var(--border)"):
+            self.assertFalse(L.color_literal(value), value)
+
+    def test_a_spacing_literal_fails_and_the_unit_passes(self) -> None:
+        for value in ("9px 12px", "0.5rem", "1em", "calc(100% - 16px)"):
+            self.assertTrue(L.spacing_literal(value), value)
+        for value in ("0", "0 auto", "calc(var(--ox-space) * 3)", "50%", "var(--pad)"):
+            self.assertFalse(L.spacing_literal(value), value)
+
+    def test_a_stylesheet_custom_property_is_its_token_layer(self) -> None:
+        css = ":root { --x: #fff; --pad: 12px; }\n.a { color: #fff; padding: 9px; border-radius: 6px; }"
+        hits = L.css_style_hits(css, "sdlc/public/x.css")
+        self.assertEqual(sorted(h.group for h in hits), ["border-radius", "color", "spacing"])
+
+    def test_a_script_literal_fails(self) -> None:
+        code = (
+            'const a = "gap-[7px] rounded-[10px] shadow-[0_1px_2px_black] bg-[#fff] bg-zinc-800 text-white bg-ox-gold";\n'
+            'const b = <div style={{ padding: 24, color: "#27272A", borderRadius: "8px" }} />;\n'
+            'const c = <path fill="#D4AF37" />;\n'
+            'const d = ".t{padding:9px 12px;background:#000}";'
+        )
+        groups = sorted(h.group for h in L.script_style_hits(code, "x.tsx"))
+        self.assertEqual(groups, ["border-radius", "border-radius", "box-shadow", "color", "color", "color", "color",
+                                  "color", "color", "color", "spacing", "spacing", "spacing"])
+
+    def test_tailwinds_bare_rounded_fails(self) -> None:
+        hits = L.script_style_hits('const a = "rounded border";\nconst b = "hover:rounded-t px-1";\nconst c = "rounded-sm rounded-full";', "x.tsx")
+        self.assertEqual([(h.line, h.value) for h in hits], [(1, "rounded"), (2, "hover:rounded-t")])
+
+    def test_a_script_token_passes(self) -> None:
+        code = (
+            'const a = "gap-1.75 rounded-xl shadow-pop bg-card text-muted-foreground p-(--pad) gap-[var(--x)]";\n'
+            'const b = <div style={{ padding: 0, color: "var(--foreground)" }} />;\n'
+            'const c = <path fill="currentColor" stroke="none" />;'
+        )
+        self.assertEqual(L.script_style_hits(code, "x.tsx"), [])
+
+    def test_the_exempt_list_gives_a_reason(self) -> None:
+        for (path, group), why in L.EXEMPT.items():
+            self.assertTrue((L.ROOT / path).is_file(), path)
+            self.assertIn(group, L.STYLE_GROUPS)
+            self.assertTrue(why.strip())
+
+
+class Contrast(unittest.TestCase):
+    def test_every_text_role_clears_4_5_on_its_grounds_and_no_word_is_quiet(self) -> None:
+        self.assertEqual(L.contrast_problems(), [])
+
+    def test_a_resolved_colour_reads_as_hex(self) -> None:
+        self.assertEqual(L.to_hex("#fff"), "#FFFFFF")
+        self.assertEqual(L.to_hex("oklch(1 0 0)"), "#FFFFFF")
+        self.assertEqual(L.to_hex("color-mix(in srgb, #000000 50%, #FFFFFF)"), "#808080")
+        self.assertIsNone(L.to_hex("linear-gradient(red, blue)"))
+
+    def test_a_quiet_word_fails_and_a_comment_passes(self) -> None:
+        code = 'const a = "uppercase text-dim";\n// text-dim in a note\nconst b = "hover:text-dim";'
+        self.assertEqual([u for _l, u in L.quiet_uses(code, "script")], ["text-dim", "hover:text-dim"])
+        css = "/* color: var(--dim) */\n.a { color: var(--dim); }\n.b { text-decoration-color: var(--dim); }"
+        self.assertEqual(L.quiet_uses(css, "css"), [(2, "color: var(--dim)")])
 
 
 if __name__ == "__main__":

@@ -29,14 +29,14 @@ const TONE: Record<ToneBadgeTone, string> = {
   proven: "border-proven/42 bg-proven/11 text-proven-ink",
   failed: "border-error/42 bg-error/11 text-error-ink",
   critical: "border-critical/42 bg-critical/12 text-critical-ink",
-  quiet: "border-border bg-hl text-muted-foreground",
+  quiet: "border-badge-border bg-hl text-muted-foreground",
 };
 
 /** Every tone, in the order a legend lists them. */
 export const TONE_BADGE_TONES = Object.keys(TONE) as ToneBadgeTone[];
 
 const badgeBase =
-  "inline-flex items-center gap-[5px] whitespace-nowrap rounded-md border px-[7px] py-0.5 text-sm font-semibold leading-normal tracking-[0.02em]";
+  "inline-flex items-center gap-1.25 whitespace-nowrap rounded-md border px-1.75 py-0.5 text-sm font-semibold leading-normal tracking-[0.02em]";
 
 export function ToneBadge({
   tone,

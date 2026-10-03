@@ -187,19 +187,19 @@ class GoldTest(Scratch):
     def test_turn_ramp_moves_only_the_ramp(self) -> None:
         text = (
             "--_amber-50: oklch(0.985 0.02 95);\n"
-            "--ox-ember-soft: oklch(0.25 0.035 88);\n"
+            "--_amber-700: oklch(0.47 0.09 80);\n"
             "--_stone-700: oklch(0.442 0.015 285.8);\n"
             "--_amber-900: oklch(0.3 0.05 2);\n"
         )
         out = A.turn_ramp(text, -7)
         self.assertIn("--_amber-50: oklch(0.985 0.02 88);", out)
-        self.assertIn("--ox-ember-soft: oklch(0.25 0.035 81);", out)
+        self.assertIn("--_amber-700: oklch(0.47 0.09 73);", out)
         self.assertIn("--_stone-700: oklch(0.442 0.015 285.8);", out)
         self.assertIn("--_amber-900: oklch(0.3 0.05 355);", out)
 
     def test_the_ramp_is_in_globals_css(self) -> None:
         css = (ROOT / "ui" / "src" / "styles" / "globals.css").read_text()
-        self.assertEqual(len(A.RAMP.findall(css)), 8, "seven --_amber-* tints and --ox-ember-soft")
+        self.assertEqual(len(A.RAMP.findall(css)), 7, "seven --_amber-* tints")
 
     def test_carry_gold_rewrites_the_copies(self) -> None:
         before = theme()
@@ -212,7 +212,7 @@ class GoldTest(Scratch):
         )
         css = self.root / "ui" / "src" / "styles"
         css.mkdir(parents=True)
-        (css / "globals.css").write_text(f"--ox-ember-soft: oklch(0.25 0.035 88);\n--x: {old['gold']};\n")
+        (css / "globals.css").write_text(f"--_amber-50: oklch(0.985 0.02 95);\n--x: {old['gold']};\n")
         changed = A.carry_gold(before, after, self.root)
         new = A.golds(after)
         self.assertEqual(sorted(changed), ["pwa/install-prompt.js", "ui/src/styles/globals.css"])
@@ -221,7 +221,7 @@ class GoldTest(Scratch):
             f"--gold:{new['gold']};--hi:{new['gold-bright']};--deep:{new['gold-deep']};",
         )
         degrees = A.gold_hue(after) - A.gold_hue(before)
-        self.assertIn(f"oklch(0.25 0.035 {88 + degrees})", (css / "globals.css").read_text())
+        self.assertIn(f"oklch(0.985 0.02 {95 + degrees})", (css / "globals.css").read_text())
 
     def test_every_carry_file_exists(self) -> None:
         for rel in A.CARRY_FILES:

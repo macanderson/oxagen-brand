@@ -134,7 +134,7 @@ function readMetrics(element: Element): Metrics {
 function Fact({ term, children }: { term: string; children: React.ReactNode }) {
   return (
     <div className="flex gap-1.5">
-      <dt className="text-dim">{term}</dt>
+      <dt className="text-muted-foreground">{term}</dt>
       <dd className="text-muted-foreground">{children}</dd>
     </div>
   );

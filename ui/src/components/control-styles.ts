@@ -62,7 +62,7 @@ export const linkText =
 export const fieldLabel = "mb-2 block text-base font-medium text-foreground";
 export const fieldHint = "mt-2 text-base leading-normal text-muted-foreground";
 export const buttonSmall =
-  "inline-flex min-h-8 flex-none items-center justify-center gap-1 rounded-4xl border border-button-default-border bg-button-default-bg px-3 text-base font-medium whitespace-nowrap text-button-default-fg hover:bg-button-default-hover-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-button-disabled-bg disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+  "inline-flex min-h-8 flex-none items-center justify-center gap-1 rounded-4xl border border-button-default-border bg-button-default-bg px-3 text-base font-medium whitespace-nowrap text-button-default-fg hover:bg-button-default-hover-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-button-disabled-bg disabled:text-button-disabled-fg [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 /** The one skin every field wears; `inputBase` and `textareaBase` add the shape. */
 const fieldSkin =
@@ -200,11 +200,12 @@ export const note =
  * `.kv { display:grid; grid-template-columns:auto 1fr; gap:7px 16px;
  * font-size:12.5px }`, `.kv dt { color:var(--dim) }` and `.kv dd
  * { color:var(--body); overflow-wrap:anywhere }`: a record's fields, label
- * left in the dim ink and value right.
+ * left in the muted ink and value right. The mockup's dim label falls below
+ * 4.5:1, so the kit sets it in --muted-foreground (#88).
  */
 export const kvList =
-  "grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-[7px] text-base";
-export const kvTerm = "whitespace-nowrap text-dim";
+  "grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-1.75 text-base";
+export const kvTerm = "whitespace-nowrap text-muted-foreground";
 export const kvValue = "m-0 min-w-0 text-foreground [overflow-wrap:anywhere]";
 
 /**
@@ -213,7 +214,7 @@ export const kvValue = "m-0 min-w-0 text-foreground [overflow-wrap:anywhere]";
  * the badges around it do not.
  */
 export const linkChip =
-  "inline-flex min-w-0 max-w-full items-center gap-[5px] whitespace-nowrap rounded-md border border-border bg-hl px-[7px] py-0.5 text-sm font-semibold leading-normal tracking-[0.02em] text-muted-foreground transition-colors hover:border-gold hover:bg-hl hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "inline-flex min-w-0 max-w-full items-center gap-1.25 whitespace-nowrap rounded-md border border-border bg-hl px-1.75 py-0.5 text-sm font-semibold leading-normal tracking-[0.02em] text-muted-foreground transition-colors hover:border-gold hover:bg-hl hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 /**
  * `.panel-h { padding:12px 16px; border-bottom:1px solid var(--border) }` and
@@ -240,12 +241,12 @@ export const panelBody = "px-4 py-3.5";
  * (`text-sm`, 12px), and the figure at the h2 step (24px, 16px on a phone).
  */
 export const statTile =
-  "flex min-w-0 flex-col rounded-2xl border border-border bg-card px-[15px] py-[13px] text-card-foreground max-md:px-3 max-md:py-[11px]";
+  "flex min-w-0 flex-col rounded-2xl border border-border bg-card px-3.75 py-3.25 text-card-foreground max-md:px-3 max-md:py-2.75";
 export const statTerm =
-  "mb-[5px] text-xs font-semibold uppercase tracking-[0.1em] text-dim";
+  "mb-1.25 text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground";
 export const statValue =
   "text-(length:--ox-a-h2) font-bold leading-[1.15] tracking-[-0.02em] tabular-nums max-md:text-(length:--ox-a-h4)";
-export const statNote = "mt-[3px] text-sm text-muted-foreground";
+export const statNote = "mt-0.75 text-sm text-muted-foreground";
 /**
  * `.grid.g4 { grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:14px }`,
  * and `#viewport.phone .g4 { grid-template-columns:1fr 1fr }`: a phone draws

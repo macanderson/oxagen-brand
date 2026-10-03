@@ -88,7 +88,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex shrink-0 flex-col gap-1 border-b border-dialog-border py-[15px] pr-12 pl-[18px] text-left",
+      "flex shrink-0 flex-col gap-1 border-b border-dialog-border py-3.75 pr-12 pl-4.5 text-left",
       className,
     )}
     {...props}
@@ -103,7 +103,7 @@ const DialogPanel = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex max-h-[62vh] min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-[18px] py-[17px] text-base",
+      "flex max-h-[62vh] min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4.5 py-4.25 text-base",
       className,
     )}
     {...props}
@@ -118,7 +118,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex shrink-0 flex-col-reverse gap-[9px] border-t border-dialog-border px-[18px] py-[13px] sm:flex-row sm:items-center sm:justify-end",
+      "flex shrink-0 flex-col-reverse gap-2.25 border-t border-dialog-border px-4.5 py-3.25 sm:flex-row sm:items-center sm:justify-end",
       className,
     )}
     {...props}

@@ -110,10 +110,10 @@ describe("Sheet drawer recipe", () => {
     expect(title.className).toContain("text-(length:--ox-a-h4)");
     const header = title.parentElement;
     expect(header?.className).toContain("border-b");
-    expect(header?.className).toContain("py-[14px]");
-    expect(header?.className).toContain("pl-[18px]");
+    expect(header?.className).toContain("py-3.5");
+    expect(header?.className).toContain("pl-4.5");
     const body = getByText("Sheet body content").parentElement;
-    for (const want of ["px-[18px]", "pt-4", "pb-12", "gap-3", "overflow-y-auto"]) {
+    for (const want of ["px-4.5", "pt-4", "pb-12", "gap-3", "overflow-y-auto"]) {
       expect(body?.className).toContain(want);
     }
   });

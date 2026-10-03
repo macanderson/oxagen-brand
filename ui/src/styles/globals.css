@@ -49,7 +49,8 @@
  * The greys are neutral and carry no hue, so the single GOLD (#D4AF37) is the
  * only warm value on a screen. Gold is IDENTITY and at most ONE action per
  * screen; it never encodes a state and it is never a surface. The primary
- * button is obsidian on white and white on obsidian; gold is --brand.
+ * button (`primary`, `default`, `gradient`) is the gold fill in both themes.
+ * `secondary`, `outline`, and `ghost` are neutral.
  *
  * Gold as INK on white is only 2.1:1, so — exactly as the kit specifies — the
  * light theme renders every gold *mark* (accent copy, links, the focus ring)
@@ -126,16 +127,9 @@
     --_ink: var(--ox-ink); /* #09090B — the dark canvas, and light-mode ink */
     --_ink-white: var(--ox-text); /* #FFFFFF — primary text on ink */
 
-    /* Named brand swatches. --ox-ember is THE accent knob: it drives --brand,
-       --ring, links and chart-1. The `ember` spelling predates the house
-       system and is kept rather than renamed to `gold` because ~25 files across
-       apps/ and packages/ bind to these identifiers; a skin owns the values,
-       not the names. All three stops are the kit's gold, unaltered. */
+    /* The light card. The gold reads straight from --ox-gold, --ox-gold-deep,
+       and --ox-gold-bright, which drive --brand, --ring, links, and chart-1. */
     --ox-surface: var(--ox-paper-panel); /* #FFFFFF — light card */
-    --ox-ember-deep: var(--ox-gold-deep); /* #8A7223 — gold as INK on paper (4.65:1) */
-    --ox-ember: var(--ox-gold); /* #D4AF37 — the metal */
-    --ox-ember-light: var(--ox-gold-bright); /* #F1CE65 — the shimmer highlight */
-    --ox-ember-soft: oklch(0.25 0.035 88); /* gold at 14% over obsidian: a tinted fill on the dark canvas */
 
     /* RULE — the house system has exactly ONE accent hue, the gold. There is no
        second brand colour anywhere: the categorical ramp spends the palette's
@@ -181,14 +175,6 @@
     --_amber-700: oklch(0.47 0.09 80); /* link hover on white */
     --_amber-800: oklch(0.38 0.07 80);
     --_amber-900: oklch(0.3 0.05 80);
-
-    /* Brand mark gradient stops — the kit's own sheen, deep → metal → highlight.
-       Used for the tab underline and any surface that shows the metal moving;
-       the MARKS themselves never take it (a mark is one colour). */
-    --_ember-a: var(--ox-gold-deep); /* #8A7223 */
-    --_ember-b: var(--ox-gold); /* #D4AF37 */
-    --_ember-c: var(--ox-gold-bright); /* #F1CE65 */
-    --_ember-navy: var(--ox-ink); /* #09090B — the canvas black */
 
     /* Status hues, from the kit's own state ramp.
      *
@@ -247,8 +233,8 @@
     --ink-light: var(--_ink-white);
     --ink-dark: var(--_ink);
 
-    /* The brand hue — ember accent drives links, focus, CTAs. */
-    --brand: var(--ox-ember);
+    /* The brand hue — the gold drives links, focus, CTAs. */
+    --brand: var(--ox-gold);
     --brand-foreground: var(--ox-ink);
 
     /* ════════════════════════════════════════════════════════════════════════
@@ -262,12 +248,11 @@
     --card-foreground: var(--_ink);
     --popover: var(--_stone-50); /* #FFFFFF — the popover on white */
     --popover-foreground: var(--_ink);
-    --primary: var(--_ink); /* #09090B — obsidian. Gold is kept for --brand, the ring and links */
+    --primary: var(--_ink); /* #09090B — obsidian ink. The primary button reads --button-primary-*, which is gold */
     --primary-foreground: var(--_paper);
     --secondary: var(--_stone-200); /* #F4F4F5 — quiet fill (buttons, badges) */
     --secondary-foreground: var(--_ink);
-    --muted: var(--_stone-100);
-    /* #6E6E77 — secondary text that clears 4.5:1 on --muted (#F4F4F5, 4.59:1)
+    /* #6E6E77 — secondary text that clears 4.5:1 on --muted-surface (#F4F4F5, 4.59:1)
        as well as on white. --ox-muted-ink is 4.40:1 on --muted. */
     --muted-foreground: var(--ox-muted-text-ink);
     --accent: var(--_stone-200); /* #F4F4F5 — the row wash is NEUTRAL, never gold */
@@ -280,8 +265,8 @@
        that gold on white becomes its deep shade: #D4AF37 is 2.1:1 here
        and would fail WCAG 1.4.11 (3:1 for a focus indicator); #8A7223 is
        4.65:1. Dark mode keeps the metal itself at 9.5:1. */
-    --ring: var(--ox-ember-deep);
-    --link: var(--ox-ember-deep); /* #8A7223 — gold as ink on paper (4.65:1); the metal itself is 2.1:1 */
+    --ring: var(--ox-gold-deep);
+    --link: var(--ox-gold-deep); /* #8A7223 — gold as ink on paper (4.65:1); the metal itself is 2.1:1 */
     --link-hover: var(--_amber-700); /* a darker gold, on white */
 
     /* Status — semantic names (error == destructive). */
@@ -313,24 +298,27 @@
        paper, so accent copy must not use it directly: light mode takes the
        gold's own deep shade (#8A7223, 4.65:1) and dark mode the gold itself
        (9.5:1). This is the kit's "gold as text on paper" rule. */
-    --ember-ink: var(--ox-ember-deep); /* #8A7223 — the kit's "gold as text on paper" */
 
     /* The metal in motion — the kit's sheen (deep → metal → highlight), laid
        out horizontally for the tab underline and any rule that shows it. The
        MARKS never take this: a mark is one colour, and the gold on a mark
        belongs to a single glyph. */
+    /* The always-dark code frame (.ox-code-frame): the lifted row over the panel,
+       the same in both themes. The house greys carry no hue. */
+    --code-frame-top: var(--_stone-850); /* #27272A */
+    --code-frame-bottom: var(--_stone-900); /* #18181B */
     --brand-gradient: linear-gradient(
       92deg,
-      var(--_ember-a) 0%,
-      var(--_ember-b) 46%,
-      var(--_ember-c) 100%
+      var(--ox-gold-deep) 0%,
+      var(--ox-gold) 46%,
+      var(--ox-gold-bright) 100%
     );
 
     /* Charts — categorical ramp drawn entirely from palette primitives:
-       ember · slate · moss · ochre · silver. Four hues roughly 60° apart plus
+       gold · slate · moss · ochre · silver. Four hues roughly 60° apart plus
        one achromatic, so five series stay separable with no colour from
        outside the skin. */
-    --chart-1: var(--ox-ember);
+    --chart-1: var(--ox-gold);
     --chart-2: var(--_slate);
     --chart-3: var(--_moss);
     --chart-4: var(--_ochre);
@@ -382,7 +370,7 @@
     --app-topbar-border: var(--border);
     /* App-chrome icons/links (support, notifications bell, mobile nav). Neutral
        at rest so they match the rest of the UI — no second accent — brightening to
-       the foreground on hover; the active nav item picks up the ember primary. */
+       the foreground on hover; the active nav item picks up the gold primary. */
     --app-link-fg: var(--muted-foreground);
     --app-link-hover-fg: var(--foreground);
     --app-link-active-fg: var(--foreground);
@@ -401,41 +389,18 @@
 
     /* ── Tabs (keep a constant rest border so the active underline never shifts
      *    layout — only the COLOR changes between states). ──────────────────── */
-    --tab-fg: var(--muted-foreground);
     --tab-fg-hover: var(--foreground);
     --tab-fg-active: var(--foreground);
     --tab-border: transparent;
     --tab-border-hover: var(--border);
-    --tab-border-active: var(--foreground); /* ink, not gold: gold is one action per screen */
     --tab-border-width: 2px;
 
-    /* ── Buttons (two variants). Hover/active adapt via color-mix toward the
-     *    background, so they flip correctly in dark with no re-declaration. ── */
-    --button-primary-bg: var(--primary);
-    --button-primary-fg: var(--primary-foreground);
-    --button-primary-border: transparent;
-    --button-primary-hover-bg: color-mix(
-      in oklch,
-      var(--primary) 88%,
-      var(--background)
-    );
-    --button-primary-active-bg: color-mix(
-      in oklch,
-      var(--primary) 78%,
-      var(--background)
-    );
+    /* ── Buttons. `primary`, `default`, and `gradient` fill gold, from the
+     *    --button-primary-* tokens at the end of this block. `secondary`,
+     *    `outline`, and `ghost` are neutral, from --button-default-*. ─────── */
     --button-primary-ring: var(--ring);
-    --button-default-bg: transparent;
     --button-default-fg: var(--foreground);
-    --button-default-border: var(--border);
-    --button-default-hover-bg: var(--accent);
-    --button-default-active-bg: color-mix(
-      in oklch,
-      var(--accent) 84%,
-      var(--foreground)
-    );
     --button-default-ring: var(--ring);
-    --button-disabled-bg: var(--muted);
     --button-disabled-fg: var(--muted-foreground);
 
     /* ── Inputs / textareas ───────────────────────────────────────────────── */
@@ -450,7 +415,6 @@
     );
     --input-border-focus: var(--ring);
     --input-ring: var(--ring);
-    --input-disabled-bg: var(--muted);
     --input-disabled-fg: var(--muted-foreground);
     --input-invalid-border: var(--error);
     --input-invalid-ring: var(--error);
@@ -503,6 +467,63 @@
     --motion-entry: 320ms;
     /* Hover feedback comes from the color-mix hover bg; no grow — crisp, not playful. */
     --button-hover-scale: 1;
+
+    /* The v3 design the app draws (product apps/app at ddb85803). These came from
+       the kit's old v3 layer, which overrode this block. Each token now has one
+       definition here. --muted is an ink, as the mockup names it, and bg-muted
+       reads --muted-surface. */
+    --ink: var(--background);
+    --void: var(--ox-paper-void);
+    --panel: var(--card);
+    --hl: var(--accent);
+    --rule: var(--ox-paper-rule);
+    --fg: var(--foreground);
+    --body: var(--ox-text-ink-body);
+    --muted: var(--ox-muted-text-ink); /* #6E6E77 — 4.59:1 on the lifted row */
+    --dim: var(--ox-dim-ink);
+    --gold: var(--ox-gold);
+    --gold-bright: var(--ox-gold-bright);
+    --gold-deep: var(--ox-gold-deep);
+    --accent-text: var(--gold-text);
+    --on-gold: var(--ox-ink);
+    /* The glyph on a gold-deep fill (#8A7223): paper reads at 4.66:1. */
+    --on-gold-deep: var(--ox-paper);
+    /* Governance states. A warning toast draws in --st-denied. */
+    --st-allowed: var(--success);
+    --st-approval: var(--info);
+    --st-denied: var(--warning);
+    --st-proven: var(--proven);
+    --st-failed: var(--error);
+    --st-critical: var(--critical);
+    --st-observe: var(--muted-foreground);
+    --mono: var(--ox-font-mono);
+    --font: var(--ox-font);
+    --muted-surface: var(--_stone-100);
+    /* A panel header is a light grey band over the white panel. */
+    --panel-head: var(--ox-paper-hl);
+    --button-disabled-bg: var(--muted-surface);
+    --input-disabled-bg: var(--muted-surface);
+    /* The mockup's primary button is gold in both themes. */
+    --button-primary-bg: var(--gold);
+    --button-primary-fg: var(--on-gold);
+    --button-primary-border: var(--gold);
+    --button-primary-hover-bg: var(--gold-bright);
+    --button-primary-active-bg: var(--gold-deep);
+    /* The default button sits on the panel and takes the wash on hover. */
+    --button-default-bg: var(--panel);
+    --button-default-border: var(--border);
+    --button-default-hover-bg: var(--hl);
+    --button-default-active-bg: var(--hl);
+    /* A tab in a dialog keeps a gold underline. */
+    --tab-border-active: var(--gold);
+    /* Page-level tabs sit on a muted track. The selected tab is raised on
+       --tab-on, and the rest read in --tab-fg (#242). */
+    --tab-fg: var(--body);
+    --tab-on: var(--card);
+    /* Menus, popovers, the command menu, dialogs, and toasts float on a faint
+       ring in place of a border, over the deep --ui-shadow-pop (#244). */
+    --pop-ring: color-mix(in srgb, var(--foreground) 5%, transparent);
+
   }
 
   /* ════════════════════════════════════════════════════════════════════════
@@ -528,7 +549,6 @@
     --primary-foreground: var(--ox-ink);
     --secondary: var(--_stone-800); /* #27272A — neutral chip fill */
     --secondary-foreground: var(--_ink-white);
-    --muted: var(--_stone-850);
     /* Brighter secondary ink in dark for legibility on the charcoal surfaces. */
     --muted-foreground: var(--_stone-400);
     --accent: var(--_stone-800); /* #27272A — the hover/selected wash stays NEUTRAL */
@@ -540,10 +560,9 @@
     --destructive-foreground: var(--ox-ink);
     --border: var(--_stone-800); /* #27272A — the hairline on ink */
     --input: var(--ox-rule); /* #3F3F46 — the heavier rule on ink */
-    --ring: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
-    --ember-ink: var(--ox-ember); /* #D4AF37 — the metal reads as ink on the canvas (9.5:1) */
-    --link: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas */
-    --link-hover: var(--ox-ember-light); /* #F1CE65 — gold-bright */
+    --ring: var(--ox-gold); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
+    --link: var(--ox-gold); /* #D4AF37 — 9.5:1 on the canvas */
+    --link-hover: var(--ox-gold-bright); /* #F1CE65 — gold-bright */
 
     --success: var(--_moss-light);
     --success-foreground: oklch(0.18 0.03 160);
@@ -554,9 +573,7 @@
     --error-ink: var(--ox-st-failed-text); /* #E7685C — 4.63:1 on the lifted row */
     --info: var(--_slate-light);
     --info-foreground: oklch(0.18 0.01 230);
-    --proven: var(--_teal-light);
     --proven-foreground: oklch(0.18 0.02 190);
-    --critical: var(--_rose-light);
     --critical-foreground: oklch(0.18 0.02 10);
     /* Status words on ink: each state's text stop, at OKLCH L 0.67. */
     --success-ink: var(--ox-st-allowed-text); /* #57A97C — 5.23:1 */
@@ -565,7 +582,7 @@
     --proven-ink: var(--ox-st-proven-text); /* #44A7A7 — 5.20:1 */
     --critical-ink: var(--ox-st-critical-text); /* #EF5C72 — 4.57:1 */
 
-    --chart-1: var(--ox-ember);
+    --chart-1: var(--ox-gold);
     --chart-2: var(--_slate-light);
     --chart-3: var(--_moss-light);
     --chart-4: var(--_ochre-light);
@@ -600,23 +617,10 @@
      *    hover, white inputs/selects, and light badges/dialogs in dark mode. ── */
     --button-default-fg: var(--foreground);
     --button-default-border: var(--border);
-    --button-default-hover-bg: var(--accent);
-    --button-default-active-bg: color-mix(
-      in oklch,
-      var(--accent) 84%,
-      var(--foreground)
-    );
-    --button-primary-hover-bg: color-mix(
-      in oklch,
-      var(--primary) 88%,
-      var(--background)
-    );
-    --button-primary-active-bg: color-mix(
-      in oklch,
-      var(--primary) 78%,
-      var(--background)
-    );
-    --button-disabled-bg: var(--muted);
+    --button-default-hover-bg: var(--hl);
+    --button-default-active-bg: var(--hl);
+    --button-primary-hover-bg: var(--gold-bright);
+    --button-primary-active-bg: var(--gold-deep);
     --button-disabled-fg: var(--muted-foreground);
 
     --input-bg: var(--background);
@@ -628,7 +632,6 @@
       var(--border) 60%,
       var(--foreground)
     );
-    --input-disabled-bg: var(--muted);
     --input-disabled-fg: var(--muted-foreground);
 
     --menu-popup-bg: var(--popover);
@@ -655,6 +658,31 @@
     --dialog-border: var(--border);
     --tooltip-bg: var(--foreground);
     --tooltip-fg: var(--background);
+
+    /* The v3 design the app draws (product apps/app at ddb85803). These came from
+       the kit's old v3 layer, which overrode this block. Each token now has one
+       definition here. --muted is an ink, as the mockup names it, and bg-muted
+       reads --muted-surface. */
+    --void: var(--ox-void);
+    --rule: var(--ox-rule);
+    --body: var(--ox-text-body);
+    --proven: var(--ox-st-proven);
+    --critical: var(--ox-st-critical);
+    --muted: var(--ox-muted);
+    --dim: var(--ox-dim);
+    --muted-surface: var(--ox-hl);
+    /* On ink the header band is a step lighter than the panel under it and
+       short of the row wash, so a header never reads as a hovered row. */
+    --panel-head: color-mix(in oklab, var(--ox-panel) 45%, var(--ox-hl));
+    --button-disabled-bg: var(--hl);
+    --input-disabled-bg: var(--hl);
+    /* The page body is ink in the dark theme. Panels and tiles stay on the
+       panel. */
+    --app-panel-bg: var(--ink);
+    --tab-fg: var(--muted);
+    --tab-on: color-mix(in srgb, var(--hl), var(--rule));
+    --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
+
   }
 
   /* "System" = DARK with zero JS. KEEP IN SYNC with .dark above. */
@@ -675,7 +703,6 @@
       --primary-foreground: var(--ox-ink);
       --secondary: var(--_stone-800); /* #27272A — neutral chip fill */
       --secondary-foreground: var(--_ink-white);
-      --muted: var(--_stone-850);
       /* Brighter secondary ink in dark for legibility (matches .dark). */
       --muted-foreground: var(--_stone-400);
       --accent: var(--_stone-800); /* #27272A — the hover/selected wash stays NEUTRAL */
@@ -688,10 +715,9 @@
       --destructive-foreground: var(--ox-ink); /* 4.92:1; white on this fill is 3.92:1 */
       --border: var(--_stone-800); /* #27272A — the hairline on ink */
       --input: var(--ox-rule); /* #3F3F46 — the heavier rule on ink */
-      --ring: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
-      --ember-ink: var(--ox-ember); /* #D4AF37 — the metal reads as ink on the canvas (9.5:1) */
-      --link: var(--ox-ember); /* #D4AF37 — 9.5:1 on the canvas */
-      --link-hover: var(--ox-ember-light); /* #F1CE65 — gold-bright */
+      --ring: var(--ox-gold); /* #D4AF37 — 9.5:1 on the canvas, no deep shade needed */
+      --link: var(--ox-gold); /* #D4AF37 — 9.5:1 on the canvas */
+      --link-hover: var(--ox-gold-bright); /* #F1CE65 — gold-bright */
 
       --success: var(--_moss-light);
       --success-foreground: oklch(0.18 0.03 160);
@@ -705,9 +731,7 @@
       /* Keep in sync with .dark. This block had no proven or critical pair, so
          under the OS preference a proven badge drew the light theme's white
          foreground on the dark theme's #3FA2A2 fill. */
-      --proven: var(--_teal-light);
       --proven-foreground: oklch(0.18 0.02 190);
-      --critical: var(--_rose-light);
       --critical-foreground: oklch(0.18 0.02 10);
       --success-ink: var(--ox-st-allowed-text); /* #57A97C — 5.23:1 */
       --warning-ink: var(--ox-st-denied-text); /* #D67858 — 4.74:1 */
@@ -715,7 +739,7 @@
       --proven-ink: var(--ox-st-proven-text); /* #44A7A7 — 5.20:1 */
       --critical-ink: var(--ox-st-critical-text); /* #EF5C72 — 4.57:1 */
 
-      --chart-1: var(--ox-ember);
+      --chart-1: var(--ox-gold);
       --chart-2: var(--_slate-light);
       --chart-3: var(--_moss-light);
       --chart-4: var(--_ochre-light);
@@ -744,23 +768,10 @@
        * why a :root-only declaration freezes to the light value). */
       --button-default-fg: var(--foreground);
       --button-default-border: var(--border);
-      --button-default-hover-bg: var(--accent);
-      --button-default-active-bg: color-mix(
-        in oklch,
-        var(--accent) 84%,
-        var(--foreground)
-      );
-      --button-primary-hover-bg: color-mix(
-        in oklch,
-        var(--primary) 88%,
-        var(--background)
-      );
-      --button-primary-active-bg: color-mix(
-        in oklch,
-        var(--primary) 78%,
-        var(--background)
-      );
-      --button-disabled-bg: var(--muted);
+      --button-default-hover-bg: var(--hl);
+      --button-default-active-bg: var(--hl);
+      --button-primary-hover-bg: var(--gold-bright);
+      --button-primary-active-bg: var(--gold-deep);
       --button-disabled-fg: var(--muted-foreground);
 
       --input-bg: var(--background);
@@ -772,7 +783,6 @@
         var(--border) 60%,
         var(--foreground)
       );
-      --input-disabled-bg: var(--muted);
       --input-disabled-fg: var(--muted-foreground);
 
       --menu-popup-bg: var(--popover);
@@ -799,6 +809,27 @@
       --dialog-border: var(--border);
       --tooltip-bg: var(--foreground);
       --tooltip-fg: var(--background);
+
+      /* The v3 design the app draws (product apps/app at ddb85803). These came from
+         the kit's old v3 layer, which overrode this block. Each token now has one
+         definition here. --muted is an ink, as the mockup names it, and bg-muted
+         reads --muted-surface. */
+      --void: var(--ox-void);
+      --rule: var(--ox-rule);
+      --body: var(--ox-text-body);
+      --proven: var(--ox-st-proven);
+      --critical: var(--ox-st-critical);
+      --muted: var(--ox-muted);
+      --dim: var(--ox-dim);
+      --muted-surface: var(--ox-hl);
+      --panel-head: color-mix(in oklab, var(--ox-panel) 45%, var(--ox-hl));
+      --button-disabled-bg: var(--hl);
+      --input-disabled-bg: var(--hl);
+      --app-panel-bg: var(--ink);
+      --tab-fg: var(--muted);
+      --tab-on: color-mix(in srgb, var(--hl), var(--rule));
+      --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
+
     }
   }
 }
@@ -821,7 +852,6 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
@@ -855,24 +885,6 @@
   --color-brand-foreground: var(--brand-foreground);
   --color-ink-light: var(--ink-light);
   --color-ink-dark: var(--ink-dark);
-
-  /* Ember gradient stops (mark-specific, rarely used directly in utilities). */
-  --color-ember-gold: var(--_ember-a);
-  --color-ember-flame: var(--_ember-b);
-  --color-ember-crimson: var(--_ember-c);
-
-  /* Accent ramp — exposed for rare direct-access. NOTE: the --*-violet-* NAMES
-     are retained for API stability; the VALUES are ember flame, not violet. */
-  --color-violet-50: var(--_amber-50);
-  --color-violet-100: var(--_amber-100);
-  --color-violet-200: var(--_amber-200);
-  --color-violet-300: var(--_amber-300);
-  --color-violet-400: var(--_amber-400);
-  --color-violet-500: var(--_amber-500);
-  --color-violet-600: var(--_amber-600);
-  --color-violet-700: var(--_amber-700);
-  --color-violet-800: var(--_amber-800);
-  --color-violet-900: var(--_amber-900);
 
   /* Charts */
   --color-chart-1: var(--chart-1);
@@ -1022,6 +1034,32 @@
      or toast. Each theme block sets --ui-shadow-pop, so a dark theme from the
      system setting gets it too, where a `dark:` class would not. */
   --shadow-pop: var(--ui-shadow-pop);
+
+  /* The v3 design the app draws (product apps/app at ddb85803). These came from
+     the kit's old v3 layer, which overrode this block. Each token now has one
+     definition here. --muted is an ink, as the mockup names it, and bg-muted
+     reads --muted-surface. */
+  --color-muted: var(--muted-surface);
+  --color-panel-head: var(--panel-head);
+  /* The mockup's palette names, so a recipe says what the design says: gold
+     for identity, hl for a wash, rule for a hairline. dim is below 4.5:1, so
+     it marks only what carries no meaning, such as a struck-through line;
+     a label reads --muted-foreground (#88). */
+  --color-gold: var(--gold);
+  --color-on-gold: var(--on-gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-on-gold-deep: var(--on-gold-deep);
+  --color-accent-text: var(--accent-text);
+  --color-dim: var(--dim);
+  --color-hl: var(--hl);
+  --color-rule: var(--rule);
+  --color-void: var(--void);
+  --color-proven: var(--proven);
+  --color-critical: var(--critical);
+  /* The floating surface's edge (#244). Each theme block sets --pop-ring, so
+     a dark theme from the system setting gets it too, where a `dark:` class
+     would not. */
+  --color-pop-ring: var(--pop-ring);
 }
 
 /*
@@ -1062,8 +1100,8 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    /* Native form controls (checkbox/radio/range/progress) tint ember, not the
-       OS blue. Inherits to the whole tree. */
+    /* Native form controls (checkbox/radio/range/progress) tint with the
+       primary, not the OS blue. Inherits to the whole tree. */
     accent-color: var(--primary);
   }
 
@@ -1144,16 +1182,16 @@
     /* Baseline vertical rhythm so even bare tables (header cells with only
        padding-bottom) keep a balanced header row. Tables that set their own
        py-* utility win (longhand > this shorthand's matching side). */
-    padding-block: 0.5rem;
+    padding-block: calc(var(--ox-space) * 2);
   }
 
   /*
-   * Focus ring — brand ember everywhere, NEVER the browser's blue/violet
-   * default. Native <select>/<input>/<textarea> that ship no focus styling
-   * (e.g. the agent-editor selects) get an ember outline + border on
-   * :focus-visible. coss Input/Select/Button opt out via
-   * focus-visible:outline-none (a utility with higher specificity) and keep
-   * their own ember ring, so this never doubles up on them.
+   * Focus ring — the gold ring everywhere, NEVER the browser's blue default.
+   * Native <select>/<input>/<textarea> that ship no focus styling (e.g. the
+   * agent-editor selects) get a gold outline + border on :focus-visible.
+   * coss Input/Select/Button opt out via focus-visible:outline-none (a
+   * utility with higher specificity) and keep their own gold ring, so this
+   * never doubles up on them.
    */
   :where(input, select, textarea):focus-visible {
     outline: 2px solid var(--ring);
@@ -1171,7 +1209,7 @@
  * scrim, and sticky navigation and header bars. Cards, panels, tables, and
  * text never take it. Floating chrome also takes the deep `shadow-pop`. The
  * recipes are `floatingSurface` and `glassBar` in control-styles.ts, and the
- * GLASS section after the v3 layer holds their fallbacks.
+ * GLASS section near the end of this file holds their fallbacks.
  *
  * The hero helpers below (`.ox-hero-*`, `.ox-grad-*`) are the one place for a
  * gradient or a glow. Motion is kept everywhere it existed: the helpers below
@@ -1223,10 +1261,10 @@
   }
 
   /* The single gold glyph inside a text wordmark. On paper the metal is only
-     2.1:1, so it takes the kit's deep shade there; --ember-ink already flips
+     2.1:1, so it takes the kit's deep shade there; --gold-text already flips
      to the metal itself in dark mode. */
   .ox-wordmark-accent {
-    color: var(--ember-ink);
+    color: var(--gold-text);
   }
 
   /* Wide-tracked uppercase eyebrow label (sans). */
@@ -1277,35 +1315,35 @@
     background-size: 22px 22px;
   }
 
-  /* ── Brand hero backdrop + ember button surfaces ─────────────────────────
-   * The canonical ember "hero" system, shared by the docs landing page and the
+  /* ── Brand hero backdrop + gold button surfaces ──────────────────────────
+   * The canonical gold "hero" system, shared by the docs landing page and the
    * app (auth, onboarding, in-app shell backdrop). A deliberate, brand-scoped
    * exception to the flat-surface default: gradients/glow are permitted ONLY on
    * these opt-in `.ox-hero-*` / `.ox-grad-*` helpers for hero + brand moments,
    * never on stock surfaces. Every rule is inert unless a consumer opts in.
-   * Colours come from the ember mark primitives so the fill is theme-stable.
+   * Colours come from the gold tokens, so the fill is theme-stable.
    * Motion is auto-suppressed by the global prefers-reduced-motion kill-switch
    * at the end of this file.
    * ──────────────────────────────────────────────────────────────────────── */
 
-  /* Ember gradient fill for CTAs (gold → flame → crimson). Literal fallbacks so
-     the fill renders regardless of which token scope is active. */
+  /* The gold sheen for CTAs (deep → metal → highlight). The stops read the
+     theme-independent gold tokens, so the fill is the same in every theme. */
   .ox-grad-surface {
     background-image: linear-gradient(
       100deg,
-      var(--_ember-a, #8A7223) 0%,
-      var(--_ember-b, #D4AF37) 46%,
-      var(--_ember-c, #F1CE65) 100%
+      var(--gold-deep) 0%,
+      var(--gold) 46%,
+      var(--gold-bright) 100%
     );
   }
 
-  /* The same ember sweep clipped to text — for accent words in headings. */
+  /* The same gold sweep clipped to text — for accent words in headings. */
   .ox-grad-text {
     background-image: linear-gradient(
       100deg,
-      var(--_ember-a) 0%,
-      var(--_ember-b) 46%,
-      var(--_ember-c) 100%
+      var(--gold-deep) 0%,
+      var(--gold) 46%,
+      var(--gold-bright) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -1340,7 +1378,7 @@
     );
   }
 
-  /* Vibrant code/terminal surface — a charcoal fill with the ember brand
+  /* Vibrant code/terminal surface — a charcoal fill with the gold brand
      gradient painted into a 1px border (padding-box fill + border-box gradient),
      identical in light and dark so a code block reads as a high-contrast, bold
      terminal on the light page. A real transparent `border` keeps a system line
@@ -1349,22 +1387,17 @@
     --code-fg: var(--_ink-white);
     color: var(--code-fg);
     background:
-      linear-gradient(
-        180deg in oklab,
-        oklch(0.26 0.005 78),
-        oklch(0.22 0.004 78)
-      )
-      padding-box,
+      linear-gradient(180deg in oklab, var(--code-frame-top), var(--code-frame-bottom)) padding-box,
       var(--brand-gradient) border-box;
     border: 1px solid transparent;
   }
 
-  /* A soft ember light source bleeding from behind the hero. */
+  /* A soft gold light source bleeding from behind the hero. */
   .ox-hero-orb {
     background: radial-gradient(
       circle at center,
-      color-mix(in oklch, var(--_ember-b) 38%, transparent) 0%,
-      color-mix(in oklch, var(--_ember-c) 16%, transparent) 40%,
+      color-mix(in oklch, var(--gold) 38%, transparent) 0%,
+      color-mix(in oklch, var(--gold-bright) 16%, transparent) 40%,
       transparent 70%
     );
     filter: blur(36px);
@@ -1384,7 +1417,7 @@
   }
 }
 
-/* Ember hero keyframes (paired with the .ox-hero-* / .ox-hex-* helpers above).
+/* Gold hero keyframes (paired with the .ox-hero-* / .ox-hex-* helpers above).
    Suppressed by the global prefers-reduced-motion kill-switch below. */
 @keyframes ox-glow {
   0%,
@@ -1442,150 +1475,6 @@
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/*
- * ─────────────────────────────────────────────────────────────────────────────
- * V3 LAYER
- *
- * The oxagen app draws the v3 design by putting these rules after this file
- * (apps/app/src/app/globals.css at oxagen ddb85803). The kit carries them here,
- * at the end, so they win on cascade order exactly as they do in the app, and
- * Storybook shows what the app shows. Only the generic rules came across. The
- * app keeps its shell frame, its record-kind and frame-kind hues, its code and
- * chart colours, and its sidebar.
- *
- * The corners and the shadows stay in the layer above, which reads them from
- * the tokens. The app reads them the same way, through packages/ui (product
- * #5111).
- *
- * Two things change from the layer above:
- *   - The primary button is gold in both themes, and the default button sits on
- *     the panel with the wash on hover.
- *   - `--muted` is an ink, as the mockup names it, and `bg-muted` reads
- *     `--muted-surface`. The kit's own `--muted` reads above are all overridden
- *     here, so none of them flips to the ink.
- * ─────────────────────────────────────────────────────────────────────────────
- */
-@theme inline {
-  --color-muted: var(--muted-surface);
-  --color-panel-head: var(--panel-head);
-  /* The mockup's palette names, so a recipe says what the design says: gold
-     for identity, dim for a label, hl for a wash, rule for a hairline. */
-  --color-gold: var(--gold);
-  --color-on-gold: var(--on-gold);
-  --color-gold-deep: var(--gold-deep);
-  --color-on-gold-deep: var(--on-gold-deep);
-  --color-accent-text: var(--accent-text);
-  --color-dim: var(--dim);
-  --color-hl: var(--hl);
-  --color-rule: var(--rule);
-  --color-void: var(--void);
-  --color-proven: var(--proven);
-  --color-critical: var(--critical);
-  /* The floating surface's edge (#244). Each theme block sets --pop-ring, so
-     a dark theme from the system setting gets it too, where a `dark:` class
-     would not. */
-  --color-pop-ring: var(--pop-ring);
-}
-
-@layer base {
-  :root {
-    --ink: var(--background);
-    --void: var(--ox-paper-void);
-    --panel: var(--card);
-    --hl: var(--accent);
-    --rule: var(--ox-paper-rule);
-    --fg: var(--foreground);
-    --body: var(--ox-text-ink-body);
-    --muted: var(--ox-muted-text-ink); /* #6E6E77 — 4.59:1 on the lifted row */
-    --dim: var(--ox-dim-ink);
-    --gold: var(--ox-gold);
-    --gold-bright: var(--ox-gold-bright);
-    --gold-deep: var(--ox-gold-deep);
-    --accent-text: var(--ember-ink);
-    --on-gold: var(--ox-ink);
-    /* The glyph on a gold-deep fill (#8A7223): paper reads at 4.66:1. */
-    --on-gold-deep: var(--ox-paper);
-    /* Governance states. A warning toast draws in --st-denied. */
-    --st-allowed: var(--success);
-    --st-approval: var(--info);
-    --st-denied: var(--warning);
-    --st-proven: var(--proven);
-    --st-failed: var(--error);
-    --st-critical: var(--critical);
-    --st-observe: var(--muted-foreground);
-    --mono: var(--ox-font-mono);
-    --font: var(--ox-font);
-    --muted-surface: var(--_stone-100);
-    /* A panel header is a light grey band over the white panel. */
-    --panel-head: var(--ox-paper-hl);
-    --button-disabled-bg: var(--muted-surface);
-    --input-disabled-bg: var(--muted-surface);
-    /* The mockup's primary button is gold in both themes. */
-    --button-primary-bg: var(--gold);
-    --button-primary-fg: var(--on-gold);
-    --button-primary-border: var(--gold);
-    --button-primary-hover-bg: var(--gold-bright);
-    --button-primary-active-bg: var(--gold-deep);
-    /* The default button sits on the panel and takes the wash on hover. */
-    --button-default-bg: var(--panel);
-    --button-default-border: var(--border);
-    --button-default-hover-bg: var(--hl);
-    --button-default-active-bg: var(--hl);
-    /* A tab in a dialog keeps a gold underline. */
-    --tab-border-active: var(--gold);
-    /* Page-level tabs sit on a muted track. The selected tab is raised on
-       --tab-on, and the rest read in --tab-fg (#242). */
-    --tab-fg: var(--body);
-    --tab-on: var(--card);
-    /* Menus, popovers, the command menu, dialogs, and toasts float on a faint
-       ring in place of a border, over the deep --ui-shadow-pop (#244). */
-    --pop-ring: color-mix(in srgb, var(--foreground) 5%, transparent);
-  }
-
-  .dark {
-    --void: var(--ox-void);
-    --rule: var(--ox-rule);
-    --body: var(--ox-text-body);
-    --proven: var(--ox-st-proven);
-    --critical: var(--ox-st-critical);
-    --muted: var(--ox-muted);
-    --dim: var(--ox-dim);
-    --muted-surface: var(--ox-hl);
-    /* On ink the header band is a step lighter than the panel under it and
-       short of the row wash, so a header never reads as a hovered row. */
-    --panel-head: color-mix(in oklab, var(--ox-panel) 45%, var(--ox-hl));
-    --button-disabled-bg: var(--hl);
-    --input-disabled-bg: var(--hl);
-    /* The page body is ink in the dark theme. Panels and tiles stay on the
-       panel. */
-    --app-panel-bg: var(--ink);
-    --tab-fg: var(--muted);
-    --tab-on: color-mix(in srgb, var(--hl), var(--rule));
-    --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
-  }
-
-  /* Match explicit dark mode before a theme script runs. */
-  @media (prefers-color-scheme: dark) {
-    :root:not(.light):not(.dark) {
-      --void: var(--ox-void);
-      --rule: var(--ox-rule);
-      --body: var(--ox-text-body);
-      --proven: var(--ox-st-proven);
-      --critical: var(--ox-st-critical);
-      --muted: var(--ox-muted);
-      --dim: var(--ox-dim);
-      --muted-surface: var(--ox-hl);
-      --panel-head: color-mix(in oklab, var(--ox-panel) 45%, var(--ox-hl));
-      --button-disabled-bg: var(--hl);
-      --input-disabled-bg: var(--hl);
-      --app-panel-bg: var(--ink);
-      --tab-fg: var(--muted);
-      --tab-on: color-mix(in srgb, var(--hl), var(--rule));
-      --pop-ring: color-mix(in srgb, var(--foreground) 10%, transparent);
-    }
   }
 }
 

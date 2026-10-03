@@ -17,7 +17,7 @@ drift and no sync step.
 | What type scale and utilities exist? | `../tokens/house-tailwind.css`, with the `text-m-*` marketing and `text-a-*` app scales, and `../tokens/house-text-scale.css`, which points Tailwind's `text-xs` to `text-3xl` at the app steps |
 | Which face and size does each surface take? | The Type section of `../skills/oxagen-branding/references/system.md` |
 | Which font files load, and how? | `../tokens/house-fonts.css` and `../fonts/` |
-| How do tokens map to semantic roles, per theme? | `src/styles/globals.css`: the `:root`, `.dark`, and `prefers-color-scheme` blocks, then the v3 layer at the end of the file |
+| How do tokens map to semantic roles, per theme? | `src/styles/globals.css`: the `:root`, `.dark`, and `prefers-color-scheme` blocks, with one definition of each semantic token per theme |
 | Where do the values come from? | `../theme/theme.json`, which `../build/color.py` and `../build/typeset.py` read |
 | What may a surface say? | `../skills/oxagen-branding/`, whose `references/positioning.md` carries the live and retired lines |
 
@@ -32,14 +32,19 @@ reskin surface. It maps the house values onto the semantic roles components
 use. A component never names a Tailwind palette colour or a hex. It names a
 house token only to read a type step, as `text-(length:--ox-a-h4)` does.
 
-The v3 layer at the end of `globals.css` came from the oxagen app with the
-components in `src/components/`. It sets the gold primary, the panel and rule
-tokens, table truncation, the phone rules, and the shimmer and spinner motion.
-It comes last, so it wins on cascade order.
+The v3 design came from the oxagen app with the components in
+`src/components/`. Its tokens, such as the gold primary button and the panel
+and rule tokens, sit at the end of each theme block. Each semantic token has
+one definition per theme: `:root` for light, `.dark` for dark, and the
+`prefers-color-scheme` block, which repeats `.dark` for a dark OS with no
+class. `build/css_literals.py` fails when a token is declared twice in one
+block, or when a later `:root` declaration would override a `.dark` one. Table
+truncation, the phone rules, and the shimmer and spinner motion sit after the
+utilities.
 
 Each corner, shadow, font size, and heading line height in `globals.css` is
 declared once and reads an `--ox-*` token. The radius and shadow scales sit in
-the mapping layer, above the v3 layer. The radius scale reads `--ox-radius-xs`
+the mapping layer. The radius scale reads `--ox-radius-xs`
 to `--ox-radius-4xl`, which multiply `--ox-radius-base`. The shadow scale reads
 `--ox-shadow-ui` and `shadow-pop` reads `--ox-shadow-pop`, each with its `-ink`
 twin on paper. `h1`, `h2`, and `h3` read `--ox-a-h1-leading`,
@@ -69,21 +74,31 @@ descendant element does not move the steps inside it.
 ## Literal guard
 
 `build/css_literals.py` is the literal guard, and `build/build.py --check` runs
-it. It reads two scopes.
+it. Mac, 2026-10-03: "everything has to be semantic driven from tokens". It
+reads two scopes, and `--report` counts what it finds by scope and kind.
 
-- **`globals.css`.** It fails on a literal corner, shadow, font size, or
-  heading line height. A phone's text fields read `--text-input-touch`, 16px
-  or the app base, whichever is larger, so iOS does not zoom on focus.
-  `KEEP` in `build/css_literals.py` is empty.
-- **Every font size the kit sets.** It fails on any hard-coded font size in
-  `ui/src`, `sdlc/public`, and `pwa/`, and in the kit's pages (`playbook.html`,
-  `message-bank.html`, `always-on.html`, and `brand-guide.html`). That covers a
-  Tailwind class such as `text-[13px]`, a `fontSize` value, and CSS in a style
-  block, a `style` attribute, or a string. It fails on Tailwind's sizes from
-  `text-4xl` up, which read no step. It also fails on a size under 1em or
-  under 100%, because `.9em` of a 14px body is 12.6px, a size no step names.
-  Tests are not read, because they name classes to assert them. It sets no
-  smallest size.
+- **`globals.css`.** It fails on a literal colour, corner, shadow, space, font
+  size, or heading line height in a rule. Its custom properties are the
+  mapping layer, which turns raw tokens into semantic ones, so a colour there
+  passes. Each semantic token has one definition per theme. A phone's text
+  fields read `--text-input-touch`, 16px or the app base, whichever is larger,
+  so iOS does not zoom on focus. `KEEP` in `build/css_literals.py` is empty.
+- **Every component and page.** It fails on any colour, corner, shadow,
+  space, or font size written as a literal in `ui/src` (the Work and Run app
+  copies included), `sdlc/public`, `pwa/`, and the kit's pages
+  (`playbook.html`, `message-bank.html`, `always-on.html`, and
+  `brand-guide.html`). That covers a Tailwind class (a palette colour such as
+  `bg-zinc-800`, a raw house colour such as `bg-ox-gold`, Tailwind's fixed
+  bare `rounded`, and an arbitrary value such as `gap-[7px]`, `rounded-[10px]`,
+  `shadow-[…]`, `bg-[#fff]`, or `text-[13px]`), a style object's value, an
+  SVG colour attribute, and CSS in a style block, a `style` attribute, or a
+  string. A custom property in a stylesheet is that file's token layer, so it
+  passes. Tests are not read, because they name classes to assert them.
+  `EXEMPT` names the one file a kind skips: the generated brand marks.
+- **Contrast.** Every semantic text role clears 4.5:1 on the page, a card, a
+  popover, a lifted row, and a panel header, in both themes. No word is set in
+  dim, which is below 4.5:1. Gold words are checked on the page, a card, and a
+  popover until #93 decides the gold for words on a lifted row.
 
 A size passes when it reads a token: `var(--ox-a-body)`,
 `text-(length:--ox-a-h2)`, a house utility (`text-m-*`, `text-a-*`), or

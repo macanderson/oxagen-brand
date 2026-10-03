@@ -1,6 +1,7 @@
-"""The literal guard: the kit's stylesheet, and every font size the kit sets.
+"""The literal guard: every colour, corner, shadow, space, and font size the kit sets.
 
-    python3 build/css_literals.py    # list each literal, exit 1 if any
+    python3 build/css_literals.py            # list each literal, exit 1 if any
+    python3 build/css_literals.py --report   # count the literals by scope and group
 
 A theme change reaches the kit's components through the `--ox-*` tokens that
 `build/build.py` writes from `theme/theme.json`. A corner, a shadow, a font
@@ -12,17 +13,26 @@ its line and the token to read instead.
 It reads two scopes:
 
 - **The kit's stylesheet**, `ui/src/styles/globals.css`: every corner,
-  shadow, font size, and heading line height.
-- **Every font size the kit sets** (Mac, 2026-10-02: "we can't hard code font
-  sizes in classes, we need to let the tokens do their job"): the CSS, the
-  stories, and the components in `ui/src`, the SDLC page in `sdlc/public`,
-  the PWA install prompt, and the kit's own pages (`playbook.html`,
-  `message-bank.html`, `always-on.html`, `brand-guide.html`). In a page it
-  reads each `<style>` block and `style` attribute. In a script it reads
-  Tailwind's arbitrary sizes (`text-[13px]`), a `fontSize` value, and CSS
-  written in a string. Tests are not read, because they name classes to
-  assert them. Neither is `ui/src/pages/app/`, a copy of the product app's
-  pages that keeps the app's own sizes.
+  shadow, font size, and heading line height, and every colour and space a
+  rule (not a custom property) writes. Its custom properties are the
+  mapping layer, which turns the raw tokens into semantic ones, so a colour
+  there passes. `semantic_problems` holds each semantic token to one
+  definition per theme.
+- **Every component and page** (Mac, 2026-10-02: "we can't hard code font
+  sizes in classes, we need to let the tokens do their job", and 2026-10-03:
+  "everything has to be semantic driven from tokens"): the CSS, the stories,
+  and the components in `ui/src`, the Work and Run app copies included, the
+  SDLC page in `sdlc/public`, the PWA install prompt, and the kit's own pages
+  (`playbook.html`, `message-bank.html`, `always-on.html`,
+  `brand-guide.html`). Each colour, corner, shadow, space (padding, margin,
+  gap), and font size reads a token. In a page it reads each `<style>` block
+  and `style` attribute. In a script it reads Tailwind classes (a palette
+  colour such as `bg-zinc-800`, a raw house colour such as `bg-ox-gold`, and
+  an arbitrary value such as `gap-[7px]` or `text-[13px]`), a style object's
+  values, an SVG colour attribute, and CSS written in a string. A custom
+  property in a stylesheet is that file's token layer, so its colour and its
+  space pass. Tests are not read, because they name classes to assert them.
+  `EXEMPT` names the few whole files a group skips, each with its reason.
 
 It is a regex pass with no CSS parser, on the model of the literal guard in
 oxageninc/product (`tools/scripts/lib/brand-literals.mjs`).
@@ -76,12 +86,10 @@ FONT_SCOPE: dict[str, tuple[str, ...]] = {
     "script": ("ui/src/**/*.ts", "ui/src/**/*.tsx", "pwa/*.js", "sdlc/public/*.js"),
 }
 
-#: A file the guard does not read for font sizes. A test names a class to
-#: assert it. `ui/src/pages/app/` is a copy of the product app's Work and Run
-#: pages, kept so the theme editor previews the app as it ships. Its sizes are
-#: the app's own, which the kit does not set, so holding the copy to the kit's
-#: rule would show a page the app never draws.
-SKIP = re.compile(r"\.test\.[jt]sx?$|^ui/src/pages/app/")
+#: A file the guard does not read: a test names a class to assert it. Every
+#: page is read, the Work and Run app copies in `ui/src/pages/app/` included,
+#: because they are where the theme editor previews the app.
+SKIP = re.compile(r"\.test\.[jt]sx?$")
 
 #: The SDLC page's own names for the type steps, which must equal the theme's.
 SDLC_CSS = "sdlc/public/sdlc.css"
@@ -340,17 +348,17 @@ def literals(css: str, keep: tuple[Keep, ...] = KEEP, path: str = KIT_CSS) -> tu
     used: set[Keep] = set()
     mine = tuple(k for k in keep if k.path == path)
     for decl in declarations(css):
-        group = group_of(decl)
-        if group is None:
-            continue
         value = re.sub(r"\s*!important$", "", decl.value)
-        if not is_literal(group, value):
-            continue
-        entry = next((k for k in mine if k.group == group and k.value == value), None)
-        if entry:
-            used.add(entry)
-            continue
-        hits.append(Hit(decl.line, group, decl.prop, value, suggestion(group, value, decl.prop), path))
+        groups = [g for g in (group_of(decl),) if g] + [g for g in style_groups(decl) if g in ("color", "spacing")]
+        for group in groups:
+            if not group_literal(group, value):
+                continue
+            entry = next((k for k in mine if k.group == group and k.value == value), None)
+            if entry:
+                used.add(entry)
+                continue
+            use = _style_suggestion(group, value, decl.prop, "--ox-") if group in ("color", "spacing") else suggestion(group, value, decl.prop)
+            hits.append(Hit(decl.line, group, decl.prop, value, use, path))
     return hits, [k for k in mine if k not in used]
 
 
@@ -476,8 +484,328 @@ def font_size_hits(root: Path = ROOT, keep: tuple[Keep, ...] = KEEP) -> tuple[li
     return hits, used
 
 
+# --------------------------------------------------------------------------
+# colours, corners, shadows, and spacing, in every file the kit styles
+# --------------------------------------------------------------------------
+
+#: Mac, 2026-10-03: "make sure you take the time to check buttons, border
+#: radius, colors etc - everything has to be semantic driven from tokens".
+#: A component or a page reads a semantic token for every colour, corner,
+#: shadow, and space. These groups join the font size in the same scope.
+STYLE_GROUPS = ("color", "border-radius", "box-shadow", "spacing", "font-size")
+
+#: Each group as a guard message names it.
+GROUP_WORDS = {
+    "color": "colour",
+    "border-radius": "corner",
+    "box-shadow": "shadow",
+    "spacing": "space",
+    "font-size": "font size",
+}
+
+#: Whole files a group does not read, each with its reason. Keep this short.
+EXEMPT: dict[tuple[str, str], str] = {
+    ("ui/src/components/brand-marks.generated.ts", "color"): (
+        "generated art: the drawn marks and the gold they paint, copied from the kit's own drawings"
+    ),
+}
+
+_COLOR_PROPS = re.compile(
+    r"^(color|background(-color|-image)?|border(-(top|right|bottom|left|block|inline)(-(start|end))?)?(-color)?"
+    r"|outline(-color)?|fill|stroke|stop-color|flood-color|lighting-color|caret-color|accent-color"
+    r"|text-decoration(-color)?|text-emphasis-color|column-rule(-color)?|scrollbar-color|text-shadow"
+    r"|-webkit-text-fill-color|-webkit-text-stroke(-color)?)$"
+)
+_SPACING_PROPS = re.compile(
+    r"^((padding|margin|scroll-padding|scroll-margin)(-(top|right|bottom|left|block|inline)(-(start|end))?)?"
+    r"|gap|row-gap|column-gap)$"
+)
+
+#: Every CSS named colour. `transparent` and `currentColor` are not here: they
+#: name no hue, so they pass.
+NAMED_COLORS = frozenset("""
+aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet brown
+burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan
+darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid
+darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet
+deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen fuchsia gainsboro
+ghostwhite gold goldenrod gray green greenyellow grey honeydew hotpink indianred indigo ivory khaki
+lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow
+lightgray lightgreen lightgrey lightpink lightsalmon lightseagreen lightskyblue lightslategray
+lightslategrey lightsteelblue lightyellow lime limegreen linen magenta maroon mediumaquamarine
+mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise
+mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite navy oldlace olive olivedrab
+orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru
+pink plum powderblue purple rebeccapurple red rosybrown royalblue saddlebrown salmon sandybrown
+seagreen seashell sienna silver skyblue slateblue slategray slategrey snow springgreen steelblue tan
+teal thistle tomato turquoise violet wheat white whitesmoke yellow yellowgreen
+""".split())
+
+_HEX = re.compile(r"(?<![\w&])#[0-9a-fA-F]{3,8}(?![\w-])")
+_COLOR_FN = re.compile(r"(?<![\w-])(rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(", re.I)
+_WORD = re.compile(r"(?<![\w-])[a-zA-Z]+(?![\w-])")
+#: A house token read straight from the raw layer. Components and pages read
+#: the semantic layer, so a raw colour token outside a custom property fails.
+_RAW_OX_COLOR = re.compile(
+    r"var\(\s*--ox-(?!font|weight|tracking|radius|shadow|space|wrap|shimmer|m-|a-)[\w-]+"
+)
+_SPACE_LENGTH = re.compile(r"(?<![\w.-])-?(\d*\.?\d+)(px|rem|em|pt|vh|vw|ch)\b")
+
+
+def color_literal(value: str) -> bool:
+    """Whether a value writes a colour of its own or reads a raw `--ox-*` colour token.
+
+    A hex, an `rgb()`, `oklch()`, or other colour function, or a named colour
+    fails. `transparent`, `currentColor`, and a colour inside a `var()`
+    fallback pass, and so does `color-mix()` over tokens.
+    """
+    if _RAW_OX_COLOR.search(value):
+        return True
+    bare = re.sub(r"url\([^)]*\)", " ", without_vars(value))
+    if _HEX.search(bare) or _COLOR_FN.search(bare):
+        return True
+    return any(w.lower() in NAMED_COLORS for w in _WORD.findall(bare))
+
+
+def spacing_literal(value: str) -> bool:
+    """Whether a padding, margin, or gap writes a length other than 0 of its own. `auto` and `%` pass."""
+    return any(float(n) != 0 for n, _unit in _SPACE_LENGTH.findall(without_vars(value)))
+
+
+def group_literal(group: str, value: str) -> bool:
+    """Whether `value` writes a literal its group should take from a token.
+
+    A shadow fails on a length that is not a ring or an inset bar, and on a
+    colour of its own, so a ring in a hex fails too.
+    """
+    if group == "color":
+        return color_literal(value)
+    if group == "spacing":
+        return spacing_literal(value)
+    if group == "font-size":
+        return small_or_fixed(value)
+    if group == "box-shadow":
+        return is_literal(group, value) or color_literal(value)
+    return is_literal(group, value)
+
+
+def style_groups(decl: Decl) -> list[str]:
+    """The groups a declaration's value answers to in the style scope.
+
+    A custom property is the file's own token layer, such as the SDLC site's
+    copy of the theme's steps, so it answers to none. `sdlc_step_problems`
+    holds that copy to the theme, and `font_size_hits` still reads a size
+    alias.
+    """
+    if decl.prop.startswith("--"):
+        return []
+    groups = []
+    base = group_of(decl)
+    if base in ("border-radius", "box-shadow", "font-size"):
+        groups.append(base)
+    if not decl.prop.startswith("--"):
+        if _COLOR_PROPS.match(decl.prop):
+            groups.append("color")
+        if _SPACING_PROPS.match(decl.prop):
+            groups.append("spacing")
+    return groups
+
+
+def _style_suggestion(group: str, value: str, prop: str, prefix: str) -> str:
+    if group == "color":
+        return "a semantic colour token, such as var(--foreground), var(--muted-foreground), or var(--border)"
+    if group == "spacing":
+        return "the spacing unit: calc(var(--ox-space) * n), or the page's --space"
+    if group == "font-size":
+        found = _LENGTH.search(without_vars(value))
+        px = float(found.group(1)) * (16 if found.group(2) == "rem" else 1) if found else None
+        return size_suggestion(px, prefix)
+    return suggestion(group, value, prop)
+
+
+def _style_decls(decls: list[Decl], path: str, offset: int = 0, prefix: str = "--ox-") -> list[Hit]:
+    out = []
+    for d in decls:
+        value = re.sub(r"\s*!important$", "", d.value)
+        for group in style_groups(d):
+            if group_literal(group, value):
+                out.append(Hit(d.line + offset, group, d.prop, value, _style_suggestion(group, value, d.prop, prefix), path))
+    return out
+
+
+def css_style_hits(css: str, path: str) -> list[Hit]:
+    """Each colour, corner, shadow, space, and font size a stylesheet writes as a literal."""
+    return _style_decls(declarations(css), path, prefix="--ox-" if path.startswith("ui/") else "--")
+
+
+def html_style_hits(html: str, path: str) -> list[Hit]:
+    """The same, in a page's `<style>` blocks and `style` attributes."""
+    out = []
+    for m in _STYLE_BLOCK.finditer(html):
+        out += _style_decls(declarations(m.group(1)), path, _line(html, m.start(1)) - 1, "--")
+    for m in _STYLE_ATTR.finditer(html):
+        out += _style_decls(declarations(m.group(2)), path, _line(html, m.start(2)) - 1, "--")
+    return out
+
+
+_TW_PALETTE = re.compile(
+    r"(?<![\w-])(?:bg|text|border(?:-[trblxyse])?|ring|ring-offset|outline|fill|stroke|from|via|to|divide"
+    r"|placeholder|caret|accent|decoration|shadow)-(?:(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow"
+    r"|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}|white|black)"
+    r"(?:/\d+)?(?![\w-])"
+)
+_TW_RAW_OX = re.compile(
+    r"(?<![\w-])(?:bg|text|border(?:-[trblxyse])?|ring|outline|fill|stroke|from|via|to|decoration|divide|caret"
+    r"|accent|placeholder)-ox-[\w-]+"
+)
+#: Tailwind's bare `rounded` (and `rounded-t`, `rounded-tl`, and the rest) is
+#: its own fixed 0.25rem, which no theme step moves. A class names a step.
+_TW_BARE_ROUNDED = re.compile(r"(?<![\w-])(?:[\w-]+:)*rounded(?:-(?:t|r|b|l|tl|tr|br|bl|s|e|ss|se|es|ee))?(?=[\s\"'`]|$)")
+_TW_ARB = re.compile(r"(?<![\w-])(-?[a-z][a-z0-9-]*)-\[([^\]\s]+)\]")
+_TW_ARB_PROP = re.compile(r"\[([a-z-]+):([^\]\s]+)\]")
+_TW_COLOR_UTIL = {"bg", "text", "border", "border-t", "border-r", "border-b", "border-l", "border-x", "border-y",
+                  "ring", "ring-offset", "outline", "fill", "stroke", "from", "via", "to", "decoration", "divide",
+                  "caret", "accent", "placeholder", "shadow"}
+_TW_RADIUS_UTIL = re.compile(r"^rounded(-(t|r|b|l|tl|tr|br|bl|s|e|ss|se|es|ee))?$")
+_TW_SPACING_UTIL = re.compile(r"^-?(p|px|py|pt|pr|pb|pl|ps|pe|m|mx|my|mt|mr|mb|ml|ms|me|gap|gap-x|gap-y|space-x|space-y)$")
+_STYLE_PROP = re.compile(
+    r"\b(color|background|backgroundColor|backgroundImage|border(?:Top|Right|Bottom|Left)?(?:Color)?|outline(?:Color)?"
+    r"|fill|stroke|stopColor|borderRadius|boxShadow|(?:padding|margin)(?:Top|Right|Bottom|Left|Block|Inline"
+    r"|BlockStart|BlockEnd|InlineStart|InlineEnd)?|gap|rowGap|columnGap)\s*:\s*(?:([\"'`])([^\"'`]*)\2|(-?\d*\.?\d+)(?![\w.%]))"
+)
+_SVG_ATTR = re.compile(r"(?<![\w-])(fill|stroke|stop-color|stopColor|color)=([\"'])([^\"']+)\2")
+_CSS_IN_STRING_ANY = re.compile(r"(?<![\w-])([a-z][a-z-]*)\s*:\s*([^;\"'`}\n]+)")
+
+
+def _style_prop_group(name: str) -> str:
+    if name in ("borderRadius",):
+        return "border-radius"
+    if name == "boxShadow":
+        return "box-shadow"
+    if re.match(r"^(padding|margin|gap|rowGap|columnGap)", name):
+        return "spacing"
+    return "color"
+
+
+def script_style_hits(code: str, path: str) -> list[Hit]:
+    """Each colour, corner, shadow, and space a script writes as a literal.
+
+    It reads Tailwind classes (a palette colour such as `bg-zinc-800`, a raw
+    house colour utility such as `bg-ox-gold`, and an arbitrary value such as
+    `gap-[7px]`, `rounded-[10px]`, `shadow-[...]`, or `bg-[#fff]`), a style
+    object's values, an SVG colour attribute, and CSS written in a string.
+    Font sizes stay with `script_font_sizes`.
+    """
+    text = strip_script_comments(code)
+    out: list[Hit] = []
+
+    def hit(index: int, group: str, prop: str, value: str, use: str) -> None:
+        out.append(Hit(_line(text, index), group, prop, value, use, path))
+
+    for m in _TW_BARE_ROUNDED.finditer(text):
+        hit(m.start(), "border-radius", "class", m.group(0), "a rounded-* step such as rounded-sm, which reads --ox-radius-sm")
+    for m in _TW_PALETTE.finditer(text):
+        hit(m.start(), "color", "class", m.group(0), "a semantic colour utility, such as bg-card or text-muted-foreground")
+    for m in _TW_RAW_OX.finditer(text):
+        hit(m.start(), "color", "class", m.group(0), "the semantic utility for the role, such as bg-primary or text-gold-text")
+    for m in _TW_ARB.finditer(text):
+        util, value = m.group(1), m.group(2)
+        body = value.replace("_", " ")
+        if body.startswith("var(") or body.startswith("length:var(") or body.startswith("color:var("):
+            if util.lstrip("-") in _TW_COLOR_UTIL and _RAW_OX_COLOR.search(body):
+                hit(m.start(), "color", "class", m.group(0), "the semantic token for the role, not a raw --ox-* colour")
+            continue
+        name = util.lstrip("-")
+        if name == "shadow":
+            if _LENGTH.search(without_vars(body)) and body != "none":
+                hit(m.start(), "box-shadow", "class", m.group(0), "shadow-pop under floating chrome, or a --shadow-* step")
+            elif color_literal(body):
+                hit(m.start(), "color", "class", m.group(0), "a semantic colour utility")
+        elif name in _TW_COLOR_UTIL and color_literal(body):
+            hit(m.start(), "color", "class", m.group(0), "a semantic colour utility")
+        elif _TW_RADIUS_UTIL.match(name) and is_literal("border-radius", body):
+            hit(m.start(), "border-radius", "class", m.group(0), "a rounded-* step, which reads --ox-radius-*")
+        elif _TW_SPACING_UTIL.match(name) and spacing_literal(body):
+            hit(m.start(), "spacing", "class", m.group(0), "a spacing step: Tailwind takes quarter steps, such as gap-1.75 for 7px")
+    for m in _TW_ARB_PROP.finditer(text):
+        prop, value = m.group(1), m.group(2).replace("_", " ")
+        d = Decl("", prop, value, 0)
+        for group in style_groups(d):
+            if group != "font-size" and group_literal(group, value):
+                hit(m.start(), group, "class", m.group(0), _style_suggestion(group, value, prop, "--ox-"))
+    for m in _STYLE_PROP.finditer(text):
+        name = m.group(1)
+        value = m.group(3) if m.group(3) is not None else m.group(4)
+        group = _style_prop_group(name)
+        if m.group(4) is not None:
+            if group in ("spacing", "border-radius") and float(value) != 0:
+                hit(m.start(), group, name, value, _style_suggestion(group, value, name, "--ox-"))
+            continue
+        if group_literal(group, value):
+            hit(m.start(), group, name, value, _style_suggestion(group, value, name, "--ox-"))
+    for m in _SVG_ATTR.finditer(text):
+        value = m.group(3)
+        if value.startswith("{") or value in ("none", "currentColor", "transparent") or value.startswith("url("):
+            continue
+        if color_literal(value):
+            hit(m.start(), "color", m.group(1), value, "currentColor, or a semantic colour token")
+    for m in _CSS_IN_STRING_ANY.finditer(text):
+        prop, value = m.group(1), m.group(2).strip()
+        d = Decl("", prop, value, 0)
+        for group in style_groups(d):
+            if group == "font-size":
+                continue
+            if group_literal(group, value):
+                hit(m.start(), group, prop, value, _style_suggestion(group, value, prop, "--"))
+    return out
+
+
+def style_hits(root: Path = ROOT) -> list[Hit]:
+    """Every colour, corner, shadow, and space literal in the style scope, exempt files left out.
+
+    Font sizes are not here: `font_size_hits` reads them, with their own
+    suggestions.
+    """
+    read = {"css": css_style_hits, "html": html_style_hits, "script": script_style_hits}
+    hits = []
+    for kind, f in scanned_files(root):
+        rel = f.relative_to(root).as_posix()
+        for h in read[kind](f.read_text(), rel):
+            if h.group == "font-size" or (rel, h.group) in EXEMPT:
+                continue
+            hits.append(h)
+    return hits
+
+
+#: The scopes `--report` counts, by path prefix, most specific first.
+REPORT_SCOPES = (
+    ("ui/src/pages/app/", "the Work and Run app copies"),
+    ("ui/src/pages/", "the example pages"),
+    ("ui/src/components/", "the components"),
+    ("ui/src/theme-editor/", "the theme editor"),
+    ("ui/src/", "the rest of ui/src"),
+    ("sdlc/public/", "the SDLC site"),
+    ("pwa/", "the PWA prompt"),
+    ("", "the kit's pages"),
+)
+
+
+def report(root: Path = ROOT) -> dict[str, dict[str, int]]:
+    """Literal counts by scope and group, for the guard's `--report`."""
+    counts: dict[str, dict[str, int]] = {}
+    all_hits = style_hits(root) + font_size_hits(root)[0]
+    kit_hits, _ = literals((root / KIT_CSS).read_text())
+    for h in all_hits + kit_hits:
+        scope = next(label for prefix, label in REPORT_SCOPES if h.path.startswith(prefix))
+        if h.path == KIT_CSS:
+            scope = "the kit's stylesheet"
+        counts.setdefault(scope, {g: 0 for g in STYLE_GROUPS})
+        counts[scope][h.group] = counts[scope].get(h.group, 0) + 1
+    return counts
+
+
 def sdlc_step_problems(root: Path = ROOT) -> list[str]:
-    """Each base, step, and leading `sdlc/public/sdlc.css` leaves out or names with a value other than the theme's.
+    """Each type step, corner step, and spacing unit `sdlc/public/sdlc.css` leaves out or names with a value other than the theme's.
 
     Each step reads its scale's base, `calc(var(--a-base) * 0.857143)`, so
     the page needs both bases and every step for its sizes to resolve.
@@ -485,7 +813,7 @@ def sdlc_step_problems(root: Path = ROOT) -> list[str]:
     path = root / SDLC_CSS
     if not path.is_file():
         return []
-    want = {f"--{name}": value for name, value in PC.type_sizes().items()}
+    want = {f"--{name}": value for name, value in {**PC.type_sizes(), **PC._shape_fixed()}.items()}
     found, seen = [], set()
     for d in declarations(path.read_text()):
         if d.prop not in want:
@@ -504,9 +832,237 @@ def sdlc_step_problems(root: Path = ROOT) -> list[str]:
     return found
 
 
+# --------------------------------------------------------------------------
+# semantic tokens: one definition per theme
+# --------------------------------------------------------------------------
+
+#: The theme blocks of the kit's stylesheet: light, dark by class, and dark by
+#: the OS setting, which repeats the dark block for a page with no class.
+LIGHT, DARK, DARK_OS = ":root", ".dark", ":root:not(.light):not(.dark)"
+DARK_MEDIA = "@media (prefers-color-scheme: dark)"
+
+
+@dataclass(frozen=True)
+class Token:
+    """One custom-property declaration: the blocks it sits in, its name and value, its order, and its line."""
+
+    scope: tuple[str, ...]
+    name: str
+    value: str
+    order: int
+    line: int
+
+
+def tokens(css: str) -> list[Token]:
+    """Every custom property `css` declares, with the full stack of blocks around it (`@layer` left out)."""
+    text = strip_comments(css)
+    out: list[Token] = []
+    stack: list[str] = []
+    start = depth = 0
+    for i, ch in enumerate(text):
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        elif ch == "{" and depth == 0:
+            stack.append(" ".join(text[start:i].split()))
+            start = i + 1
+        elif ch in ";}" and depth == 0:
+            m = re.match(r"\s*(--[\w-]+)\s*:", text[start:i])
+            if m:
+                scope = tuple(b for b in stack if not b.startswith("@layer"))
+                line = text.count("\n", 0, start + m.start(1)) + 1
+                out.append(Token(scope, m.group(1), " ".join(text[start + m.end():i].split()), len(out), line))
+            if ch == "}" and stack:
+                stack.pop()
+            start = i + 1
+    return out
+
+
+def semantic_problems(css: str, path: str = KIT_CSS) -> list[str]:
+    """Each way the stylesheet gives a semantic token more than one definition in a theme.
+
+    - A token declared twice in the same block: the later one wins, and the
+      earlier one reads as live while it is dead.
+    - A `:root` declaration after a `.dark` one of the same token: on a page
+      whose `<html>` carries `.dark`, both match at the same specificity, so
+      the later `:root` value wins and the dark value is dead there, though it
+      still applies to a `.dark` element further down.
+    - A dark-by-OS block that differs from `.dark`: a dark OS with no class
+      draws a different theme from a page that sets `.dark`.
+    """
+    toks = tokens(css)
+    found = []
+    seen: dict[tuple[tuple[str, ...], str], Token] = {}
+    for t in toks:
+        first = seen.setdefault((t.scope, t.name), t)
+        if first is not t:
+            found.append(
+                f"{path}:{t.line} declares {t.name} a second time in {' '.join(t.scope) or 'the top level'} "
+                f"(first at line {first.line}). Keep one declaration per theme block."
+            )
+    last = {}
+    for t in toks:
+        if t.scope in ((LIGHT,), (DARK,)):
+            last[(t.scope[0], t.name)] = t
+    for (block, name), t in last.items():
+        light = last.get((LIGHT, name))
+        if block == DARK and light and light.order > t.order:
+            found.append(
+                f"{path}:{light.line} declares {name} on :root after .dark does (line {t.line}), so the "
+                "dark value never reaches a page whose <html> is .dark. Declare the light value before the "
+                ".dark block."
+            )
+    dark = {t.name: t.value for t in toks if t.scope == (DARK,)}
+    dark_os = {t.name: t.value for t in toks if t.scope == (DARK_MEDIA, DARK_OS)}
+    for name in sorted(set(dark) | set(dark_os)):
+        if dark.get(name) != dark_os.get(name):
+            found.append(
+                f"{path} sets {name} to {dark.get(name)!r} in .dark and {dark_os.get(name)!r} in the "
+                f"{DARK_MEDIA} block. The OS block repeats .dark, so make them equal."
+            )
+    return found
+
+
+# --------------------------------------------------------------------------
+# contrast: every semantic text role that carries meaning
+# --------------------------------------------------------------------------
+
+#: The semantic text roles that carry meaning. Each clears 4.5:1, the WCAG AA
+#: bar for text at any size, on every ground in GROUNDS, in both themes.
+TEXT_ROLES = (
+    "--foreground", "--card-foreground", "--popover-foreground", "--accent-foreground", "--secondary-foreground",
+    "--muted-foreground", "--muted", "--body", "--fg", "--tab-fg", "--app-link-fg", "--card-header-fg",
+    "--menu-item-fg", "--menu-group-label-fg", "--button-default-fg", "--input-placeholder",
+    "--link", "--link-hover", "--accent-text", "--gold-text",
+    "--error-ink", "--warning-ink", "--success-ink", "--info-ink", "--proven-ink", "--critical-ink",
+)
+
+#: The grounds a text role sits on: the page, a card or panel, a popover, a
+#: lifted row or wash, and a panel header.
+GROUNDS = ("--background", "--card", "--popover", "--muted-surface", "--hl", "--panel-head")
+
+#: Gold words sit on the page, a card, or a popover. The deep gold that sets
+#: them on paper (#8A7223) is 4.23:1 on a lifted row, so a link or an accent
+#: word on a lifted ground waits on a darker gold for words (#93).
+GOLD_ROLES = ("--link", "--link-hover", "--accent-text", "--gold-text")
+GOLD_GROUNDS = ("--background", "--card", "--popover")
+
+#: A text tone below 4.5:1, kept for marks that carry no meaning, such as a
+#: struck-through line. No class or rule sets words in it (#88).
+QUIET_TONES = ("dim",)
+
+#: The token files, in the order the kit's stylesheet imports them.
+TOKEN_STACK = (
+    "tokens/house-tokens.css", "tokens/house-tailwind.css", "tokens/house-text-scale.css", KIT_CSS,
+)
+
+_THEMES = {"light": {LIGHT: 1}, "dark": {LIGHT: 1, DARK: 1}}
+
+
+def theme_values(root: Path = ROOT) -> dict[str, dict[str, str]]:
+    """Each custom property's resolved value in the light and the dark theme, with every var() substituted."""
+    toks: list[Token] = []
+    for rel in TOKEN_STACK:
+        toks += tokens((root / rel).read_text())
+    out = {}
+    for theme, blocks in _THEMES.items():
+        raw: dict[str, tuple[int, str]] = {}
+        for order, t in enumerate(toks):
+            if len(t.scope) != 1 or t.scope[0] not in blocks:
+                continue
+            raw[t.name] = (order, t.value)
+        def resolve(value: str, depth: int = 0) -> str:
+            if depth > 40:
+                return value
+            def sub(m: re.Match[str]) -> str:
+                name, fallback = m.group(1), m.group(2)
+                if name in raw:
+                    return resolve(raw[name][1], depth + 1)
+                return resolve(fallback, depth + 1) if fallback is not None else ""
+            prev = None
+            while prev != value:
+                prev, value = value, _VAR_REF.sub(sub, value)
+            return " ".join(value.split())
+        out[theme] = {name: resolve(v) for name, (_o, v) in raw.items()}
+    return out
+
+
+_VAR_REF = re.compile(r"var\(\s*(--[\w-]+)\s*(?:,\s*([^()]*(?:\([^()]*\)[^()]*)*))?\)")
+
+
+def to_hex(value: str) -> str | None:
+    """A resolved colour as a hex: a hex, an `oklch()`, or a `color-mix()` of two of them. None for anything else."""
+    import color as C
+
+    v = value.strip()
+    if re.fullmatch(r"#[0-9a-fA-F]{6}", v):
+        return v.upper()
+    if re.fullmatch(r"#[0-9a-fA-F]{3}", v):
+        return "#" + "".join(ch * 2 for ch in v[1:]).upper()
+    m = re.fullmatch(r"oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)", v)
+    if m:
+        return C.oklch_hex(float(m.group(1)), float(m.group(2)), float(m.group(3))).upper()
+    m = re.fullmatch(r"color-mix\(\s*in\s+(srgb|oklab|oklch)\s*,\s*(.+?)\s+([\d.]+)%\s*,\s*(.+?)(?:\s+([\d.]+)%)?\s*\)", v)
+    if m:
+        a, b = to_hex(m.group(2)), to_hex(m.group(4))
+        if not a or not b:
+            return None
+        p = float(m.group(3)) / 100
+        if m.group(1) == "srgb":
+            ra, rb = C.hex_to_rgb(a), C.hex_to_rgb(b)
+            return C.rgb_to_hex(*(x * p + y * (1 - p) for x, y in zip(ra, rb))).upper()
+        la, lb = C.rgb_to_oklab(*C.hex_to_rgb(a)), C.rgb_to_oklab(*C.hex_to_rgb(b))
+        mixed = tuple(x * p + y * (1 - p) for x, y in zip(la, lb))
+        return C.rgb_to_hex(*C.oklab_to_rgb(*mixed)).upper()
+    return None
+
+
+def quiet_uses(text: str, kind: str) -> list[tuple[int, str]]:
+    """Each place a file sets words in a quiet tone: a `text-dim` class or a `color: var(--dim)` rule, comments left out."""
+    quiet = "|".join(QUIET_TONES)
+    text_class = re.compile(rf"(?<![\w-])(?:[\w-]+:)*text-(?:{quiet})(?![\w-])")
+    css_color = re.compile(rf"(?<![\w-])color\s*:\s*var\(--(?:{quiet})\)")
+    bare = strip_comments(text) if kind == "css" else strip_script_comments(text) if kind == "script" else text
+    return [(_line(bare, m.start()), m.group(0)) for m in [*text_class.finditer(bare), *css_color.finditer(bare)]]
+
+
+def contrast_problems(root: Path = ROOT) -> list[str]:
+    """Each text role below 4.5:1 on a ground, and each quiet tone set as a word's colour in the scope."""
+    import color as C
+
+    found = []
+    values = theme_values(root)
+    for theme, v in values.items():
+        for role in TEXT_ROLES:
+            fg = to_hex(v.get(role, ""))
+            if fg is None:
+                found.append(f"{KIT_CSS}: {role} resolves to {v.get(role)!r} in the {theme} theme, which the contrast "
+                             "check cannot read as a colour")
+                continue
+            for ground in GOLD_GROUNDS if role in GOLD_ROLES else GROUNDS:
+                bg = to_hex(v.get(ground, ""))
+                if bg is None:
+                    continue
+                ratio = C.contrast(fg, bg)
+                if ratio < 4.5:
+                    found.append(f"{KIT_CSS}: {role} ({fg}) is {ratio:.2f}:1 on {ground} ({bg}) in the {theme} theme, "
+                                 "below the 4.5:1 a word that carries meaning needs")
+    for kind, f in scanned_files(root):
+        rel = f.relative_to(root).as_posix()
+        text = f.read_text()
+        found += [
+            f"{rel}:{line} sets words in {use}, a tone below 4.5:1. Use text-muted-foreground or "
+            "var(--muted-foreground) (var(--muted) on a kit page) for a word that carries meaning"
+            for line, use in quiet_uses(text, kind)
+        ]
+    return found
+
+
 def check(path: Path = ROOT / KIT_CSS, root: Path = ROOT) -> list[str]:
     """The guard's problems, as `build/build.py --check` prints them."""
     hits, stale = literals(path.read_text())
+    problems_semantic = semantic_problems(path.read_text())
     problems = [
         f"{KIT_CSS}:{h.line} writes {h.prop}: {h.value} as a literal. Read {h.use} instead, "
         "or add it to KEEP in build/css_literals.py with the reason it stays."
@@ -519,11 +1075,16 @@ def check(path: Path = ROOT / KIT_CSS, root: Path = ROOT) -> list[str]:
         for h in sizes
     ]
     problems += [
+        f"{h.path}:{h.line} sets {h.prop} {h.value}, a {GROUP_WORDS[h.group]} the tokens do not set. "
+        f"Use {h.use} instead."
+        for h in style_hits(root)
+    ]
+    problems += [
         f"build/css_literals.py keeps {k.group}: {k.value} for {k.path}, but that file no longer writes it. "
         "Remove the entry from KEEP."
         for k in stale + [k for k in KEEP if k.path != KIT_CSS and k not in used]
     ]
-    return problems + sdlc_step_problems(root)
+    return problems + problems_semantic + contrast_problems(root) + sdlc_step_problems(root)
 
 
 def summary() -> list[str]:
@@ -534,14 +1095,24 @@ def summary() -> list[str]:
         return f", apart from {n} kept {what}{'s' if n != 1 else ''}" if n else ""
 
     return [
-        f"{KIT_CSS} reads every corner, shadow, font size, and heading line height from a token"
+        f"{KIT_CSS} reads every colour, corner, shadow, space, font size, and heading line height from a token"
         + kept(kit, "literal"),
-        f"{len(scanned_files())} files in ui/src, sdlc/public, pwa/, and the kit's pages set every font size "
-        "from a token" + kept(other, "size"),
+        f"{KIT_CSS} gives each semantic token one definition per theme",
+        f"{len(scanned_files())} files in ui/src, sdlc/public, pwa/, and the kit's pages set every colour, corner, "
+        f"shadow, space, and font size from a token" + kept(other, "size")
+        + (f", apart from {len(EXEMPT)} exempt file{'s' if len(EXEMPT) != 1 else ''}" if EXEMPT else ""),
     ]
 
 
 if __name__ == "__main__":
+    if "--report" in sys.argv[1:]:
+        counts = report()
+        print(f"{'scope':32} " + " ".join(f"{g:>13}" for g in STYLE_GROUPS) + "  total")
+        for scope, row in counts.items():
+            print(f"{scope:32} " + " ".join(f"{row.get(g, 0):>13}" for g in STYLE_GROUPS) + f"  {sum(row.values()):>5}")
+        print(f"{'total':32} " + " ".join(f"{sum(r.get(g, 0) for r in counts.values()):>13}" for g in STYLE_GROUPS)
+              + f"  {sum(sum(r.values()) for r in counts.values()):>5}")
+        sys.exit(0)
     found = check()
     for p in found:
         print("problem:", p)

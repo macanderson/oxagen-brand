@@ -149,7 +149,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     <th
       ref={ref}
       className={cn(
-        "whitespace-nowrap bg-card px-[var(--table-pad-x)] py-[var(--table-pad-y)] text-left align-middle text-xs font-semibold uppercase tracking-[0.09em] text-dim",
+        "whitespace-nowrap bg-card px-[var(--table-pad-x)] py-[var(--table-pad-y)] text-left align-middle text-xs font-semibold uppercase tracking-[0.09em] text-muted-foreground",
         numeric && "text-right tabular-nums",
         className,
       )}
@@ -212,7 +212,7 @@ const TableGroupRow = React.forwardRef<HTMLTableRowElement, TableGroupRowProps>(
     >
       <td
         colSpan={colSpan}
-        className="whitespace-nowrap bg-hl px-[var(--table-pad-x)] py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-dim"
+        className="whitespace-nowrap bg-hl px-[var(--table-pad-x)] py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground"
       >
         {children}
       </td>

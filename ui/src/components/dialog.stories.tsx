@@ -81,7 +81,7 @@ export const WithUnderlineTabs: Story = {
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="general" className="flex min-h-0 flex-1 flex-col">
-          <TabsList variant="underline" className="shrink-0 px-[18px]">
+          <TabsList variant="underline" className="shrink-0 px-4.5">
             <TabsTab value="general">General</TabsTab>
             <TabsTab value="steering">Steering</TabsTab>
             <TabsTab value="spend">Spend</TabsTab>

@@ -31,7 +31,7 @@ describe("Stat render", () => {
       expect(tile.className).toContain(token);
     }
     expect(screen.getByText("Runs").className).toContain("uppercase");
-    expect(screen.getByText("Runs").className).toContain("text-dim");
+    expect(screen.getByText("Runs").className).toContain("text-muted-foreground");
   });
 
   it("value uses tabular numerals at the tile's figure size", () => {

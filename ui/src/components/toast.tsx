@@ -188,7 +188,7 @@ function ToastList() {
           </div>
           <ToastPrimitive.Close
             aria-label="Close"
-            className="-mt-0.5 grid size-[22px] flex-none place-items-center rounded-[6px] text-muted-foreground transition-colors hover:bg-hl hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="-mt-0.5 grid size-[22px] flex-none place-items-center rounded-md text-muted-foreground transition-colors hover:bg-hl hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <XIcon aria-hidden="true" className="size-3.5" />
           </ToastPrimitive.Close>

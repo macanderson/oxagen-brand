@@ -25,8 +25,9 @@ describe("badgeVariants — class map", () => {
     expect(cls).not.toContain("bg-secondary");
     expect(cls).not.toContain("font-mono");
   });
-  it("secondary variant includes bg-secondary", () => {
-    expect(badgeVariants({ variant: "secondary" })).toContain("bg-secondary");
+  it("secondary variant reads the badge tokens", () => {
+    expect(badgeVariants({ variant: "secondary" })).toContain("bg-badge-bg");
+    expect(badgeVariants({ variant: "secondary" })).toContain("text-badge-fg");
   });
   it("destructive variant includes bg-destructive", () => {
     expect(badgeVariants({ variant: "destructive" })).toContain(
@@ -81,7 +82,7 @@ describe("badgeVariants — class map", () => {
     expect(badgeVariants({ variant: "quiet" })).toContain(
       "text-muted-foreground",
     );
-    expect(badgeVariants({ variant: "chip" })).toContain("border-border");
+    expect(badgeVariants({ variant: "chip" })).toContain("border-badge-border");
     expect(badgeVariants({ variant: "chip" })).toContain("font-normal");
     expect(badgeVariants({ variant: "label" })).toContain("rounded-full");
   });
@@ -99,7 +100,7 @@ describe("badgeVariants — class map", () => {
   it("default size reads the micro step with 7px sides", () => {
     const cls = badgeVariants({ size: "default" });
     expect(cls).toContain("text-sm");
-    expect(cls).toContain("px-[7px]");
+    expect(cls).toContain("px-1.75");
   });
   it("lg size includes text-sm with px-2.5", () => {
     const cls = badgeVariants({ size: "lg" });
@@ -119,7 +120,7 @@ describe("Badge — render", () => {
   it("applies variant class", () => {
     render(<Badge variant="secondary">Beta</Badge>);
     const el = screen.getByText("Beta");
-    expect(el.className).toContain("bg-secondary");
+    expect(el.className).toContain("bg-badge-bg");
   });
 
   it("applies size class", () => {

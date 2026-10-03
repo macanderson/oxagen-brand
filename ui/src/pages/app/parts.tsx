@@ -1,8 +1,9 @@
 // The product app's small shared parts, copied from oxageninc/product
 // apps/app/src/ui/ (badge.tsx, avatar.tsx, table.tsx, page-header.tsx,
 // route-tabs.tsx) at fad620bcef (2026-10-02). Each keeps the app's markup and
-// classes. What the app reads from its data layer or its router is a prop
-// here: a tab is a link that calls `onSelect` in place of changing the URL.
+// classes, except that each font size, space, and corner reads the nearest kit
+// token. What the app reads from its data layer or its router is a prop here:
+// a tab is a link that calls `onSelect` in place of changing the URL.
 import type * as React from "react";
 import { cn } from "../../lib/utils";
 import { cell, eyebrow as eyebrowStyle, headCell, tabCount, tabLink } from "./styles";
@@ -23,7 +24,7 @@ const TONE: Record<BadgeTone, string> = {
 };
 
 const badgeBase =
-  "inline-flex items-center gap-[5px] whitespace-nowrap rounded-md border px-[7px] py-0.5 text-[11px] font-semibold leading-normal tracking-[0.02em]";
+  "inline-flex items-center gap-1.25 whitespace-nowrap rounded-md border px-1.75 py-0.5 text-sm font-semibold leading-normal tracking-[0.02em]";
 
 /** A dot and a word in a tinted pill, so the state survives greyscale. */
 export function Badge({
@@ -44,7 +45,7 @@ export function Badge({
   return (
     <span
       title={title}
-      className={cn(badgeBase, TONE[tone], mono && "font-mono text-[10.5px] font-medium lowercase")}
+      className={cn(badgeBase, TONE[tone], mono && "font-mono text-xs font-medium lowercase")}
     >
       {dot ? (
         <span
@@ -68,6 +69,14 @@ const AVATAR_TONE: Record<AvatarTone, string> = {
   gold: "bg-gold text-on-gold border-gold",
   "gold-deep": "bg-gold-deep text-on-gold-deep border-gold-deep",
 };
+
+/**
+ * A length that follows the app base: `px` at the shipped 14px base, and the
+ * same share of the base when the theme editor or a site moves it.
+ */
+function baseLength(px: number): string {
+  return `calc(var(--ox-a-base) * ${Number((px / 14).toFixed(4))})`;
+}
 
 /** One letter fills half the tile, two letters a little less. */
 function initialsScale(letters: number): number {
@@ -93,14 +102,14 @@ export function Avatar({
   /** A designed avatar's glyph, in place of the initials. */
   glyph?: React.ReactNode;
 }) {
-  const radius = shape === "person" ? "rounded-full" : "rounded-[27%]";
+  const radius = shape === "person" ? "rounded-full" : "rounded-lg";
   return (
     <span
       aria-hidden="true"
       style={{
-        width: size,
-        height: size,
-        fontSize: Math.round(size * initialsScale(initials.length)),
+        width: baseLength(size),
+        height: baseLength(size),
+        fontSize: baseLength(Math.round(size * initialsScale(initials.length))),
         letterSpacing: "0.02em",
       }}
       className={cn(
@@ -139,7 +148,7 @@ export function Table({
 }) {
   return (
     <div className="min-w-0 overflow-x-auto">
-      <table aria-label={label} className="w-full min-w-[560px] border-collapse text-[13px]">
+      <table aria-label={label} className="w-full min-w-[560px] border-collapse text-base">
         <thead>
           <tr className="border-b border-border">
             {columns.map((column) => (
@@ -181,7 +190,7 @@ export function PageHeader({
   figure?: React.ReactNode;
 }) {
   return (
-    <header className="flex flex-col gap-3 pb-[18px] sm:flex-row sm:items-start sm:justify-between">
+    <header className="flex flex-col gap-3 pb-4.5 sm:flex-row sm:items-start sm:justify-between">
       <div className="flex min-w-0 flex-col gap-1">
         {eyebrow ? <p className={`${eyebrowStyle} mb-1`}>{eyebrow}</p> : null}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -192,7 +201,7 @@ export function PageHeader({
           </h1>
           {figure}
         </div>
-        {description ? <p className="max-w-[70ch] text-[13px] text-muted-foreground">{description}</p> : null}
+        {description ? <p className="max-w-[70ch] text-base text-muted-foreground">{description}</p> : null}
         {meta ? <div className="flex flex-wrap items-center gap-2 pt-1">{meta}</div> : null}
       </div>
       {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}

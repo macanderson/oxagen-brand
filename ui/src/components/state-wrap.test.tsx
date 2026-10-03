@@ -42,13 +42,13 @@ describe("StateWrap", () => {
       "grid",
       "place-items-center",
       "px-5",
-      "py-[60px]",
+      "py-15",
     );
     const heading = within(state).getByRole("heading", {
       level: 2,
       name: "No runs yet",
     });
-    expect(heading).toHaveClass("mb-[7px]", "text-(length:--ox-a-h3)", "font-semibold");
+    expect(heading).toHaveClass("mb-1.75", "text-(length:--ox-a-h3)", "font-semibold");
     expect(state).toHaveAttribute("aria-labelledby", heading.id);
     expect(heading.id).toBe("probe-title");
     const body = within(state).getByText(
@@ -59,7 +59,7 @@ describe("StateWrap", () => {
     expect(
       within(state).getByRole("button", { name: "Register an agent" })
         .parentElement,
-    ).toHaveClass("flex", "flex-wrap", "justify-center", "gap-[9px]");
+    ).toHaveClass("flex", "flex-wrap", "justify-center", "gap-2.25");
   });
 
   it("draws each tone with exactly one border colour", () => {
@@ -149,7 +149,7 @@ describe("StateWrap", () => {
     render(<StateWrap testId="bare" tone="neutral" title="Nothing here" />);
     const state = screen.getByTestId("bare");
     expect(state.querySelector("p")).toBeNull();
-    expect(state.querySelector(".gap-\\[9px\\]")).toBeNull();
+    expect(state.querySelector(".gap-2\\.25")).toBeNull();
   });
 
   it("draws what follows the actions: the trace line and the facts, on the design's recipes", () => {
@@ -173,7 +173,7 @@ describe("StateWrap", () => {
     expect(within(state).getByText("2026-09-11 09:16:04Z")).toHaveClass(
       "font-mono",
       "text-sm",
-      "text-dim",
+      "text-muted-foreground",
       "mt-4",
     );
     expect(state.querySelector("dl")).toHaveClass(

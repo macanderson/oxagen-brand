@@ -157,7 +157,7 @@ export function RangeField({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-[var(--ox-gold)]"
+        className="w-full accent-gold"
       />
     </div>
   );

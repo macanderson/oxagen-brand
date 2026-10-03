@@ -20,6 +20,7 @@ import glyphs as G
 import surfaces as SF
 from build import AD_COPY, CONTENT, TAGLINES, ad_svg
 from marks import (
+    ADAPTIVE_STYLE,
     BRANDS,
     HIVE,
     HIVE_CELLS,
@@ -154,7 +155,7 @@ def misuse_panel(kind: str, brand: str) -> str:
         body = f'<path d="{plain} {gold}" fill="none" stroke="currentColor" stroke-width="1.5"/>'
     return (
         f'<svg viewBox="{vb}" role="img" aria-label="incorrect use" class="diagram">'
-        f"{body}<line x1=\"-20\" y1=\"-20\" x2=\"{w + 20:.0f}\" y2=\"{h + 20:.0f}\" stroke=\"#C0392B\" stroke-width=\"1.2\" opacity=\"0.55\"/></svg>"
+        f"{body}<line class=\"strike\" x1=\"-20\" y1=\"-20\" x2=\"{w + 20:.0f}\" y2=\"{h + 20:.0f}\" stroke-width=\"1.2\" opacity=\"0.55\"/></svg>"
     )
 
 
@@ -227,9 +228,36 @@ def favicon_row(brand: str) -> str:
     return f'<div class="fav-row">{cells}<div><img src="icons/{brand}-icon-180.png" width="64" height="64" alt="{brand} app icon"><span>180 · app</span></div></div>'
 
 
+TOKEN_HEX = {name: value for name, value, _ in C.TOKENS}
+
+
+def spec_layer() -> dict[str, str]:
+    """The specimen layer: each token's value as `--spec-<token>`, the same in both themes.
+
+    A swatch shows what a token is, whatever theme the page is in, so a
+    swatch, a fixed ink or paper plate, and a state badge read this layer.
+    The page's own chrome reads the theme variables from `pagecss`.
+    The names follow tokens/house-tokens.css without `--ox-`: a state's
+    mark is `st-<state>` on ink and `st-<state>-ink` on paper.
+    """
+    v = {f"spec-{name}": value for name, value, _ in C.TOKENS}
+    for name, dark, light, _ in C.STATES:
+        v[f"spec-st-{name}"] = dark
+        v[f"spec-st-{name}-ink"] = light
+        v[f"spec-st-{name}-text"] = C.STATE_TEXT[name]["dark"]
+        v[f"spec-st-{name}-text-ink"] = C.STATE_TEXT[name]["light"]
+    v["spec-gold-sheen"] = (
+        "linear-gradient(45deg,var(--spec-gold-deep) 0%,var(--spec-gold) 38%,"
+        "var(--spec-gold-bright) 56%,var(--spec-gold) 74%,var(--spec-gold-deep) 100%)"
+    )
+    # The misuse a gold glow shows: a blur, so it is a specimen and no shadow token.
+    v["spec-glow"] = "0 0 30px color-mix(in srgb,var(--spec-gold) 55%,transparent)"
+    return v
+
+
 def swatch_row(name: str, hexv: str, note: str) -> str:
     return (
-        f'<tr><td><span class="chip" style="background:{hexv}"></span></td>'
+        f'<tr><td><span class="chip" style="background:var(--spec-{name})"></span></td>'
         f'<td class="mono">--ox-{name}</td><td class="mono num">{hexv}</td>'
         f'<td class="num">{C.contrast(hexv, C.INK):.1f}<span class="unit">:1</span></td>'
         f'<td class="num">{C.contrast(hexv, C.PAPER):.1f}<span class="unit">:1</span></td>'
@@ -239,12 +267,7 @@ def swatch_row(name: str, hexv: str, note: str) -> str:
 
 def gold_card(label: str, hexv: str, note: str, *, sheen: bool = False) -> str:
     L, Cc, H = C.hex_to_oklch(hexv)
-    bg = f"background:{hexv}"
-    if sheen:
-        bg = (
-            f"background:linear-gradient(45deg,{C.GOLD_DEEP} 0%,{C.GOLD} 38%,"
-            f"{C.GOLD_BRIGHT} 56%,{C.GOLD} 74%,{C.GOLD_DEEP} 100%)"
-        )
+    bg = "background:var(--spec-gold-sheen)" if sheen else f"background:var(--spec-{label})"
     val = "sheen" if sheen else hexv
     lch = "" if sheen else f"<br>L {L:.2f} · C {Cc:.3f} · H {H:.0f}°"
     return (
@@ -254,29 +277,32 @@ def gold_card(label: str, hexv: str, note: str, *, sheen: bool = False) -> str:
     )
 
 
-def ground_ladder(rows: list[tuple[str, str]]) -> str:
-    """One theme's surfaces, from the deepest to the heaviest rule."""
+def ground_ladder(names: list[str]) -> str:
+    """One theme's surfaces, from the deepest to the heaviest rule, each painted from its specimen token."""
     cells = "".join(
-        f'<div><i style="background:{v}"></i><b>{esc(n)}</b><span class="mono">{v}</span></div>' for n, v in rows
+        f'<div><i style="background:var(--spec-{n})"></i><b>{esc(n)}</b><span class="mono">{TOKEN_HEX[n]}</span></div>'
+        for n in names
     )
     return f'<div class="ladder">{cells}</div>'
 
 
 def text_rows() -> str:
     """The four text roles, set on each ground, with the contrast the build checks."""
-    roles = (
-        ("primary", C.PAPER_TEXT, C.INK_TEXT, "headings and the words that matter most"),
-        ("body", C.TEXT, C.TEXT_INK, "paragraphs and table cells"),
-        ("secondary", C.MUTED, C.MUTED_INK, "labels, captions, and help text"),
-        ("quietest", C.DIM, C.DIM_INK, "placeholders and decoration, never a word the reader needs"),
+    roles = (  # (role, token on ink, token on paper, use)
+        ("primary", "text", "text-ink", "headings and the words that matter most"),
+        ("body", "text-body", "text-ink-body", "paragraphs and table cells"),
+        ("secondary", "muted", "muted-ink", "labels, captions, and help text"),
+        ("quietest", "dim", "dim-ink", "placeholders and decoration, never a word the reader needs"),
     )
     out = []
-    for name, on_ink, on_paper, use in roles:
+    for name, ink_tok, paper_tok, use in roles:
+        on_ink, on_paper = TOKEN_HEX[ink_tok], TOKEN_HEX[paper_tok]
         out.append(
             f"<tr><td>{name}</td>"
-            f'<td><span class="tx-sample" style="background:{C.INK};color:{on_ink}">Aa {on_ink}</span>'
+            f'<td><span class="tx-sample" style="background:var(--spec-ink);color:var(--spec-{ink_tok})">Aa {on_ink}</span>'
             f' <span class="num">{C.contrast(on_ink, C.INK):.1f}<span class="unit">:1</span></span></td>'
-            f'<td><span class="tx-sample" style="background:{C.PAPER};color:{on_paper};border-color:{C.PAPER_BORDER}">Aa {on_paper}</span>'
+            f'<td><span class="tx-sample" style="background:var(--spec-paper);color:var(--spec-{paper_tok});'
+            f'border-color:var(--spec-paper-border)">Aa {on_paper}</span>'
             f' <span class="num">{C.contrast(on_paper, C.PAPER):.1f}<span class="unit">:1</span></span></td>'
             f'<td class="note">{esc(use)}</td></tr>'
         )
@@ -295,9 +321,9 @@ def state_rows() -> str:
     out = []
     for name, dark, light, use in C.STATES:
         out.append(
-            f"<tr><td>{state_badge(name, dark, C.STATE_TEXT[name]['dark'], C.INK, C.BORDER)}"
+            f"<tr><td>{state_badge(name, f'var(--spec-st-{name})', f'var(--spec-st-{name}-text)', 'var(--spec-ink)', 'var(--spec-border)')}"
             f'<br><span class="mono hex">dot {dark}<br>word {C.STATE_TEXT[name]["dark"]}</span></td>'
-            f"<td>{state_badge(name, light, C.STATE_TEXT[name]['light'], C.PAPER, C.PAPER_BORDER)}"
+            f"<td>{state_badge(name, f'var(--spec-st-{name}-ink)', f'var(--spec-st-{name}-text-ink)', 'var(--spec-paper)', 'var(--spec-paper-border)')}"
             f'<br><span class="mono hex">dot {light}<br>word {C.STATE_TEXT[name]["light"]}</span></td>'
             f'<td class="note">{esc(use)}</td></tr>'
         )
@@ -398,8 +424,6 @@ STEP_MULT = THEME["radius"]["steps"]
 RADIUS_STEPS = tuple((step, STEP_MULT[step], use) for step, use in _RADIUS_USE)
 UI_SHADOW = {"dark": PG.resolve(THEME["shadow"]["ui"]["ink"]), "light": PG.resolve(THEME["shadow"]["ui"]["paper"])}
 POP_SHADOW = {"dark": PG.resolve(THEME["shadow"]["pop"]["ink"]), "light": PG.resolve(THEME["shadow"]["pop"]["paper"])}
-#: The light theme restates the quiet shadow only when the theme gives paper its own.
-LIGHT_UI_SHADOW = "" if UI_SHADOW["light"] == UI_SHADOW["dark"] else f"--ui-shadow:{UI_SHADOW['light']};"
 POP_RING_PCT = {"dark": 10, "light": 5}  # the text colour, as a 1px ring
 SCRIM = {"dark": "oklch(0 0 0 / 0.6)", "light": "oklch(0.15 0.002 286 / 0.5)"}
 SCRIM_BLUR_PX = 3
@@ -417,7 +441,7 @@ def radius_px(mult: float) -> float:
 
 def radius_row() -> str:
     cells = "".join(
-        f'<div><i style="border-radius:{radius_px(m):.2f}px"></i><b>rounded-{s}</b>'
+        f'<div><i style="border-radius:var(--radius-{s})"></i><b>rounded-{s}</b>'
         f'<span class="mono">{radius_px(m):.0f}px, base × {m:g}</span><span>{esc(use)}</span></div>'
         for s, m, use in RADIUS_STEPS
     )
@@ -449,7 +473,13 @@ def plate(svg: str, cap: str, *, cls: str = "") -> str:
 
 
 def inline(svg: str) -> str:
-    """An SVG file body made safe to inline: no width/height, so CSS sizes it."""
+    """An SVG file body made safe to inline: no width/height, so CSS sizes it.
+
+    An adaptive file's own `<style>` sets the colour on `:root`, which inline
+    is the page's `<html>`, so it is dropped: the letters take the plate's
+    colour through `currentColor` instead.
+    """
+    svg = svg.replace(ADAPTIVE_STYLE, "")
     head, rest = svg.split(">", 1)
     head = head.replace('width="', 'data-w="').replace('height="', 'data-h="')
     return head + ">" + rest
@@ -467,61 +497,59 @@ def css() -> str:
     return f"""
 {FONT_FACES}
 :root{{
-  --ink:{C.INK};--void:{C.VOID};--panel:{C.PANEL};--hl:{C.HL};--border:{C.BORDER};--rule:{C.RULE};
-  --fg:{C.PAPER_TEXT};--body:{C.TEXT};--muted:{C.MUTED};--dim:{C.DIM};
-  --gold:{C.GOLD};--gold-bright:{C.GOLD_BRIGHT};--gold-deep:{C.GOLD_DEEP};--accent-text:{C.GOLD};
-  --paper:{C.PAPER};--card:{C.PANEL};
-  --shadow:0 1px 0 rgba(255,255,255,.03),0 18px 44px rgba(0,0,0,.5);
+{PG._block(PG._dark())}
   --ox-font:{T.TEXT_FACE.css_stack};
   --ox-font-display:{T.DISPLAY_FACE.css_stack};
   --ox-font-mono:{T.MONASPACE_NEON.css_stack};
 {PG._block(PG.type_sizes())}
-  --ui-shadow:{UI_SHADOW["dark"]};--pop-shadow:{POP_SHADOW["dark"]};--scrim:{SCRIM["dark"]};
+{PG._block(PG._shape_fixed())}
+  --radius:{SITE_RADIUS_PX:g}px;
+{PG._block(PG._shape("ink"))}
+  --scrim:{SCRIM["dark"]};
   --pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["dark"]}%,transparent);
+{PG._block(spec_layer())}
 }}
 @media(prefers-color-scheme:light){{:root:not([data-theme="dark"]){{
-  --ink:{C.PAPER};--void:{C.PAPER_VOID};--panel:{C.PAPER_PANEL};--hl:{C.PAPER_HL};--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
-  --fg:{C.INK_TEXT};--body:{C.TEXT_INK};--muted:{C.MUTED_INK};--dim:{C.DIM_INK};--accent-text:{C.GOLD_DEEP};
-  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);
-  --pop-shadow:{POP_SHADOW["light"]};--scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);{LIGHT_UI_SHADOW}}}}}
+{PG._block(PG._light(), "    ")}
+{PG._block(PG._shape("paper"), "    ")}
+    --scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);}}}}
 :root[data-theme="light"]{{
-  --ink:{C.PAPER};--void:{C.PAPER_VOID};--panel:{C.PAPER_PANEL};--hl:{C.PAPER_HL};--border:{C.PAPER_BORDER};--rule:{C.PAPER_RULE};
-  --fg:{C.INK_TEXT};--body:{C.TEXT_INK};--muted:{C.MUTED_INK};--dim:{C.DIM_INK};--accent-text:{C.GOLD_DEEP};
-  --card:{C.PAPER_PANEL};--shadow:0 1px 0 rgba(255,255,255,.7),0 18px 44px rgba(9,9,11,.08);
-  --pop-shadow:{POP_SHADOW["light"]};--scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);{LIGHT_UI_SHADOW}}}
+{PG._block(PG._light())}
+{PG._block(PG._shape("paper"))}
+  --scrim:{SCRIM["light"]};--pop-ring:color-mix(in srgb,var(--fg) {POP_RING_PCT["light"]}%,transparent);}}
 *,*::before,*::after{{box-sizing:border-box}}
-html{{scroll-behavior:smooth;scroll-padding-top:78px}}
+html{{scroll-behavior:smooth;scroll-padding-top:calc(var(--space) * 19.5)}}
 @media(prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
 body{{margin:0;background:var(--ink);color:var(--fg);font-family:var(--ox-font);font-size:var(--m-body);line-height:1.65;-webkit-font-smoothing:antialiased}}
 .bar{{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--ink) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}}
-.bar-in{{max-width:1180px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:20px}}
+.bar-in{{max-width:1180px;margin:0 auto;padding:calc(var(--space) * 3) calc(var(--space) * 7);display:flex;align-items:center;gap:calc(var(--space) * 5)}}
 .bar svg{{height:20px;width:auto;display:block}}
-.bar nav{{display:flex;gap:16px;margin-left:auto;flex-wrap:wrap;align-items:center}}
-.bar a,.bar button{{color:var(--muted);text-decoration:none;font-size:var(--a-body);font-weight:500;letter-spacing:.02em;padding:4px 0;border:0;background:none;font-family:inherit;cursor:pointer;border-bottom:1px solid transparent}}
+.bar nav{{display:flex;gap:calc(var(--space) * 4);margin-left:auto;flex-wrap:wrap;align-items:center}}
+.bar a,.bar button{{color:var(--muted);text-decoration:none;font-size:var(--a-body);font-weight:500;letter-spacing:.02em;padding:calc(var(--space) * 1) 0;border:0;background:none;font-family:inherit;cursor:pointer;border-bottom:1px solid transparent}}
 .bar a:hover,.bar button:hover{{color:var(--fg);border-bottom-color:var(--accent-text)}}
-.wrap{{max-width:1180px;margin:0 auto;padding:0 28px}}
-section{{padding:72px 0;border-top:1px solid var(--rule)}}
+.wrap{{max-width:1180px;margin:0 auto;padding:0 calc(var(--space) * 7)}}
+section{{padding:calc(var(--space) * 18) 0;border-top:1px solid var(--rule)}}
 section:first-of-type{{border-top:0}}
-.eyebrow{{font-size:var(--a-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}}
+.eyebrow{{font-size:var(--a-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 calc(var(--space) * 3)}}
 h1,h2,h3{{font-family:var(--ox-font-display)}}
-h1{{font-size:clamp(var(--m-h2),6vw,var(--m-h1));line-height:1.02;letter-spacing:-.02em;font-weight:700;margin:0 0 20px}}
-h2{{font-size:var(--m-h2);line-height:1.1;letter-spacing:-.015em;font-weight:700;margin:0 0 14px}}
-h3{{font-size:var(--m-h4);font-weight:600;margin:32px 0 10px}}
-p{{max-width:66ch;color:var(--body);margin:0 0 14px}}
+h1{{font-size:clamp(var(--m-h2),6vw,var(--m-h1));line-height:1.02;letter-spacing:-.02em;font-weight:700;margin:0 0 calc(var(--space) * 5)}}
+h2{{font-size:var(--m-h2);line-height:1.1;letter-spacing:-.015em;font-weight:700;margin:0 0 calc(var(--space) * 3.5)}}
+h3{{font-size:var(--m-h4);font-weight:600;margin:calc(var(--space) * 8) 0 calc(var(--space) * 2.5)}}
+p{{max-width:66ch;color:var(--body);margin:0 0 calc(var(--space) * 3.5)}}
 p.lead{{font-size:var(--m-h4);line-height:1.5;color:var(--fg);max-width:56ch}}
 .mono{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features}}}
 .muted{{color:var(--muted)}}
 a{{color:var(--accent-text)}}
-code{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};background:var(--hl);padding:.1em .35em;border-radius:4px}}
-pre{{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;font-size:var(--a-body);line-height:1.55;color:var(--body)}}
+code{{font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};background:var(--hl);padding:calc(var(--space) * 0.4) calc(var(--space) * 1.4);border-radius:var(--radius-sm)}}
+pre{{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-xl);padding:calc(var(--space) * 4) calc(var(--space) * 4.5);overflow-x:auto;font-size:var(--a-body);line-height:1.55;color:var(--body)}}
 pre code{{background:none;padding:0}}
-.grid{{display:grid;gap:18px}}
+.grid{{display:grid;gap:calc(var(--space) * 4.5)}}
 .g2{{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}}
 .g3{{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
 .g4{{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}}
-.plate{{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:34px 28px;display:flex;align-items:center;justify-content:center;min-height:150px;overflow:hidden;color:var(--fg)}}
-.plate.ink{{background:{C.INK};color:{C.PAPER_TEXT};border-color:{C.BORDER}}}
-.plate.paper{{background:{C.PAPER};color:{C.INK_TEXT};border-color:{C.PAPER_BORDER}}}
+.plate{{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-card);padding:calc(var(--space) * 8.5) calc(var(--space) * 7);display:flex;align-items:center;justify-content:center;min-height:150px;overflow:hidden;color:var(--fg)}}
+.plate.ink{{background:var(--spec-ink);color:var(--spec-text);border-color:var(--spec-border)}}
+.plate.paper{{background:var(--spec-paper);color:var(--spec-text-ink);border-color:var(--spec-paper-border)}}
 .plate.tight{{padding:0;min-height:0;display:block}}
 .plate.tight svg{{display:block;width:100%;height:auto}}
 .plate>svg{{max-width:100%;height:auto}}
@@ -530,78 +558,79 @@ pre code{{background:none;padding:0}}
 .plate.icon>svg{{width:120px;height:120px}}
 .plate.sp>svg{{width:88px;height:88px}}
 .m0{{margin:0}}
-.cap{{font-size:var(--a-micro);color:var(--muted);margin-top:8px;letter-spacing:.01em}}
+.cap{{font-size:var(--a-micro);color:var(--muted);margin-top:calc(var(--space) * 2);letter-spacing:.01em}}
 .diagram{{width:100%;height:auto;color:var(--fg);font-family:var(--ox-font-mono)}}
-.hero{{padding:90px 0 60px}}
-.hero .plates{{margin-top:36px}}
+.diagram .strike{{stroke:var(--destructive)}}
+.hero{{padding:calc(var(--space) * 22.5) 0 calc(var(--space) * 15)}}
+.hero .plates{{margin-top:calc(var(--space) * 9)}}
 table{{border-collapse:collapse;width:100%;font-size:var(--a-body)}}
-th,td{{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}}
+th,td{{text-align:left;padding:calc(var(--space) * 2.5) calc(var(--space) * 3);border-bottom:1px solid var(--border);vertical-align:middle}}
 th{{font-size:var(--a-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}}
 td.num{{font-variant-numeric:tabular-nums}}
-.unit{{color:var(--dim);font-size:var(--a-micro)}}
-.chip{{display:inline-block;width:28px;height:28px;border-radius:7px;border:1px solid var(--border)}}
+.unit{{color:var(--muted);font-size:var(--a-micro)}}
+.chip{{display:inline-block;width:28px;height:28px;border-radius:var(--radius-lg);border:1px solid var(--border)}}
 .note{{color:var(--muted)}}
-.gold-card{{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}}
+.gold-card{{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-card);overflow:hidden}}
 .gold-sw{{height:110px}}
-.gold-meta{{padding:14px 16px;display:grid;gap:4px;font-size:var(--a-body);color:var(--muted)}}
+.gold-meta{{padding:calc(var(--space) * 3.5) calc(var(--space) * 4);display:grid;gap:calc(var(--space) * 1);font-size:var(--a-body);color:var(--muted)}}
 .gold-meta b{{color:var(--fg);font-size:var(--m-body)}}
-.rules{{list-style:none;padding:0;margin:0;display:grid;gap:12px;max-width:70ch}}
-.rules li{{padding-left:26px;position:relative;color:var(--body)}}
+.rules{{list-style:none;padding:0;margin:0;display:grid;gap:calc(var(--space) * 3);max-width:70ch}}
+.rules li{{padding-left:calc(var(--space) * 6.5);position:relative;color:var(--body)}}
 .rules li::before{{content:"*";position:absolute;left:0;top:-2px;color:var(--gold);font-weight:700;font-size:var(--a-h2);line-height:1}}
 .rules b{{color:var(--fg)}}
-.type-row{{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--border)}}
+.type-row{{display:grid;grid-template-columns:120px 1fr;gap:calc(var(--space) * 4);align-items:baseline;padding:calc(var(--space) * 3) 0;border-bottom:1px solid var(--border)}}
 .type-row .mono{{color:var(--muted);font-size:var(--a-micro)}}
-.bad .cap::before{{content:"✕  ";color:#C0392B}}
-.files{{display:grid;grid-template-columns:200px 1fr;gap:8px 20px;font-size:var(--a-body)}}
+.bad .cap::before{{content:"✕  ";color:var(--destructive-text)}}
+.files{{display:grid;grid-template-columns:200px 1fr;gap:calc(var(--space) * 2) calc(var(--space) * 5);font-size:var(--a-body)}}
 .files .mono{{color:var(--fg)}}
 .files span{{color:var(--muted)}}
-footer{{padding:48px 0 80px;border-top:1px solid var(--rule);color:var(--muted);font-size:var(--a-body)}}
+footer{{padding:calc(var(--space) * 12) 0 calc(var(--space) * 20);border-top:1px solid var(--rule);color:var(--muted);font-size:var(--a-body)}}
 .shimmer-demo svg{{width:min(100%,420px);height:auto}}
-.favs{{display:flex;gap:28px;flex-wrap:wrap;margin-top:14px}}
-.fav-row{{display:flex;align-items:flex-end;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px}}
+.favs{{display:flex;gap:calc(var(--space) * 7);flex-wrap:wrap;margin-top:calc(var(--space) * 3.5)}}
+.fav-row{{display:flex;align-items:flex-end;gap:calc(var(--space) * 3.5);background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-card);padding:calc(var(--space) * 4.5) calc(var(--space) * 5)}}
 .fav-row img{{display:block;image-rendering:auto}}
-.fav-row span{{font-size:var(--a-micro);color:var(--muted);display:block;text-align:center;margin-top:6px}}
-.ladder{{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:14px 0 8px}}
+.fav-row span{{font-size:var(--a-micro);color:var(--muted);display:block;text-align:center;margin-top:calc(var(--space) * 1.5)}}
+.ladder{{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:calc(var(--space) * 2.5);margin:calc(var(--space) * 3.5) 0 calc(var(--space) * 2)}}
 @media(max-width:640px){{.ladder{{grid-template-columns:repeat(3,minmax(0,1fr))}}}}
-.ladder div,.radius-row div{{display:grid;gap:4px;font-size:var(--a-micro);color:var(--muted);align-content:start}}
-.ladder i{{display:block;height:64px;border-radius:10px;border:1px solid var(--rule)}}
+.ladder div,.radius-row div{{display:grid;gap:calc(var(--space) * 1);font-size:var(--a-micro);color:var(--muted);align-content:start}}
+.ladder i{{display:block;height:64px;border-radius:var(--radius-xl);border:1px solid var(--rule)}}
 .ladder b,.radius-row b{{color:var(--fg);font-weight:600;font-size:var(--a-body)}}
-.tx-sample{{display:inline-block;padding:4px 10px;border-radius:8px;border:1px solid {C.BORDER};font-family:var(--ox-font-mono);font-size:var(--a-body)}}
-.stbadge{{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;border-radius:999px;border:1px solid;font-size:var(--a-micro);font-weight:500}}
+.tx-sample{{display:inline-block;padding:calc(var(--space) * 1) calc(var(--space) * 2.5);border-radius:var(--radius-lg);border:1px solid var(--spec-border);font-family:var(--ox-font-mono);font-size:var(--a-body)}}
+.stbadge{{display:inline-flex;align-items:center;gap:calc(var(--space) * 1.75);padding:calc(var(--space) * 0.75) calc(var(--space) * 2.75);border-radius:999px;border:1px solid;font-size:var(--a-micro);font-weight:500}}
 .stbadge i{{width:8px;height:8px;border-radius:50%;display:block}}
 .hex{{font-size:var(--a-micro);color:var(--muted);line-height:1.5}}
-.shapes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:14px 0 22px}}
-.shape{{padding:14px 16px;border-radius:12px;background:var(--panel);color:var(--fg);font-size:var(--a-body);font-weight:500}}
+.shapes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:calc(var(--space) * 3.5);margin:calc(var(--space) * 3.5) 0 calc(var(--space) * 5.5)}}
+.shape{{padding:calc(var(--space) * 3.5) calc(var(--space) * 4);border-radius:var(--radius);background:var(--panel);color:var(--fg);font-size:var(--a-body);font-weight:500}}
 .shape span{{display:block;color:var(--muted);font-size:var(--a-micro);font-weight:400}}
 .shape.held{{border:3px double var(--fg)}}
 .shape.pending{{border:1.5px dashed var(--fg)}}
 .shape.broken{{border:1px solid var(--fg)}}
-.face-card{{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;display:grid;gap:6px;font-size:var(--a-body);color:var(--muted);align-content:start}}
-.face-card .sample{{font-size:var(--m-h2);line-height:1.1;color:var(--fg);margin-bottom:8px;overflow-wrap:anywhere}}
+.face-card{{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-card);padding:calc(var(--space) * 5.5);display:grid;gap:calc(var(--space) * 1.5);font-size:var(--a-body);color:var(--muted);align-content:start}}
+.face-card .sample{{font-size:var(--m-h2);line-height:1.1;color:var(--fg);margin-bottom:calc(var(--space) * 2);overflow-wrap:anywhere}}
 .face-card b{{color:var(--fg);font-size:var(--m-body)}}
-.radius-row{{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:18px 14px;margin:14px 0 22px}}
-.radius-row i{{display:block;height:64px;background:var(--panel);border:1px solid var(--rule);margin-bottom:4px}}
-.stage{{position:relative;background:var(--void);border:1px solid var(--border);border-radius:14px;padding:32px 24px;min-height:220px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;overflow:hidden}}
+.radius-row{{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:calc(var(--space) * 4.5) calc(var(--space) * 3.5);margin:calc(var(--space) * 3.5) 0 calc(var(--space) * 5.5)}}
+.radius-row i{{display:block;height:64px;background:var(--panel);border:1px solid var(--rule);margin-bottom:calc(var(--space) * 1)}}
+.stage{{position:relative;background:var(--void);border:1px solid var(--border);border-radius:var(--radius-card);padding:calc(var(--space) * 8) calc(var(--space) * 6);min-height:220px;display:flex;align-items:center;justify-content:center;gap:calc(var(--space) * 4);flex-wrap:wrap;overflow:hidden}}
 .stage.end{{justify-content:flex-end}}
-.demo-card{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:16px 18px;width:min(100%,240px);color:var(--fg);font-size:var(--a-body);font-weight:500}}
-.demo-card span{{display:block;color:var(--muted);font-size:var(--a-micro);font-weight:400;margin-top:2px}}
-.demo-card.lift{{box-shadow:var(--ui-shadow)}}
-.demo-card.glow{{box-shadow:0 0 30px color-mix(in srgb,var(--gold) 55%,transparent)}}
-.demo-card.heavy{{box-shadow:0 22px 44px rgba(0,0,0,.55),0 8px 14px rgba(0,0,0,.3)}}
-.demo-menu{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(STEP_MULT["3xl"]):.2f}px;padding:4px;width:min(100%,220px);box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);font-size:var(--a-body);color:var(--fg)}}
+.demo-card{{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-2xl);padding:calc(var(--space) * 4) calc(var(--space) * 4.5);width:min(100%,240px);color:var(--fg);font-size:var(--a-body);font-weight:500}}
+.demo-card span{{display:block;color:var(--muted);font-size:var(--a-micro);font-weight:400;margin-top:calc(var(--space) * 0.5)}}
+.demo-card.lift{{box-shadow:var(--shadow-ui)}}
+.demo-card.glow{{box-shadow:var(--spec-glow)}}
+.demo-card.heavy{{box-shadow:var(--shadow-pop)}}
+.demo-menu{{position:relative;z-index:1;background:var(--panel);border-radius:var(--radius-3xl);padding:calc(var(--space) * 1);width:min(100%,220px);box-shadow:0 0 0 1px var(--pop-ring),var(--shadow-pop);font-size:var(--a-body);color:var(--fg)}}
 .demo-menu.glass{{background:color-mix(in srgb,var(--panel) {POPUP_FILL_PCT}%,transparent);backdrop-filter:blur({POPUP_BLUR_PX}px) saturate({POPUP_SATURATE_PCT}%);-webkit-backdrop-filter:blur({POPUP_BLUR_PX}px) saturate({POPUP_SATURATE_PCT}%)}}
-.demo-menu div{{padding:8px 12px;border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;min-height:36px;display:flex;align-items:center}}
+.demo-menu div{{padding:calc(var(--space) * 2) calc(var(--space) * 3);border-radius:var(--radius-2xl);min-height:36px;display:flex;align-items:center}}
 .demo-menu div.on{{background:color-mix(in srgb,var(--fg) {WASH_PCT}%,transparent)}}
-.behind{{position:absolute;inset:0;padding:18px 22px;display:grid;align-content:start;font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features}}}
-.behind div{{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding:9px 0;color:var(--body);font-size:var(--a-body)}}
+.behind{{position:absolute;inset:0;padding:calc(var(--space) * 4.5) calc(var(--space) * 5.5);display:grid;align-content:start;font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features}}}
+.behind div{{display:flex;justify-content:space-between;gap:calc(var(--space) * 3);border-bottom:1px solid var(--border);padding:calc(var(--space) * 2.25) 0;color:var(--body);font-size:var(--a-body)}}
 .scrim{{position:absolute;inset:0;background:var(--scrim);backdrop-filter:blur({SCRIM_BLUR_PX}px);-webkit-backdrop-filter:blur({SCRIM_BLUR_PX}px)}}
-.demo-dialog{{position:relative;z-index:1;background:var(--panel);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;box-shadow:0 0 0 1px var(--pop-ring),var(--pop-shadow);padding:18px 20px;width:min(100%,280px);color:var(--fg);font-size:var(--m-body);font-weight:600}}
-.demo-dialog p{{font-size:var(--a-body);font-weight:400;color:var(--muted);margin:4px 0 0}}
-.demo-btns{{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}}
-.pill{{display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border-radius:{radius_px(STEP_MULT["4xl"]):.2f}px;font-size:var(--a-body);font-weight:500;border:1px solid var(--border);background:var(--panel);color:var(--fg)}}
-.pill.gold{{background:var(--gold);border-color:var(--gold);color:{C.INK}}}
-.pill.field{{min-width:min(100%,240px);color:var(--dim);background:var(--ink)}}
-.demo-panel{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:18px;width:min(100%,320px);display:grid;gap:12px;color:var(--fg);font-size:var(--a-body);font-weight:600}}
+.demo-dialog{{position:relative;z-index:1;background:var(--panel);border-radius:var(--radius-2xl);box-shadow:0 0 0 1px var(--pop-ring),var(--shadow-pop);padding:calc(var(--space) * 4.5) calc(var(--space) * 5);width:min(100%,280px);color:var(--fg);font-size:var(--m-body);font-weight:600}}
+.demo-dialog p{{font-size:var(--a-body);font-weight:400;color:var(--muted);margin:calc(var(--space) * 1) 0 0}}
+.demo-btns{{display:flex;gap:calc(var(--space) * 2);margin-top:calc(var(--space) * 3.5);flex-wrap:wrap}}
+.pill{{display:inline-flex;align-items:center;min-height:36px;padding:0 calc(var(--space) * 4);border-radius:var(--radius-4xl);font-size:var(--a-body);font-weight:500;border:1px solid var(--border);background:var(--panel);color:var(--fg)}}
+.pill.gold{{background:var(--gold);border-color:var(--gold);color:var(--on-gold)}}
+.pill.field{{min-width:min(100%,240px);color:var(--muted);background:var(--ink)}}
+.demo-panel{{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-2xl);padding:calc(var(--space) * 4.5);width:min(100%,320px);display:grid;gap:calc(var(--space) * 3);color:var(--fg);font-size:var(--a-body);font-weight:600}}
 .demo-panel .demo-btns{{margin-top:0}}
 """
 
@@ -809,7 +838,7 @@ def build_html() -> str:
 {plate(inline(icon_svg("stella", background=C.PAPER, letters=C.INK_TEXT, radius=20, sheen=True, uid=uid("i"))), "stella tile · paper", cls="icon")}
 {plate(inline(icon_svg("oxagen", background=C.PAPER, letters=C.INK_TEXT, radius=20, sheen=True, uid=uid("i"))), "oxagen tile · paper", cls="icon")}
 </div>
-<p style="margin-top:18px">At 16 to 48 px both icons survive as themselves, and neither is redrawn to get there. The hive is six cells on a grid, which is what a 16 px grid can hold; only its outline is thickened, so the ink cells do not fall between pixels. The fill fraction goes up too -- at 16 px the mark takes almost the whole square, because the padding a 256 px tile wants is four pixels a favicon cannot spare. The small PNGs come from a favicon tile on ink, because an outline on nothing is no favicon on a tab that happens to be its colour.</p>
+<p style="margin-top:calc(var(--space) * 4.5)">At 16 to 48 px both icons survive as themselves, and neither is redrawn to get there. The hive is six cells on a grid, which is what a 16 px grid can hold; only its outline is thickened, so the ink cells do not fall between pixels. The fill fraction goes up too -- at 16 px the mark takes almost the whole square, because the padding a 256 px tile wants is four pixels a favicon cannot spare. The small PNGs come from a favicon tile on ink, because an outline on nothing is no favicon on a tab that happens to be its colour.</p>
 <div class="favs">{favicon_row("oxagen")}{favicon_row("stella")}</div>
 </section>
 
@@ -817,7 +846,7 @@ def build_html() -> str:
 <p class="eyebrow">Colour</p>
 <h2>Palette</h2>
 <p>The gold is <span class="mono">{C.GOLD}</span>, and its two neighbours are derived from it in OKLCH, not picked: gold-bright is lighter, for the moment the shimmer passes, and gold-deep is darker and a few degrees warmer, for gold set as text on white. The build fails if a pinned value stops matching its derivation. gold clears {C.contrast(C.GOLD, C.INK):.1f}:1 on obsidian; on white it is {C.contrast(C.GOLD, C.PAPER):.1f}:1, which is why gold as <em>text</em> on white becomes gold-deep at {C.contrast(C.GOLD_DEEP, C.PAPER):.1f}:1.</p>
-<div class="grid g4" style="margin:22px 0 22px">{gold_cards}</div>
+<div class="grid g4" style="margin:calc(var(--space) * 5.5) 0 calc(var(--space) * 5.5)">{gold_cards}</div>
 <ul class="rules">
 <li><b>One gold action per screen.</b> The focus ring is gold too, because it marks where that action is.</li>
 <li><b>Gold is never a state, a surface fill, a card border, or a row highlight.</b> If a screen shows two gold things that are not the mark, one of them is wrong.</li>
@@ -825,8 +854,8 @@ def build_html() -> str:
 </ul>
 <h3>Grounds</h3>
 <p>Dark comes first. Obsidian is the ground, a panel sits one step up, and a lifted row one step above that. The light theme is white, and a card on white is a hairline border, not a tint. The greys are neutral zinc with no hue, so the gold is the only warm colour on a screen. Every page ships both themes.</p>
-{ground_ladder([("void", C.VOID), ("ink", C.INK), ("panel", C.PANEL), ("hl", C.HL), ("border", C.BORDER), ("rule", C.RULE)])}
-{ground_ladder([("paper-void", C.PAPER_VOID), ("paper", C.PAPER), ("paper-panel", C.PAPER_PANEL), ("paper-hl", C.PAPER_HL), ("paper-border", C.PAPER_BORDER), ("paper-rule", C.PAPER_RULE)])}
+{ground_ladder(["void", "ink", "panel", "hl", "border", "rule"])}
+{ground_ladder(["paper-void", "paper", "paper-panel", "paper-hl", "paper-border", "paper-rule"])}
 <h3>Text</h3>
 <p>Text comes in four roles. Each role has one value on ink and one on paper. Every role that carries meaning clears 4.5:1 on its ground, and the build checks it. On a lifted row in the light theme, secondary text moves to <span class="mono">--ox-muted-text-ink</span> ({C.MUTED_TEXT_INK}, {C.contrast(C.MUTED_TEXT_INK, C.PAPER_HL):.1f}:1), because {C.MUTED_INK} is {C.contrast(C.MUTED_INK, C.PAPER_HL):.1f}:1 there.</p>
 <div style="overflow-x:auto"><table>
@@ -843,12 +872,12 @@ def build_html() -> str:
 <div style="overflow-x:auto"><table>
 <thead><tr><th>on ink</th><th>on paper</th><th>meaning</th></tr></thead>
 <tbody>{state_rows()}</tbody></table></div>
-<p style="margin-top:14px">The destructive red is the one state colour that is also a button fill: <span class="mono">{C.DESTRUCTIVE["dark"]}</span> on ink and <span class="mono">{C.DESTRUCTIVE["light"]}</span> on paper. It clears 4.5:1 both as a fill under its label and as text on its ground.</p>
+<p style="margin-top:calc(var(--space) * 3.5)">The destructive red is the one state colour that is also a button fill: <span class="mono">{C.DESTRUCTIVE["dark"]}</span> on ink and <span class="mono">{C.DESTRUCTIVE["light"]}</span> on paper. It clears 4.5:1 both as a fill under its label and as text on its ground.</p>
 <h3>Every token</h3>
 <div style="overflow-x:auto"><table>
 <thead><tr><th></th><th>token</th><th>value</th><th>on ink</th><th>on paper</th><th>use</th></tr></thead>
 <tbody>{tokens_rows}</tbody></table></div>
-<p class="muted" style="margin-top:14px;font-size:var(--a-body)">Contrast is WCAG 2.x. Text tokens clear 4.5:1 on their own ground; the build checks it.</p>
+<p class="muted" style="margin-top:calc(var(--space) * 3.5);font-size:var(--a-body)">Contrast is WCAG 2.x. Text tokens clear 4.5:1 on their own ground; the build checks it.</p>
 </section>
 
 <section id="type">
@@ -856,7 +885,7 @@ def build_html() -> str:
 <h2>Typefaces</h2>
 <p>Mac set one type rule on 2026-10-02. <b>{T.TEXT_FACE.family}</b> sets the default text on every surface: body, labels, buttons, tables, and navigation. It also sets h1 to h3 in the web app and the internal tools, and every h4 to h6 everywhere. Its italic ships beside it. <b>{T.DISPLAY_FACE.family}</b> sets h1 to h3 on the marketing and customer sites, and the docs sites count as customer sites. It also sets the two wordmarks, and that use is fixed. Its wide geometric letters lose their shape below {T.DISPLAY_ADVICE_PX}px. At the shipped base, every heading step that can take it is {display_min:g}px or more, and the theme editor warns when one falls under {T.DISPLAY_ADVICE_PX}px. <b>{T.CODE_FACE.family}</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
 {extra_faces_note()}
-<div class="grid g3" style="margin:22px 0 10px">
+<div class="grid g3" style="margin:calc(var(--space) * 5.5) 0 calc(var(--space) * 2.5)">
 {face_card(T.TEXT_FACE, "Aa Gg 1234", "--ox-font")}
 {face_card(T.MONASPACE_NEON, "0O 1lI =&gt;", "--ox-font-mono")}
 {face_card(T.DISPLAY_FACE, "Aa Gg 1234", "--ox-font-display")}
@@ -877,7 +906,7 @@ def build_html() -> str:
 <div style="overflow-x:auto"><table>
 <thead><tr><th>step</th><th>marketing face</th><th>marketing ratio</th><th>marketing size</th><th>app face</th><th>app ratio</th><th>app size</th></tr></thead>
 <tbody>{scale_rows()}</tbody></table></div>
-<p class="muted" style="margin-top:14px;font-size:var(--a-body)">Sizes in px at the shipped base, then line height and weight.</p>
+<p class="muted" style="margin-top:calc(var(--space) * 3.5);font-size:var(--a-body)">Sizes in px at the shipped base, then line height and weight.</p>
 <h3>Headings</h3>
 <p>On the marketing scale, <span class="mono">text-m-h1</span> to <span class="mono">text-m-h3</span> set {T.DISPLAY_FACE.family} through <code>--font-display</code>. On the app scale, <span class="mono">text-a-h1</span> to <span class="mono">text-a-h3</span> and a bare h1 to h3 read <code>--font-heading</code>, which is {T.TEXT_FACE.family}. A marketing or docs site sets its h1 to h3 in {T.DISPLAY_FACE.family} with one line in its own stylesheet. Every h4 to h6 is {T.TEXT_FACE.family}.</p>
 <pre><code>:root {{ {T.MARKETING_HEADINGS}; }}</code></pre>
@@ -917,7 +946,7 @@ def build_html() -> str:
 <li><b>A corner inside a corner is smaller by about the gap between them.</b> That keeps the two curves close to parallel. A menu rounds at <code>rounded-3xl</code> (about {radius_px(STEP_MULT["3xl"]):.0f}px) and insets its rows by 4px, so each row takes <code>rounded-2xl</code> (about {radius_px(STEP_MULT["2xl"]):.0f}px).</li>
 <li><b>A tile icon rounds at 20 on a 96 box.</b> That is about a fifth of its side.</li>
 </ul>
-<div class="grid g2" style="margin-top:22px">
+<div class="grid g2" style="margin-top:calc(var(--space) * 5.5)">
 <figure class="m0"><div class="stage"><div class="demo-panel">Rename agent<div class="pill field">night-shift-runner</div><div class="demo-btns"><span class="pill">Cancel</span><span class="pill gold">Save</span></div></div></div><figcaption class="cap">a panel at 2xl with a field and buttons at 4xl</figcaption></figure>
 <figure class="m0"><div class="stage">{demo_menu()}</div><figcaption class="cap">a menu at 3xl with rows at 2xl</figcaption></figure>
 </div>
@@ -930,11 +959,11 @@ def build_html() -> str:
 <figure class="m0"><div class="stage"><div class="demo-card lift">Spend this week<span>border and --ui-shadow</span></div></div><figcaption class="cap">at rest with the faint shadow</figcaption></figure>
 <figure class="m0"><div class="stage">{demo_menu()}</div><figcaption class="cap">floating with pop-ring and shadow-pop</figcaption></figure>
 </div>
-<div class="grid g2" style="margin-top:18px">
+<div class="grid g2" style="margin-top:calc(var(--space) * 4.5)">
 <div class="bad"><figure class="m0"><div class="stage"><div class="demo-card glow">Spend this week<span>a gold glow</span></div></div><figcaption class="cap">add a glow or a coloured shadow</figcaption></figure></div>
 <div class="bad"><figure class="m0"><div class="stage"><div class="demo-card heavy">Spend this week<span>a deep shadow at rest</span></div></div><figcaption class="cap">give a resting card a floating shadow</figcaption></figure></div>
 </div>
-<p style="margin-top:18px">Never add a glow, a coloured shadow, or a text shadow, and never put a shadow on the mark.</p>
+<p style="margin-top:calc(var(--space) * 4.5)">Never add a glow, a coloured shadow, or a text shadow, and never put a shadow on the mark.</p>
 
 <h3>Translucency</h3>
 <p>A translucent surface lets you partly see what is behind it. Glass belongs only on chrome that floats over content: menus, selects, comboboxes, popovers, hover cards, the command menu, toasts, a dialog's scrim, and sticky navigation and header bars. Cards, panels, tables, and text never take it.</p>
@@ -947,8 +976,8 @@ def build_html() -> str:
 <li><b>Secondary text on ink may use opacity.</b> White at 60% takes the tone of the surface under it. It must still clear 4.5:1.</li>
 <li><b>Gold is never translucent.</b> The mark and the one gold action stay solid on every surface.</li>
 </ul>
-<p style="margin-top:14px">This page's top bar uses the same idea: the page colour at 88% with a 14px blur, so content scrolls under it without clashing.</p>
-<div class="grid g2" style="margin-top:18px">
+<p style="margin-top:calc(var(--space) * 3.5)">This page's top bar uses the same idea: the page colour at 88% with a 14px blur, so content scrolls under it without clashing.</p>
+<div class="grid g2" style="margin-top:calc(var(--space) * 4.5)">
 <figure class="m0"><div class="stage end">{demo_behind()}{demo_menu(glass=True)}</div><figcaption class="cap">a menu over a table with a {POPUP_FILL_PCT}% fill and a {POPUP_BLUR_PX}px blur</figcaption></figure>
 <figure class="m0"><div class="stage">{demo_behind()}<div class="scrim"></div><div class="demo-dialog">Approve this deploy?<p>The agent runs deploy-prod once you approve.</p><div class="demo-btns"><span class="pill">Cancel</span><span class="pill gold">Approve</span></div></div></div><figcaption class="cap">a dialog over its scrim</figcaption></figure>
 </div>
@@ -964,7 +993,7 @@ def build_html() -> str:
 {plate(inline(spinner_svg("stella", background=C.INK, uid=uid("sp"))), "stella spinner · tile", cls="sp")}
 {plate(inline(spinner_svg("oxagen", background=C.INK, uid=uid("sp"))), "oxagen spinner · tile", cls="sp")}
 </div>
-<div class="grid g2 shimmer-demo" style="margin-top:18px">
+<div class="grid g2 shimmer-demo" style="margin-top:calc(var(--space) * 4.5)">
 {plate(inline(spinner_wordmark_svg("stella", uid=uid("sw"))), "stella · loading masthead", cls="ink wm")}
 {plate(inline(spinner_wordmark_svg("oxagen", uid=uid("sw"))), "oxagen · loading masthead", cls="ink wm")}
 </div>
@@ -977,10 +1006,10 @@ def build_html() -> str:
 <h3>Wallpapers</h3>
 <p><b>graph</b> scatters nodes across the ground, wires each to its two nearest neighbours, and runs gold edges from the mark out to the nodes nearest it: the one-to-many, drawn. <b>blocks</b> rebuilds the mark from blocks on a grid, each tile a shade brighter or deeper than the next, with a bloom of fainter blocks around it. <b>orbit</b> hangs five rings of nodes off the mark, each node wired inward to the ring inside it. <b>glow</b> and <b>quiet</b> are the mark alone, as a bloom and as a hairline -- and both are pulled back inside the canvas rather than cropped, because a mark clipped by a few per cent of its width reads as a mistake and not as a crop. <b>word</b> and <b>echo</b> carry the wordmark and no icon. <b>word</b> is the wordmark alone over its bloom. <b>echo</b> stacks the wordmark above and below itself, each copy fainter than the last and in the surface's ink alone, so the gold stays on the one word that is the mark. Every node is placed by a seeded random, so the same file comes out of every build.</p>
 <div class="grid g2">{walls}</div>
-<div class="grid g4" style="margin-top:18px">{phones}</div>
+<div class="grid g4" style="margin-top:calc(var(--space) * 4.5)">{phones}</div>
 <h3>Social</h3>
 <div class="grid g4">{social}</div>
-<div class="grid g2" style="margin-top:18px">{banners}</div>
+<div class="grid g2" style="margin-top:calc(var(--space) * 4.5)">{banners}</div>
 <h3>Ads</h3>
 <p>Every ad takes its copy from an approved, launch-released entry in <code>messages/ads/</code> or <code>messages/always-on/</code>, and <code>build/messages.py --check</code> fails on any file in <code>ads/</code> that no entry produces. The Oxagen campaign follows the operator's job. The <b>workforce</b> ad states the job, and each of the others explains one decision an operator makes: which agent has the <b>authority</b> to do what, how each agent is <b>equipped</b>, which agent <b>spent</b> what, and why the agent does not hold the <b>keys</b>. A short form keeps the scope of its long form, so the banner still says governed, recorded, or mediated where the poster does. The 300&times;250 drops the kicker and the call to action, because neither fits at a legible size, but it keeps the answer line in a shorter form. A held campaign, such as completion checks for bounded tasks, is written and not rendered until its capability ships. Stella runs two lines: the proof rule, and the green check. The always-on campaign adds three ads from <code>messages/always-on/</code>: <b>night shift</b>, <b>capacity</b>, and <b>driver seat</b>. Each ships in the four sizes, on ink and on paper.</p>
 <p>Four of the five Oxagen campaigns take the ghost in the top right. The <b>workforce</b> ad takes the orbit instead, laid back behind the type: rings of nodes wired inward to one mark is the only composition the kit already owns that reads as many agents under one control plane. It is not a new shape; it is the wallpaper's, at ad scale and at ad strength.</p>

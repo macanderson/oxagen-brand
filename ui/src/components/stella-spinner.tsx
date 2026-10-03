@@ -16,13 +16,14 @@ const STELLA_MARK = STELLA.icon.parts[0]?.d ?? "";
 export const STELLA_SHIMMER = "#F1CE65";
 
 /**
- * The asterisk and its sweep read the house gold tokens, with the pinned
- * values as the fallback, so a page that sets `--ox-gold` and
- * `--ox-gold-bright` recolours the spinner. The attributes keep the pinned
- * values for a copy of the SVG that carries no CSS.
+ * The asterisk and its sweep read the semantic gold tokens, `--gold` and
+ * `--gold-bright`, with the pinned values as the fallback. The kit maps both
+ * to the house gold, which is one value in both themes, so a page that sets
+ * `--ox-gold` recolours the spinner. The attributes keep the pinned values
+ * for a copy of the SVG that carries no CSS.
  */
-const GOLD_PAINT = { fill: `var(--ox-gold, ${BRAND_GOLD})` };
-const SHIMMER_PAINT = { stopColor: `var(--ox-gold-bright, ${STELLA_SHIMMER})` };
+const GOLD_PAINT = { fill: `var(--gold, ${BRAND_GOLD})` };
+const SHIMMER_PAINT = { stopColor: `var(--gold-bright, ${STELLA_SHIMMER})` };
 
 /**
  * The placement `spinners/stella-spinner.svg` gives the asterisk, a little

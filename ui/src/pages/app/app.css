@@ -9,8 +9,10 @@
  *
  * The app sets these values on :root. Here they sit on `.app-snapshot`, the
  * class each copied page wears, so no other story picks them up. The dark
- * values sit on `.dark .app-snapshot`. The kit's tokens still drive every
- * colour, so the theme editor restyles these pages as it restyles the app.
+ * values sit on `.dark .app-snapshot`. The kit's tokens drive every colour
+ * except the app's own hues for frames, record kinds, and charts, which have
+ * no house token. The theme editor restyles these pages as it restyles the
+ * app. Every size, space, and corner reads a token too.
  *
  * Storybook imports this file after globals.css through
  * `.storybook/preview.css`, so the colour names below compile with the kit's
@@ -76,7 +78,7 @@
     --sidebar-nav-label-fg: var(--_stone-700);
     --code-bg: var(--ox-paper-hl);
     --code-comment: var(--muted-foreground);
-    --code-table: var(--ember-ink);
+    --code-table: var(--gold-text);
     --code-key: var(--foreground);
     --code-string: var(--proven);
     --code-number: var(--info);
@@ -121,27 +123,27 @@
 /* The app's workspace frame and data density, shared by every app page. */
 .app-snapshot [data-shell-page] main#main {
   max-width: 1500px;
-  padding: 22px 24px 80px;
+  padding: calc(var(--ox-space) * 5.5) calc(var(--ox-space) * 6) calc(var(--ox-space) * 20);
 }
 
 .app-snapshot [data-shell-page] table {
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: var(--ox-a-body);
 }
 
 .app-snapshot [data-shell-page] table thead th {
-  padding: 9px 12px;
+  padding: calc(var(--ox-space) * 2.25) calc(var(--ox-space) * 3);
   white-space: nowrap;
   background: var(--panel);
-  font-size: 10.5px;
+  font-size: var(--ox-a-2xs);
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--dim);
+  color: var(--muted-foreground);
 }
 
 :where(.app-snapshot [data-shell-page]) table tbody :is(td, th) {
-  padding: 9px 12px;
+  padding: calc(var(--ox-space) * 2.25) calc(var(--ox-space) * 3);
   vertical-align: middle;
 }
 
@@ -175,7 +177,7 @@
 
 @media (width < 48rem) {
   .app-snapshot [data-shell-page] main#main {
-    padding: 16px 16px 88px;
+    padding: calc(var(--ox-space) * 4) calc(var(--ox-space) * 4) calc(var(--ox-space) * 22);
   }
 }
 
