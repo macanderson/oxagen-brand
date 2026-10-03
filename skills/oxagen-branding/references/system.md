@@ -1,6 +1,6 @@
 # Visual system
 
-Source of truth: `theme/theme.json` in `oxageninc/brand`. `build/color.py` and `build/typeset.py` read it and generate every token file, mark, and asset. `assets/tokens.css` is generated from it, and the build fails if it drifts. Use it; do not retype a value. A Next.js product imports `tokens/house-tailwind.css` and `tokens/next-fonts.ts` from the kit instead.
+Source of truth: `theme/theme.json` in `oxageninc/brand`. `build/color.py` and `build/typeset.py` read it and generate every token file, mark, and asset. `assets/tokens.css` is generated from it, and the build fails if it drifts. Use it; do not retype a value. A Next.js product imports `tokens/house-tailwind.css` and `tokens/next-fonts.ts` from the kit instead, and `tokens/house-text-scale.css` when it opts in to Tailwind's named sizes on the app steps.
 
 ## Ground and surfaces
 
@@ -71,22 +71,40 @@ No fourth role face. In CSS a rule names a role, never a face. Five roles carry 
 
 The token files name the same roles `--ox-font`, `--ox-font-display`, `--ox-font-heading`, `--ox-font-mono`, and `--ox-font-wordmark`. A site that reads them sets its h1 to h3 in Space Grotesk with `h1, h2, h3 { font-family: var(--ox-font-display); }`. `assets/tokens.css` and the kit's pages call the text role `--font` and the code role `--mono`. Aeonik Mono and Aeonik Fono ship in the kit's `fonts/` too and load as their own families, and no role takes either one yet. Headings are sentence case.
 
-Two scales. Each cell gives the size, line height, weight, and tracking.
+Two scales. Each has one base, and every step is the base times its ratio. Each cell gives the size at the shipped base, the ratio, the line height, the weight, and the tracking.
 
 | Step | Marketing face | Marketing (`text-m-*`) | App face | App (`text-a-*`) |
 |---|---|---|---|---|
-| h1 | Space Grotesk | 72px, 1.05, 700, -0.03em | Aeonik | 30px, 1.15, 700, -0.02em |
-| h2 | Space Grotesk | 40px, 1.2, 700, -0.01em | Aeonik | 24px, 1.2, 600 |
-| h3 | Space Grotesk | 28px, 1.3, 600 | Aeonik | 20px, 1.25, 600 |
-| h4 | Aeonik | 20px, 1.4, 500 | Aeonik | 16px, 1.4, 600 |
-| body | Aeonik | 16px, 1.625, 400 | Aeonik | 14px, 1.5, 400 |
-| micro | Monaspace Neon | 14px, 1.5, 400 | Monaspace Neon | 14px, 1.5, 400 |
+| base | | 16px, `--ox-m-base` | | 14px, `--ox-a-base` |
+| h1 | Space Grotesk | 72px, ×4.5, 1.05, 700, -0.03em | Aeonik | 30px, ×2.142857, 1.15, 700, -0.02em |
+| h2 | Space Grotesk | 40px, ×2.5, 1.2, 700, -0.01em | Aeonik | 24px, ×1.714286, 1.2, 600 |
+| h3 | Space Grotesk | 28px, ×1.75, 1.3, 600 | Aeonik | 20px, ×1.428571, 1.25, 600 |
+| h4 | Aeonik | 20px, ×1.25, 1.4, 500 | Aeonik | 16px, ×1.142857, 1.4, 600 |
+| body | Aeonik | 16px, ×1, 1.625, 400 | Aeonik | 14px, ×1, 1.5, 400 |
+| micro | Monaspace Neon | 14px, ×0.875, 1.5, 400 | Monaspace Neon | 12px, ×0.857143, 1.4, 400 |
+| 2xs | none | none | Aeonik | 10px, ×0.714286, 1.4, 500 |
 
-Marketing is for landing pages and posts: large and spaced. App is for the web app and the internal tools: dense, for dashboards, panels, tables, terminals, and logs. Body text is 16px on the marketing and customer sites and 14px in the app and the internal tools. Docs sites are customer sites, so their h1 to h3 take Space Grotesk and their body is 16px. A docs site sets both in its own stylesheet: `--font-heading: var(--font-display)` for the headings, and `--ox-m-body` for the body.
+Marketing is for landing pages and posts: large and spaced. App is for the web app and the internal tools: dense, for dashboards, panels, tables, terminals, and logs. Docs sites are customer sites, so their h1 to h3 take Space Grotesk and their body is 16px. A docs site sets both in its own stylesheet: `--font-heading: var(--font-display)` for the headings, and `--ox-m-body` for the body.
 
-No text is set below 14px, on any surface. Mac, 2026-10-02: "The minimum font size in the app has to be 14px at least! Not 13px! And we can't hard code font sizes in classes, we need to let the tokens do their job." The floor covers labels, badges, eyebrows, table headers, timestamps, and hints. An eyebrow or a badge stands apart by case, tracking, weight, or colour, never by a smaller size. An eyebrow is 14px Aeonik, uppercase, at 0.14em tracking.
+The base is the body size: 16px on the marketing and customer sites, docs included, and 14px in the app and the internal tools. Mac, 2026-10-03: "The base page font size should never be lower than 14px". Every step derives from its scale's base (`--ox-m-base`, `--ox-a-base`) as the base times its ratio, such as `calc(var(--ox-a-base) * 0.857143)` for the app micro step, so a change to the base in `theme/theme.json` or the theme editor moves every step. The theme editor warns when a base goes under 14px. Set the base on `:root`. Each step is computed where `:root` declares it, so a base set on a descendant element does not move the steps inside it.
 
-No class or stylesheet writes a font size of its own. Every size reads a step token (`--ox-m-*`, `--ox-a-*`) or a house utility (`text-m-*`, `text-a-*`). Tailwind's `text-xs` and `text-sm` both read the 14px app body step. In this kit, `build/theme.py` refuses a step under 14px, and `build/css_literals.py` fails on a hard-coded size.
+The smaller steps are for labels, badges, timestamps, and table headers, and dense metadata such as a chart axis: micro (12px) and 2xs (10px) in the app, and micro (14px) on marketing. Running text, control labels, inputs, buttons, menu items, and table body cells take the base, never a smaller step. An eyebrow takes the micro step's size in Aeonik, uppercase, at 0.14em tracking: 14px on a marketing or customer site and 12px in the app, at the shipped bases.
+
+No class or stylesheet writes a font size of its own. Mac, 2026-10-02: "we can't hard code font sizes in classes, we need to let the tokens do their job." Every size reads a step token (`--ox-m-*`, `--ox-a-*`) or a house utility (`text-m-*`, `text-a-*`). A hard-coded small size becomes the nearest smaller step, never a literal. In this kit, `build/css_literals.py` fails on a hard-coded size.
+
+In a Tailwind product, `tokens/house-tailwind.css` keeps `text-xs` and `text-sm` on the app base, so a product that syncs it keeps its sizes. A product opts in to the app steps by importing `tokens/house-text-scale.css` after it. Tailwind's named sizes then read the steps in order:
+
+| Tailwind | App step | Size at the base |
+|---|---|---|
+| `text-xs` | 2xs | 10px |
+| `text-sm` | micro | 12px |
+| `text-base` | body, the base | 14px |
+| `text-lg` | h4 | 16px |
+| `text-xl` | h3 | 20px |
+| `text-2xl` | h2 | 24px |
+| `text-3xl` | h1 | 30px |
+
+Rename the product's classes in the same change that adds the import: body text in `text-sm` becomes `text-base`, and a label in `text-xs` becomes `text-sm`. A text field on a phone takes `text-input-touch`, which is 16px or the app base, whichever is larger, so iOS Safari never zooms on focus and the field still follows a larger base.
 
 ## Layout
 

@@ -32,9 +32,11 @@ What passes without an entry in KEEP:
   a fallback inside the `var()` included;
 - a Tailwind size that reads a token, `text-(length:--ox-a-h2)` or
   `text-[length:var(--ox-a-h2)]`, and Tailwind's named sizes `text-xs` to
-  `text-3xl`, which `tokens/house-tailwind.css` points at the app steps in
-  order (`text-base` is the app base). Tailwind's larger sizes (`text-4xl`
-  and up) read no step, so they fail;
+  `text-3xl`, which `tokens/house-text-scale.css` points at the app steps in
+  order (`text-base` is the app base). The kit's stylesheet imports that
+  file. Tailwind's larger sizes (`text-4xl` and up) read no step, so they
+  fail, and so does a text field's size on a phone written as a literal:
+  it reads `text-input-touch`;
 - a corner of 0, a circle (50%), or a pill (999px or 9999px);
 - a ring, which is a shadow with no offset and no blur, such as a focus or
   hover ring, and an inset bar;
@@ -400,7 +402,7 @@ def strip_script_comments(code: str) -> str:
 
 _TW_SIZE = re.compile(r"(?<![\w-])text-\[([^\]\s]+)\]")
 #: Tailwind's own fixed sizes: the ones above 3xl. `text-xs` to `text-3xl` are
-#: not here, because `tokens/house-tailwind.css` points each at an app step.
+#: not here, because `tokens/house-text-scale.css` points each at an app step.
 _TW_NAMED = re.compile(r"(?<![\w-])text-([4-9]xl)(?![\w-])")
 _FONT_SIZE_PROP = re.compile(r"\bfontSize\s*[:=]\s*\{?\s*(?:([\"'`])([^\"'`]*)\1|(-?\d*\.?\d+))")
 _CSS_IN_STRING = re.compile(r"(?<![\w-])(font-size|font)\s*:\s*([^;\"'`}\n]+)")

@@ -319,9 +319,32 @@ def face_card(face: T.Face, sample: str, var: str) -> str:
     )
     return (
         f'<div class="face-card"><span class="sample" style="font-family:{esc(face.css_stack)};'
-        f'font-feature-settings:{face.features}">{sample}</span>'
+        f'font-feature-settings:{esc(face.features)}">{sample}</span>'
         f"<b>{esc(face.family)}</b><span>{esc(face.job[:1].upper() + face.job[1:])}.</span>"
         f'<span class="mono">{var}</span><span class="mono">weights {esc(weights)}</span></div>'
+    )
+
+
+def scale_rows() -> str:
+    """The type table: a row for each scale's base, then a row for each step on either scale.
+
+    A step one scale lacks, such as the app's 2xs, reads "none" in that scale's cells.
+    """
+    def cells(scale: T.Scale, name: str) -> str:
+        st = next((s for s in scale.steps if s.name == name), None)
+        if st is None:
+            return '<td class="note" colspan="3">none</td>'
+        return (
+            f"<td>{esc(T.family(st.role))}</td><td class=\"mono\">{T.ratio_css(st.ratio)}</td>"
+            f"<td class=\"mono\">{st.px:g} · {st.leading} · {st.weight}</td>"
+        )
+
+    base = '<tr><td class="mono">base</td>' + "".join(
+        f'<td class="mono" colspan="2">--ox-{s.key}-base</td><td class="mono">{s.base_px:g}</td>' for s in T.SCALES
+    ) + "</tr>"
+    names = dict.fromkeys(st.name for s in T.SCALES for st in s.steps)
+    return base + "".join(
+        f'<tr><td class="mono">{n}</td>' + "".join(cells(s, n) for s in T.SCALES) + "</tr>" for n in names
     )
 
 
@@ -479,7 +502,7 @@ body{{margin:0;background:var(--ink);color:var(--fg);font-family:var(--ox-font);
 .wrap{{max-width:1180px;margin:0 auto;padding:0 28px}}
 section{{padding:72px 0;border-top:1px solid var(--rule)}}
 section:first-of-type{{border-top:0}}
-.eyebrow{{font-size:var(--m-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}}
+.eyebrow{{font-size:var(--a-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);font-weight:600;margin:0 0 12px}}
 h1,h2,h3{{font-family:var(--ox-font-display)}}
 h1{{font-size:clamp(var(--m-h2),6vw,var(--m-h1));line-height:1.02;letter-spacing:-.02em;font-weight:700;margin:0 0 20px}}
 h2{{font-size:var(--m-h2);line-height:1.1;letter-spacing:-.015em;font-weight:700;margin:0 0 14px}}
@@ -507,15 +530,15 @@ pre code{{background:none;padding:0}}
 .plate.icon>svg{{width:120px;height:120px}}
 .plate.sp>svg{{width:88px;height:88px}}
 .m0{{margin:0}}
-.cap{{font-size:var(--a-body);color:var(--muted);margin-top:8px;letter-spacing:.01em}}
+.cap{{font-size:var(--a-micro);color:var(--muted);margin-top:8px;letter-spacing:.01em}}
 .diagram{{width:100%;height:auto;color:var(--fg);font-family:var(--ox-font-mono)}}
 .hero{{padding:90px 0 60px}}
 .hero .plates{{margin-top:36px}}
 table{{border-collapse:collapse;width:100%;font-size:var(--a-body)}}
 th,td{{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}}
-th{{font-size:var(--a-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}}
+th{{font-size:var(--a-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}}
 td.num{{font-variant-numeric:tabular-nums}}
-.unit{{color:var(--dim)}}
+.unit{{color:var(--dim);font-size:var(--a-micro)}}
 .chip{{display:inline-block;width:28px;height:28px;border-radius:7px;border:1px solid var(--border)}}
 .note{{color:var(--muted)}}
 .gold-card{{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}}
@@ -527,7 +550,7 @@ td.num{{font-variant-numeric:tabular-nums}}
 .rules li::before{{content:"*";position:absolute;left:0;top:-2px;color:var(--gold);font-weight:700;font-size:var(--a-h2);line-height:1}}
 .rules b{{color:var(--fg)}}
 .type-row{{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--border)}}
-.type-row .mono{{color:var(--muted);font-size:var(--a-body)}}
+.type-row .mono{{color:var(--muted);font-size:var(--a-micro)}}
 .bad .cap::before{{content:"✕  ";color:#C0392B}}
 .files{{display:grid;grid-template-columns:200px 1fr;gap:8px 20px;font-size:var(--a-body)}}
 .files .mono{{color:var(--fg)}}
@@ -537,19 +560,19 @@ footer{{padding:48px 0 80px;border-top:1px solid var(--rule);color:var(--muted);
 .favs{{display:flex;gap:28px;flex-wrap:wrap;margin-top:14px}}
 .fav-row{{display:flex;align-items:flex-end;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px}}
 .fav-row img{{display:block;image-rendering:auto}}
-.fav-row span{{font-size:var(--a-body);color:var(--muted);display:block;text-align:center;margin-top:6px}}
+.fav-row span{{font-size:var(--a-micro);color:var(--muted);display:block;text-align:center;margin-top:6px}}
 .ladder{{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:14px 0 8px}}
 @media(max-width:640px){{.ladder{{grid-template-columns:repeat(3,minmax(0,1fr))}}}}
-.ladder div,.radius-row div{{display:grid;gap:4px;font-size:var(--a-body);color:var(--muted);align-content:start}}
+.ladder div,.radius-row div{{display:grid;gap:4px;font-size:var(--a-micro);color:var(--muted);align-content:start}}
 .ladder i{{display:block;height:64px;border-radius:10px;border:1px solid var(--rule)}}
 .ladder b,.radius-row b{{color:var(--fg);font-weight:600;font-size:var(--a-body)}}
 .tx-sample{{display:inline-block;padding:4px 10px;border-radius:8px;border:1px solid {C.BORDER};font-family:var(--ox-font-mono);font-size:var(--a-body)}}
-.stbadge{{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;border-radius:999px;border:1px solid;font-size:var(--a-body);font-weight:500}}
+.stbadge{{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;border-radius:999px;border:1px solid;font-size:var(--a-micro);font-weight:500}}
 .stbadge i{{width:8px;height:8px;border-radius:50%;display:block}}
-.hex{{font-size:var(--a-body);color:var(--muted);line-height:1.5}}
+.hex{{font-size:var(--a-micro);color:var(--muted);line-height:1.5}}
 .shapes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:14px 0 22px}}
 .shape{{padding:14px 16px;border-radius:12px;background:var(--panel);color:var(--fg);font-size:var(--a-body);font-weight:500}}
-.shape span{{display:block;color:var(--muted);font-size:var(--a-body);font-weight:400}}
+.shape span{{display:block;color:var(--muted);font-size:var(--a-micro);font-weight:400}}
 .shape.held{{border:3px double var(--fg)}}
 .shape.pending{{border:1.5px dashed var(--fg)}}
 .shape.broken{{border:1px solid var(--fg)}}
@@ -561,7 +584,7 @@ footer{{padding:48px 0 80px;border-top:1px solid var(--rule);color:var(--muted);
 .stage{{position:relative;background:var(--void);border:1px solid var(--border);border-radius:14px;padding:32px 24px;min-height:220px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;overflow:hidden}}
 .stage.end{{justify-content:flex-end}}
 .demo-card{{background:var(--panel);border:1px solid var(--border);border-radius:{radius_px(STEP_MULT["2xl"]):.2f}px;padding:16px 18px;width:min(100%,240px);color:var(--fg);font-size:var(--a-body);font-weight:500}}
-.demo-card span{{display:block;color:var(--muted);font-size:var(--a-body);font-weight:400;margin-top:2px}}
+.demo-card span{{display:block;color:var(--muted);font-size:var(--a-micro);font-weight:400;margin-top:2px}}
 .demo-card.lift{{box-shadow:var(--ui-shadow)}}
 .demo-card.glow{{box-shadow:0 0 30px color-mix(in srgb,var(--gold) 55%,transparent)}}
 .demo-card.heavy{{box-shadow:0 22px 44px rgba(0,0,0,.55),0 8px 14px rgba(0,0,0,.3)}}
@@ -595,11 +618,9 @@ def build_html() -> str:
     a = asterisk()
 
     tokens_rows = "".join(swatch_row(n, v, note) for n, v, note in C.TOKENS)
-    scale_rows = "".join(
-        f"<tr><td class=\"mono\">{m.name}</td><td>{T.family(m.role)}</td><td>{T.family(a.role)}</td>"
-        f"<td class=\"mono\">{m.px} · {m.leading} · {m.weight}</td><td class=\"mono\">{a.px} · {a.leading} · {a.weight}</td></tr>"
-        for m, a in zip(T.MARKETING.steps, T.APP.steps)
-    )
+    m_base, a_base = T.MARKETING.base_px, T.APP.base_px
+    a_micro, a_2xs, m_micro = T.APP.step("micro"), T.APP.step("2xs"), T.MARKETING.step("micro")
+    display_min = min(st.px for s in T.SCALES for st in s.steps if st.role in ("display", "heading"))
     gold_cards = "".join(
         [
             gold_card("gold", C.GOLD, "the metal. identity and one action per screen"),
@@ -833,7 +854,7 @@ def build_html() -> str:
 <section id="type">
 <p class="eyebrow">Typography</p>
 <h2>Typefaces</h2>
-<p>Mac set one type rule on 2026-10-02. <b>{T.TEXT_FACE.family}</b> sets the default text on every surface: body, labels, buttons, tables, and navigation. It also sets h1 to h3 in the web app and the internal tools, and every h4 to h6 everywhere. Its italic ships beside it. <b>{T.DISPLAY_FACE.family}</b> sets h1 to h3 on the marketing and customer sites, and the docs sites count as customer sites. It also sets the two wordmarks, and that use is fixed. Its wide geometric letters lose their shape below {T.DISPLAY_FLOOR_PX} px, so no heading step that can take it is smaller. <b>{T.CODE_FACE.family}</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
+<p>Mac set one type rule on 2026-10-02. <b>{T.TEXT_FACE.family}</b> sets the default text on every surface: body, labels, buttons, tables, and navigation. It also sets h1 to h3 in the web app and the internal tools, and every h4 to h6 everywhere. Its italic ships beside it. <b>{T.DISPLAY_FACE.family}</b> sets h1 to h3 on the marketing and customer sites, and the docs sites count as customer sites. It also sets the two wordmarks, and that use is fixed. Its wide geometric letters lose their shape below {T.DISPLAY_ADVICE_PX}px. At the shipped base, every heading step that can take it is {display_min:g}px or more, and the theme editor warns when one falls under {T.DISPLAY_ADVICE_PX}px. <b>{T.CODE_FACE.family}</b> sets code, logs, digests, paths, ids, and the numbers in tables, with texture healing and code ligatures on.</p>
 {extra_faces_note()}
 <div class="grid g3" style="margin:22px 0 10px">
 {face_card(T.TEXT_FACE, "Aa Gg 1234", "--ox-font")}
@@ -846,16 +867,20 @@ def build_html() -> str:
 <div class="type-row"><span class="mono">heading 600</span><span style="font-weight:600;font-size:var(--a-h2);line-height:1.25">Spend this week</span></div>
 <div class="type-row"><span class="mono">text 600</span><span style="font-weight:600;font-size:var(--m-body)">Runs waiting for approval</span></div>
 <div class="type-row"><span class="mono">text 400</span><span style="font-weight:400;font-size:var(--m-body);color:var(--body)">A rule the owning team wrote answers each request: allowed, denied, or routed to a person.</span></div>
-<div class="type-row"><span class="mono">code 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{T.MONASPACE_NEON.features};font-size:var(--a-body)">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
+<div class="type-row"><span class="mono">code 400</span><span style="font-family:var(--ox-font-mono);font-feature-settings:{esc(T.MONASPACE_NEON.features)};font-size:var(--a-body)">oxagen dod verify --run 4f2c  =&gt;  held</span></div>
 <h3>Scales</h3>
-<p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a landing page or a post read once. Its body is {T.MARKETING.step('body').px}px. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for the web app, panels, tables, and logs. Its body is {T.APP.step('body').px}px. No step on either scale is below {T.TYPE_FLOOR_PX}px, and no page writes a size of its own: every size reads a step.</p>
+<p>A surface picks one scale and keeps it. <b>marketing</b> (<span class="mono">text-m-*</span>) is large and spaced, for a landing page or a post read once. <b>app</b> (<span class="mono">text-a-*</span>) is dense, for the web app, panels, tables, and logs.</p>
+<p>Each scale has one base, its body size. The base is {m_base:g}px on marketing and customer sites, docs included, and {a_base:g}px in the web app and the internal tools. Mac's rule: "The base page font size should never be lower than 14px."</p>
+<p>Every other step is the base times its ratio. For example, the app micro step is <code>calc(var(--ox-a-base) * {T.ratio_css(a_micro.ratio)})</code>. Change the base in <span class="mono">theme/theme.json</span> or the theme editor, and every step on that scale follows.</p>
+<p>The steps under the base are for labels, badges, timestamps, and table headers. At the shipped base, app micro is {a_micro.px:g}px, app 2xs is {a_2xs.px:g}px, and marketing micro is {m_micro.px:g}px. Running text, buttons, inputs, menu items, and table cells use the base.</p>
+<p>Nothing is hard-coded. Every size reads a step token, such as <code>--ox-a-micro</code>, or a house utility, such as <span class="mono">text-a-micro</span>. <span class="mono">build/css_literals.py</span> fails a hard-coded font size, such as <code>13px</code> or <code>0.8rem</code>.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>step</th><th>marketing face</th><th>marketing ratio</th><th>marketing size</th><th>app face</th><th>app ratio</th><th>app size</th></tr></thead>
+<tbody>{scale_rows()}</tbody></table></div>
+<p class="muted" style="margin-top:14px;font-size:var(--a-body)">Sizes in px at the shipped base, then line height and weight.</p>
 <h3>Headings</h3>
 <p>On the marketing scale, <span class="mono">text-m-h1</span> to <span class="mono">text-m-h3</span> set {T.DISPLAY_FACE.family} through <code>--font-display</code>. On the app scale, <span class="mono">text-a-h1</span> to <span class="mono">text-a-h3</span> and a bare h1 to h3 read <code>--font-heading</code>, which is {T.TEXT_FACE.family}. A marketing or docs site sets its h1 to h3 in {T.DISPLAY_FACE.family} with one line in its own stylesheet. Every h4 to h6 is {T.TEXT_FACE.family}.</p>
 <pre><code>:root {{ {T.MARKETING_HEADINGS}; }}</code></pre>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>step</th><th>marketing face</th><th>app face</th><th>marketing</th><th>app</th></tr></thead>
-<tbody>{scale_rows}</tbody></table></div>
-<p class="muted" style="margin-top:14px;font-size:var(--a-body)">Sizes in px, then line height and weight.</p>
 <h3>Weights</h3>
 <p>Six named weights cover every job.</p>
 <div style="overflow-x:auto"><table>
@@ -870,7 +895,7 @@ def build_html() -> str:
 <ul class="rules">
 <li><b>Headings use sentence case.</b> Capitalise the first word and proper names only.</li>
 <li><b>No fourth role face.</b> A CSS rule names a role, such as <code>--font-display</code> or <code>--font-mono</code>, never a face, so a face can change in one place.</li>
-<li><b>An eyebrow is 14px {T.TEXT_FACE.family}, uppercase, at 0.14em tracking.</b> An eyebrow is the small label above a heading, like the word above each heading on this page. It stands apart by case, tracking, weight, and colour, not by size.</li>
+<li><b>An eyebrow is {T.TEXT_FACE.family} on the app micro step, uppercase, at 0.14em tracking.</b> An eyebrow is the small label above a heading, like the word above each heading on this page. The micro step is {a_micro.px:g}px at the shipped base.</li>
 <li><b>Numbers in tables use Monaspace Neon.</b> Every digit is the same width, so columns of figures line up.</li>
 <li><b>Monaspace Neon keeps texture healing and code ligatures on</b> (<code>font-feature-settings: {T.MONASPACE_NEON.features}</code>). Texture healing evens out the space around narrow and wide letters. Ligatures join pairs such as <code>=&gt;</code> into one glyph.</li>
 </ul>

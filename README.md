@@ -43,11 +43,17 @@ and that use is fixed. Monaspace Neon sets code, logs, digests, and data. Mac
 set this rule on 2026-10-02, and it replaces every earlier face and size rule.
 
 Two size scales sit on top: marketing for landing pages and posts, app for the
-web app and the internal tools. Body text is 16px on the marketing and customer
-sites and 14px in the app. No text is set below 14px on any surface, labels,
-badges, eyebrows, and timestamps included. No class or stylesheet writes a
-font size of its own, so every size reads a step token. Aeonik Mono and Aeonik
-Fono load too, so a page can name them, and no role takes either one yet.
+web app and the internal tools. Each scale has one base, its body size: 16px
+on the marketing and customer sites, docs included, and 14px in the app and
+the internal tools. Mac: "The base page font size should never be lower than
+14px". Every other step is the base times a ratio, so a new base in
+`theme/theme.json` or the theme editor moves every step. The smaller steps are
+for labels, badges, timestamps, and table headers: micro (12px) and 2xs (10px)
+in the app, and micro (14px) on marketing. Running text, controls,
+inputs, buttons, menu items, and table body cells take the base. No class or
+stylesheet writes a font size of its own, so every size reads a step token.
+Aeonik Mono and Aeonik Fono load too, so a page can name them, and no role
+takes either one yet.
 
 Where a square is required, Stella uses its asterisk and Oxagen uses **the
 hive**: six hexagonal cells on a honeycomb grid, four drawn as an outline and
@@ -84,7 +90,7 @@ theme/             theme.json, the one editable source for colours, faces, radiu
 build/             theme.py · color.py · typeset.py · fonts.py · pagecss.py · glyphs.py · geom.py · marks.py · surfaces.py · build.py · messages.py · playbook.py
 build/reference/   the kit wordmark and logomark this system is checked against
 fonts/             Space Grotesk, Aeonik, Aeonik Mono, Aeonik Fono and Monaspace Neon webfonts
-tokens/            house-tokens.css · house-tokens.json · house-tailwind.css · house-fonts.css · next-fonts.ts
+tokens/            house-tokens.css · house-tokens.json · house-tailwind.css · house-text-scale.css · house-fonts.css · next-fonts.ts
 ui/                @oxagen/ui: the component kit, its Storybook, and the design-system bundle. Reads tokens/ and fonts/.
 logo/svg,png/      wordmarks, icons, the oxagen lockup: dark · light · adaptive · mono · sheen · tiles
 icons/             favicons, app icons 16 to 512, maskable 192/512, .ico, .webmanifest
@@ -153,12 +159,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 the OS preference, adds the palette as `bg-ox-*` and `text-ox-*` utilities,
 routes body and every h4 to h6 to Aeonik, h1 to h3 to `--font-heading`, and
 code to Monaspace Neon, and defines the two scales as `text-m-h1` to
-`text-m-micro` and `text-a-h1` to `text-a-micro`. It points `text-xs` and
-`text-sm` at the 14px app body step. Each state colour comes as a mark for
-badges and dots and as a text stop for words, `--ox-st-*-text` on ink and
-`--ox-st-*-text-ink` on paper.
+`text-m-micro` and `text-a-h1` to `text-a-2xs`. It keeps `text-xs` and
+`text-sm` on the app base, so a product that syncs it keeps its sizes.
+`text-input-touch` sets a text field on a phone at 16px or the app base,
+whichever is larger, so iOS Safari never zooms the page on focus. Each state
+colour comes as a mark for badges and dots and as a text stop for words,
+`--ox-st-*-text` on ink and `--ox-st-*-text-ink` on paper.
 `next-fonts.ts` loads its fonts from `../fonts/`, so vendor `tokens/` and
 `fonts/` side by side.
+
+`house-text-scale.css` is opt-in. Import it after `house-tailwind.css`, and
+Tailwind's named sizes read the app steps in order: `text-xs` is 2xs (10px),
+`text-sm` is micro (12px), `text-base` is the base (14px), `text-lg` is h4
+(16px), `text-xl` is h3 (20px), `text-2xl` is h2 (24px), and `text-3xl` is h1
+(30px). Each size follows the base. Rename the site's classes in the same
+change that adds the import: body text in `text-sm` becomes `text-base`, and a
+label in `text-xs` becomes `text-sm`.
+
+```css
+@import "./house-tailwind.css";
+@import "./house-text-scale.css";
+```
 
 Space Grotesk reaches a product three ways. `text-m-h1` to `text-m-h3` set it,
 through `--font-display`, for a marketing or customer site. `--font-heading` is
@@ -330,8 +351,7 @@ has moved. It also fails if a gold neighbour stops matching its OKLCH
 derivation, if any text token drops below AA on its ground, if a state text
 stop drops below AA on a surface of its theme or leaves its mark's hue, if h1
 to h3 stop reading the heading role or h4 to h6 stop reading the text face, if
-a type step is set below 14px, if a step that can take Space Grotesk is set
-below 20px, if a webfont loses a face, its italic, or a feature, if a file in
+a webfont loses a face, its italic, or a feature, if a file in
 `ui/src`, `sdlc/public`, or `pwa/`, or one of the kit's pages, hard-codes a font
 size, or if the skill's tokens or logo drift from the build.
 
@@ -367,9 +387,10 @@ size, or if the skill's tokens or logo drift from the build.
   h3. In the app and the internal tools, h1 to h3 are Aeonik. Every h4 to h6
   is Aeonik on every surface. Nothing in Space Grotesk is below 20 px. Code,
   terminal output, and data are Monaspace Neon.
-- **No text is below 14 px.** Body is 16 px on the marketing and customer
-  sites and 14 px in the app. Labels, badges, eyebrows, and timestamps are
-  14 px or more. An eyebrow stands apart by case, tracking, weight, or colour.
+- **The base is never below 14 px.** It is 16 px on the marketing and
+  customer sites and 14 px in the app. Every step follows the base. Labels,
+  badges, timestamps, and table headers take a smaller step. Running text,
+  controls, inputs, buttons, menu items, and table body cells take the base.
   Every size reads a token, and no class sets one of its own.
 - **A status word takes its text stop.** A badge or a dot takes the state's
   mark. A word in that colour takes `--ox-st-*-text` on ink or

@@ -36,8 +36,9 @@ declaration — if a custom property has no marker it is Tailwind engine plumbin
 Utility classes that DO exist, if you prefer them: `bg-background` `bg-card`
 `bg-muted` `bg-primary` `bg-destructive` `text-foreground` `text-muted-foreground`
 `text-primary` `border-border` `border-input` `rounded-sm|md|lg|xl|full`
-`shadow-sm|md|lg` `font-sans|display|heading|mono|medium|semibold` `text-xs|sm` (both 14px)
-`text-a-h1|h2|h3|h4|body|micro` `text-m-h1|h2|h3|h4|body|micro`
+`shadow-sm|md|lg` `font-sans|display|heading|mono|medium|semibold`
+`text-xs|sm|base|lg|xl|2xl|3xl` (the app steps 2xs, micro, base, h4, h3, h2, h1)
+`text-a-h1|h2|h3|h4|body|micro|2xs` `text-m-h1|h2|h3|h4|body|micro`
 `gap-1|2|3|4|6`. Anything outside that list: use `var(--token)` instead.
 
 ### Theme
@@ -60,11 +61,14 @@ healing. A figure in a table is mono so columns of digits align.
 
 Mac set this rule on 2026-10-02. A component's h1 to h3 read `--font-heading`, which is
 Aeonik. A marketing or docs design sets `--font-heading: var(--font-display)` on its
-root, so its h1 to h3 draw Space Grotesk. No text is set below 14px, labels, badges,
-and eyebrows included. No style writes a font size of its own: read a step token, such
-as `var(--ox-a-body)` (14px, app body) or `var(--ox-m-body)` (16px, marketing body).
-`text-xs` and `text-sm` both set 14px. Aeonik Mono and Aeonik Fono load as their own
-families, and no role takes either one yet.
+root, so its h1 to h3 draw Space Grotesk. Each scale has one base: 14px in the app
+(`--ox-a-base`) and 16px on marketing (`--ox-m-base`), never below 14px. Every step is the
+base times a ratio, so it follows the base. No style writes a font size of its own: read
+a step token, such as `var(--ox-a-body)` (the app base) or `var(--ox-a-micro)` (12px).
+Running text, controls, inputs, buttons, menu items, and table body cells take the base
+(`text-base`). Labels, badges, timestamps, and table headers take a smaller step:
+`text-sm` (micro, 12px) or `text-xs` (2xs, 10px). Aeonik Mono and Aeonik Fono load as
+their own families, and no role takes either one yet.
 
 **Glass belongs only on chrome that floats over content:** menus, selects, comboboxes,
 popovers, hover cards, the command menu, toasts, a dialog's scrim, and sticky navigation

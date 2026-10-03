@@ -123,7 +123,7 @@ h3 { font-size: clamp(var(--a-h3), 3vw, var(--m-h3)); line-height: var(--m-h3-le
 h4 { font: 600 var(--m-h4)/var(--m-h4-leading) var(--sans); color: var(--ink); margin: 0; }
 p { margin: 0 0 16px; }
 .eyebrow {
-  font: 500 var(--a-body)/1.4 var(--sans); letter-spacing: 0.14em; text-transform: uppercase;
+  font: 500 var(--a-micro)/1.4 var(--sans); letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--muted); margin: 0 0 14px;
 }
 .eyebrow.first { color: var(--gold-text); }
@@ -143,7 +143,7 @@ p { margin: 0 0 16px; }
 .top .wrap { display: flex; align-items: center; gap: 20px; height: 60px; }
 .brand { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
 .brand svg { height: 22px; width: auto; }
-.tag { font: 400 var(--a-body)/1 var(--mono); color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 9px; white-space: nowrap; }
+.tag { font: 400 var(--a-micro)/1 var(--mono); color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 9px; white-space: nowrap; }
 .top nav { display: flex; gap: 22px; margin-left: auto; align-items: center; }
 .top nav a { font: 500 var(--a-body)/1 var(--sans); color: var(--muted); text-decoration: none; }
 .top nav a:hover { color: var(--ink); }
@@ -226,7 +226,7 @@ section.hero { border-top: 0; padding: 72px 0 88px; }
 /* Waiting card stack (hero) */
 .queue { position: relative; display: grid; gap: 12px; }
 .queue-title { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-.queue-title span { font: 400 var(--a-body)/1 var(--mono); color: var(--muted); }
+.queue-title span { font: 400 var(--a-micro)/1 var(--mono); color: var(--muted); }
 .card-wait {
   display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center;
   padding: 14px 16px; border: 1px dashed var(--rule); border-radius: var(--r); background: var(--panel);
@@ -235,7 +235,7 @@ section.hero { border-top: 0; padding: 72px 0 88px; }
 .queue .t { font: 600 var(--m-body)/1.3 var(--sans); color: var(--ink); }
 .queue .s { font: 400 var(--a-body)/1.4 var(--sans); color: var(--muted); }
 .card-wait .clock { font: 500 var(--a-body)/1 var(--mono); color: var(--body); white-space: nowrap; }
-.zz { font: 600 var(--a-body)/1 var(--mono); fill: var(--muted); }
+.zz { font: 600 var(--a-micro)/1 var(--mono); fill: var(--muted); }
 .card-person {
   display: grid; grid-template-columns: 44px 1fr 84px; gap: 14px; align-items: center;
   padding: 14px 16px; border: 1px solid var(--rule); border-radius: var(--r); background: var(--hl);
@@ -247,10 +247,10 @@ section.hero { border-top: 0; padding: 72px 0 88px; }
 
 /* Week grid */
 .week { display: grid; grid-template-columns: 48px repeat(24, 1fr); gap: 3px; align-items: center; }
-.week .d { font: 400 var(--a-body)/1 var(--mono); color: var(--muted); }
+.week .d { font: 400 var(--a-micro)/1 var(--mono); color: var(--muted); }
 .week .h { aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--line); background: transparent; transition: background-color 0.4s, border-color 0.4s; }
 .week .h.person { background: var(--muted); border-color: var(--muted); }
-.week .hours { font: 400 var(--a-body)/1 var(--mono); color: var(--dim); grid-column: span 6; }
+.week .hours { font: 400 var(--a-micro)/1 var(--mono); color: var(--dim); grid-column: span 6; }
 .week-legend { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 16px; font-size: var(--a-body); color: var(--muted); align-items: center; }
 .week-legend b { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 8px; }
 .week-legend .lp { background: var(--muted); }
@@ -283,16 +283,16 @@ section.hero { border-top: 0; padding: 72px 0 88px; }
 .sim svg { width: 100%; height: auto; }
 .sim text { font-family: var(--sans); }
 .sim .col-label { font: 500 var(--a-body)/1 var(--sans); fill: var(--muted); letter-spacing: 0.02em; }
-.sim .lane-label { font: 400 var(--a-body)/1 var(--mono); fill: var(--muted); }
+.sim .lane-label { font: 400 var(--a-micro)/1 var(--mono); fill: var(--muted); }
 .sim .col { fill: none; stroke: var(--line); }
 .sim .tok { fill: var(--hl); stroke: var(--ink); stroke-width: 1.2; transition: transform 0.35s ease; }
 .sim .tok.wait { stroke-dasharray: 4 3; fill: none; stroke: var(--muted); }
-.sim .tok-text { font: 500 var(--a-body)/1 var(--sans); fill: var(--ink); }
+.sim .tok-text { font: 500 var(--a-micro)/1 var(--sans); fill: var(--ink); }
 .sim .tok-text.wait { fill: var(--muted); }
 .sim .done { fill: var(--ink); }
 .sim .clockbar { fill: none; stroke: var(--rule); }
 .sim .band { fill: var(--hl); }
-.sim .band-label { font: 400 var(--a-body)/1 var(--mono); fill: var(--muted); }
+.sim .band-label { font: 400 var(--a-micro)/1 var(--mono); fill: var(--muted); }
 .sim .now { stroke: var(--ink); stroke-width: 1.5; }
 .sim .time { font: 500 var(--a-body)/1 var(--mono); fill: var(--ink); }
 .sim-controls { display: flex; gap: 12px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
@@ -310,7 +310,7 @@ section.hero { border-top: 0; padding: 72px 0 88px; }
 .loop .ring-outer { fill: none; stroke: var(--line); stroke-dasharray: 3 5; }
 .loop .node rect { fill: var(--panel); stroke: var(--rule); stroke-width: 1.2; transition: fill 0.3s, stroke 0.3s; }
 .loop .node text { font: 500 var(--m-body)/1 var(--sans); fill: var(--body); text-anchor: middle; }
-.loop .node .num { font: 400 var(--a-body)/1 var(--mono); fill: var(--muted); }
+.loop .node .num { font: 400 var(--a-micro)/1 var(--mono); fill: var(--muted); }
 .loop .node.on rect { fill: var(--hl); stroke: var(--ink); stroke-width: 3; stroke: var(--ink); }
 .loop .node.on text { fill: var(--ink); }
 .loop .node { cursor: pointer; }
@@ -320,7 +320,7 @@ section.hero { border-top: 0; padding: 72px 0 88px; }
 .loop .center-big { font: 700 var(--m-h3)/1 var(--sans); fill: var(--ink); text-anchor: middle; }
 .loop .center-small { font: 400 var(--m-body)/1 var(--sans); fill: var(--muted); text-anchor: middle; }
 .loop .person rect { fill: var(--ground); stroke: var(--muted); stroke-dasharray: 4 3; }
-.loop .person .who-label { font: 400 var(--a-body)/1 var(--mono); fill: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.loop .person .who-label { font: 400 var(--a-2xs)/1 var(--mono); fill: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
 .loop .person text { font: 500 var(--a-body)/1 var(--sans); fill: var(--muted); text-anchor: middle; }
 .loop .person line { stroke: var(--muted); stroke-dasharray: 2 4; }
 
@@ -342,10 +342,10 @@ td.old { color: var(--muted); }
 .chart svg { width: 100%; height: auto; }
 .chart .bar { fill: var(--muted); }
 .chart .axis { stroke: var(--rule); }
-.chart .tick { font: 400 var(--a-body)/1 var(--mono); fill: var(--muted); }
-.chart .val { font: 400 var(--a-body)/1 var(--mono); fill: var(--body); text-anchor: middle; }
+.chart .tick { font: 400 var(--a-micro)/1 var(--mono); fill: var(--muted); }
+.chart .val { font: 400 var(--a-2xs)/1 var(--mono); fill: var(--body); text-anchor: middle; }
 .chart .band { fill: var(--hl); }
-.chart .band-label { font: 400 var(--a-body)/1 var(--sans); fill: var(--muted); }
+.chart .band-label { font: 400 var(--a-micro)/1 var(--sans); fill: var(--muted); }
 .chart .bar-g:hover .bar, .chart .bar-g:focus .bar { fill: var(--ink); }
 .chart .bar-g:focus { outline: none; }
 
@@ -370,9 +370,9 @@ td.old { color: var(--muted); }
 .stage .num { font: 500 var(--a-body)/1 var(--mono); color: var(--muted); }
 .stage p { font-size: var(--m-body); line-height: 1.6; margin: 0; }
 .stage .rule { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: var(--a-body); color: var(--muted); }
-.stage .rule b { font: 500 var(--a-body)/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--body); margin-right: 8px; }
+.stage .rule b { font: 500 var(--a-micro)/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--body); margin-right: 8px; }
 
-.who { display: inline-block; font: 400 var(--a-body)/1 var(--mono); color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; padding: 4px 8px; margin-left: auto; white-space: nowrap; }
+.who { display: inline-block; font: 400 var(--a-micro)/1 var(--mono); color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; padding: 4px 8px; margin-left: auto; white-space: nowrap; }
 
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .steps li { border: 1px solid var(--line); border-radius: var(--r); padding: 22px; background: var(--panel); }

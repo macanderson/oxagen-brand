@@ -14,7 +14,7 @@ drift and no sync step.
 |---|---|
 | What is every token worth? | `../tokens/house-tokens.css`, and `house-tokens.json` for the same values as data |
 | Which corner, shadow, and spacing unit? | `--ox-radius-base` and its steps `--ox-radius-*`, `--ox-shadow-ui` and `--ox-shadow-pop` (each with an `-ink` twin for paper), and `--ox-space`, all in `../tokens/house-tokens.css` |
-| What type scale and utilities exist? | `../tokens/house-tailwind.css`, with the `text-m-*` marketing and `text-a-*` app scales |
+| What type scale and utilities exist? | `../tokens/house-tailwind.css`, with the `text-m-*` marketing and `text-a-*` app scales, and `../tokens/house-text-scale.css`, which points Tailwind's `text-xs` to `text-3xl` at the app steps |
 | Which face and size does each surface take? | The Type section of `../skills/oxagen-branding/references/system.md` |
 | Which font files load, and how? | `../tokens/house-fonts.css` and `../fonts/` |
 | How do tokens map to semantic roles, per theme? | `src/styles/globals.css`: the `:root`, `.dark`, and `prefers-color-scheme` blocks, then the v3 layer at the end of the file |
@@ -49,8 +49,22 @@ twin on paper. `h1`, `h2`, and `h3` read `--ox-a-h1-leading`,
 `h1` to `h3` take `--font-heading`, which is Aeonik in the kit, as in the app.
 A Pages/Website story points it at `--font-display`, Space Grotesk, as a
 marketing or docs site does in its own stylesheet. `h4` to `h6` take
-`--font-sans`, Aeonik, on every surface. No text is set below 14px: `text-xs`
-and `text-sm` both read the 14px app body step.
+`--font-sans`, Aeonik, on every surface.
+
+`globals.css` imports `../tokens/house-text-scale.css` after
+`house-tailwind.css`, so Tailwind's named sizes read the app steps in order.
+`text-base` is the app base, `text-sm` is micro, `text-xs` is 2xs, and
+`text-lg` to `text-3xl` are h4 to h1. Running text, controls, inputs, buttons,
+menu items, and table body cells take `text-base`. Labels, badges, timestamps,
+and table headers take `text-sm` or `text-xs`.
+
+Every type step is `calc()` over its scale's base, `--ox-m-base` or
+`--ox-a-base`. A new base in `theme/theme.json` moves every step on the next
+build. The theme editor writes only the values that differ from the shipped
+theme on `<html>`. A new base writes `--ox-a-base` or `--ox-m-base` alone, and
+every step on the page follows it as you change it. Set the base on `:root`.
+Each step is computed where `:root` declares it, so a base set on a
+descendant element does not move the steps inside it.
 
 ## Literal guard
 
@@ -58,23 +72,23 @@ and `text-sm` both read the 14px app body step.
 it. It reads two scopes.
 
 - **`globals.css`.** It fails on a literal corner, shadow, font size, or
-  heading line height. One literal stays, and `KEEP` in `build/css_literals.py`
-  names it with its reason: a phone's text fields set 16px, so iOS does not
-  zoom on focus.
+  heading line height. A phone's text fields read `--text-input-touch`, 16px
+  or the app base, whichever is larger, so iOS does not zoom on focus.
+  `KEEP` in `build/css_literals.py` is empty.
 - **Every font size the kit sets.** It fails on any hard-coded font size in
   `ui/src`, `sdlc/public`, and `pwa/`, and in the kit's pages (`playbook.html`,
   `message-bank.html`, `always-on.html`, and `brand-guide.html`). That covers a
   Tailwind class such as `text-[13px]`, a `fontSize` value, and CSS in a style
-  block, a `style` attribute, or a string. It fails on Tailwind's own fixed
-  sizes, `text-base`, `text-lg`, and up, apart from a text field's 16px on a
-  phone, which `KEEP` names for each file that sets it. It also fails on a
-  size under 1em or under 100%, because `.9em` of a 14px body is 12.6px. Tests
-  are not read, because they name classes to assert them.
+  block, a `style` attribute, or a string. It fails on Tailwind's sizes from
+  `text-4xl` up, which read no step. It also fails on a size under 1em or
+  under 100%, because `.9em` of a 14px body is 12.6px, a size no step names.
+  Tests are not read, because they name classes to assert them. It sets no
+  smallest size.
 
 A size passes when it reads a token: `var(--ox-a-body)`,
 `text-(length:--ox-a-h2)`, a house utility (`text-m-*`, `text-a-*`), or
-Tailwind's `text-xs` and `text-sm`, which read a step. A size of 1em or 100% or
-more passes too, since it never sets text below its parent.
+Tailwind's `text-xs` to `text-3xl`, which read the app steps. A size of 1em or
+100% or more passes too, since it never sets text below its parent.
 `sdlc/public/sdlc.css` names the type steps once, because that site cannot
 import `tokens/`, and the guard holds those names to the theme's values.
 
