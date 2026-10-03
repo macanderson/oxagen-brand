@@ -351,8 +351,7 @@ def literals(css: str, keep: tuple[Keep, ...] = KEEP, path: str = KIT_CSS) -> tu
         value = re.sub(r"\s*!important$", "", decl.value)
         groups = [g for g in (group_of(decl),) if g] + [g for g in style_groups(decl) if g in ("color", "spacing")]
         for group in groups:
-            literal = {"color": color_literal, "spacing": spacing_literal}.get(group, lambda v, g=group: is_literal(g, v))
-            if not literal(value):
+            if not group_literal(group, value):
                 continue
             entry = next((k for k in mine if k.group == group and k.value == value), None)
             if entry:
@@ -515,7 +514,7 @@ _COLOR_PROPS = re.compile(
     r"^(color|background(-color|-image)?|border(-(top|right|bottom|left|block|inline)(-(start|end))?)?(-color)?"
     r"|outline(-color)?|fill|stroke|stop-color|flood-color|lighting-color|caret-color|accent-color"
     r"|text-decoration(-color)?|text-emphasis-color|column-rule(-color)?|scrollbar-color|text-shadow"
-    r"|-webkit-text-fill-color|-webkit-text-stroke(-color)?|box-shadow)$"
+    r"|-webkit-text-fill-color|-webkit-text-stroke(-color)?)$"
 )
 _SPACING_PROPS = re.compile(
     r"^((padding|margin|scroll-padding|scroll-margin)(-(top|right|bottom|left|block|inline)(-(start|end))?)?"
@@ -573,6 +572,23 @@ def spacing_literal(value: str) -> bool:
     return any(float(n) != 0 for n, _unit in _SPACE_LENGTH.findall(without_vars(value)))
 
 
+def group_literal(group: str, value: str) -> bool:
+    """Whether `value` writes a literal its group should take from a token.
+
+    A shadow fails on a length that is not a ring or an inset bar, and on a
+    colour of its own, so a ring in a hex fails too.
+    """
+    if group == "color":
+        return color_literal(value)
+    if group == "spacing":
+        return spacing_literal(value)
+    if group == "font-size":
+        return small_or_fixed(value)
+    if group == "box-shadow":
+        return is_literal(group, value) or color_literal(value)
+    return is_literal(group, value)
+
+
 def style_groups(decl: Decl) -> list[str]:
     """The groups a declaration's value answers to in the style scope.
 
@@ -612,12 +628,7 @@ def _style_decls(decls: list[Decl], path: str, offset: int = 0, prefix: str = "-
     for d in decls:
         value = re.sub(r"\s*!important$", "", d.value)
         for group in style_groups(d):
-            literal = {
-                "color": color_literal,
-                "spacing": spacing_literal,
-                "font-size": small_or_fixed,
-            }.get(group, lambda v, g=group: is_literal(g, v))(value)
-            if literal:
+            if group_literal(group, value):
                 out.append(Hit(d.line + offset, group, d.prop, value, _style_suggestion(group, value, d.prop, prefix), path))
     return out
 
@@ -715,9 +726,7 @@ def script_style_hits(code: str, path: str) -> list[Hit]:
         prop, value = m.group(1), m.group(2).replace("_", " ")
         d = Decl("", prop, value, 0)
         for group in style_groups(d):
-            if group != "font-size" and {"color": color_literal, "spacing": spacing_literal}.get(
-                group, lambda v, g=group: is_literal(g, v)
-            )(value):
+            if group != "font-size" and group_literal(group, value):
                 hit(m.start(), group, "class", m.group(0), _style_suggestion(group, value, prop, "--ox-"))
     for m in _STYLE_PROP.finditer(text):
         name = m.group(1)
@@ -727,8 +736,7 @@ def script_style_hits(code: str, path: str) -> list[Hit]:
             if group in ("spacing", "border-radius") and float(value) != 0:
                 hit(m.start(), group, name, value, _style_suggestion(group, value, name, "--ox-"))
             continue
-        check_fn = {"color": color_literal, "spacing": spacing_literal}.get(group, lambda v, g=group: is_literal(g, v))
-        if check_fn(value):
+        if group_literal(group, value):
             hit(m.start(), group, name, value, _style_suggestion(group, value, name, "--ox-"))
     for m in _SVG_ATTR.finditer(text):
         value = m.group(3)
@@ -742,8 +750,7 @@ def script_style_hits(code: str, path: str) -> list[Hit]:
         for group in style_groups(d):
             if group == "font-size":
                 continue
-            literal = {"color": color_literal, "spacing": spacing_literal}.get(group, lambda v, g=group: is_literal(g, v))
-            if literal(value):
+            if group_literal(group, value):
                 hit(m.start(), group, prop, value, _style_suggestion(group, value, prop, "--"))
     return out
 

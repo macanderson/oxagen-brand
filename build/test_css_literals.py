@@ -63,7 +63,10 @@ class Shadows(unittest.TestCase):
         self.assertEqual(flagged(css), [])
 
     def test_a_ring_beside_a_drop_shadow_fails(self) -> None:
-        self.assertEqual(len(flagged(".a { box-shadow: 0 0 0 1px red, 0 2px 4px black; }")), 1)
+        self.assertEqual(len(flagged(".a { box-shadow: 0 0 0 1px var(--ring), 0 2px 4px var(--fg); }")), 1)
+
+    def test_a_ring_in_a_colour_literal_fails(self) -> None:
+        self.assertEqual(flagged(".a { box-shadow: 0 0 0 1px #fff; }"), [(1, "box-shadow", "0 0 0 1px #fff")])
 
     def test_a_token_passes(self) -> None:
         self.assertEqual(flagged(".a { box-shadow: var(--ui-shadow); } :root { --ui-shadow: var(--ox-shadow-ui-ink); }"), [])
@@ -157,7 +160,7 @@ class HeadingLineHeights(unittest.TestCase):
 
 class Reading(unittest.TestCase):
     def test_a_literal_in_a_comment_passes(self) -> None:
-        self.assertEqual(flagged("/* .a { border-radius: 6px; } */\n.b { color: red; }"), [])
+        self.assertEqual(flagged("/* .a { border-radius: 6px; } */\n.b { color: var(--fg); }"), [])
 
     def test_a_glob_in_a_string_does_not_open_a_comment(self) -> None:
         # `/*` inside the @source path is not a comment, so the rule after it is still read.
@@ -177,7 +180,7 @@ class Keep(unittest.TestCase):
 
     def test_an_entry_that_excuses_nothing_is_stale(self) -> None:
         keep = (L.Keep("font-size", "16px", "the iOS zoom floor"),)
-        self.assertEqual(L.literals(".a { color: red; }", keep=keep), ([], list(keep)))
+        self.assertEqual(L.literals(".a { color: var(--fg); }", keep=keep), ([], list(keep)))
 
 
 
