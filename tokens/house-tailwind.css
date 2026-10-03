@@ -20,10 +20,11 @@
  * Type: text-m-* is the marketing scale, text-a-* the app scale. A surface
  * picks one. Aeonik sets the default text everywhere, and Monaspace Neon
  * sets code with texture healing on. Each scale has one base, --ox-m-base
- * and --ox-a-base, and every step is the base times its ratio. Tailwind's
- * text-xs to text-3xl read the app steps in order: text-base is the app
- * base, text-sm and text-xs are smaller, and text-lg and up are larger.
- * Each follows the base.
+ * and --ox-a-base, and every step is the base times its ratio. text-xs and
+ * text-sm read the app base here. To point Tailwind's text-xs to text-3xl
+ * at the app steps in order, import house-text-scale.css after this file.
+ * text-input-touch sets a text field on a phone: 16px or the app base,
+ * whichever is larger, so iOS never zooms the page on focus.
  *
  * Headings: text-m-h1 to text-m-h3 set Space Grotesk (--font-display), for
  * a marketing or customer site. text-a-h1 to text-a-h3, and bare h1 to h3,
@@ -100,20 +101,12 @@
   --font-mono: var(--font-monaspace-neon, "Monaspace Neon"), ui-monospace, "SF Mono", Menlo, Consolas, monospace; /* code, logs, ids, and numbers in tables */
   --font-wordmark: var(--font-space-grotesk, "Space Grotesk"), "Helvetica Neue", Arial, sans-serif; /* a wordmark set as text rather than drawn. It is fixed */
 
-  --text-xs: var(--ox-a-2xs); /* 10px at the base, the app 2xs step */
-  --text-xs--line-height: var(--ox-a-2xs-leading);
-  --text-sm: var(--ox-a-micro); /* 12px at the base, the app micro step */
-  --text-sm--line-height: var(--ox-a-micro-leading);
-  --text-base: var(--ox-a-body); /* 14px at the base, the app body step */
-  --text-base--line-height: var(--ox-a-body-leading);
-  --text-lg: var(--ox-a-h4); /* 16px at the base, the app h4 step */
-  --text-lg--line-height: var(--ox-a-h4-leading);
-  --text-xl: var(--ox-a-h3); /* 20px at the base, the app h3 step */
-  --text-xl--line-height: var(--ox-a-h3-leading);
-  --text-2xl: var(--ox-a-h2); /* 24px at the base, the app h2 step */
-  --text-2xl--line-height: var(--ox-a-h2-leading);
-  --text-3xl: var(--ox-a-h1); /* 30px at the base, the app h1 step */
-  --text-3xl--line-height: var(--ox-a-h1-leading);
+  --text-xs: var(--ox-a-body); /* the app base, until the site imports house-text-scale.css */
+  --text-xs--line-height: var(--ox-a-body-leading);
+  --text-sm: var(--ox-a-body); /* the app base, until the site imports house-text-scale.css */
+  --text-sm--line-height: var(--ox-a-body-leading);
+  --text-input-touch: max(16px, var(--ox-a-body)); /* a text field on a phone */
+  --text-input-touch--line-height: var(--ox-a-body-leading);
 
   --tracking-hero: -0.03em;
   --tracking-display: -0.02em;

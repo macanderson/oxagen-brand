@@ -357,9 +357,10 @@ def house_tailwind_css() -> str:
             "Type: text-m-* is the marketing scale, text-a-* the app scale. A surface picks one."
             f" {T.TEXT_FACE.family} sets the default text everywhere, and {T.CODE_FACE.family} sets code"
             " with texture healing on. Each scale has one base, --ox-m-base and --ox-a-base, and every"
-            " step is the base times its ratio. Tailwind's text-xs to text-3xl read the app steps in"
-            " order: text-base is the app base, text-sm and text-xs are smaller, and text-lg and up are"
-            " larger. Each follows the base."
+            " step is the base times its ratio. text-xs and text-sm read the app base here. To point"
+            " Tailwind's text-xs to text-3xl at the app steps in order, import house-text-scale.css"
+            " after this file. text-input-touch sets a text field on a phone: 16px or the app base,"
+            " whichever is larger, so iOS never zooms the page on focus."
         ),
         "",
         *_wrap(
@@ -400,11 +401,17 @@ def house_tailwind_css() -> str:
         face = T.FACE[role.face]
         out += f"  --font-{role.key}: var({face.next_var}, \"{face.family}\"), {face.stack}; /* {role.job} */\n"
     out += "\n"
-    # Tailwind's named sizes read the app steps in order, so text-base is the
-    # app base and every named size follows it.
-    for name, step in T.TAILWIND_SIZES:
-        out += f"  --text-{name}: var(--ox-a-{step}); /* {T.APP.step(step).px:g}px at the base, the app {step} step */\n"
-        out += f"  --text-{name}--line-height: var(--ox-a-{step}-leading);\n"
+    # text-xs and text-sm read the app base, as they have since #83, so a
+    # product that syncs this file keeps its sizes. A site that wants every
+    # named size on the app steps imports house-text-scale.css after this file.
+    for name in ("xs", "sm"):
+        out += f"  --text-{name}: var(--ox-a-body); /* the app base, until the site imports house-text-scale.css */\n"
+        out += f"  --text-{name}--line-height: var(--ox-a-body-leading);\n"
+    # A text field on a phone: iOS Safari zooms the page when a focused
+    # field's text is under 16px, so the field takes 16px or the app base,
+    # whichever is larger. The 16px is the device's rule, not a step.
+    out += f"  --text-input-touch: max({T.IOS_FIELD_PX}px, var(--ox-a-body)); /* a text field on a phone */\n"
+    out += "  --text-input-touch--line-height: var(--ox-a-body-leading);\n"
     out += "\n"
     for job, t in T.TRACKING.items():
         out += f"  --tracking-{job}: {t};\n"
@@ -456,6 +463,29 @@ def house_tailwind_css() -> str:
     out += "/* the code face with texture healing, for anything not already routed */\n"
     out += f"@utility font-code {{ font-family: var(--font-mono); font-feature-settings: {T.FACE['mono'].features}; }}\n"
     return out
+
+
+def house_text_scale_css() -> str:
+    """Tailwind's named sizes on the app steps, as a file a site imports when it opts in."""
+    lines = _header(
+        "Tailwind's named sizes on the house app steps, for a site that opts in.",
+        "Import it after house-tailwind.css, in the app's global stylesheet:",
+        "",
+        '    @import "./house-tailwind.css";',
+        '    @import "./house-text-scale.css";',
+        "",
+        *_wrap(
+            "text-base is the app base. Smaller text takes text-sm or text-xs, and larger text takes"
+            " text-lg and up. Each size reads an app step, so it follows the base. Rename a site's"
+            " classes in the same change that imports this file: a body text-sm becomes text-base, and a"
+            " label text-xs becomes text-sm."
+        ),
+    )
+    out = "\n".join(lines) + "\n\n@theme {\n"
+    for name, step in T.TAILWIND_SIZES:
+        out += f"  --text-{name}: var(--ox-a-{step}); /* {T.APP.step(step).px:g}px at the base, the app {step} step */\n"
+        out += f"  --text-{name}--line-height: var(--ox-a-{step}-leading);\n"
+    return out + "}\n"
 
 
 def _export_name(family: str) -> str:
@@ -520,6 +550,7 @@ def build_tokens() -> None:
     write("tokens/house-tokens.css", house_tokens_css())
     write("tokens/house-fonts.css", house_fonts_css())
     write("tokens/house-tailwind.css", house_tailwind_css())
+    write("tokens/house-text-scale.css", house_text_scale_css())
     write("tokens/next-fonts.ts", next_fonts_ts())
     write(SKILL_TOKENS, PG.skill_tokens_css())
 

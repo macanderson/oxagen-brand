@@ -522,14 +522,17 @@
         "family": "Monaspace Neon"
       }
     ],
-    "tailwind_sizes": {
-      "text-xs": "--ox-a-2xs",
-      "text-sm": "--ox-a-micro",
-      "text-base": "--ox-a-body",
-      "text-lg": "--ox-a-h4",
-      "text-xl": "--ox-a-h3",
-      "text-2xl": "--ox-a-h2",
-      "text-3xl": "--ox-a-h1"
+    "text_scale": {
+      "file": "tokens/house-text-scale.css",
+      "sizes": {
+        "text-xs": "--ox-a-2xs",
+        "text-sm": "--ox-a-micro",
+        "text-base": "--ox-a-body",
+        "text-lg": "--ox-a-h4",
+        "text-xl": "--ox-a-h3",
+        "text-2xl": "--ox-a-h2",
+        "text-3xl": "--ox-a-h1"
+      }
     },
     "scales": {
       "marketing": {

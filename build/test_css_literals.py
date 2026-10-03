@@ -95,13 +95,22 @@ class FontSizesEverywhere(unittest.TestCase):
         hits = L.script_font_sizes('const a = "px-2 text-[13px] font-medium";\nconst b = "text-[0.75rem]";', "x.tsx")
         self.assertEqual([(h.line, h.value) for h in hits], [(1, "text-[13px]"), (2, "text-[0.75rem]")])
 
-    def test_a_tailwind_fixed_size_fails(self) -> None:
-        hits = L.script_font_sizes('const a = "text-lg max-md:text-base text-2xl";', "x.tsx")
-        self.assertEqual([h.value for h in hits], ["text-lg", "text-base", "text-2xl"])
+    def test_a_tailwind_size_with_no_step_fails(self) -> None:
+        hits = L.script_font_sizes('const a = "text-4xl max-md:text-base text-6xl";', "x.tsx")
+        self.assertEqual([h.value for h in hits], ["text-4xl", "text-6xl"])
 
     def test_a_tailwind_size_that_reads_a_token_passes(self) -> None:
-        code = 'const a = "text-(length:--ox-a-h2) text-[length:var(--ox-m-h2)] text-[var(--body)] text-sm text-a-body";'
+        code = (
+            'const a = "text-(length:--ox-a-h2) text-[length:var(--ox-m-h2)] text-[var(--body)] text-a-body text-a-2xs";\n'
+            'const b = "text-xs text-sm text-base text-lg text-xl text-2xl text-3xl";'
+        )
         self.assertEqual(L.script_font_sizes(code, "x.tsx"), [])
+
+    def test_a_small_literal_reads_the_nearest_small_step(self) -> None:
+        hits = L.script_font_sizes('const a = "text-[10.5px]";\nconst b = "text-[12px]";', "x.tsx")
+        self.assertTrue(hits[0].use.startswith("text-xs (10px"))
+        self.assertTrue(hits[1].use.startswith("text-sm (12px"))
+        self.assertIn("var(--ox-a-micro) (12px)", L.size_suggestion(11.5))
 
     def test_a_font_size_prop_and_css_in_a_string_fail(self) -> None:
         code = 'h({ fontSize: "0.75rem" });\nconst css = ".t{font:14px/1.45 Aeonik}.b{font-size:13px}";'

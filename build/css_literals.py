@@ -90,19 +90,10 @@ class Keep:
     path: str = KIT_CSS
 
 
-#: Why a text field keeps a fixed 16px on a phone. It is a device rule, not a
-#: step: iOS Safari zooms the page when a focused field's text is under 16px,
-#: whatever the base.
-_IOS_ZOOM = "Safari's smallest size for a text field on a phone, below which iOS zooms the page on focus"
-
-#: The literals the guard excuses, by file, group, and value.
-KEEP: tuple[Keep, ...] = (
-    Keep("font-size", "16px", _IOS_ZOOM),
-    *(
-        Keep("font-size", "text-[16px]", _IOS_ZOOM, f"ui/src/components/{name}")
-        for name in ("command-menu.tsx", "composer.tsx", "control-styles.ts", "input.tsx", "list-controls.tsx", "textarea.tsx")
-    ),
-)
+#: The literals the guard excuses, by file, group, and value. A text field on
+#: a phone reads `--text-input-touch` (`text-input-touch`), which holds iOS
+#: Safari's 16px in the token layer, so no file here keeps a size of its own.
+KEEP: tuple[Keep, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -532,11 +523,14 @@ def summary() -> list[str]:
     """What a clean pass of the guard holds, one line per scope."""
     kit = sum(1 for k in KEEP if k.path == KIT_CSS)
     other = len(KEEP) - kit
+    def kept(n: int, what: str) -> str:
+        return f", apart from {n} kept {what}{'s' if n != 1 else ''}" if n else ""
+
     return [
-        f"{KIT_CSS} reads every corner, shadow, font size, and heading line height from a token, "
-        f"apart from {kit} kept literal{'s' if kit != 1 else ''}",
+        f"{KIT_CSS} reads every corner, shadow, font size, and heading line height from a token"
+        + kept(kit, "literal"),
         f"{len(scanned_files())} files in ui/src, sdlc/public, pwa/, and the kit's pages set every font size "
-        f"from a token, apart from {other} kept text field size{'s' if other != 1 else ''}",
+        "from a token" + kept(other, "size"),
     ]
 
 

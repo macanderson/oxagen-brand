@@ -296,12 +296,13 @@ APP = _scale("a", "app", "dashboards, panels, tables, terminals, logs: dense")
 SCALES: tuple[Scale, ...] = (MARKETING, APP)
 
 #: Tailwind's named sizes, smallest first, and the app step each reads.
-#: `tokens/house-tailwind.css` points each `--text-<name>` at its step, so
+#: `tokens/house-text-scale.css` points each `--text-<name>` at its step, so
 #: `text-base` is the app base, smaller text takes `text-sm` or `text-xs`,
-#: and larger text takes `text-lg` and up. Mac, 2026-10-03: base is 14px,
-#: with "text that is supposed to be smaller to have text-sm, for text that's
-#: supposed to be larger to have text-xl". Tailwind's sizes above 3xl read no
-#: step.
+#: and larger text takes `text-lg` and up. A site opts in by importing that
+#: file after `house-tailwind.css`. The kit's own stylesheet does. Mac,
+#: 2026-10-03: base is 14px, with "text that is supposed to be smaller to have
+#: text-sm, for text that's supposed to be larger to have text-xl". Tailwind's
+#: sizes above 3xl read no step.
 TAILWIND_SIZES: tuple[tuple[str, str], ...] = (
     ("xs", "2xs"),
     ("sm", "micro"),
@@ -330,6 +331,11 @@ ROUTING: tuple[Route, ...] = (
     Route("body, button, input, select, textarea, label, nav", "sans"),
     Route("pre, code, kbd, samp, [data-mono]", "mono", (f"font-feature-settings: {MONASPACE_NEON.features}",)),
 )
+
+#: iOS Safari zooms the page when a focused text field's text is under this
+#: size. `--text-input-touch` holds a field on a phone at it or at the app
+#: base, whichever is larger. It is the device's rule, not a step.
+IOS_FIELD_PX = 16
 
 #: Space Grotesk's wide letters lose their shape below this size. The theme
 #: editor warns, without refusing, when a heading step that can take the
@@ -413,7 +419,10 @@ def as_json() -> dict:
         "weights": WEIGHTS,
         "tracking": TRACKING,
         "routing": [{"elements": r.elements, "role": r.role, "family": family(r.role)} for r in ROUTING],
-        "tailwind_sizes": {f"text-{name}": f"--ox-a-{step}" for name, step in TAILWIND_SIZES},
+        "text_scale": {
+            "file": "tokens/house-text-scale.css",
+            "sizes": {f"text-{name}": f"--ox-a-{step}" for name, step in TAILWIND_SIZES},
+        },
         "scales": {
             s.name: {
                 "utility_prefix": f"text-{s.key}-",
