@@ -283,7 +283,9 @@ export function typeWarnings(theme: Theme): string[] {
       out.push(`The ${scale} base is ${round2(base)}px. Mac: "${BASE_ADVICE_QUOTE}."`);
     }
     for (const step of ["h1", "h2", "h3"] as const) {
-      const px = stepPx(theme, scale, step);
+      // A ratio such as 1.428571 lands a hair under its whole pixel (19.999994px
+      // at a 14px base), so compare the size as the editor shows it.
+      const px = round2(stepPx(theme, scale, step));
       if (px < DISPLAY_ADVICE_PX) {
         out.push(
           `The ${scale} ${step} is ${round2(px)}px. A heading that can take the display face reads best at ${DISPLAY_ADVICE_PX}px or more.`,
