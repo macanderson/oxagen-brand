@@ -12,7 +12,8 @@
       "sync": "node tools/scripts/sync-brand-assets.mjs --brand \"$KIT\"",
       "apt": [],
       "copy": [
-        { "from": "tokens/house-text-scale.css", "to": "packages/ui/src/styles/house-text-scale.css" }
+        { "from": "tokens/house-text-scale.css", "to": "packages/ui/src/styles/house-text-scale.css" },
+        { "from": "ui/src/lib/house-type-utilities.json", "to": "packages/ui/src/lib/house-type-utilities.json" }
       ],
       "surfaces": [
         { "url": "https://oxagen.sh", "pages": ["/"] },

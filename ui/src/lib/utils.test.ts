@@ -6,6 +6,7 @@
 
 import { describe, expect, it } from "vitest";
 import theme from "../../../theme/theme.json";
+import typeUtilities from "./house-type-utilities.json";
 import { cn } from "./utils";
 
 describe("cn", () => {
@@ -57,16 +58,22 @@ describe("cn", () => {
 // colour class in the same list dropped them (oxageninc/brand#75).
 describe("cn with the house type utilities", () => {
   const SCALES = { a: theme.type.scales.app.steps, m: theme.type.scales.marketing.steps };
-  const UTILITIES = Object.entries(SCALES).flatMap(([prefix, steps]) =>
-    Object.keys(steps).map((step) => `text-${prefix}-${step}`),
-  );
+  const UTILITIES = [
+    ...Object.entries(SCALES).flatMap(([prefix, steps]) => Object.keys(steps).map((step) => `text-${prefix}-${step}`)),
+    "text-input-touch",
+  ];
 
   it("reads every step of both scales from theme/theme.json", () => {
-    // The cases below run once per step the theme lists. A step added to the
-    // theme fails them until MARKETING_STEPS or APP_STEPS in utils.ts names it too.
+    // The cases below run once per step the theme lists, so a new step in the
+    // theme runs them too. cn() reads the steps from house-type-utilities.json,
+    // which build/build.py writes from the same theme.
     expect(UTILITIES).toContain("text-a-h1");
     expect(UTILITIES).toContain("text-m-micro");
     expect(UTILITIES).toContain("text-a-2xs");
+  });
+
+  it("names the same utilities as the generated list", () => {
+    expect([...typeUtilities.utilities].sort()).toEqual([...UTILITIES].sort());
   });
 
   it("keeps the Runs title's size beside its colour", () => {

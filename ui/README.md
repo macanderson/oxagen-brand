@@ -246,7 +246,7 @@ toasts share one translucent surface. [Glass](#glass) below sets the rule.
 | `useExpiryClock` | `expiry-clock.ts` | The clock a row judges its own expiry against, so a stale row stops saying active. |
 | `FocusedHeading` | `focused-heading.tsx` | The heading of a result that replaced a form. It takes focus once, on mount. |
 | `GlobalErrorPage`, `NotFoundPage` | `global-error.tsx`, `not-found.tsx` | Full-page templates. |
-| `cn` | `lib/utils.ts` | `clsx` with `tailwind-merge`. It files `text-a-*` and `text-m-*` as font sizes, so a text colour beside one keeps both. |
+| `cn` | `lib/utils.ts` | `clsx` with `tailwind-merge`. It files `text-a-*`, `text-m-*`, and `text-input-touch` as font sizes, so a text colour beside one keeps both. It reads the names from `lib/house-type-utilities.json`, which `build/build.py` writes from the theme. |
 
 ## Glass
 

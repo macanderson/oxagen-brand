@@ -9,7 +9,7 @@ Oxagen and Stella share one house system: the palette, the faces, the components
 ## Rules for every change
 
 1. Edit the source file. For a colour, a face, a corner, a shadow, the spacing, or a type size, that is `theme/theme.json`. Run its generator. Commit the source and everything the generator writes, in one PR.
-2. Never edit a generated file by hand: `tokens/`, `logo/`, `icons/`, `spinners/`, `wallpapers/`, `splash/`, `social/`, `ads/`, `content/`, `github-badges/`, `messages/index.json`, `message-bank.html`, `always-on.html`, `playbook.html`, `skills/oxagen-branding/assets/`, and `skills/oxagen-branding/references/always-on-lines.md`.
+2. Never edit a generated file by hand: `tokens/`, `logo/`, `icons/`, `spinners/`, `wallpapers/`, `splash/`, `social/`, `ads/`, `content/`, `github-badges/`, `messages/index.json`, `message-bank.html`, `always-on.html`, `playbook.html`, `skills/oxagen-branding/assets/`, `skills/oxagen-branding/references/always-on-lines.md`, and `ui/src/lib/house-type-utilities.json`.
 3. Open a pull request. On every PR, CI runs `build/build.py --check`, the unit tests in `build/` (`python -m unittest discover -s build -p "test_*.py"`), `build/editor_fixture.py --check`, `build/messages.py --check`, `build/fonts.py --check`, `build/skill.py --check`, and an install of the skill stub, and the kit's typecheck, tests, Storybook, and bundle beside them. The deploy to brand.oxagen.cloud waits for all of them.
 4. The generators run on your machine. The checks run in CI. `build/build.py` checks its sources before it writes, and it prints a `problem:` line and writes nothing when one fails.
 
