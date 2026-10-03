@@ -5,7 +5,8 @@ name: fan-out
 # consumers.json) against the kit at that commit, and installs the current
 # skill stub. When anything changed, it opens a PR in the consumer with the
 # agent-monitored-pr label and asks GitHub to merge it once the consumer's
-# required checks pass. A newer sync PR closes the older ones it supersedes.
+# required checks pass. A newer sync PR closes the older ones it supersedes,
+# after it carries any commit a person pushed to one (build/sync_supersede.py).
 #
 # Needs one secret, BRAND_SYNC_TOKEN: a fine-grained token with contents and
 # pull-requests write on every repo in consumers.json. GITHUB_TOKEN cannot push
@@ -156,9 +157,11 @@ jobs:
           url=$(gh pr create --repo "$REPO" --head "$branch" --title "Sync the brand from oxagen-brand@$short" \
             --body "$body" --label agent-monitored-pr)
           echo "Opened $url"
+          # Close the sync PRs this one supersedes. A commit a person or an
+          # agent pushed to one of them is cherry-picked onto this branch
+          # first, and a commit that does not apply leaves that PR open with
+          # a comment on both. Auto-merge waits until the carried commits are
+          # pushed, so the new PR cannot merge without them.
+          python3 "$GITHUB_WORKSPACE/kit/build/sync_supersede.py" --repo "$REPO" --branch "$branch" --url "$url"
           gh pr merge "$url" --auto --squash \
             || echo "::warning::$REPO does not allow auto-merge, so $url waits for a person or a watcher."
-          for n in $(gh pr list --repo "$REPO" --state open --json number,headRefName \
-              --jq ".[] | select(.headRefName | startswith(\"brand/sync-\")) | select(.headRefName != \"$branch\") | .number"); do
-            gh pr close "$n" --repo "$REPO" --delete-branch --comment "Superseded by $url."
-          done
