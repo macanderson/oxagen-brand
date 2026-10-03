@@ -2,7 +2,8 @@
 // apps/app/src/features/shell/ (shell-frame.tsx, sidebar.tsx, switchers.tsx,
 // assistant-launcher.tsx, topbar.tsx, user-menu.tsx) at fad620bcef
 // (2026-10-02): the rail on the left, the sticky top bar, and the page's one
-// <main>. It keeps the app's markup and classes. The dialogs, drawers, and
+// <main>. It keeps the app's markup and classes, except that each font size,
+// space, and corner reads the nearest kit token. The dialogs, drawers, and
 // menus the chrome opens are left out, so its buttons open nothing here.
 import type * as React from "react";
 import { Fragment } from "react";
@@ -75,7 +76,7 @@ const COUNTS: Partial<Record<NavKey, { value: number; hot: boolean }>> = {
 };
 
 const tileClass =
-  "mb-[7px] flex w-full items-center gap-[9px] rounded-[10px] border border-border bg-card px-2.5 py-2 text-left text-card-foreground transition-colors hover:border-rule focus-visible:outline-2 focus-visible:outline-ring";
+  "mb-1.75 flex w-full items-center gap-2.25 rounded-xl border border-border bg-card px-2.5 py-2 text-left text-card-foreground transition-colors hover:border-rule focus-visible:outline-2 focus-visible:outline-ring";
 
 function Switcher({
   title,
@@ -93,8 +94,8 @@ function Switcher({
       <span className="sr-only">{title}</span>
       {avatar}
       <span className="min-w-0 flex-1">
-        <b className="block truncate text-[13px] font-semibold">{name}</b>
-        <span className="block truncate font-mono text-[11px] text-muted-foreground">{sub}</span>
+        <b className="block truncate text-base font-semibold">{name}</b>
+        <span className="block truncate font-mono text-sm text-muted-foreground">{sub}</span>
       </span>
       <CaretUpDownIcon aria-hidden="true" className="size-3.5 flex-none text-muted-foreground" />
     </button>
@@ -133,7 +134,7 @@ function Sidebar({ current }: { current: NavKey }) {
           <div key={section.key} className="mb-3">
             <p
               id={`app-nav-${section.key}`}
-              className="px-2 pb-1.5 pt-3 text-[10.5px] font-semibold uppercase tracking-[0.13em] text-sidebar-nav-label-fg"
+              className="px-2 pb-1.5 pt-3 text-xs font-semibold uppercase tracking-[0.13em] text-sidebar-nav-label-fg"
             >
               {section.label}
             </p>
@@ -148,9 +149,9 @@ function Sidebar({ current }: { current: NavKey }) {
                       href={`#${key}`}
                       aria-current={on ? "page" : undefined}
                       data-nav={key}
-                      className={`mb-px flex items-center gap-2.5 rounded-lg px-[9px] py-[7px] text-[13.5px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring ${
+                      className={`mb-px flex items-center gap-2.5 rounded-lg px-2.25 py-1.75 text-base font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring ${
                         on
-                          ? "bg-sidebar-nav-link-active-bg text-sidebar-nav-link-active-fg shadow-[inset_2px_0_0_var(--gold)]"
+                          ? "bg-sidebar-nav-link-active-bg text-sidebar-nav-link-active-fg [box-shadow:inset_2px_0_0_var(--gold)]"
                           : "text-sidebar-nav-link-fg hover:bg-sidebar-nav-link-hover-bg hover:text-sidebar-nav-link-hover-fg"
                       }`}
                     >
@@ -159,7 +160,7 @@ function Sidebar({ current }: { current: NavKey }) {
                       {waiting === undefined ? null : (
                         <span
                           data-count={key}
-                          className={`rounded-[5px] border bg-card px-[5px] font-mono text-[10.5px] ${
+                          className={`rounded-sm border bg-card px-1.25 font-mono text-xs ${
                             waiting.hot ? "border-info/40 text-info" : "border-border text-sidebar-nav-label-fg"
                           }`}
                         >
@@ -180,7 +181,7 @@ function Sidebar({ current }: { current: NavKey }) {
           type="button"
           aria-haspopup="dialog"
           aria-expanded={false}
-          className="mb-2 flex w-full items-center gap-2.5 rounded-[10px] border border-border bg-card px-2.5 py-2 text-left text-card-foreground transition-colors hover:border-rule focus-visible:outline-2 focus-visible:outline-ring"
+          className="mb-2 flex w-full items-center gap-2.5 rounded-xl border border-border bg-card px-2.5 py-2 text-left text-card-foreground transition-colors hover:border-rule focus-visible:outline-2 focus-visible:outline-ring"
         >
           <StellaIcon className="size-7 flex-none" />
           <span className="min-w-0 flex-1">
@@ -215,7 +216,7 @@ function Topbar({ crumbs }: { crumbs: readonly Crumb[] }) {
   return (
     <header
       aria-label="Top bar"
-      className="sticky top-0 z-30 flex items-center gap-3 border-b border-app-topbar-border bg-app-topbar-bg/90 px-4 pb-2.5 pt-[calc(0.625rem+env(safe-area-inset-top))] text-app-topbar-fg backdrop-blur md:col-start-2 md:row-start-1 md:px-5"
+      className="sticky top-0 z-30 flex items-center gap-3 border-b border-app-topbar-border bg-app-topbar-bg/90 px-4 pb-2.5 pt-[calc(var(--ox-space)*2.5+env(safe-area-inset-top))] text-app-topbar-fg backdrop-blur md:col-start-2 md:row-start-1 md:px-5"
     >
       <button type="button" className={cn(iconButton, "md:hidden")} aria-label="Open navigation">
         <ListIcon aria-hidden="true" className="size-4" />
@@ -233,7 +234,7 @@ function Topbar({ crumbs }: { crumbs: readonly Crumb[] }) {
                 className={cn(
                   "truncate",
                   i < crumbs.length - 1 && "hidden md:block",
-                  crumb.mono && "font-mono text-[13px]",
+                  crumb.mono && "font-mono text-base",
                 )}
               >
                 {crumb.href === null ? (
@@ -254,13 +255,13 @@ function Topbar({ crumbs }: { crumbs: readonly Crumb[] }) {
         type="button"
         aria-keyshortcuts="Meta+K Control+K"
         aria-label="Search or run an action"
-        className="flex items-center gap-2 rounded-[9px] border border-border bg-card px-2.5 py-1.5 text-[12.5px] text-muted-foreground transition-colors hover:border-rule hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring lg:min-w-[190px]"
+        className="flex items-center gap-2 rounded-xl border border-border bg-card px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-rule hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring lg:min-w-[190px]"
       >
         <MagnifyingGlassIcon aria-hidden="true" className="size-3.5" />
         <span className="hidden lg:inline">Search or run an action</span>
         <kbd
           aria-hidden="true"
-          className="ml-auto hidden rounded border border-border bg-hl px-[5px] font-mono text-[10.5px] text-muted-foreground sm:inline"
+          className="ml-auto hidden rounded border border-border bg-hl px-1.25 font-mono text-xs text-muted-foreground sm:inline"
         >
           ⌘K
         </kbd>
@@ -276,7 +277,7 @@ function Topbar({ crumbs }: { crumbs: readonly Crumb[] }) {
         <ShieldCheckIcon aria-hidden="true" className="size-4" />
         <span
           aria-hidden="true"
-          className="absolute -right-1.5 -top-1.5 min-w-[18px] rounded-full border border-app-topbar-bg bg-info px-1 text-center font-mono text-[10px] font-semibold leading-4 text-info-foreground"
+          className="absolute -right-1.5 -top-1.5 min-w-[18px] rounded-full border border-app-topbar-bg bg-info px-1 text-center font-mono text-xs font-semibold leading-4 text-info-foreground"
         >
           2
         </span>
@@ -313,7 +314,7 @@ export function AppFrame({
         <Topbar crumbs={crumbs} />
         <div
           data-shell-page=""
-          className="min-w-0 pb-[calc(6rem+env(safe-area-inset-bottom))] md:col-start-2 md:row-start-2 md:pb-0"
+          className="min-w-0 pb-[calc(var(--ox-space)*24+env(safe-area-inset-bottom))] md:col-start-2 md:row-start-2 md:pb-0"
         >
           <main id="main" className="mx-auto flex w-full flex-col gap-4">
             {children}
